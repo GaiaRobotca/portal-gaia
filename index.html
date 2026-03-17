@@ -566,7 +566,6 @@
 <body>
 <div id="app">
 
-<!-- ════════ LOGIN ════════ -->
 <div id="screen-login" class="screen active">
   <div class="login-card">
     <div class="logo-area">
@@ -614,9 +613,7 @@
   </div>
 </div>
 
-<!-- ════════ DASHBOARD ════════ -->
 <div id="screen-dashboard" class="screen">
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-logo">
       <div class="sidebar-logo-icon">G</div>
@@ -690,20 +687,16 @@
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main">
 
-    <!-- ── HOME PAGE ── -->
     <div id="page-home" class="page active">
       <div class="page-header">
         <div class="page-title" id="home-title">Visão Geral</div>
         <div class="page-subtitle">Acompanhe o desempenho do projeto Gaia</div>
       </div>
 
-      <!-- Stats row -->
       <div class="grid grid-4" style="margin-bottom:20px;" id="home-stats"></div>
 
-      <!-- Team Overview -->
       <div class="grid grid-2" style="margin-bottom:20px;">
         <div>
           <div class="section-header"><div class="section-title">🚁 Gaia EletroQuad</div></div>
@@ -715,12 +708,10 @@
         </div>
       </div>
 
-      <!-- Recent activity -->
       <div class="section-header"><div class="section-title">⚡ Atividade Recente</div></div>
       <div id="recent-activity"></div>
     </div>
 
-    <!-- ── TASKS PAGE ── -->
     <div id="page-tasks" class="page">
       <div class="page-header">
         <div class="page-title">Tarefas do Projeto</div>
@@ -735,7 +726,6 @@
       <div id="tasks-list"></div>
     </div>
 
-    <!-- ── RANKING ── -->
     <div id="page-ranking" class="page">
       <div class="page-header">
         <div class="page-title">Ranking Geral</div>
@@ -758,7 +748,6 @@
       <div id="ranking-list"></div>
     </div>
 
-    <!-- ── MY PROFILE ── -->
     <div id="page-myprofile" class="page">
       <div class="page-header">
         <div class="page-title">Meu Perfil</div>
@@ -766,7 +755,6 @@
       <div id="my-profile-content"></div>
     </div>
 
-    <!-- ── MY METRICS ── -->
     <div id="page-mymetrics" class="page">
       <div class="page-header">
         <div class="page-title">Minhas Métricas</div>
@@ -775,7 +763,6 @@
       <div id="my-metrics-content"></div>
     </div>
 
-    <!-- ── ADMIN: MEMBERS ── -->
     <div id="page-admin-members" class="page">
       <div class="page-header">
         <div class="page-title">Gestão de Membros</div>
@@ -789,7 +776,6 @@
       <div id="admin-members-list"></div>
     </div>
 
-    <!-- ── ADMIN: SUBMISSIONS ── -->
     <div id="page-admin-submissions" class="page">
       <div class="page-header">
         <div class="page-title">Entregas para Revisão</div>
@@ -798,7 +784,6 @@
       <div id="admin-submissions-list"></div>
     </div>
 
-    <!-- ── ADMIN: NEW TASK ── -->
     <div id="page-admin-tasks" class="page">
       <div class="page-header">
         <div class="page-title">Nova Tarefa</div>
@@ -845,7 +830,6 @@
       </div>
     </div>
 
-    <!-- ── ADMIN: REWARDS ── -->
     <div id="page-admin-rewards" class="page">
       <div class="page-header">
         <div class="page-title">Recompensas</div>
@@ -854,13 +838,7 @@
       <div id="admin-rewards-content"></div>
     </div>
 
-  </div><!-- /main -->
-</div><!-- /screen-dashboard -->
-
-</div><!-- /app -->
-
-<!-- ── MODALS ── -->
-<div id="modal-member" class="modal-overlay">
+  </div></div></div><div id="modal-member" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
       <div id="modal-member-avatar" class="sidebar-avatar" style="width:40px;height:40px;font-size:16px;"></div>
@@ -929,36 +907,35 @@
 
 <div id="toast-container"></div>
 
-<script>
-// ══════════════════════════════════════════════
-//  DATA
-// ══════════════════════════════════════════════
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 
+<script>
+// 1. Configuração do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCgbRDXE3Y61m6FLQt6hThebmd_bz21VGY",
+  authDomain: "portal-gaia-f5c93.firebaseapp.com",
+  projectId: "portal-gaia-f5c93",
+  storageBucket: "portal-gaia-f5c93.firebasestorage.app",
+  messagingSenderId: "228822751950",
+  appId: "1:228822751950:web:8aeacdd4c599f07eec8e9f"
+};
+
+// Inicializa o Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const dbRef = db.ref('portal_gaia_data');
+
+// Base de Dados Original (mockup inicial)
 const MEMBERS = [
-  { id:'eq-member-1', name:'Ana Ribeiro',    team:'eletroquad', role:'Piloto & Visão Computacional', avatar:'AR', color:'#1a8fff',
-    metrics:{ presenca:92, tarefas:88, qualidade:94, pontualidade:85, colaboracao:96 },
-    skills:['OpenCV','Python','ROS','Controle PID'], pts:320, tasks_done:7, tasks_pending:1 },
-  { id:'eq-member-2', name:'Carlos Melo',    team:'eletroquad', role:'Sistemas de Controle',         avatar:'CM', color:'#5b8cff',
-    metrics:{ presenca:78, tarefas:82, qualidade:80, pontualidade:75, colaboracao:88 },
-    skills:['C++','PID','ArduPilot','Simulink'], pts:240, tasks_done:5, tasks_pending:2 },
-  { id:'eq-member-3', name:'Fernanda Lima',  team:'eletroquad', role:'Autonomia & Missões',          avatar:'FL', color:'#00b4d8',
-    metrics:{ presenca:95, tarefas:95, qualidade:92, pontualidade:94, colaboracao:97 },
-    skills:['Python','MAVROS','Planejamento de missão'], pts:410, tasks_done:9, tasks_pending:0 },
-  { id:'eq-member-4', name:'João Ferreira',  team:'eletroquad', role:'Hardware & Eletrônica',        avatar:'JF', color:'#48cae4',
-    metrics:{ presenca:85, tarefas:70, qualidade:88, pontualidade:80, colaboracao:82 },
-    skills:['KiCad','ESP32','Firmware','Telemetria'], pts:180, tasks_done:4, tasks_pending:3 },
-  { id:'rob-member-1', name:'Beatriz Santos', team:'robotica',   role:'Líder Técnica · ROS',          avatar:'BS', color:'#00e5a0',
-    metrics:{ presenca:90, tarefas:93, qualidade:96, pontualidade:88, colaboracao:95 },
-    skills:['ROS2','Python','SLAM','Gazebo'], pts:375, tasks_done:8, tasks_pending:1 },
-  { id:'rob-member-2', name:'Diego Souza',   team:'robotica',   role:'Integração & Testes',          avatar:'DS', color:'#38cf7f',
-    metrics:{ presenca:82, tarefas:85, qualidade:82, pontualidade:79, colaboracao:90 },
-    skills:['Linux','Docker','CI/CD','Pytest'], pts:265, tasks_done:6, tasks_pending:1 },
-  { id:'rob-member-3', name:'Larissa Nunes', team:'robotica',   role:'Visão Computacional',          avatar:'LN', color:'#00c984',
-    metrics:{ presenca:88, tarefas:90, qualidade:91, pontualidade:86, colaboracao:93 },
-    skills:['OpenCV','YOLO','TensorFlow','Python'], pts:300, tasks_done:7, tasks_pending:0 },
-  { id:'rob-member-4', name:'Pedro Costa',   team:'robotica',   role:'Mecânica & Prototipagem',      avatar:'PC', color:'#0fbf70',
-    metrics:{ presenca:76, tarefas:68, qualidade:79, pontualidade:71, colaboracao:84 },
-    skills:['SolidWorks','Impressão 3D','Arduino'], pts:155, tasks_done:3, tasks_pending:2 },
+  { id:'eq-member-1', name:'Ana Ribeiro',    team:'eletroquad', role:'Piloto & Visão Computacional', avatar:'AR', color:'#1a8fff', metrics:{ presenca:92, tarefas:88, qualidade:94, pontualidade:85, colaboracao:96 }, skills:['OpenCV','Python','ROS','Controle PID'], pts:320, tasks_done:7, tasks_pending:1 },
+  { id:'eq-member-2', name:'Carlos Melo',    team:'eletroquad', role:'Sistemas de Controle',         avatar:'CM', color:'#5b8cff', metrics:{ presenca:78, tarefas:82, qualidade:80, pontualidade:75, colaboracao:88 }, skills:['C++','PID','ArduPilot','Simulink'], pts:240, tasks_done:5, tasks_pending:2 },
+  { id:'eq-member-3', name:'Fernanda Lima',  team:'eletroquad', role:'Autonomia & Missões',          avatar:'FL', color:'#00b4d8', metrics:{ presenca:95, tarefas:95, qualidade:92, pontualidade:94, colaboracao:97 }, skills:['Python','MAVROS','Planejamento de missão'], pts:410, tasks_done:9, tasks_pending:0 },
+  { id:'eq-member-4', name:'João Ferreira',  team:'eletroquad', role:'Hardware & Eletrônica',        avatar:'JF', color:'#48cae4', metrics:{ presenca:85, tarefas:70, qualidade:88, pontualidade:80, colaboracao:82 }, skills:['KiCad','ESP32','Firmware','Telemetria'], pts:180, tasks_done:4, tasks_pending:3 },
+  { id:'rob-member-1', name:'Beatriz Santos', team:'robotica',   role:'Líder Técnica · ROS',          avatar:'BS', color:'#00e5a0', metrics:{ presenca:90, tarefas:93, qualidade:96, pontualidade:88, colaboracao:95 }, skills:['ROS2','Python','SLAM','Gazebo'], pts:375, tasks_done:8, tasks_pending:1 },
+  { id:'rob-member-2', name:'Diego Souza',   team:'robotica',   role:'Integração & Testes',          avatar:'DS', color:'#38cf7f', metrics:{ presenca:82, tarefas:85, qualidade:82, pontualidade:79, colaboracao:90 }, skills:['Linux','Docker','CI/CD','Pytest'], pts:265, tasks_done:6, tasks_pending:1 },
+  { id:'rob-member-3', name:'Larissa Nunes', team:'robotica',   role:'Visão Computacional',          avatar:'LN', color:'#00c984', metrics:{ presenca:88, tarefas:90, qualidade:91, pontualidade:86, colaboracao:93 }, skills:['OpenCV','YOLO','TensorFlow','Python'], pts:300, tasks_done:7, tasks_pending:0 },
+  { id:'rob-member-4', name:'Pedro Costa',   team:'robotica',   role:'Mecânica & Prototipagem',      avatar:'PC', color:'#0fbf70', metrics:{ presenca:76, tarefas:68, qualidade:79, pontualidade:71, colaboracao:84 }, skills:['SolidWorks','Impressão 3D','Arduino'], pts:155, tasks_done:3, tasks_pending:2 },
 ];
 
 const TASKS_DATA = [
@@ -980,33 +957,71 @@ const REWARDS_DATA = [
   { id:'r1', period:'Fevereiro 2026 · Ciclo Inicial', desc:'Certificado de Destaque Gaia + menção na apresentação para a SAE.', team:'all', winner:'Fernanda Lima', date:'2026-02-28' },
 ];
 
+// Variáveis de Interface
 let currentUser = null;
 let currentTaskFilter = 'all';
 let currentRankingFilter = 'all';
 let currentAdminMemberFilter = 'all';
 let pendingTaskId = null;
 
-// 1. Função que salva tudo no navegador
-function saveToLocal() {
-  localStorage.setItem('gaia_tasks', JSON.stringify(tasks));
-  localStorage.setItem('gaia_submissions', JSON.stringify(submissions));
-  localStorage.setItem('gaia_rewards', JSON.stringify(rewards));
-  localStorage.setItem('gaia_memberPoints', JSON.stringify(memberPoints));
-}
+// Variáveis Sincronizadas na Nuvem
+let tasks = [];
+let submissions = [];
+let rewards = [];
+let memberPoints = {};
 
-// 2. Carrega os dados salvos ou usa o padrão da primeira vez
-let tasks = JSON.parse(localStorage.getItem('gaia_tasks')) || JSON.parse(JSON.stringify(TASKS_DATA));
-let submissions = JSON.parse(localStorage.getItem('gaia_submissions')) || JSON.parse(JSON.stringify(SUBMISSIONS_DATA));
-let rewards = JSON.parse(localStorage.getItem('gaia_rewards')) || JSON.parse(JSON.stringify(REWARDS_DATA));
+// OUVINTE DO FIREBASE (Sincroniza automaticamente)
+dbRef.on('value', (snapshot) => {
+  const data = snapshot.val();
+  
+  if (data) {
+    tasks = data.tasks || [];
+    submissions = data.submissions || [];
+    rewards = data.rewards || [];
+    memberPoints = data.memberPoints || {};
+    
+    if (data.members) {
+      MEMBERS.forEach(m => {
+        let sm = data.members.find(x => x.id === m.id);
+        if(sm) {
+          m.tasks_done = sm.tasks_done || 0;
+          m.tasks_pending = sm.tasks_pending || 0;
+          m.pts = sm.pts || m.pts;
+        }
+      });
+    }
+  } else {
+    tasks = JSON.parse(JSON.stringify(TASKS_DATA));
+    submissions = JSON.parse(JSON.stringify(SUBMISSIONS_DATA));
+    rewards = JSON.parse(JSON.stringify(REWARDS_DATA));
+    MEMBERS.forEach(m => { memberPoints[m.id] = m.pts; });
+    saveToFirebase();
+  }
 
-let memberPoints = JSON.parse(localStorage.getItem('gaia_memberPoints'));
-if (!memberPoints) {
-  memberPoints = {};
-  MEMBERS.forEach(m => { memberPoints[m.id] = m.pts; });
+  // Se já logado, atualiza a tela para mostrar os dados novos que vieram da nuvem
+  if (currentUser) {
+    updateBadges();
+    if (document.getElementById('page-tasks').classList.contains('active')) filterTasks(currentTaskFilter);
+    if (document.getElementById('page-home').classList.contains('active')) renderHomePage();
+    if (document.getElementById('page-ranking').classList.contains('active')) filterRanking(currentRankingFilter);
+    if (document.getElementById('page-admin-submissions').classList.contains('active')) renderAdminSubmissions();
+    if (document.getElementById('page-admin-members').classList.contains('active')) filterAdminMembers(currentAdminMemberFilter);
+  }
+});
+
+// FUNÇÃO PARA ENVIAR PRA NUVEM
+function saveToFirebase() {
+  dbRef.set({
+    tasks: tasks,
+    submissions: submissions,
+    rewards: rewards,
+    memberPoints: memberPoints,
+    members: MEMBERS
+  });
 }
 
 // ══════════════════════════════════════════════
-//  AUTH
+//  AUTH & NAVIGATION
 // ══════════════════════════════════════════════
 
 function quickLogin(role, name) {
@@ -1034,10 +1049,6 @@ function switchScreen(from, to) {
   document.getElementById('screen-'+from).classList.remove('active');
   document.getElementById('screen-'+to).classList.add('active');
 }
-
-// ══════════════════════════════════════════════
-//  INIT DASHBOARD
-// ══════════════════════════════════════════════
 
 function initDashboard() {
   const u = currentUser;
@@ -1070,16 +1081,11 @@ function updateBadges() {
   if(sb) sb.textContent = pending > 0 ? pending : '';
 }
 
-// ══════════════════════════════════════════════
-//  NAVIGATION
-// ══════════════════════════════════════════════
-
 function showPage(page, el) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(el) el.classList.add('active');
   document.getElementById('page-'+page).classList.add('active');
-  // Lazy render
   const renders = {
     'home': renderHomePage,
     'tasks': renderTasksPage,
@@ -1099,7 +1105,6 @@ function showPage(page, el) {
 // ══════════════════════════════════════════════
 
 function renderHomePage() {
-  // Stats
   const allPts = MEMBERS.reduce((s,m)=> s + (memberPoints[m.id]||m.pts), 0);
   const tasksDone = tasks.filter(t=>t.status==='done').length;
   const tasksAvail = tasks.filter(t=>t.status==='available').length;
@@ -1110,7 +1115,6 @@ function renderHomePage() {
     <div class="card card-sm"><div class="card-label">Tarefas Disponíveis</div><div class="card-value sm" style="color:var(--accent3)">${tasksAvail}</div><div class="card-change" style="color:var(--text-dim)">para assumir</div></div>
   `;
 
-  // EQ members mini
   const renderMiniMembers = (team, containerId) => {
     const members = MEMBERS.filter(m=>m.team===team);
     document.getElementById(containerId).innerHTML = members.map(m => {
@@ -1129,7 +1133,6 @@ function renderHomePage() {
   renderMiniMembers('eletroquad','eq-members-overview');
   renderMiniMembers('robotica','rob-members-overview');
 
-  // Recent activity
   const activities = [
     { icon:'✅', text:'<b>Fernanda Lima</b> concluiu "Atualizar README do repositório"', time:'há 2 dias', color:'var(--accent2)' },
     { icon:'📋', text:'<b>Beatriz Santos</b> entregou "Nó ROS2 para leitura IMU" — aguardando revisão', time:'há 1 dia', color:'var(--accent3)' },
@@ -1161,7 +1164,6 @@ function filterTasks(filter, el) {
   else if(filter === 'claimed') filtered = filtered.filter(t=>t.status==='claimed');
   else if(filter === 'done') filtered = filtered.filter(t=>t.status==='done');
 
-  // Filter by team for non-admin
   if(!currentUser.isAdmin) {
     const member = MEMBERS.find(m=>m.id===currentUser.id);
     if(member) filtered = filtered.filter(t=> t.team===member.team || t.team==='both');
@@ -1184,7 +1186,7 @@ function renderTaskItem(t) {
   let actionHtml = '';
   if(!currentUser.isAdmin) {
     const isMyClaim = t.claimedBy === currentUser.id;
-    const isMySubmit = t.submittedBy.includes(currentUser.id);
+    const isMySubmit = t.submittedBy && t.submittedBy.includes(currentUser.id);
     if(t.status === 'available') {
       actionHtml = `<button class="btn-claim" onclick="claimTask('${t.id}')">Assumir</button>`;
     } else if(t.status === 'claimed' && isMyClaim && !isMySubmit) {
@@ -1221,10 +1223,8 @@ function claimTask(id) {
   t.claimedBy = currentUser.id;
   const member = MEMBERS.find(m=>m.id===currentUser.id);
   if(member) member.tasks_pending = (member.tasks_pending||0)+1;
+  saveToFirebase();
   toast(`Tarefa assumida! Boa sorte, ${currentUser.name.split(' ')[0]}!`,'success');
-  updateBadges();
-  saveToLocal();
-  renderTasksPage();
 }
 
 function toggleTaskDone(id) {
@@ -1232,9 +1232,7 @@ function toggleTaskDone(id) {
   const t = tasks.find(x=>x.id===id);
   if(!t) return;
   t.status = t.status==='done' ? 'available' : 'done';
-  saveToLocal();
-  renderTasksPage();
-  updateBadges();
+  saveToFirebase();
 }
 
 function openSubmitModal(taskId) {
@@ -1252,9 +1250,9 @@ function submitTask() {
   if(!desc) { toast('Adicione uma descrição da entrega','error'); return; }
   const t = tasks.find(x=>x.id===pendingTaskId);
   if(!t) return;
+  if (!t.submittedBy) t.submittedBy = [];
   t.submittedBy.push(currentUser.id);
   t.status = 'done';
-  const member = MEMBERS.find(m=>m.id===currentUser.id);
   const sub = {
     id: 's'+Date.now(),
     taskId: pendingTaskId,
@@ -1269,10 +1267,8 @@ function submitTask() {
   };
   submissions.push(sub);
   closeModal('modal-task-submit');
-  saveToLocal();
+  saveToFirebase();
   toast('Entrega registrada! Aguardando aprovação da coordenação.','success');
-  updateBadges();
-  renderTasksPage();
 }
 
 // ══════════════════════════════════════════════
@@ -1561,9 +1557,7 @@ function reviewSubmission(id, verdict) {
   } else {
     toast(`Entrega de ${sub.memberName} reprovada.`,'error');
   }
-  saveToLocal();
-  updateBadges();
-  renderAdminSubmissions();
+  saveToFirebase();
 }
 
 // ══════════════════════════════════════════════
@@ -1585,9 +1579,8 @@ function createTask() {
   };
   tasks.unshift(task);
   ['new-task-title','new-task-desc'].forEach(id=>document.getElementById(id).value='');
-  saveToLocal();
+  saveToFirebase();
   toast('Tarefa criada e publicada para a equipe!','success');
-  updateBadges();
 }
 
 // ══════════════════════════════════════════════
@@ -1630,9 +1623,8 @@ function saveReward() {
   const sorted = [...MEMBERS].sort((a,b)=>(memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
   rewards.unshift({ id:'r'+Date.now(), period, desc, team: document.getElementById('reward-team').value, winner: sorted[0].name, date: new Date().toISOString().split('T')[0] });
   closeModal('modal-reward');
-  saveToLocal();
+  saveToFirebase();
   toast('Recompensa registrada!','success');
-  renderAdminRewards();
 }
 
 // ══════════════════════════════════════════════
@@ -1642,7 +1634,6 @@ function saveReward() {
 function openMemberModal(id) {
   const m = MEMBERS.find(x=>x.id===id);
   if(!m) return;
-  // Non-admin can only see their own
   if(!currentUser.isAdmin && currentUser.id !== id) {
     toast('Você só pode ver suas próprias métricas.','error'); return;
   }
