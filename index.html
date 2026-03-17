@@ -536,10 +536,8 @@
       <div class="modal-close" onclick="closeModal('modal-member')">✕</div>
     </div>
     <div id="modal-member-content"></div>
-    <div class="modal-footer" id="modal-member-footer" style="display:none; justify-content: flex-start;">
-        <button class="btn-ghost" id="btn-admin-edit-user">⚙️ Conta/Senha</button>
-        <button class="btn-ghost" id="btn-admin-edit-skills">🛠 Habilidades</button>
-    </div>
+    <div class="modal-footer" id="modal-member-footer" style="display:none; justify-content: flex-start; flex-wrap: wrap; gap:8px;">
+        </div>
   </div>
 </div>
 
@@ -662,6 +660,47 @@
     <div class="modal-footer">
       <button class="btn-ghost" onclick="closeModal('modal-skills')">Cancelar</button>
       <button class="btn-success" onclick="saveSkills()">Salvar Mudanças</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-metrics" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Editar Métricas do Membro</div>
+      <div class="modal-close" onclick="closeModal('modal-metrics')">✕</div>
+    </div>
+    <div style="font-size:12px; color:var(--text-dim); margin-bottom:16px;">Ajuste o desempenho (0 a 100%). As barras serão atualizadas em tempo real.</div>
+    <input type="hidden" id="metrics-user-id" />
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label>Presença (%)</label>
+        <input type="number" id="metric-presenca" min="0" max="100" />
+      </div>
+      <div class="form-group">
+        <label>Conclusão de Tarefas (%)</label>
+        <input type="number" id="metric-tarefas" min="0" max="100" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Qualidade de Entrega (%)</label>
+        <input type="number" id="metric-qualidade" min="0" max="100" />
+      </div>
+      <div class="form-group">
+        <label>Pontualidade (%)</label>
+        <input type="number" id="metric-pontualidade" min="0" max="100" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Colaboração (%)</label>
+      <input type="number" id="metric-colaboracao" min="0" max="100" />
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-metrics')">Cancelar</button>
+      <button class="btn-success" onclick="saveMetrics()">Salvar Métricas</button>
     </div>
   </div>
 </div>
@@ -967,6 +1006,39 @@ function saveSkills() {
   closeModal('modal-skills');
   if(document.getElementById('modal-member').classList.contains('open')){
       openMemberModal(editingSkillsUserId);
+  }
+}
+
+// ----- MÉTRICAS (ADMs) -----
+function openEditMetricsModal(userId) {
+  const m = MEMBERS.find(x=>x.id===userId);
+  if(!m) return;
+  document.getElementById('metrics-user-id').value = userId;
+  document.getElementById('metric-presenca').value = m.metrics.presenca || 0;
+  document.getElementById('metric-tarefas').value = m.metrics.tarefas || 0;
+  document.getElementById('metric-qualidade').value = m.metrics.qualidade || 0;
+  document.getElementById('metric-pontualidade').value = m.metrics.pontualidade || 0;
+  document.getElementById('metric-colaboracao').value = m.metrics.colaboracao || 0;
+  openModal('modal-metrics');
+}
+
+function saveMetrics() {
+  const id = document.getElementById('metrics-user-id').value;
+  const m = MEMBERS.find(x=>x.id===id);
+  if(!m) return;
+
+  m.metrics.presenca = parseInt(document.getElementById('metric-presenca').value) || 0;
+  m.metrics.tarefas = parseInt(document.getElementById('metric-tarefas').value) || 0;
+  m.metrics.qualidade = parseInt(document.getElementById('metric-qualidade').value) || 0;
+  m.metrics.pontualidade = parseInt(document.getElementById('metric-pontualidade').value) || 0;
+  m.metrics.colaboracao = parseInt(document.getElementById('metric-colaboracao').value) || 0;
+
+  saveToFirebase();
+  toast('Métricas atualizadas!','success');
+  closeModal('modal-metrics');
+  
+  if(document.getElementById('modal-member').classList.contains('open')){
+      openMemberModal(id);
   }
 }
 
@@ -1472,7 +1544,7 @@ function reviewSubmission(id, verdict) {
     if(m){ 
       m.tasks_done++; 
       m.tasks_pending = Math.max(0,(m.tasks_pending||0)-1); 
-      m.hours = (m.hours || 0) + (sub.hours || 0); // Soma as horas pro certificado
+      m.hours = (m.hours || 0) + (sub.hours || 0);
     }
     toast(`Entrega aprovada! +${sub.pts} pts e +${sub.hours||0}h para ${sub.memberName}`,'success');
   } else {
@@ -1493,7 +1565,7 @@ function createTask() {
     team: document.getElementById('new-task-team').value,
     diff: document.getElementById('new-task-diff').value,
     pts: parseInt(document.getElementById('new-task-pts').value)||50,
-    hours: parseInt(document.getElementById('new-task-hours').value)||2, // Puxa as horas!
+    hours: parseInt(document.getElementById('new-task-hours').value)||2,
     deadline: document.getElementById('new-task-deadline').value || '2026-12-31',
     status: 'available', claimedBy: null, submittedBy: [],
   };
@@ -1590,11 +1662,20 @@ function openMemberModal(id) {
     `).join('')}` : ''}
   `;
 
-  // Exibir botões de edição se for o próprio usuário ou se for ADM
-  if(currentUser.isAdmin || currentUser.id === id) {
+  document.getElementById('modal-member-footer').innerHTML = '';
+  if(currentUser.isAdmin) {
       document.getElementById('modal-member-footer').style.display = 'flex';
-      document.getElementById('btn-admin-edit-user').onclick = () => { closeModal('modal-member'); openEditUserModal(id); };
-      document.getElementById('btn-admin-edit-skills').onclick = () => { openEditSkillsModal(id); };
+      document.getElementById('modal-member-footer').innerHTML = `
+          <button class="btn-ghost" onclick="closeModal('modal-member'); openEditUserModal('${id}')">⚙️ Conta/Senha</button>
+          <button class="btn-ghost" onclick="openEditSkillsModal('${id}')">🛠 Habilidades</button>
+          <button class="btn-ghost" style="color:var(--accent);" onclick="openEditMetricsModal('${id}')">📊 Métricas</button>
+      `;
+  } else if(currentUser.id === id) {
+      document.getElementById('modal-member-footer').style.display = 'flex';
+      document.getElementById('modal-member-footer').innerHTML = `
+          <button class="btn-ghost" onclick="closeModal('modal-member'); openEditUserModal('${id}')">⚙️ Conta/Senha</button>
+          <button class="btn-ghost" onclick="openEditSkillsModal('${id}')">🛠 Habilidades</button>
+      `;
   } else {
       document.getElementById('modal-member-footer').style.display = 'none';
   }
