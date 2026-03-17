@@ -161,7 +161,7 @@
 
   .task-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:10px; transition:all 0.2s; position:relative; }
   .task-header { display:flex; align-items:flex-start; gap:12px; }
-  .task-check { width:18px; height:18px; border-radius:5px; border:1.5px solid var(--text-muted); flex-shrink:0; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+  .task-check { width:18px; height:18px; border-radius:5px; border:1.5px solid var(--text-muted); flex-shrink:0; display:flex; align-items:center; justify-content:center; margin-top:1px; }
   .task-check.done { background:var(--accent2); border-color:var(--accent2); }
   .task-check.done::after { content:'✓'; font-size:10px; color:#000; font-weight:700; }
   .task-content { flex:1; }
@@ -174,6 +174,7 @@
   .tag-rob { background:rgba(0,229,160,0.08); color:var(--gaia-green); border-color:rgba(0,229,160,0.15); }
   .tag-both { background:rgba(255,209,102,0.1); color:var(--gaia-gold); border-color:rgba(255,209,102,0.2); }
   .tag-pts { background:rgba(255,184,106,0.1); color:var(--accent3); border-color:rgba(255,184,106,0.2); }
+  .tag-hours { background:rgba(187, 134, 252, 0.1); color:#bb86fc; border-color:rgba(187, 134, 252, 0.2); }
   .tag-diff-easy { background:rgba(127,255,110,0.08); color:var(--accent2); }
   .tag-diff-med { background:rgba(255,184,106,0.08); color:var(--accent3); }
   .tag-diff-hard { background:rgba(255,110,110,0.08); color:var(--accent-red); }
@@ -384,7 +385,7 @@
     <div id="page-tasks" class="page">
       <div class="page-header">
         <div class="page-title">Tarefas do Projeto</div>
-        <div class="page-subtitle">Contribua com o projeto e acumule pontos</div>
+        <div class="page-subtitle">Contribua com o projeto, acumule pontos e horas de certificado</div>
       </div>
       <div class="tabs">
         <div class="tab active" onclick="filterTasks('all',this)">Todas</div>
@@ -441,7 +442,7 @@
       <div class="page-header page-actions">
         <div>
           <div class="page-title">Gestão de Membros</div>
-          <div class="page-subtitle">Gerencie os usuários, senhas e equipes do portal</div>
+          <div class="page-subtitle">Gerencie os usuários, senhas, horas e equipes do portal</div>
         </div>
         <div>
           <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="openAddUserModal()">+ Adicionar Usuário</button>
@@ -458,7 +459,7 @@
     <div id="page-admin-submissions" class="page">
       <div class="page-header">
         <div class="page-title">Entregas para Revisão</div>
-        <div class="page-subtitle">Avalie as tarefas entregues pelos membros</div>
+        <div class="page-subtitle">Avalie e aprove tarefas para contabilizar pontos e horas</div>
       </div>
       <div id="admin-submissions-list"></div>
     </div>
@@ -497,8 +498,12 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Pontos</label>
+            <label>Pontos de Ranking</label>
             <input type="number" id="new-task-pts" value="50" min="5" max="500" />
+          </div>
+          <div class="form-group">
+            <label>Horas (Certificado)</label>
+            <input type="number" id="new-task-hours" value="2" min="1" max="100" />
           </div>
           <div class="form-group">
             <label>Prazo</label>
@@ -682,33 +687,33 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-// Alterado para v3 para resetar e injetar a equipe real nova
-const dbRef = db.ref('portal_gaia_data_v3');
+// Alterado para v4 para aplicar o sistema de Horas do zero!
+const dbRef = db.ref('portal_gaia_data_v4');
 
 // ══════════════════════════════════════════════
-//  DADOS INICIAIS (EQUIPE GAIA REAL)
+//  DADOS INICIAIS (EQUIPE GAIA REAL COM HORAS)
 // ══════════════════════════════════════════════
 const INITIAL_MEMBERS = [
   // ──── ADMS ────
-  { id:'m1', username: 'Pedro Henrique', password: '123', name:'Pedro Henrique', team:'eletroquad', role:'Coordenador ADM', isAdmin: true, avatar:'PH', color:'#1a8fff', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Gestão','Engenharia Mecânica'], pts:0, tasks_done:0, tasks_pending:0 },
-  { id:'m2', username: 'Laura Capanema', password: '123', name:'Laura Capanema', team:'robotica', role:'Coordenadora ADM', isAdmin: true, avatar:'LC', color:'#00c984', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Gestão','Projetos'], pts:0, tasks_done:0, tasks_pending:0 },
-  { id:'m3', username: 'Júlia Origuela', password: '123', name:'Júlia Origuela', team:'eletroquad', role:'Administradora', isAdmin: true, avatar:'JO', color:'#5b8cff', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Liderança','Mecânica'], pts:0, tasks_done:0, tasks_pending:0 },
-  { id:'m4', username: 'Wanessa Karoline', password: '123', name:'Wanessa Karoline', team:'robotica', role:'Administradora', isAdmin: true, avatar:'WK', color:'#00e5a0', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Liderança','Programação'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m1', username: 'Pedro Henrique', password: '123', name:'Pedro Henrique', team:'eletroquad', role:'Coordenador ADM', isAdmin: true, avatar:'PH', color:'#1a8fff', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Gestão','Engenharia Mecânica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m2', username: 'Laura Capanema', password: '123', name:'Laura Capanema', team:'robotica', role:'Coordenadora ADM', isAdmin: true, avatar:'LC', color:'#00c984', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Gestão','Projetos'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m3', username: 'Júlia Origuela', password: '123', name:'Júlia Origuela', team:'eletroquad', role:'Administradora', isAdmin: true, avatar:'JO', color:'#5b8cff', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Liderança','Mecânica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m4', username: 'Wanessa Karoline', password: '123', name:'Wanessa Karoline', team:'robotica', role:'Administradora', isAdmin: true, avatar:'WK', color:'#00e5a0', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Liderança','Programação'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
   
   // ──── MEMBROS ELETROQUAD ────
-  { id:'m5', username: 'Carlos Gabriel', password: '123', name:'Carlos Gabriel', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'CG', color:'#00b4d8', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Eletrônica'], pts:0, tasks_done:0, tasks_pending:0 },
-  { id:'m6', username: 'João Paulo', password: '123', name:'João Paulo', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'JP', color:'#48cae4', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Hardware'], pts:0, tasks_done:0, tasks_pending:0 },
-  { id:'m7', username: 'João Maerbal', password: '123', name:'João Maerbal', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'JM', color:'#1a8fff', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Autonomia'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m5', username: 'Carlos Gabriel', password: '123', name:'Carlos Gabriel', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'CG', color:'#00b4d8', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Eletrônica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m6', username: 'João Paulo', password: '123', name:'João Paulo', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'JP', color:'#48cae4', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Hardware'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m7', username: 'João Maerbal', password: '123', name:'João Maerbal', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'JM', color:'#1a8fff', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Autonomia'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
   
   // ──── MEMBROS ROBÓTICA ────
-  { id:'m8', username: 'Murilo Tristão', password: '123', name:'Murilo Tristão', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'MT', color:'#38cf7f', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Mecânica','CAD'], pts:0, tasks_done:0, tasks_pending:0 },
-  { id:'m9', username: 'Felipe (Braia)', password: '123', name:'Felipe (Braia)', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'FB', color:'#0fbf70', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['ROS2','Linux'], pts:0, tasks_done:0, tasks_pending:0 },
-  { id:'m10', username: 'Júlia Vitalino', password: '123', name:'Júlia Vitalino', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'JV', color:'#00e5a0', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Visão Computacional'], pts:0, tasks_done:0, tasks_pending:0 },
-  { id:'m11', username: 'Eloiza Lopes', password: '123', name:'Eloiza Lopes', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'EL', color:'#00c984', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Controle','Programação'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m8', username: 'Murilo Tristão', password: '123', name:'Murilo Tristão', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'MT', color:'#38cf7f', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Mecânica','CAD'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m9', username: 'Felipe (Braia)', password: '123', name:'Felipe (Braia)', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'FB', color:'#0fbf70', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['ROS2','Linux'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m10', username: 'Júlia Vitalino', password: '123', name:'Júlia Vitalino', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'JV', color:'#00e5a0', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Visão Computacional'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m11', username: 'Eloiza Lopes', password: '123', name:'Eloiza Lopes', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'EL', color:'#00c984', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Controle','Programação'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
 ];
 
 const INITIAL_TASKS = [
-  { id:'t1', title:'Configurar o novo Portal', desc:'Fazer login pela primeira vez no novo sistema do Portal Gaia e trocar a senha padrão.', team:'both', diff:'easy', pts:50, deadline:'2026-03-31', status:'available', claimedBy:null, submittedBy:[] }
+  { id:'t1', title:'Configurar o novo Portal (v4)', desc:'Fazer login, testar o sistema de assumir/entregar tarefas e aprovação de horas.', team:'both', diff:'easy', pts:50, hours:2, deadline:'2026-03-31', status:'available', claimedBy:null, submittedBy:[] }
 ];
 
 let currentUser = null;
@@ -730,7 +735,8 @@ dbRef.on('value', (snapshot) => {
   const data = snapshot.val();
   
   if (data && data.members) {
-    MEMBERS = data.members;
+    // Garante que o campo hours exista para não bugar contas antigas se voltarem pra ca
+    MEMBERS = data.members.map(m => ({...m, hours: m.hours || 0}));
     tasks = data.tasks || [];
     submissions = data.submissions || [];
     rewards = data.rewards || [];
@@ -746,7 +752,6 @@ dbRef.on('value', (snapshot) => {
   }
 
   if (currentUser) {
-    // Atualiza o objeto do usuario logado (caso sua propria conta tenha sido editada)
     const updatedUser = MEMBERS.find(m=>m.id === currentUser.id);
     if(updatedUser) {
         currentUser.name = updatedUser.name;
@@ -758,11 +763,9 @@ dbRef.on('value', (snapshot) => {
             document.getElementById('nav-admin').style.display='block';
         } else {
             document.getElementById('nav-admin').style.display='none';
-            // Se um user perder admin e estiver em tela de admin, joga pra home
             if(document.getElementById('page-admin-members').classList.contains('active')){ showPage('home'); }
         }
     } else {
-        // Usuario deletado
         doLogout();
     }
 
@@ -788,8 +791,6 @@ function doLogin() {
   const passwordVal = document.getElementById('login-password').value.trim();
 
   if(!usernameVal || !passwordVal) { toast('Preencha usuário e senha','error'); return; }
-
-  // Espera carregar o MEMBERS do Firebase primeiro
   if(MEMBERS.length === 0) { toast('Carregando banco de dados... tente novamente em 1s','error'); return; }
 
   const member = MEMBERS.find(m => m.username.toLowerCase() === usernameVal.toLowerCase() && m.password === passwordVal);
@@ -819,8 +820,6 @@ function switchScreen(from, to) {
 // ══════════════════════════════════════════════
 //  CRUD DE USUÁRIOS E HABILIDADES
 // ══════════════════════════════════════════════
-
-// ----- USUÁRIOS -----
 function openAddUserModal() {
   document.getElementById('user-form-title').textContent = 'Adicionar Novo Membro';
   document.getElementById('user-id').value = '';
@@ -871,12 +870,10 @@ function saveUser() {
   
   if(!name || !username || !password) { toast('Preencha os dados básicos!','error'); return; }
 
-  // Checa duplicidade de username
   const exists = MEMBERS.find(m => m.username.toLowerCase() === username.toLowerCase() && m.id !== id);
   if(exists) { toast('Este nome de usuário já está em uso!','error'); return; }
 
   if(id) {
-    // Editar
     const m = MEMBERS.find(x=>x.id===id);
     m.name = name; m.username = username; m.password = password;
     if(currentUser.isAdmin) {
@@ -887,7 +884,6 @@ function saveUser() {
     }
     toast('Dados salvos!','success');
   } else {
-    // Criar novo
     const team = document.getElementById('user-team').value;
     const isEq = team === 'eletroquad';
     const newMember = {
@@ -899,7 +895,7 @@ function saveUser() {
         avatar: name.substring(0,2).toUpperCase(),
         color: isEq ? '#1a8fff' : '#00e5a0',
         metrics: { presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 },
-        skills: ['Gaia'], pts:0, tasks_done:0, tasks_pending:0
+        skills: ['Gaia'], pts:0, hours:0, tasks_done:0, tasks_pending:0
     };
     MEMBERS.push(newMember);
     memberPoints[newMember.id] = 0;
@@ -973,7 +969,7 @@ function saveSkills() {
   }
   closeModal('modal-skills');
   if(document.getElementById('modal-member').classList.contains('open')){
-      openMemberModal(editingSkillsUserId); // re-render modal background
+      openMemberModal(editingSkillsUserId);
   }
 }
 
@@ -1046,13 +1042,14 @@ function renderHomePage() {
     const members = MEMBERS.filter(m=>m.team===team);
     document.getElementById(containerId).innerHTML = members.map(m => {
       const pts = memberPoints[m.id]||m.pts;
+      const hours = m.hours || 0;
       const avg = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
       return `<div class="rank-item" onclick="openMemberModal('${m.id}')" style="cursor:pointer;">
         <div class="rank-avatar" style="background:${m.color}">${m.avatar}</div>
         <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-detail">${m.role}</div></div>
         <div style="text-align:right;">
           <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--accent)">${pts} pts</div>
-          <div style="font-size:10px;color:var(--text-muted)">perf. ${avg}%</div>
+          <div style="font-size:10px;color:var(--text-muted)">⏱ ${hours}h • perf. ${avg}%</div>
         </div>
       </div>`;
     }).join('');
@@ -1068,7 +1065,7 @@ function renderHomePage() {
   recentSubs.forEach(sub => {
     activities.push({
       icon: '✅',
-      text: `<b>${sub.memberName}</b> concluiu a tarefa "${sub.taskTitle}" e ganhou ${sub.pts} pts!`,
+      text: `<b>${sub.memberName}</b> concluiu a tarefa "${sub.taskTitle}" (+${sub.pts} pts / +${sub.hours||0}h)`,
       time: formatDate(sub.date),
       color: 'var(--accent2)'
     });
@@ -1100,9 +1097,10 @@ function filterTasks(filter, el) {
   else if(filter === 'claimed') filtered = filtered.filter(t=>t.status==='claimed');
   else if(filter === 'done') filtered = filtered.filter(t=>t.status==='done');
 
-  if(!currentUser.isAdmin) {
-    const member = MEMBERS.find(m=>m.id===currentUser.id);
-    if(member) filtered = filtered.filter(t=> t.team===member.team || t.team==='both');
+  // Filtro de equipe (todos vêem both e sua propria equipe)
+  const member = MEMBERS.find(m=>m.id===currentUser.id);
+  if(member) {
+      filtered = filtered.filter(t=> t.team===member.team || t.team==='both');
   }
 
   if(filtered.length === 0) {
@@ -1116,19 +1114,21 @@ function renderTaskItem(t) {
   const teamTag = t.team === 'both' ? `<span class="tag tag-both">Ambas</span>` : t.team === 'eletroquad' ? `<span class="tag tag-eq">EletroQuad</span>` : `<span class="tag tag-rob">Robótica</span>`;
   const diffTag = { easy: `<span class="tag tag-diff-easy">Fácil</span>`, medium: `<span class="tag tag-diff-med">Médio</span>`, hard: `<span class="tag tag-diff-hard">Difícil</span>` }[t.diff];
   const ptsTag = `<span class="tag tag-pts">+${t.pts} pts</span>`;
+  const hoursTag = `<span class="tag tag-hours">⏱ ${t.hours || 0}h</span>`;
   const deadlineTag = `<span class="tag tag-deadline">📅 ${formatDate(t.deadline)}</span>`;
 
   let actionHtml = '';
-  if(!currentUser.isAdmin) {
-    const isMyClaim = t.claimedBy === currentUser.id;
-    const isMySubmit = t.submittedBy && t.submittedBy.includes(currentUser.id);
-    if(t.status === 'available') {
-      actionHtml = `<button class="btn-claim" onclick="claimTask('${t.id}')">Assumir</button>`;
-    } else if(t.status === 'claimed' && isMyClaim && !isMySubmit) {
-      actionHtml = `<button class="btn-claim" onclick="openSubmitModal('${t.id}')">Entregar</button>`;
-    } else if(isMySubmit) {
-      actionHtml = `<button class="btn-claim claimed" disabled>Entregue ✓</button>`;
-    }
+  
+  // ADMs E membros normais agora vêm o botão e podem assumir
+  const isMyClaim = t.claimedBy === currentUser.id;
+  const isMySubmit = t.submittedBy && t.submittedBy.includes(currentUser.id);
+
+  if(t.status === 'available') {
+    actionHtml = `<button class="btn-claim" onclick="claimTask('${t.id}')">Assumir</button>`;
+  } else if(t.status === 'claimed' && isMyClaim && !isMySubmit) {
+    actionHtml = `<button class="btn-claim" onclick="openSubmitModal('${t.id}')">Entregar</button>`;
+  } else if(isMySubmit) {
+    actionHtml = `<button class="btn-claim claimed" disabled>Aguardando Revisão ⏳</button>`;
   }
 
   let claimer = '';
@@ -1141,11 +1141,10 @@ function renderTaskItem(t) {
 
   return `<div class="task-item">
     <div class="task-header">
-      <div class="task-check ${isDone?'done':''}" onclick="toggleTaskDone('${t.id}')"></div>
       <div class="task-content">
         <div class="task-title ${isDone?'done':''}">${t.title}</div>
         <div class="task-desc">${t.desc}</div>
-        <div class="task-meta">${teamTag}${diffTag}${ptsTag}${deadlineTag}${claimer}${actionHtml}</div>
+        <div class="task-meta">${teamTag}${diffTag}${ptsTag}${hoursTag}${deadlineTag}${claimer}${actionHtml}</div>
       </div>
     </div>
   </div>`;
@@ -1160,14 +1159,6 @@ function claimTask(id) {
   if(member) member.tasks_pending = (member.tasks_pending||0)+1;
   saveToFirebase();
   toast(`Tarefa assumida! Boa sorte, ${currentUser.name.split(' ')[0]}!`,'success');
-}
-
-function toggleTaskDone(id) {
-  if(!currentUser.isAdmin) return;
-  const t = tasks.find(x=>x.id===id);
-  if(!t) return;
-  t.status = t.status==='done' ? 'available' : 'done';
-  saveToFirebase();
 }
 
 function openSubmitModal(taskId) {
@@ -1198,6 +1189,7 @@ function submitTask() {
     link: document.getElementById('submit-link').value,
     date: new Date().toISOString().split('T')[0],
     pts: t.pts,
+    hours: t.hours || 0,
     status: 'pending',
   };
   submissions.push(sub);
@@ -1220,6 +1212,7 @@ function filterRanking(filter, el) {
   const posClass = ['gold','silver','bronze'];
   document.getElementById('ranking-list').innerHTML = members.map((m,i)=>{
     const pts = memberPoints[m.id]||m.pts;
+    const hours = m.hours || 0;
     const pc = posClass[i] || '';
     return `<div class="rank-item" onclick="openMemberModal('${m.id}')" style="cursor:pointer;">
       <div class="rank-pos ${pc}">${i+1}</div>
@@ -1229,8 +1222,8 @@ function filterRanking(filter, el) {
         <div class="rank-detail">${m.role} · ${m.team==='eletroquad'?'EletroQuad':'Robótica'}</div>
       </div>
       <div style="text-align:right;">
-        <div class="rank-score">${pts}</div>
-        <div class="rank-pts-label">pontos</div>
+        <div class="rank-score">${pts} pts</div>
+        <div class="rank-pts-label">⏱ ${hours}h</div>
       </div>
     </div>`;
   }).join('');
@@ -1243,6 +1236,7 @@ function renderMyProfile() {
   const m = MEMBERS.find(x=>x.id===currentUser.id);
   if(!m) return;
   const pts = memberPoints[m.id]||m.pts;
+  const hours = m.hours || 0;
   const isEQ = m.team==='eletroquad';
   const myTasks = tasks.filter(t=>t.claimedBy===m.id);
   const mySubs = submissions.filter(s=>s.memberId===m.id);
@@ -1265,7 +1259,7 @@ function renderMyProfile() {
         </div>
         <div style="margin-left:auto;text-align:right;">
           <div class="pts-big">${pts}</div>
-          <div class="pts-label">pontos acumulados</div>
+          <div class="pts-label">pontos · <span style="color:#bb86fc;">⏱ ${hours}h</span></div>
         </div>
       </div>
     </div>
@@ -1280,8 +1274,8 @@ function renderMyProfile() {
         <div class="card-value sm" style="color:var(--accent3)">${myTasks.filter(t=>t.status==='claimed').length}</div>
       </div>
       <div class="card card-sm" style="text-align:center;">
-        <div class="card-label">Pts este Mês</div>
-        <div class="card-value sm" style="color:var(--accent)">${approvedSubs.reduce((s,x)=>s+x.pts,0)}</div>
+        <div class="card-label">Horas Certificado</div>
+        <div class="card-value sm" style="color:#bb86fc;">${hours}h</div>
       </div>
     </div>
 
@@ -1304,7 +1298,7 @@ function renderMyProfile() {
         <div style="font-size:11px;color:var(--text-dim);">${s.desc.substring(0,100)}${s.desc.length>100?'...':''}</div>
         <div style="display:flex;justify-content:space-between;margin-top:8px;">
           <div class="submission-date">${formatDate(s.date)}</div>
-          ${s.status==='approved'?`<div class="submission-pts">+${s.pts} pts</div>`:''}
+          ${s.status==='approved'?`<div class="submission-pts">+${s.pts} pts | ⏱ ${s.hours||0}h</div>`:''}
         </div>
       </div>`).join('')}
   `;
@@ -1333,6 +1327,7 @@ function renderMyMetrics() {
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <span class="tag" style="background:rgba(0,229,160,0.08);border-color:rgba(0,229,160,0.15);color:var(--gaia-green);">${m.tasks_done} tarefas feitas</span>
             <span class="tag tag-pts">+${memberPoints[m.id]||m.pts} pts totais</span>
+            <span class="tag tag-hours">⏱ ${m.hours||0} horas</span>
           </div>
         </div>
       </div>
@@ -1386,6 +1381,7 @@ function filterAdminMembers(filter, el) {
     <div class="grid grid-auto">
       ${members.map(m => {
         const pts = memberPoints[m.id]||m.pts;
+        const hours = m.hours || 0;
         const avg = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
         const isEQ = m.team==='eletroquad';
         return `<div class="member-card ${m.team}" onclick="openMemberModal('${m.id}')">
@@ -1403,8 +1399,8 @@ function filterAdminMembers(filter, el) {
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
             <div>
-              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:var(--accent)">${pts}</div>
-              <div style="font-size:10px;color:var(--text-muted);">pontos</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:var(--accent)">${pts} <span style="font-size:12px;color:var(--text-muted);font-weight:normal;">pts</span></div>
+              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#bb86fc;">⏱ ${hours}h</div>
             </div>
             <div style="text-align:right;">
               <div style="font-size:13px;font-weight:500;">${m.tasks_done} feitas</div>
@@ -1448,12 +1444,13 @@ function renderSubmissionReview(s, readonly=false) {
       </div>
       <span class="status-badge status-${s.status}">${{pending:'Pendente',approved:'Aprovado',rejected:'Reprovado'}[s.status]}</span>
       <span class="tag tag-pts">+${s.pts} pts</span>
+      <span class="tag tag-hours">⏱ ${s.hours||0}h</span>
     </div>
     <div style="font-size:12px;color:var(--text-dim);padding:8px;background:var(--bg3);border-radius:8px;margin:8px 0;">${s.desc}</div>
     ${s.link ? `<a href="${s.link}" target="_blank" style="font-size:11px;color:var(--accent);text-decoration:none;">🔗 ${s.link}</a>` : ''}
     <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${formatDate(s.date)}</div>
     ${!readonly ? `<div class="admin-review-actions">
-      <button class="btn-approve" onclick="reviewSubmission('${s.id}','approved')">✓ Aprovar (+${s.pts} pts)</button>
+      <button class="btn-approve" onclick="reviewSubmission('${s.id}','approved')">✓ Aprovar (+${s.pts}pts / +${s.hours||0}h)</button>
       <button class="btn-reject" onclick="reviewSubmission('${s.id}','rejected')">✕ Reprovar</button>
     </div>` : ''}
   </div>`;
@@ -1466,8 +1463,12 @@ function reviewSubmission(id, verdict) {
   if(verdict === 'approved') {
     memberPoints[sub.memberId] = (memberPoints[sub.memberId]||0) + sub.pts;
     const m = MEMBERS.find(x=>x.id===sub.memberId);
-    if(m){ m.tasks_done++; m.tasks_pending = Math.max(0,(m.tasks_pending||0)-1); }
-    toast(`Entrega aprovada! +${sub.pts} pts para ${sub.memberName}`,'success');
+    if(m){ 
+      m.tasks_done++; 
+      m.tasks_pending = Math.max(0,(m.tasks_pending||0)-1); 
+      m.hours = (m.hours || 0) + (sub.hours || 0); // Soma as horas pro certificado
+    }
+    toast(`Entrega aprovada! +${sub.pts} pts e +${sub.hours||0}h para ${sub.memberName}`,'success');
   } else {
     toast(`Entrega de ${sub.memberName} reprovada.`,'error');
   }
@@ -1486,11 +1487,13 @@ function createTask() {
     team: document.getElementById('new-task-team').value,
     diff: document.getElementById('new-task-diff').value,
     pts: parseInt(document.getElementById('new-task-pts').value)||50,
+    hours: parseInt(document.getElementById('new-task-hours').value)||2, // Puxa as horas!
     deadline: document.getElementById('new-task-deadline').value || '2026-12-31',
     status: 'available', claimedBy: null, submittedBy: [],
   };
   tasks.unshift(task);
   ['new-task-title','new-task-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('new-task-hours').value = 2;
   saveToFirebase();
   toast('Tarefa criada e publicada!','success');
 }
@@ -1544,6 +1547,7 @@ function openMemberModal(id) {
   if(!m) return;
   const isEQ = m.team==='eletroquad';
   const pts = memberPoints[m.id]||m.pts;
+  const hours = m.hours || 0;
   const avg = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
   const labels = { presenca:'Presença', tarefas:'Tarefas', qualidade:'Qualidade', pontualidade:'Pontualidade', colaboracao:'Colaboração' };
   const colors = [ 'var(--gaia-blue)','var(--gaia-green)','var(--accent)','var(--accent3)','var(--accent2)' ];
@@ -1563,7 +1567,7 @@ function openMemberModal(id) {
     <div style="display:flex;gap:16px;margin-bottom:20px;">
       <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:${avg>=90?'var(--accent2)':avg>=75?'var(--accent)':'var(--accent3)'};">${avg}%</div></div>
       <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--accent)">${pts}</div></div>
-      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Entregues</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--accent2)">${mySubs.filter(s=>s.status==='approved').length}</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Horas Certif.</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:#bb86fc;">${hours}h</div></div>
     </div>
     ${entries.map(([k,v],i)=>`<div class="progress-item"><div class="progress-header"><span class="progress-label">${labels[k]}</span><span class="progress-val">${v}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${v}%;background:${colors[i]};"></div></div></div>`).join('')}
     <div class="divider"></div>
