@@ -1029,7 +1029,7 @@ function showPage(page, el) {
 }
 
 // ══════════════════════════════════════════════
-//  HOME PAGE
+//  HOME PAGE & ATIVIDADE RECENTE DINÂMICA
 // ══════════════════════════════════════════════
 function renderHomePage() {
   const allPts = MEMBERS.reduce((s,m)=> s + (memberPoints[m.id]||m.pts), 0);
@@ -1060,10 +1060,24 @@ function renderHomePage() {
   renderMiniMembers('eletroquad','eq-members-overview');
   renderMiniMembers('robotica','rob-members-overview');
 
-  const activities = [
-    { icon:'🌟', text:'<b>Nova equipe cadastrada!</b> Sistema atualizado para a versão 3.0.', time:'agora', color:'var(--gaia-blue)' },
-    { icon:'🏆', text:'<b>Recompensa do ciclo</b> inicial foi cadastrada', time:'há 1 dia', color:'var(--gaia-gold)' },
-  ];
+  // ---- FEED DINÂMICO ----
+  let activities = [];
+  const approvedSubs = submissions.filter(s => s.status === 'approved');
+  const recentSubs = approvedSubs.slice(-4).reverse();
+
+  recentSubs.forEach(sub => {
+    activities.push({
+      icon: '✅',
+      text: `<b>${sub.memberName}</b> concluiu a tarefa "${sub.taskTitle}" e ganhou ${sub.pts} pts!`,
+      time: formatDate(sub.date),
+      color: 'var(--accent2)'
+    });
+  });
+
+  if (activities.length === 0) {
+    activities.push({ icon:'🌟', text:'<b>Portal Gaia online!</b> Assuma tarefas e comece a pontuar para aparecer aqui.', time:'agora', color:'var(--gaia-blue)' });
+  }
+
   document.getElementById('recent-activity').innerHTML = activities.map(a=>`
     <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;">
       <div style="font-size:18px;">${a.icon}</div>
@@ -1561,7 +1575,7 @@ function openMemberModal(id) {
   `;
 
   // Exibir botões de edição se for o próprio usuário ou se for ADM
-  if(currentUser.isAdmin) {
+  if(currentUser.isAdmin || currentUser.id === id) {
       document.getElementById('modal-member-footer').style.display = 'flex';
       document.getElementById('btn-admin-edit-user').onclick = () => { closeModal('modal-member'); openEditUserModal(id); };
       document.getElementById('btn-admin-edit-skills').onclick = () => { openEditSkillsModal(id); };
