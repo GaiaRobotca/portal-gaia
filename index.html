@@ -459,7 +459,7 @@
     <div id="page-admin-submissions" class="page">
       <div class="page-header">
         <div class="page-title">Entregas para Revisão</div>
-        <div class="page-subtitle">Avalie e aprove tarefas para contabilizar pontos e horas</div>
+        <div class="page-subtitle">Avalie e aprove tarefas, adicione feedback para os membros</div>
       </div>
       <div id="admin-submissions-list"></div>
     </div>
@@ -687,7 +687,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-// Alterado para v4 para aplicar o sistema de Horas do zero!
 const dbRef = db.ref('portal_gaia_data_v4');
 
 // ══════════════════════════════════════════════
@@ -735,14 +734,12 @@ dbRef.on('value', (snapshot) => {
   const data = snapshot.val();
   
   if (data && data.members) {
-    // Garante que o campo hours exista para não bugar contas antigas se voltarem pra ca
     MEMBERS = data.members.map(m => ({...m, hours: m.hours || 0}));
     tasks = data.tasks || [];
     submissions = data.submissions || [];
     rewards = data.rewards || [];
     memberPoints = data.memberPoints || {};
   } else {
-    // Banco vazio: inicializa equipe Gaia
     MEMBERS = JSON.parse(JSON.stringify(INITIAL_MEMBERS));
     tasks = JSON.parse(JSON.stringify(INITIAL_TASKS));
     submissions = [];
@@ -1097,7 +1094,6 @@ function filterTasks(filter, el) {
   else if(filter === 'claimed') filtered = filtered.filter(t=>t.status==='claimed');
   else if(filter === 'done') filtered = filtered.filter(t=>t.status==='done');
 
-  // Filtro de equipe (todos vêem both e sua propria equipe)
   const member = MEMBERS.find(m=>m.id===currentUser.id);
   if(member) {
       filtered = filtered.filter(t=> t.team===member.team || t.team==='both');
@@ -1119,7 +1115,6 @@ function renderTaskItem(t) {
 
   let actionHtml = '';
   
-  // ADMs E membros normais agora vêm o botão e podem assumir
   const isMyClaim = t.claimedBy === currentUser.id;
   const isMySubmit = t.submittedBy && t.submittedBy.includes(currentUser.id);
 
@@ -1289,13 +1284,14 @@ function renderMyProfile() {
 
     <div class="section-header"><div class="section-title">📋 Histórico de Entregas</div></div>
     ${mySubs.length === 0 ? '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Nenhuma entrega ainda. Assuma uma tarefa!</div></div>'
-    : mySubs.map(s=>`
+    : mySubs.slice().reverse().map(s=>`
       <div class="submission-item">
         <div class="submission-header">
           <div class="submission-task">${s.taskTitle}</div>
           <span class="status-badge status-${s.status}">${{pending:'Aguardando',approved:'Aprovado',rejected:'Reprovado'}[s.status]}</span>
         </div>
         <div style="font-size:11px;color:var(--text-dim);">${s.desc.substring(0,100)}${s.desc.length>100?'...':''}</div>
+        ${s.adminFeedback ? `<div style="margin-top:6px; padding:6px; background:rgba(255,209,102,0.05); border-left:2px solid var(--gaia-gold); font-size:10px; color:var(--text-dim);"><b>Obs do ADM:</b> ${s.adminFeedback}</div>` : ''}
         <div style="display:flex;justify-content:space-between;margin-top:8px;">
           <div class="submission-date">${formatDate(s.date)}</div>
           ${s.status==='approved'?`<div class="submission-pts">+${s.pts} pts | ⏱ ${s.hours||0}h</div>`:''}
@@ -1424,17 +1420,19 @@ function renderAdminSubmissions() {
     html += `<div class="empty-state" style="margin-bottom:20px;"><div class="empty-icon">🎉</div><div class="empty-text">Nenhuma entrega pendente de revisão!</div></div>`;
   } else {
     html += `<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--accent3);">⏳ Aguardando Revisão (${pending.length})</div>`;
-    html += pending.map(s => renderSubmissionReview(s)).join('');
+    html += pending.map(s => renderSubmissionReview(s, false)).join('');
   }
   if(reviewed.length > 0) {
     html += `<div class="divider"></div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--text-dim);">Histórico Revisado</div>`;
-    html += reviewed.map(s => renderSubmissionReview(s, true)).join('');
+    html += reviewed.slice().reverse().map(s => renderSubmissionReview(s, true)).join('');
   }
   document.getElementById('admin-submissions-list').innerHTML = html;
 }
 
 function renderSubmissionReview(s, readonly=false) {
   const m = MEMBERS.find(x=>x.id===s.memberId);
+  const feedbackHtml = s.adminFeedback ? `<div style="margin-top:8px; padding:8px; background:rgba(255,209,102,0.05); border:1px solid rgba(255,209,102,0.15); border-radius:6px; font-size:11px; color:var(--text); border-left: 3px solid var(--gaia-gold);"><b>Observação (Feedback):</b> <span style="color:var(--text-dim);">${s.adminFeedback}</span></div>` : '';
+
   return `<div class="admin-review-item">
     <div class="admin-review-header">
       <div class="task-claimer-avatar" style="background:${m?.color||'#888'};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;">${m?.avatar||'?'}</div>
@@ -1448,8 +1446,10 @@ function renderSubmissionReview(s, readonly=false) {
     </div>
     <div style="font-size:12px;color:var(--text-dim);padding:8px;background:var(--bg3);border-radius:8px;margin:8px 0;">${s.desc}</div>
     ${s.link ? `<a href="${s.link}" target="_blank" style="font-size:11px;color:var(--accent);text-decoration:none;">🔗 ${s.link}</a>` : ''}
+    ${feedbackHtml}
     <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${formatDate(s.date)}</div>
-    ${!readonly ? `<div class="admin-review-actions">
+    ${!readonly ? `<div style="margin-top:12px;"><input type="text" id="feedback-${s.id}" placeholder="Escreva uma observação de revisão (opcional)..." style="width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:8px 12px; color:var(--text); font-size:11px; outline:none; margin-bottom:8px;"></div>
+    <div class="admin-review-actions">
       <button class="btn-approve" onclick="reviewSubmission('${s.id}','approved')">✓ Aprovar (+${s.pts}pts / +${s.hours||0}h)</button>
       <button class="btn-reject" onclick="reviewSubmission('${s.id}','rejected')">✕ Reprovar</button>
     </div>` : ''}
@@ -1459,6 +1459,12 @@ function renderSubmissionReview(s, readonly=false) {
 function reviewSubmission(id, verdict) {
   const sub = submissions.find(s=>s.id===id);
   if(!sub) return;
+
+  const feedbackInput = document.getElementById(`feedback-${id}`);
+  if(feedbackInput && feedbackInput.value.trim()) {
+     sub.adminFeedback = feedbackInput.value.trim();
+  }
+
   sub.status = verdict;
   if(verdict === 'approved') {
     memberPoints[sub.memberId] = (memberPoints[sub.memberId]||0) + sub.pts;
@@ -1575,7 +1581,13 @@ function openMemberModal(id) {
     <div style="font-size:13px;">${m.role}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">${skillsList}</div>
     ${mySubs.length > 0 ? `<div class="divider"></div><div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Entregas Recentes</div>
-    ${mySubs.slice(0,3).map(s=>`<div class="submission-item"><div class="submission-header"><div class="submission-task">${s.taskTitle}</div><span class="status-badge status-${s.status}">${{pending:'Pend.',approved:'OK',rejected:'Repr.'}[s.status]}</span></div><div style="font-size:10px;color:var(--text-muted);">${formatDate(s.date)}</div></div>`).join('')}` : ''}
+    ${mySubs.slice().reverse().slice(0,3).map(s=>`
+      <div class="submission-item">
+        <div class="submission-header"><div class="submission-task">${s.taskTitle}</div><span class="status-badge status-${s.status}">${{pending:'Pend.',approved:'OK',rejected:'Repr.'}[s.status]}</span></div>
+        ${s.adminFeedback ? `<div style="margin-top:4px; padding:4px 6px; background:rgba(255,209,102,0.05); border-left:2px solid var(--gaia-gold); font-size:10px; color:var(--text-dim);"><b>Obs:</b> ${s.adminFeedback}</div>` : ''}
+        <div style="font-size:10px;color:var(--text-muted); margin-top:4px;">${formatDate(s.date)}</div>
+      </div>
+    `).join('')}` : ''}
   `;
 
   // Exibir botões de edição se for o próprio usuário ou se for ADM
