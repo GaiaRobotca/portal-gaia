@@ -331,6 +331,10 @@
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Membros (Gestão)
       </div>
+      <div class="nav-item" onclick="showPage('admin-attendance',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Lista de Presença
+      </div>
       <div class="nav-item" onclick="showPage('admin-submissions',this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Entregas
@@ -454,6 +458,38 @@
         <div class="tab" onclick="filterAdminMembers('robotica',this)">Robótica</div>
       </div>
       <div id="admin-members-list"></div>
+    </div>
+
+    <div id="page-admin-attendance" class="page">
+      <div class="page-header">
+        <div class="page-title">Lista de Presença</div>
+        <div class="page-subtitle">Registre reuniões e adicione horas de certificado automaticamente para os presentes</div>
+      </div>
+      
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-title">Nova Reunião / Evento</div>
+        <div class="form-row">
+          <div class="form-group" style="flex:1;">
+            <label>Data</label>
+            <input type="date" id="att-date" />
+          </div>
+          <div class="form-group" style="flex:2;">
+            <label>Descrição do Evento</label>
+            <input type="text" id="att-desc" placeholder="Ex: Reunião Geral de Sábado, Laboratório..." />
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label>Horas Validadas</label>
+            <input type="number" id="att-hours" value="2" min="1" max="20" />
+          </div>
+        </div>
+        <label style="display:block; font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin:12px 0 8px;">Membros Presentes</label>
+        <div id="attendance-members-list" class="grid grid-3" style="background:var(--bg3); padding:16px; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:20px;">
+          </div>
+        <button class="btn-primary" onclick="saveAttendance()" style="width:auto; padding:12px 28px;">Registrar Presença e Adicionar Horas</button>
+      </div>
+
+      <div class="section-header"><div class="section-title">Histórico de Presenças</div></div>
+      <div id="attendance-history"></div>
     </div>
 
     <div id="page-admin-submissions" class="page">
@@ -729,7 +765,7 @@ const db = firebase.database();
 const dbRef = db.ref('portal_gaia_data_v4');
 
 // ══════════════════════════════════════════════
-//  DADOS INICIAIS (EQUIPE GAIA REAL COM HORAS)
+//  DADOS INICIAIS
 // ══════════════════════════════════════════════
 const INITIAL_MEMBERS = [
   // ──── ADMS ────
@@ -765,6 +801,7 @@ let tasks = [];
 let submissions = [];
 let rewards = [];
 let memberPoints = {};
+let attendance = []; // Array para salvar o histórico de presenças
 
 // ══════════════════════════════════════════════
 //  SINCRONIZAÇÃO E NUVEM
@@ -778,11 +815,13 @@ dbRef.on('value', (snapshot) => {
     submissions = data.submissions || [];
     rewards = data.rewards || [];
     memberPoints = data.memberPoints || {};
+    attendance = data.attendance || [];
   } else {
     MEMBERS = JSON.parse(JSON.stringify(INITIAL_MEMBERS));
     tasks = JSON.parse(JSON.stringify(INITIAL_TASKS));
     submissions = [];
     rewards = [];
+    attendance = [];
     MEMBERS.forEach(m => { memberPoints[m.id] = m.pts; });
     saveToFirebase();
   }
@@ -812,11 +851,12 @@ dbRef.on('value', (snapshot) => {
     if (document.getElementById('page-admin-submissions').classList.contains('active')) renderAdminSubmissions();
     if (document.getElementById('page-admin-members').classList.contains('active')) filterAdminMembers(currentAdminMemberFilter);
     if (document.getElementById('page-myprofile').classList.contains('active')) renderMyProfile();
+    if (document.getElementById('page-admin-attendance').classList.contains('active')) renderAdminAttendance();
   }
 });
 
 function saveToFirebase() {
-  dbRef.set({ tasks, submissions, rewards, memberPoints, members: MEMBERS });
+  dbRef.set({ tasks, submissions, rewards, memberPoints, members: MEMBERS, attendance });
 }
 
 // ══════════════════════════════════════════════
@@ -1086,6 +1126,7 @@ function showPage(page, el) {
     'myprofile': renderMyProfile,
     'mymetrics': renderMyMetrics,
     'admin-members': renderAdminMembers,
+    'admin-attendance': renderAdminAttendance,
     'admin-submissions': renderAdminSubmissions,
     'admin-tasks': ()=>{},
     'admin-rewards': renderAdminRewards,
@@ -1481,6 +1522,84 @@ function filterAdminMembers(filter, el) {
 }
 
 // ══════════════════════════════════════════════
+//  ADMIN: ATTENDANCE (PRESENÇA)
+// ══════════════════════════════════════════════
+function renderAdminAttendance() {
+    // Rendereiza os checkboxes para os membros
+    const checkboxesHtml = MEMBERS.map(m => `
+        <label class="checkbox-group" style="padding:8px; background:var(--bg2); border-radius:8px; border:1px solid var(--border);">
+            <input type="checkbox" class="att-member-check" value="${m.id}" />
+            <span style="font-size:13px; font-weight:500; margin-left:6px;">${m.name}</span>
+        </label>
+    `).join('');
+    document.getElementById('attendance-members-list').innerHTML = checkboxesHtml;
+
+    // Rendereiza o histórico
+    if (attendance.length === 0) {
+        document.getElementById('attendance-history').innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">Nenhuma reunião registrada.</div></div>`;
+        return;
+    }
+
+    const historyHtml = attendance.slice().reverse().map(a => {
+        return `
+        <div class="card card-sm" style="margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                    <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--text);">${a.desc}</div>
+                    <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">📅 ${formatDate(a.date)}</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="tag tag-hours" style="font-size:12px; padding:4px 10px;">⏱ +${a.hours}h</div>
+                    <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">${a.attendees.length} presentes</div>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+    document.getElementById('attendance-history').innerHTML = historyHtml;
+}
+
+function saveAttendance() {
+    const date = document.getElementById('att-date').value;
+    const desc = document.getElementById('att-desc').value.trim();
+    const hours = parseInt(document.getElementById('att-hours').value);
+
+    if(!date || !desc || isNaN(hours)) { toast('Preencha Data, Descrição e Horas!', 'error'); return; }
+
+    const checkboxes = document.querySelectorAll('.att-member-check');
+    const presentIds = [];
+    checkboxes.forEach(cb => { if(cb.checked) presentIds.push(cb.value); });
+
+    if(presentIds.length === 0) { toast('Marque pelo menos uma pessoa presente!', 'error'); return; }
+
+    // Salva o log de presença
+    const newAtt = {
+        id: 'a'+Date.now(),
+        date: date,
+        desc: desc,
+        hours: hours,
+        attendees: presentIds
+    };
+    attendance.push(newAtt);
+
+    // Adiciona as horas pros membros
+    presentIds.forEach(id => {
+        const m = MEMBERS.find(x => x.id === id);
+        if(m) {
+            m.hours = (m.hours || 0) + hours;
+        }
+    });
+
+    // Limpa o formulário
+    document.getElementById('att-date').value = '';
+    document.getElementById('att-desc').value = '';
+    document.getElementById('att-hours').value = '2';
+    checkboxes.forEach(cb => cb.checked = false);
+
+    saveToFirebase();
+    toast(`Presença registrada! +${hours}h para ${presentIds.length} membros.`, 'success');
+}
+
+// ══════════════════════════════════════════════
 //  ADMIN: SUBMISSIONS
 // ══════════════════════════════════════════════
 function renderAdminSubmissions() {
@@ -1544,7 +1663,7 @@ function reviewSubmission(id, verdict) {
     if(m){ 
       m.tasks_done++; 
       m.tasks_pending = Math.max(0,(m.tasks_pending||0)-1); 
-      m.hours = (m.hours || 0) + (sub.hours || 0);
+      m.hours = (m.hours || 0) + (sub.hours || 0); // Soma as horas pro certificado
     }
     toast(`Entrega aprovada! +${sub.pts} pts e +${sub.hours||0}h para ${sub.memberName}`,'success');
   } else {
@@ -1565,7 +1684,7 @@ function createTask() {
     team: document.getElementById('new-task-team').value,
     diff: document.getElementById('new-task-diff').value,
     pts: parseInt(document.getElementById('new-task-pts').value)||50,
-    hours: parseInt(document.getElementById('new-task-hours').value)||2,
+    hours: parseInt(document.getElementById('new-task-hours').value)||2, // Puxa as horas!
     deadline: document.getElementById('new-task-deadline').value || '2026-12-31',
     status: 'available', claimedBy: null, submittedBy: [],
   };
