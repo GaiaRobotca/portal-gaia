@@ -39,66 +39,36 @@
     overflow-x: hidden;
   }
 
-  /* ──── BG NOISE ──── */
   body::before {
-    content:'';
-    position:fixed; inset:0;
+    content:''; position:fixed; inset:0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     opacity:0.4; pointer-events:none; z-index:0;
   }
 
-  /* ──── LAYOUT ──── */
   #app { position:relative; z-index:1; }
-
   .screen { display:none; min-height:100vh; }
   .screen.active { display:flex; }
 
-  /* ──────────────────────────────────────────────
-     LOGIN SCREEN
-  ────────────────────────────────────────────── */
+  /* ──── LOGIN ──── */
   #screen-login {
-    align-items:center; justify-content:center;
-    flex-direction:column; gap:0;
+    align-items:center; justify-content:center; flex-direction:column; gap:0;
     background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,143,255,0.12) 0%, transparent 70%),
                 radial-gradient(ellipse 50% 40% at 80% 100%, rgba(0,229,160,0.08) 0%, transparent 60%),
                 var(--bg);
   }
-
   .login-card {
-    width:100%; max-width:420px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 48px 40px;
-    position:relative;
-    overflow:hidden;
+    width:100%; max-width:420px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 24px; padding: 48px 40px; position:relative; overflow:hidden;
     animation: fadeUp 0.6s ease both;
   }
-  .login-card::before {
-    content:'';
-    position:absolute; top:-1px; left:20%; right:20%;
-    height:1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  }
-
+  .login-card::before { content:''; position:absolute; top:-1px; left:20%; right:20%; height:1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
   .logo-area { text-align:center; margin-bottom:36px; }
   .logo-glyph {
-    width:64px; height:64px;
-    margin:0 auto 16px;
+    width:64px; height:64px; margin:0 auto 16px; border-radius:16px;
     background: linear-gradient(135deg, var(--gaia-blue), var(--gaia-green));
-    border-radius:16px;
     display:flex; align-items:center; justify-content:center;
-    font-family:'Syne',sans-serif; font-weight:800; font-size:24px;
-    color:#fff;
-    box-shadow: 0 0 40px rgba(26,143,255,0.3);
-    position:relative;
-  }
-  .logo-glyph::after {
-    content:'';
-    position:absolute; inset:-3px;
-    border-radius:18px;
-    background: linear-gradient(135deg, var(--gaia-blue), var(--gaia-green));
-    z-index:-1; opacity:0.3; filter:blur(8px);
+    font-family:'Syne',sans-serif; font-weight:800; font-size:24px; color:#fff;
+    box-shadow: 0 0 40px rgba(26,143,255,0.3); position:relative;
   }
   .logo-title { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:var(--text); }
   .logo-sub { color:var(--text-dim); font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-top:4px; }
@@ -106,189 +76,82 @@
   .form-group { margin-bottom:16px; }
   .form-group label { display:block; font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
   .form-group input, .form-group select {
-    width:100%;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    color: var(--text);
-    font-family:'DM Sans',sans-serif; font-size:14px;
-    outline:none;
+    width:100%; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 16px; color: var(--text); font-family:'DM Sans',sans-serif; font-size:14px; outline:none;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .form-group input:focus, .form-group select:focus {
-    border-color: var(--border-active);
-    box-shadow: 0 0 0 3px rgba(99,210,255,0.08);
-  }
-  .form-group select option { background: var(--bg3); }
+  .form-group input:focus, .form-group select:focus { border-color: var(--border-active); box-shadow: 0 0 0 3px rgba(99,210,255,0.08); }
+  
+  .checkbox-group { display:flex; align-items:center; gap:10px; margin-bottom:16px; cursor:pointer; }
+  .checkbox-group input { width:16px; height:16px; cursor:pointer; }
 
-  .btn-primary {
-    width:100%; padding:14px;
-    background: linear-gradient(135deg, var(--gaia-blue), #0d6fff);
-    border:none; border-radius: var(--radius);
-    color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:14px;
-    letter-spacing:0.04em; cursor:pointer;
-    transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
-    margin-top:8px;
-  }
+  .btn-primary { width:100%; padding:14px; background: linear-gradient(135deg, var(--gaia-blue), #0d6fff); border:none; border-radius: var(--radius); color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:14px; letter-spacing:0.04em; cursor:pointer; transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s; margin-top:8px; }
   .btn-primary:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(26,143,255,0.35); }
   .btn-primary:active { transform:translateY(0); }
 
   .login-divider { text-align:center; color:var(--text-muted); font-size:11px; margin:20px 0; letter-spacing:0.06em; }
-  .demo-btns { display:flex; gap:8px; }
-  .btn-demo {
-    flex:1; padding:10px;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color:var(--text-dim); font-size:12px; cursor:pointer;
-    transition: all 0.2s;
-    font-family:'DM Mono',monospace;
-  }
-  .btn-demo:hover { border-color:var(--border-active); color:var(--accent); }
 
-  /* ──────────────────────────────────────────────
-     DASHBOARD LAYOUT
-  ────────────────────────────────────────────── */
-  #screen-dashboard {
-    flex-direction:row;
-    animation: fadeIn 0.4s ease;
-  }
-
-  .sidebar {
-    width:240px; min-width:240px;
-    background: var(--bg2);
-    border-right: 1px solid var(--border);
-    display:flex; flex-direction:column;
-    padding:24px 16px;
-    position:sticky; top:0; height:100vh;
-    overflow-y:auto;
-  }
-
-  .sidebar-logo {
-    display:flex; align-items:center; gap:12px;
-    padding:0 8px; margin-bottom:32px;
-  }
-  .sidebar-logo-icon {
-    width:36px; height:36px;
-    background: linear-gradient(135deg, var(--gaia-blue), var(--gaia-green));
-    border-radius:10px;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Syne',sans-serif; font-weight:800; font-size:14px; color:#fff;
-    flex-shrink:0;
-  }
+  /* ──── DASHBOARD ──── */
+  #screen-dashboard { flex-direction:row; animation: fadeIn 0.4s ease; }
+  .sidebar { width:240px; min-width:240px; background: var(--bg2); border-right: 1px solid var(--border); display:flex; flex-direction:column; padding:24px 16px; position:sticky; top:0; height:100vh; overflow-y:auto; }
+  .sidebar-logo { display:flex; align-items:center; gap:12px; padding:0 8px; margin-bottom:32px; }
+  .sidebar-logo-icon { width:36px; height:36px; background: linear-gradient(135deg, var(--gaia-blue), var(--gaia-green)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:14px; color:#fff; flex-shrink:0; }
   .sidebar-logo-text { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; }
   .sidebar-logo-sub { font-size:10px; color:var(--text-dim); letter-spacing:0.06em; text-transform:uppercase; }
 
   .nav-section { margin-bottom:24px; }
   .nav-section-label { font-size:10px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); padding:0 8px; margin-bottom:8px; }
-  .nav-item {
-    display:flex; align-items:center; gap:10px;
-    padding:9px 10px; border-radius:10px;
-    color:var(--text-dim); font-size:13px; font-weight:400;
-    cursor:pointer; transition: all 0.15s;
-    margin-bottom:2px; user-select:none;
-  }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:10px; color:var(--text-dim); font-size:13px; font-weight:400; cursor:pointer; transition: all 0.15s; margin-bottom:2px; user-select:none; }
   .nav-item:hover { background:var(--card); color:var(--text); }
   .nav-item.active { background: rgba(26,143,255,0.12); color:var(--accent); font-weight:500; }
   .nav-item svg { opacity:0.7; flex-shrink:0; }
   .nav-item.active svg { opacity:1; }
 
-  .sidebar-footer {
-    margin-top:auto;
-    padding:12px;
-    background: var(--bg3);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-  }
+  .sidebar-footer { margin-top:auto; padding:12px; background: var(--bg3); border:1px solid var(--border); border-radius:var(--radius); }
   .sidebar-user { display:flex; align-items:center; gap:10px; }
-  .sidebar-avatar {
-    width:32px; height:32px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:12px; font-weight:700; color:#fff; flex-shrink:0;
-  }
+  .sidebar-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
   .sidebar-user-info { flex:1; min-width:0; }
   .sidebar-user-name { font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sidebar-user-role { font-size:10px; color:var(--text-dim); }
   .sidebar-logout { cursor:pointer; color:var(--text-muted); transition:color 0.2s; flex-shrink:0; }
   .sidebar-logout:hover { color:var(--accent-red); }
 
-  /* ──── MAIN CONTENT ──── */
   .main { flex:1; padding:32px; overflow-y:auto; }
-
   .page { display:none; }
   .page.active { display:block; animation: fadeIn 0.3s ease; }
-
   .page-header { margin-bottom:28px; }
   .page-title { font-family:'Syne',sans-serif; font-weight:800; font-size:26px; }
   .page-subtitle { color:var(--text-dim); font-size:13px; margin-top:4px; }
+  .page-actions { display:flex; align-items:center; justify-content:space-between; }
 
-  /* ──── CARDS ──── */
   .grid { display:grid; gap:16px; }
   .grid-2 { grid-template-columns: repeat(2,1fr); }
   .grid-3 { grid-template-columns: repeat(3,1fr); }
   .grid-4 { grid-template-columns: repeat(4,1fr); }
   .grid-auto { grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); }
 
-  .card {
-    background: var(--bg2);
-    border:1px solid var(--border);
-    border-radius:var(--radius-lg);
-    padding:20px;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .card:hover { border-color: rgba(255,255,255,0.12); background:var(--bg3); }
+  .card { background: var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; transition: border-color 0.2s, background 0.2s; }
   .card-sm { padding:16px; border-radius:var(--radius); }
-  .card-title { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; margin-bottom:16px; }
   .card-label { font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
   .card-value { font-family:'Syne',sans-serif; font-weight:700; font-size:28px; }
   .card-value.sm { font-size:20px; }
   .card-change { font-size:11px; margin-top:4px; }
   .pos { color:var(--accent2); } .neg { color:var(--accent-red); }
 
-  /* ──── STAT CHIPS ──── */
-  .stat-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px; }
-  .stat-chip {
-    background:var(--bg2); border:1px solid var(--border);
-    border-radius:100px; padding:6px 14px;
-    display:flex; align-items:center; gap:8px;
-    font-size:12px;
-  }
-  .stat-chip-dot { width:6px; height:6px; border-radius:50%; }
-
-  /* ──── MEMBER CARDS ──── */
-  .member-card {
-    background:var(--bg2); border:1px solid var(--border);
-    border-radius:var(--radius-lg); padding:20px;
-    cursor:pointer; transition:all 0.2s;
-    position:relative; overflow:hidden;
-  }
-  .member-card::before {
-    content:''; position:absolute;
-    top:0; left:0; right:0; height:3px;
-  }
+  .member-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+  .member-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
   .member-card.eletroquad::before { background:linear-gradient(90deg, var(--gaia-blue), var(--accent)); }
   .member-card.robotica::before { background:linear-gradient(90deg, var(--gaia-green), var(--accent2)); }
   .member-card:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(0,0,0,0.3); border-color:rgba(255,255,255,0.12); }
-
   .member-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
-  .member-avatar {
-    width:44px; height:44px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:#fff; flex-shrink:0;
-  }
+  .member-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:#fff; flex-shrink:0; }
   .member-name { font-family:'Syne',sans-serif; font-weight:700; font-size:14px; }
   .member-role { font-size:11px; color:var(--text-dim); margin-top:2px; }
-  .member-team-badge {
-    margin-left:auto; padding:3px 10px;
-    border-radius:100px; font-size:10px; font-weight:600;
-    letter-spacing:0.06em; text-transform:uppercase;
-  }
+  .member-team-badge { margin-left:auto; padding:3px 10px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; }
   .badge-eq { background:rgba(26,143,255,0.15); color:var(--gaia-blue); border:1px solid rgba(26,143,255,0.25); }
   .badge-rob { background:rgba(0,229,160,0.12); color:var(--gaia-green); border:1px solid rgba(0,229,160,0.2); }
   .badge-adm { background:rgba(255,209,102,0.15); color:var(--gaia-gold); border:1px solid rgba(255,209,102,0.25); }
 
-  /* ──── PROGRESS BAR ──── */
   .progress-item { margin-bottom:12px; }
   .progress-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
   .progress-label { font-size:12px; color:var(--text-dim); }
@@ -296,22 +159,9 @@
   .progress-bar { height:5px; background:var(--bg3); border-radius:100px; overflow:hidden; }
   .progress-fill { height:100%; border-radius:100px; transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
 
-  /* ──── TASKS ──── */
-  .task-item {
-    background:var(--bg2); border:1px solid var(--border);
-    border-radius:var(--radius); padding:16px;
-    margin-bottom:10px; transition:all 0.2s;
-    position:relative;
-  }
-  .task-item:hover { border-color:rgba(255,255,255,0.1); }
+  .task-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:10px; transition:all 0.2s; position:relative; }
   .task-header { display:flex; align-items:flex-start; gap:12px; }
-  .task-check {
-    width:18px; height:18px; border-radius:5px;
-    border:1.5px solid var(--text-muted);
-    flex-shrink:0; cursor:pointer; transition:all 0.2s;
-    display:flex; align-items:center; justify-content:center;
-    margin-top:1px;
-  }
+  .task-check { width:18px; height:18px; border-radius:5px; border:1.5px solid var(--text-muted); flex-shrink:0; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-top:1px; }
   .task-check.done { background:var(--accent2); border-color:var(--accent2); }
   .task-check.done::after { content:'✓'; font-size:10px; color:#000; font-weight:700; }
   .task-content { flex:1; }
@@ -319,11 +169,7 @@
   .task-title.done { text-decoration:line-through; color:var(--text-dim); }
   .task-desc { font-size:11px; color:var(--text-dim); line-height:1.5; }
   .task-meta { display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap:wrap; }
-  .tag {
-    padding:2px 8px; border-radius:100px;
-    font-size:10px; font-weight:600; letter-spacing:0.04em;
-    border:1px solid transparent;
-  }
+  .tag { padding:2px 8px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:0.04em; border:1px solid transparent; }
   .tag-eq { background:rgba(26,143,255,0.1); color:var(--gaia-blue); border-color:rgba(26,143,255,0.2); }
   .tag-rob { background:rgba(0,229,160,0.08); color:var(--gaia-green); border-color:rgba(0,229,160,0.15); }
   .tag-both { background:rgba(255,209,102,0.1); color:var(--gaia-gold); border-color:rgba(255,209,102,0.2); }
@@ -331,214 +177,73 @@
   .tag-diff-easy { background:rgba(127,255,110,0.08); color:var(--accent2); }
   .tag-diff-med { background:rgba(255,184,106,0.08); color:var(--accent3); }
   .tag-diff-hard { background:rgba(255,110,110,0.08); color:var(--accent-red); }
-  .tag-deadline { background:rgba(255,255,255,0.04); color:var(--text-dim); }
 
-  .task-claimer {
-    margin-left:auto; font-size:11px; color:var(--text-dim);
-    display:flex; align-items:center; gap:6px;
-  }
-  .task-claimer-avatar {
-    width:20px; height:20px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-size:9px; font-weight:700; color:#fff;
-  }
-
-  .btn-claim {
-    padding:6px 14px;
-    background: rgba(26,143,255,0.12);
-    border:1px solid rgba(26,143,255,0.25);
-    border-radius:8px; color:var(--gaia-blue);
-    font-size:11px; font-weight:600; cursor:pointer;
-    transition:all 0.2s; margin-left:auto;
-  }
-  .btn-claim:hover { background:rgba(26,143,255,0.22); }
+  .btn-claim { padding:6px 14px; background: rgba(26,143,255,0.12); border:1px solid rgba(26,143,255,0.25); border-radius:8px; color:var(--gaia-blue); font-size:11px; font-weight:600; cursor:pointer; margin-left:auto; }
   .btn-claim.claimed { background:rgba(0,229,160,0.08); border-color:rgba(0,229,160,0.2); color:var(--gaia-green); cursor:default; }
 
   /* ──── MODALS ──── */
-  .modal-overlay {
-    display:none; position:fixed; inset:0;
-    background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
-    z-index:1000; align-items:center; justify-content:center;
-    padding:20px;
-  }
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center; padding:20px; }
   .modal-overlay.open { display:flex; animation:fadeIn 0.2s; }
-  .modal {
-    background:var(--bg2); border:1px solid var(--border);
-    border-radius:20px; padding:28px; width:100%; max-width:520px;
-    max-height:85vh; overflow-y:auto;
-    animation: fadeUp 0.25s ease;
-    position:relative;
-  }
+  .modal { background:var(--bg2); border:1px solid var(--border); border-radius:20px; padding:28px; width:100%; max-width:520px; max-height:85vh; overflow-y:auto; position:relative; }
   .modal-header { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
   .modal-title { font-family:'Syne',sans-serif; font-weight:700; font-size:18px; }
   .modal-close { margin-left:auto; cursor:pointer; color:var(--text-dim); transition:color 0.2s; }
   .modal-close:hover { color:var(--text); }
-
-  /* ──── FORMS ──── */
-  .form-row { display:flex; gap:12px; }
-  .form-row .form-group { flex:1; }
-  .form-group textarea {
-    width:100%; background:var(--bg3); border:1px solid var(--border);
-    border-radius:var(--radius); padding:12px 16px;
-    color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px;
-    outline:none; resize:vertical; min-height:80px;
-    transition:border-color 0.2s;
-  }
-  .form-group textarea:focus { border-color:var(--border-active); }
-
-  .btn-success {
-    padding:10px 20px;
-    background:rgba(0,229,160,0.12); border:1px solid rgba(0,229,160,0.25);
-    border-radius:var(--radius); color:var(--gaia-green);
-    font-family:'Syne',sans-serif; font-weight:600; font-size:13px;
-    cursor:pointer; transition:all 0.2s;
-  }
-  .btn-success:hover { background:rgba(0,229,160,0.2); }
-
-  .btn-danger {
-    padding:10px 20px;
-    background:rgba(255,110,110,0.08); border:1px solid rgba(255,110,110,0.2);
-    border-radius:var(--radius); color:var(--accent-red);
-    font-family:'Syne',sans-serif; font-weight:600; font-size:13px;
-    cursor:pointer; transition:all 0.2s;
-  }
-
-  .btn-ghost {
-    padding:10px 20px;
-    background:transparent; border:1px solid var(--border);
-    border-radius:var(--radius); color:var(--text-dim);
-    font-size:13px; cursor:pointer; transition:all 0.2s;
-  }
-  .btn-ghost:hover { border-color:rgba(255,255,255,0.15); color:var(--text); }
-
   .modal-footer { display:flex; gap:10px; justify-content:flex-end; margin-top:24px; }
 
-  /* ──── TOASTS ──── */
-  #toast-container {
-    position:fixed; bottom:24px; right:24px;
-    display:flex; flex-direction:column; gap:8px;
-    z-index:9999;
-  }
-  .toast {
-    background:var(--bg2); border:1px solid var(--border);
-    border-radius:12px; padding:12px 16px;
-    display:flex; align-items:center; gap:10px;
-    font-size:13px; min-width:240px;
-    animation: slideIn 0.3s ease;
-    box-shadow:0 8px 24px rgba(0,0,0,0.3);
-  }
+  .form-row { display:flex; gap:12px; }
+  .form-row .form-group { flex:1; }
+
+  .btn-success { padding:10px 20px; background:rgba(0,229,160,0.12); border:1px solid rgba(0,229,160,0.25); border-radius:var(--radius); color:var(--gaia-green); font-family:'Syne',sans-serif; font-weight:600; font-size:13px; cursor:pointer; transition:all 0.2s; }
+  .btn-danger { padding:10px 20px; background:rgba(255,110,110,0.08); border:1px solid rgba(255,110,110,0.2); border-radius:var(--radius); color:var(--accent-red); font-family:'Syne',sans-serif; font-weight:600; font-size:13px; cursor:pointer; transition:all 0.2s; }
+  .btn-ghost { padding:10px 20px; background:transparent; border:1px solid var(--border); border-radius:var(--radius); color:var(--text-dim); font-size:13px; cursor:pointer; transition:all 0.2s; }
+  .btn-ghost:hover { border-color:rgba(255,255,255,0.15); color:var(--text); }
+
+  #toast-container { position:fixed; bottom:24px; right:24px; display:flex; flex-direction:column; gap:8px; z-index:9999; }
+  .toast { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:10px; font-size:13px; min-width:240px; animation: slideIn 0.3s ease; box-shadow:0 8px 24px rgba(0,0,0,0.3); }
   .toast.success { border-color:rgba(0,229,160,0.3); }
   .toast.error { border-color:rgba(255,110,110,0.3); }
-  .toast-icon { font-size:16px; }
 
-  /* ──── TABS ──── */
-  .tabs { display:flex; gap:4px; margin-bottom:20px; background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:4px; width:fit-content; }
-  .tab {
-    padding:8px 16px; border-radius:9px;
-    font-size:12px; font-weight:500; cursor:pointer;
-    color:var(--text-dim); transition:all 0.2s;
-  }
+  .tabs { display:flex; gap:4px; margin-bottom:20px; background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:4px; width:fit-content; flex-wrap:wrap;}
+  .tab { padding:8px 16px; border-radius:9px; font-size:12px; font-weight:500; cursor:pointer; color:var(--text-dim); transition:all 0.2s; }
   .tab.active { background:var(--bg3); color:var(--text); box-shadow:0 1px 3px rgba(0,0,0,0.2); }
 
-  /* ──── RANKING ──── */
-  .rank-item {
-    display:flex; align-items:center; gap:14px;
-    padding:14px 16px; background:var(--bg2); border:1px solid var(--border);
-    border-radius:var(--radius); margin-bottom:8px;
-    transition:all 0.2s;
-  }
-  .rank-item:hover { border-color:rgba(255,255,255,0.1); }
-  .rank-pos {
-    font-family:'Syne',sans-serif; font-weight:800; font-size:18px;
-    color:var(--text-muted); width:24px; text-align:center; flex-shrink:0;
-  }
-  .rank-pos.gold { color:var(--gaia-gold); }
-  .rank-pos.silver { color:#a0aec0; }
-  .rank-pos.bronze { color:#c67b3c; }
+  .rank-item { display:flex; align-items:center; gap:14px; padding:14px 16px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px; transition:all 0.2s; }
+  .rank-pos { font-family:'Syne',sans-serif; font-weight:800; font-size:18px; color:var(--text-muted); width:24px; text-align:center; flex-shrink:0; }
+  .rank-pos.gold { color:var(--gaia-gold); } .rank-pos.silver { color:#a0aec0; } .rank-pos.bronze { color:#c67b3c; }
   .rank-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff; flex-shrink:0; }
   .rank-info { flex:1; }
   .rank-name { font-size:13px; font-weight:500; }
   .rank-detail { font-size:11px; color:var(--text-dim); margin-top:1px; }
   .rank-score { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:var(--accent); }
-  .rank-pts-label { font-size:10px; color:var(--text-muted); }
 
-  /* ──── REWARD SECTION ──── */
-  .reward-card {
-    background: linear-gradient(135deg, rgba(255,209,102,0.08), rgba(255,184,106,0.05));
-    border:1px solid rgba(255,209,102,0.2);
-    border-radius:var(--radius-lg); padding:20px;
-    margin-bottom:20px;
-  }
-  .reward-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-  .reward-icon { font-size:28px; }
-  .reward-title { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:var(--gaia-gold); }
-  .reward-desc { font-size:12px; color:var(--text-dim); margin-top:2px; }
-
-  /* ──── DIVIDER ──── */
-  .divider { height:1px; background:var(--border); margin:20px 0; }
-
-  /* ──── SUBMISSION HISTORY ──── */
-  .submission-item {
-    padding:12px; background:var(--bg3); border-radius:var(--radius);
-    margin-bottom:8px; border:1px solid var(--border);
-  }
-  .submission-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
-  .submission-task { font-size:12px; font-weight:500; }
-  .submission-date { font-size:10px; color:var(--text-muted); font-family:'DM Mono',monospace; }
-  .submission-pts { font-family:'Syne',sans-serif; font-weight:700; font-size:14px; color:var(--accent2); }
+  .submission-item { padding:12px; background:var(--bg3); border-radius:var(--radius); margin-bottom:8px; border:1px solid var(--border); }
   .status-badge { padding:2px 8px; border-radius:100px; font-size:10px; font-weight:600; }
   .status-pending { background:rgba(255,184,106,0.1); color:var(--accent3); }
   .status-approved { background:rgba(0,229,160,0.1); color:var(--gaia-green); }
   .status-rejected { background:rgba(255,110,110,0.08); color:var(--accent-red); }
 
-  /* ──── ADM ──── */
-  .admin-review-item {
-    background:var(--bg2); border:1px solid var(--border);
-    border-radius:var(--radius); padding:16px; margin-bottom:10px;
-  }
-  .admin-review-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-  .admin-review-actions { display:flex; gap:8px; margin-top:12px; }
-  .btn-approve { padding:6px 14px; background:rgba(0,229,160,0.1); border:1px solid rgba(0,229,160,0.2); border-radius:8px; color:var(--gaia-green); font-size:11px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-  .btn-approve:hover { background:rgba(0,229,160,0.2); }
-  .btn-reject { padding:6px 14px; background:rgba(255,110,110,0.06); border:1px solid rgba(255,110,110,0.15); border-radius:8px; color:var(--accent-red); font-size:11px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .admin-review-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:10px; }
 
-  /* ──── EMPTY STATE ──── */
   .empty-state { text-align:center; padding:48px 20px; color:var(--text-muted); }
   .empty-icon { font-size:40px; margin-bottom:12px; }
-  .empty-text { font-size:13px; }
 
-  /* ──── MY PROFILE ──── */
-  .profile-hero {
-    background: var(--bg2); border:1px solid var(--border);
-    border-radius:var(--radius-lg); padding:28px;
-    margin-bottom:20px;
-    position:relative; overflow:hidden;
-  }
-  .profile-hero::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:4px;
-  }
+  .profile-hero { background: var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; margin-bottom:20px; position:relative; overflow:hidden; }
+  .profile-hero::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; }
   .profile-hero.eletroquad::before { background:linear-gradient(90deg, var(--gaia-blue), var(--accent)); }
   .profile-hero.robotica::before { background:linear-gradient(90deg, var(--gaia-green), var(--accent2)); }
   .profile-hero-inner { display:flex; align-items:center; gap:20px; }
-  .profile-avatar-lg {
-    width:72px; height:72px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Syne',sans-serif; font-weight:800; font-size:26px; color:#fff; flex-shrink:0;
-  }
+  .profile-avatar-lg { width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:26px; color:#fff; flex-shrink:0; }
   .profile-name { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; }
-  .profile-meta { display:flex; gap:10px; align-items:center; margin-top:6px; flex-wrap:wrap; }
 
-  /* ──── ANIM ──── */
   @keyframes fadeIn { from{opacity:0} to{opacity:1} }
   @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
   @keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
 
-  /* ──── SCROLL ──── */
   ::-webkit-scrollbar { width:5px; }
   ::-webkit-scrollbar-track { background:transparent; }
   ::-webkit-scrollbar-thumb { background:var(--border); border-radius:100px; }
 
-  /* ──── RESPONSIVE ──── */
   @media(max-width:768px) {
     .sidebar { display:none; }
     .main { padding:16px; }
@@ -548,18 +253,12 @@
 
   .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
   .section-title { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; }
-
   .pts-big { font-family:'Syne',sans-serif; font-weight:800; font-size:36px; color:var(--accent); }
   .pts-label { font-size:11px; color:var(--text-dim); letter-spacing:0.08em; text-transform:uppercase; }
 
-  .notification-dot {
-    width:7px; height:7px; border-radius:50%;
-    background:var(--accent-red); flex-shrink:0;
-  }
-  .input-with-icon { position:relative; }
-  .input-with-icon input { padding-left:38px; }
-  .input-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-muted); }
-
+  .skill-chip { display:flex; align-items:center; gap:6px; padding:4px 10px; background:var(--bg3); border:1px solid var(--border); border-radius:100px; color:var(--text); font-size:12px; }
+  .skill-chip-remove { color:var(--accent-red); cursor:pointer; font-weight:bold; font-size:14px; }
+  
   hr { border:none; border-top:1px solid var(--border); margin:16px 0; }
 </style>
 </head>
@@ -574,42 +273,15 @@
       <div class="logo-sub">UFTM · Projeto de Extensão</div>
     </div>
     <div class="form-group">
-      <label>Identificação</label>
-      <div class="input-with-icon">
-        <span class="input-icon">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        </span>
-        <input type="text" id="login-name" placeholder="Seu nome completo" />
-      </div>
+      <label>Usuário de Acesso</label>
+      <input type="text" id="login-username" placeholder="Seu nome (ex: Pedro Henrique)" onkeypress="if(event.key==='Enter') document.getElementById('login-password').focus()" />
     </div>
     <div class="form-group">
-      <label>Acesso</label>
-      <select id="login-role">
-        <option value="">Selecione seu perfil...</option>
-        <optgroup label="Administração">
-          <option value="admin">Administrador (ADM)</option>
-        </optgroup>
-        <optgroup label="Gaia EletroQuad">
-          <option value="eq-member-1">Ana Ribeiro — EletroQuad</option>
-          <option value="eq-member-2">Carlos Melo — EletroQuad</option>
-          <option value="eq-member-3">Fernanda Lima — EletroQuad</option>
-          <option value="eq-member-4">João Ferreira — EletroQuad</option>
-        </optgroup>
-        <optgroup label="Gaia Robótica">
-          <option value="rob-member-1">Beatriz Santos — Robótica</option>
-          <option value="rob-member-2">Diego Souza — Robótica</option>
-          <option value="rob-member-3">Larissa Nunes — Robótica</option>
-          <option value="rob-member-4">Pedro Costa — Robótica</option>
-        </optgroup>
-      </select>
+      <label>Senha</label>
+      <input type="password" id="login-password" placeholder="Sua senha (padrão inicial: 123)" onkeypress="if(event.key==='Enter') doLogin()" />
     </div>
     <button class="btn-primary" onclick="doLogin()">Entrar no Portal</button>
-    <div class="login-divider">— Acesso rápido demo —</div>
-    <div class="demo-btns">
-      <button class="btn-demo" onclick="quickLogin('admin','Admin')">👑 ADM</button>
-      <button class="btn-demo" onclick="quickLogin('eq-member-1','Ana Ribeiro')">✈️ EQ</button>
-      <button class="btn-demo" onclick="quickLogin('rob-member-1','Beatriz Santos')">🤖 Rob</button>
-    </div>
+    <div class="login-divider">Use seu Nome (Maiúsculas ou Minúsculas) e senha para entrar.</div>
   </div>
 </div>
 
@@ -656,7 +328,7 @@
       <div class="nav-section-label">Administração</div>
       <div class="nav-item" onclick="showPage('admin-members',this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Membros
+        Membros (Gestão)
       </div>
       <div class="nav-item" onclick="showPage('admin-submissions',this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
@@ -694,9 +366,7 @@
         <div class="page-title" id="home-title">Visão Geral</div>
         <div class="page-subtitle">Acompanhe o desempenho do projeto Gaia</div>
       </div>
-
       <div class="grid grid-4" style="margin-bottom:20px;" id="home-stats"></div>
-
       <div class="grid grid-2" style="margin-bottom:20px;">
         <div>
           <div class="section-header"><div class="section-title">🚁 Gaia EletroQuad</div></div>
@@ -707,7 +377,6 @@
           <div id="rob-members-overview"></div>
         </div>
       </div>
-
       <div class="section-header"><div class="section-title">⚡ Atividade Recente</div></div>
       <div id="recent-activity"></div>
     </div>
@@ -736,7 +405,7 @@
           <div class="reward-icon">🏆</div>
           <div>
             <div class="reward-title">Destaque do Mês</div>
-            <div class="reward-desc">O membro com mais pontos ao final do ciclo receberá uma recompensa especial definida pela coordenação.</div>
+            <div class="reward-desc">O membro com mais pontos ao final do ciclo receberá uma recompensa especial.</div>
           </div>
         </div>
       </div>
@@ -749,8 +418,13 @@
     </div>
 
     <div id="page-myprofile" class="page">
-      <div class="page-header">
-        <div class="page-title">Meu Perfil</div>
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">Meu Perfil</div>
+        </div>
+        <div>
+          <button class="btn-ghost" onclick="openEditUserModal(currentUser.id)">⚙️ Editar Conta</button>
+        </div>
       </div>
       <div id="my-profile-content"></div>
     </div>
@@ -764,9 +438,14 @@
     </div>
 
     <div id="page-admin-members" class="page">
-      <div class="page-header">
-        <div class="page-title">Gestão de Membros</div>
-        <div class="page-subtitle">Desempenho detalhado de todos os integrantes</div>
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">Gestão de Membros</div>
+          <div class="page-subtitle">Gerencie os usuários, senhas e equipes do portal</div>
+        </div>
+        <div>
+          <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="openAddUserModal()">+ Adicionar Usuário</button>
+        </div>
       </div>
       <div class="tabs">
         <div class="tab active" onclick="filterAdminMembers('all',this)">Todos</div>
@@ -838,7 +517,10 @@
       <div id="admin-rewards-content"></div>
     </div>
 
-  </div></div></div><div id="modal-member" class="modal-overlay">
+  </div>
+</div>
+
+</div><div id="modal-member" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
       <div id="modal-member-avatar" class="sidebar-avatar" style="width:40px;height:40px;font-size:16px;"></div>
@@ -849,6 +531,10 @@
       <div class="modal-close" onclick="closeModal('modal-member')">✕</div>
     </div>
     <div id="modal-member-content"></div>
+    <div class="modal-footer" id="modal-member-footer" style="display:none; justify-content: flex-start;">
+        <button class="btn-ghost" id="btn-admin-edit-user">⚙️ Conta/Senha</button>
+        <button class="btn-ghost" id="btn-admin-edit-skills">🛠 Habilidades</button>
+    </div>
   </div>
 </div>
 
@@ -879,28 +565,98 @@
 <div id="modal-reward" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">🏆 Definir Recompensa do Ciclo</div>
+      <div class="modal-title">🏆 Definir Recompensa</div>
       <div class="modal-close" onclick="closeModal('modal-reward')">✕</div>
     </div>
     <div class="form-group">
       <label>Ciclo / Período</label>
-      <input type="text" id="reward-period" placeholder="Ex: Março 2026 · Fase 1" />
+      <input type="text" id="reward-period" placeholder="Ex: Março 2026" />
     </div>
     <div class="form-group">
-      <label>Descrição da Recompensa</label>
-      <textarea id="reward-desc" placeholder="Ex: Certificado de destaque + menção na apresentação final da equipe..."></textarea>
+      <label>Descrição</label>
+      <textarea id="reward-desc" placeholder="Ex: Certificado de destaque..."></textarea>
     </div>
     <div class="form-group">
-      <label>Equipe Elegível</label>
+      <label>Equipe</label>
       <select id="reward-team">
-        <option value="all">Toda a equipe Gaia</option>
-        <option value="eletroquad">Gaia EletroQuad</option>
-        <option value="robotica">Gaia Robótica</option>
+        <option value="all">Toda a equipe</option>
+        <option value="eletroquad">EletroQuad</option>
+        <option value="robotica">Robótica</option>
       </select>
     </div>
     <div class="modal-footer">
       <button class="btn-ghost" onclick="closeModal('modal-reward')">Cancelar</button>
       <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="saveReward()">Salvar Recompensa</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-user-form" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="user-form-title">Editar Usuário</div>
+      <div class="modal-close" onclick="closeModal('modal-user-form')">✕</div>
+    </div>
+    <input type="hidden" id="user-id" />
+    <div class="form-group">
+      <label>Nome Completo</label>
+      <input type="text" id="user-name" placeholder="Ex: João da Silva" />
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+          <label>Usuário de Login</label>
+          <input type="text" id="user-username" placeholder="Para entrar no portal" />
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="text" id="user-password" placeholder="Senha do membro" />
+        </div>
+    </div>
+    <div class="form-row" id="admin-only-fields">
+        <div class="form-group">
+          <label>Equipe</label>
+          <select id="user-team">
+            <option value="eletroquad">Gaia EletroQuad</option>
+            <option value="robotica">Gaia Robótica</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Cargo/Função</label>
+          <input type="text" id="user-role" placeholder="Ex: Desenvolvedor ROS" />
+        </div>
+    </div>
+    <label class="checkbox-group" id="admin-only-checkbox">
+        <input type="checkbox" id="user-isadmin" />
+        <span style="font-size:13px; font-weight:500;">Conceder acesso de Administrador (ADM)</span>
+    </label>
+    <div class="modal-footer" style="margin-top: 10px;">
+      <button class="btn-danger" id="btn-delete-user" onclick="deleteUser()" style="margin-right:auto; display:none;">Excluir Usuário</button>
+      <button class="btn-ghost" onclick="closeModal('modal-user-form')">Cancelar</button>
+      <button class="btn-success" onclick="saveUser()">Salvar Configurações</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-skills" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Gerenciar Habilidades</div>
+      <div class="modal-close" onclick="closeModal('modal-skills')">✕</div>
+    </div>
+    <div style="font-size:12px; color:var(--text-dim); margin-bottom:16px;">Habilidades atuais (clique no X para remover):</div>
+    
+    <div id="skills-container" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; min-height: 40px; padding: 12px; background: var(--bg3); border-radius: var(--radius); border: 1px solid var(--border);"></div>
+    
+    <div class="form-row" style="align-items:flex-end;">
+       <div class="form-group" style="flex:1; margin-bottom:0;">
+         <label>Adicionar Nova Habilidade</label>
+         <input type="text" id="new-skill-input" placeholder="Ex: Python, ROS2, Solda..." onkeypress="if(event.key==='Enter') addSkill()" />
+       </div>
+       <button class="btn-primary" onclick="addSkill()" style="width:auto; padding: 12px 20px; margin-top:0;">Adicionar</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-skills')">Cancelar</button>
+      <button class="btn-success" onclick="saveSkills()">Salvar Mudanças</button>
     </div>
   </div>
 </div>
@@ -911,7 +667,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 
 <script>
-// 1. Configuração do Firebase
+// ══════════════════════════════════════════════
+//  CONFIGURAÇÃO DO FIREBASE
+// ══════════════════════════════════════════════
 const firebaseConfig = {
   apiKey: "AIzaSyCgbRDXE3Y61m6FLQt6hThebmd_bz21VGY",
   authDomain: "portal-gaia-f5c93.firebaseapp.com",
@@ -922,123 +680,130 @@ const firebaseConfig = {
   databaseURL: "https://portal-gaia-f5c93-default-rtdb.firebaseio.com"
 };
 
-// Inicializa o Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const dbRef = db.ref('portal_gaia_data');
+// Alterado para v3 para resetar e injetar a equipe real nova
+const dbRef = db.ref('portal_gaia_data_v3');
 
-// Base de Dados Original (mockup inicial)
-const MEMBERS = [
-  { id:'eq-member-1', name:'Ana Ribeiro',    team:'eletroquad', role:'Piloto & Visão Computacional', avatar:'AR', color:'#1a8fff', metrics:{ presenca:92, tarefas:88, qualidade:94, pontualidade:85, colaboracao:96 }, skills:['OpenCV','Python','ROS','Controle PID'], pts:320, tasks_done:7, tasks_pending:1 },
-  { id:'eq-member-2', name:'Carlos Melo',    team:'eletroquad', role:'Sistemas de Controle',         avatar:'CM', color:'#5b8cff', metrics:{ presenca:78, tarefas:82, qualidade:80, pontualidade:75, colaboracao:88 }, skills:['C++','PID','ArduPilot','Simulink'], pts:240, tasks_done:5, tasks_pending:2 },
-  { id:'eq-member-3', name:'Fernanda Lima',  team:'eletroquad', role:'Autonomia & Missões',          avatar:'FL', color:'#00b4d8', metrics:{ presenca:95, tarefas:95, qualidade:92, pontualidade:94, colaboracao:97 }, skills:['Python','MAVROS','Planejamento de missão'], pts:410, tasks_done:9, tasks_pending:0 },
-  { id:'eq-member-4', name:'João Ferreira',  team:'eletroquad', role:'Hardware & Eletrônica',        avatar:'JF', color:'#48cae4', metrics:{ presenca:85, tarefas:70, qualidade:88, pontualidade:80, colaboracao:82 }, skills:['KiCad','ESP32','Firmware','Telemetria'], pts:180, tasks_done:4, tasks_pending:3 },
-  { id:'rob-member-1', name:'Beatriz Santos', team:'robotica',   role:'Líder Técnica · ROS',          avatar:'BS', color:'#00e5a0', metrics:{ presenca:90, tarefas:93, qualidade:96, pontualidade:88, colaboracao:95 }, skills:['ROS2','Python','SLAM','Gazebo'], pts:375, tasks_done:8, tasks_pending:1 },
-  { id:'rob-member-2', name:'Diego Souza',   team:'robotica',   role:'Integração & Testes',          avatar:'DS', color:'#38cf7f', metrics:{ presenca:82, tarefas:85, qualidade:82, pontualidade:79, colaboracao:90 }, skills:['Linux','Docker','CI/CD','Pytest'], pts:265, tasks_done:6, tasks_pending:1 },
-  { id:'rob-member-3', name:'Larissa Nunes', team:'robotica',   role:'Visão Computacional',          avatar:'LN', color:'#00c984', metrics:{ presenca:88, tarefas:90, qualidade:91, pontualidade:86, colaboracao:93 }, skills:['OpenCV','YOLO','TensorFlow','Python'], pts:300, tasks_done:7, tasks_pending:0 },
-  { id:'rob-member-4', name:'Pedro Costa',   team:'robotica',   role:'Mecânica & Prototipagem',      avatar:'PC', color:'#0fbf70', metrics:{ presenca:76, tarefas:68, qualidade:79, pontualidade:71, colaboracao:84 }, skills:['SolidWorks','Impressão 3D','Arduino'], pts:155, tasks_done:3, tasks_pending:2 },
+// ══════════════════════════════════════════════
+//  DADOS INICIAIS (EQUIPE GAIA REAL)
+// ══════════════════════════════════════════════
+const INITIAL_MEMBERS = [
+  // ──── ADMS ────
+  { id:'m1', username: 'Pedro Henrique', password: '123', name:'Pedro Henrique', team:'eletroquad', role:'Coordenador ADM', isAdmin: true, avatar:'PH', color:'#1a8fff', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Gestão','Engenharia Mecânica'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m2', username: 'Laura Capanema', password: '123', name:'Laura Capanema', team:'robotica', role:'Coordenadora ADM', isAdmin: true, avatar:'LC', color:'#00c984', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Gestão','Projetos'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m3', username: 'Júlia Origuela', password: '123', name:'Júlia Origuela', team:'eletroquad', role:'Administradora', isAdmin: true, avatar:'JO', color:'#5b8cff', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Liderança','Mecânica'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m4', username: 'Wanessa Karoline', password: '123', name:'Wanessa Karoline', team:'robotica', role:'Administradora', isAdmin: true, avatar:'WK', color:'#00e5a0', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Liderança','Programação'], pts:0, tasks_done:0, tasks_pending:0 },
+  
+  // ──── MEMBROS ELETROQUAD ────
+  { id:'m5', username: 'Carlos Gabriel', password: '123', name:'Carlos Gabriel', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'CG', color:'#00b4d8', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Eletrônica'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m6', username: 'João Paulo', password: '123', name:'João Paulo', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'JP', color:'#48cae4', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Hardware'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m7', username: 'João Maerbal', password: '123', name:'João Maerbal', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'JM', color:'#1a8fff', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Autonomia'], pts:0, tasks_done:0, tasks_pending:0 },
+  
+  // ──── MEMBROS ROBÓTICA ────
+  { id:'m8', username: 'Murilo Tristão', password: '123', name:'Murilo Tristão', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'MT', color:'#38cf7f', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Mecânica','CAD'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m9', username: 'Felipe (Braia)', password: '123', name:'Felipe (Braia)', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'FB', color:'#0fbf70', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['ROS2','Linux'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m10', username: 'Júlia Vitalino', password: '123', name:'Júlia Vitalino', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'JV', color:'#00e5a0', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Visão Computacional'], pts:0, tasks_done:0, tasks_pending:0 },
+  { id:'m11', username: 'Eloiza Lopes', password: '123', name:'Eloiza Lopes', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'EL', color:'#00c984', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Controle','Programação'], pts:0, tasks_done:0, tasks_pending:0 },
 ];
 
-const TASKS_DATA = [
-  { id:'t1', title:'Calibrar câmera com padrão de xadrez', desc:'Realizar calibração intríseca e extrínseca da câmera OAK-D usando ROS2.', team:'eletroquad', diff:'medium', pts:80, deadline:'2026-03-25', status:'available', claimedBy:null, submittedBy:[] },
-  { id:'t2', title:'Documentar algoritmo de detecção de cores', desc:'Criar doc técnica do pipeline de visão para identificação dos postes do Slalom.', team:'both', diff:'easy', pts:40, deadline:'2026-03-20', status:'available', claimedBy:null, submittedBy:[] },
-  { id:'t3', title:'Implementar nó ROS2 para leitura de sensores IMU', desc:'Publicar dados de IMU em tópico /imu/data com taxa mínima de 100Hz.', team:'robotica', diff:'hard', pts:150, deadline:'2026-04-05', status:'claimed', claimedBy:'rob-member-1', submittedBy:[] },
-  { id:'t4', title:'Criar script de missão Bouncing', desc:'Implementar missão de pouso em múltiplas bases com identificação de figuras geométricas.', team:'eletroquad', diff:'hard', pts:200, deadline:'2026-04-10', status:'available', claimedBy:null, submittedBy:[] },
-  { id:'t5', title:'Atualizar README do repositório', desc:'Melhorar documentação de setup do ambiente de desenvolvimento para novos membros.', team:'both', diff:'easy', pts:30, deadline:'2026-03-18', status:'done', claimedBy:'eq-member-3', submittedBy:['eq-member-3'] },
-  { id:'t6', title:'Revisão de consumo de bateria em voo', desc:'Criar planilha de análise de consumo por missão e propor otimizações.', team:'eletroquad', diff:'medium', pts:70, deadline:'2026-03-30', status:'available', claimedBy:null, submittedBy:[] },
-  { id:'t7', title:'Integrar Gazebo ao pipeline CI', desc:'Configurar simulação headless no CI/CD para testes de regressão.', team:'robotica', diff:'hard', pts:120, deadline:'2026-04-01', status:'available', claimedBy:null, submittedBy:[] },
+const INITIAL_TASKS = [
+  { id:'t1', title:'Configurar o novo Portal', desc:'Fazer login pela primeira vez no novo sistema do Portal Gaia e trocar a senha padrão.', team:'both', diff:'easy', pts:50, deadline:'2026-03-31', status:'available', claimedBy:null, submittedBy:[] }
 ];
 
-const SUBMISSIONS_DATA = [
-  { id:'s1', taskId:'t5', taskTitle:'Atualizar README do repositório', memberId:'eq-member-3', memberName:'Fernanda Lima', desc:'README atualizado com seção de setup, pré-requisitos e exemplos de uso.', link:'https://github.com/gaia-uftm/drone-stack', date:'2026-03-14', pts:30, status:'approved' },
-  { id:'s2', taskId:'t3', taskTitle:'Implementar nó ROS2 para leitura de sensores IMU', memberId:'rob-member-1', memberName:'Beatriz Santos', desc:'Nó implementado, testado no Gazebo. Taxa 110Hz confirmada.', link:'', date:'2026-03-15', pts:150, status:'pending' },
-];
-
-const REWARDS_DATA = [
-  { id:'r1', period:'Fevereiro 2026 · Ciclo Inicial', desc:'Certificado de Destaque Gaia + menção na apresentação para a SAE.', team:'all', winner:'Fernanda Lima', date:'2026-02-28' },
-];
-
-// Variáveis de Interface
 let currentUser = null;
 let currentTaskFilter = 'all';
 let currentRankingFilter = 'all';
 let currentAdminMemberFilter = 'all';
 let pendingTaskId = null;
 
-// Variáveis Sincronizadas na Nuvem
+let MEMBERS = [];
 let tasks = [];
 let submissions = [];
 let rewards = [];
 let memberPoints = {};
 
-// OUVINTE DO FIREBASE (Sincroniza automaticamente)
+// ══════════════════════════════════════════════
+//  SINCRONIZAÇÃO E NUVEM
+// ══════════════════════════════════════════════
 dbRef.on('value', (snapshot) => {
   const data = snapshot.val();
   
-  if (data) {
+  if (data && data.members) {
+    MEMBERS = data.members;
     tasks = data.tasks || [];
     submissions = data.submissions || [];
     rewards = data.rewards || [];
     memberPoints = data.memberPoints || {};
-    
-    if (data.members) {
-      MEMBERS.forEach(m => {
-        let sm = data.members.find(x => x.id === m.id);
-        if(sm) {
-          m.tasks_done = sm.tasks_done || 0;
-          m.tasks_pending = sm.tasks_pending || 0;
-          m.pts = sm.pts || m.pts;
-        }
-      });
-    }
   } else {
-    tasks = JSON.parse(JSON.stringify(TASKS_DATA));
-    submissions = JSON.parse(JSON.stringify(SUBMISSIONS_DATA));
-    rewards = JSON.parse(JSON.stringify(REWARDS_DATA));
+    // Banco vazio: inicializa equipe Gaia
+    MEMBERS = JSON.parse(JSON.stringify(INITIAL_MEMBERS));
+    tasks = JSON.parse(JSON.stringify(INITIAL_TASKS));
+    submissions = [];
+    rewards = [];
     MEMBERS.forEach(m => { memberPoints[m.id] = m.pts; });
     saveToFirebase();
   }
 
-  // Se já logado, atualiza a tela para mostrar os dados novos que vieram da nuvem
   if (currentUser) {
+    // Atualiza o objeto do usuario logado (caso sua propria conta tenha sido editada)
+    const updatedUser = MEMBERS.find(m=>m.id === currentUser.id);
+    if(updatedUser) {
+        currentUser.name = updatedUser.name;
+        currentUser.isAdmin = updatedUser.isAdmin;
+        document.getElementById('sidebar-name').textContent = currentUser.name;
+        document.getElementById('sidebar-role').textContent = currentUser.isAdmin ? 'Administrador' : (updatedUser.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
+        
+        if(currentUser.isAdmin) {
+            document.getElementById('nav-admin').style.display='block';
+        } else {
+            document.getElementById('nav-admin').style.display='none';
+            // Se um user perder admin e estiver em tela de admin, joga pra home
+            if(document.getElementById('page-admin-members').classList.contains('active')){ showPage('home'); }
+        }
+    } else {
+        // Usuario deletado
+        doLogout();
+    }
+
     updateBadges();
     if (document.getElementById('page-tasks').classList.contains('active')) filterTasks(currentTaskFilter);
     if (document.getElementById('page-home').classList.contains('active')) renderHomePage();
     if (document.getElementById('page-ranking').classList.contains('active')) filterRanking(currentRankingFilter);
     if (document.getElementById('page-admin-submissions').classList.contains('active')) renderAdminSubmissions();
     if (document.getElementById('page-admin-members').classList.contains('active')) filterAdminMembers(currentAdminMemberFilter);
+    if (document.getElementById('page-myprofile').classList.contains('active')) renderMyProfile();
   }
 });
 
-// FUNÇÃO PARA ENVIAR PRA NUVEM
 function saveToFirebase() {
-  dbRef.set({
-    tasks: tasks,
-    submissions: submissions,
-    rewards: rewards,
-    memberPoints: memberPoints,
-    members: MEMBERS
-  });
+  dbRef.set({ tasks, submissions, rewards, memberPoints, members: MEMBERS });
 }
 
 // ══════════════════════════════════════════════
-//  AUTH & NAVIGATION
+//  AUTH
 // ══════════════════════════════════════════════
-
-function quickLogin(role, name) {
-  document.getElementById('login-role').value = role;
-  document.getElementById('login-name').value = name;
-  doLogin();
-}
-
 function doLogin() {
-  const role = document.getElementById('login-role').value;
-  const name = document.getElementById('login-name').value.trim();
-  if(!role) { toast('Selecione um perfil','error'); return; }
-  const displayName = name || (role === 'admin' ? 'Administrador' : MEMBERS.find(m=>m.id===role)?.name || 'Membro');
-  currentUser = { id: role, name: displayName, isAdmin: role === 'admin' };
-  initDashboard();
-  switchScreen('login','dashboard');
+  const usernameVal = document.getElementById('login-username').value.trim();
+  const passwordVal = document.getElementById('login-password').value.trim();
+
+  if(!usernameVal || !passwordVal) { toast('Preencha usuário e senha','error'); return; }
+
+  // Espera carregar o MEMBERS do Firebase primeiro
+  if(MEMBERS.length === 0) { toast('Carregando banco de dados... tente novamente em 1s','error'); return; }
+
+  const member = MEMBERS.find(m => m.username.toLowerCase() === usernameVal.toLowerCase() && m.password === passwordVal);
+  
+  if (member) {
+    currentUser = { id: member.id, name: member.name, isAdmin: member.isAdmin };
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+    initDashboard();
+    switchScreen('login','dashboard');
+    toast(`Bem-vindo(a), ${member.name.split(' ')[0]}!`, 'success');
+  } else {
+    toast('Usuário ou senha incorretos!', 'error');
+  }
 }
 
 function doLogout() {
@@ -1051,6 +816,170 @@ function switchScreen(from, to) {
   document.getElementById('screen-'+to).classList.add('active');
 }
 
+// ══════════════════════════════════════════════
+//  CRUD DE USUÁRIOS E HABILIDADES
+// ══════════════════════════════════════════════
+
+// ----- USUÁRIOS -----
+function openAddUserModal() {
+  document.getElementById('user-form-title').textContent = 'Adicionar Novo Membro';
+  document.getElementById('user-id').value = '';
+  document.getElementById('user-name').value = '';
+  document.getElementById('user-username').value = '';
+  document.getElementById('user-password').value = '123';
+  document.getElementById('user-team').value = 'eletroquad';
+  document.getElementById('user-role').value = 'Membro';
+  document.getElementById('user-isadmin').checked = false;
+  
+  document.getElementById('admin-only-fields').style.display = 'flex';
+  document.getElementById('admin-only-checkbox').style.display = 'flex';
+  document.getElementById('btn-delete-user').style.display = 'none';
+  openModal('modal-user-form');
+}
+
+function openEditUserModal(id) {
+  const m = MEMBERS.find(x=>x.id===id);
+  if(!m) return;
+
+  document.getElementById('user-form-title').textContent = (id === currentUser.id) ? 'Minha Conta' : 'Editar Usuário';
+  document.getElementById('user-id').value = m.id;
+  document.getElementById('user-name').value = m.name;
+  document.getElementById('user-username').value = m.username;
+  document.getElementById('user-password').value = m.password;
+  
+  if (currentUser.isAdmin) {
+      document.getElementById('user-team').value = m.team;
+      document.getElementById('user-role').value = m.role;
+      document.getElementById('user-isadmin').checked = m.isAdmin;
+      document.getElementById('admin-only-fields').style.display = 'flex';
+      document.getElementById('admin-only-checkbox').style.display = 'flex';
+      document.getElementById('btn-delete-user').style.display = (id === currentUser.id) ? 'none' : 'block';
+  } else {
+      document.getElementById('admin-only-fields').style.display = 'none';
+      document.getElementById('admin-only-checkbox').style.display = 'none';
+      document.getElementById('btn-delete-user').style.display = 'none';
+  }
+  
+  openModal('modal-user-form');
+}
+
+function saveUser() {
+  const id = document.getElementById('user-id').value;
+  const name = document.getElementById('user-name').value.trim();
+  const username = document.getElementById('user-username').value.trim();
+  const password = document.getElementById('user-password').value.trim();
+  
+  if(!name || !username || !password) { toast('Preencha os dados básicos!','error'); return; }
+
+  // Checa duplicidade de username
+  const exists = MEMBERS.find(m => m.username.toLowerCase() === username.toLowerCase() && m.id !== id);
+  if(exists) { toast('Este nome de usuário já está em uso!','error'); return; }
+
+  if(id) {
+    // Editar
+    const m = MEMBERS.find(x=>x.id===id);
+    m.name = name; m.username = username; m.password = password;
+    if(currentUser.isAdmin) {
+        m.team = document.getElementById('user-team').value;
+        m.role = document.getElementById('user-role').value.trim() || 'Membro';
+        m.isAdmin = document.getElementById('user-isadmin').checked;
+        m.color = (m.team === 'eletroquad') ? '#1a8fff' : '#00e5a0';
+    }
+    toast('Dados salvos!','success');
+  } else {
+    // Criar novo
+    const team = document.getElementById('user-team').value;
+    const isEq = team === 'eletroquad';
+    const newMember = {
+        id: 'm'+Date.now(),
+        name: name, username: username, password: password,
+        team: team,
+        role: document.getElementById('user-role').value.trim() || 'Membro',
+        isAdmin: document.getElementById('user-isadmin').checked,
+        avatar: name.substring(0,2).toUpperCase(),
+        color: isEq ? '#1a8fff' : '#00e5a0',
+        metrics: { presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 },
+        skills: ['Gaia'], pts:0, tasks_done:0, tasks_pending:0
+    };
+    MEMBERS.push(newMember);
+    memberPoints[newMember.id] = 0;
+    toast('Usuário criado!','success');
+  }
+  
+  saveToFirebase();
+  closeModal('modal-user-form');
+}
+
+function deleteUser() {
+  const id = document.getElementById('user-id').value;
+  if(id === currentUser.id) { toast('Você não pode excluir sua própria conta.','error'); return; }
+  
+  if(confirm("Tem certeza que deseja EXCLUIR este usuário do portal? Essa ação não tem volta.")) {
+      MEMBERS = MEMBERS.filter(m => m.id !== id);
+      saveToFirebase();
+      closeModal('modal-user-form');
+      closeModal('modal-member');
+      toast('Usuário excluído!','success');
+  }
+}
+
+// ----- HABILIDADES -----
+let tempSkills = [];
+let editingSkillsUserId = null;
+
+function openEditSkillsModal(userId) {
+  editingSkillsUserId = userId;
+  const m = MEMBERS.find(x=>x.id===userId);
+  if(!m) return;
+  tempSkills = [...(m.skills || [])];
+  renderTempSkills();
+  openModal('modal-skills');
+}
+
+function renderTempSkills() {
+  const container = document.getElementById('skills-container');
+  if(tempSkills.length === 0) {
+      container.innerHTML = `<div style="color:var(--text-muted); font-size:12px;">Nenhuma habilidade cadastrada.</div>`;
+      return;
+  }
+  container.innerHTML = tempSkills.map((s, i) => `
+      <div class="skill-chip">
+          ${s} <span class="skill-chip-remove" onclick="removeSkill(${i})">✕</span>
+      </div>
+  `).join('');
+}
+
+function addSkill() {
+  const input = document.getElementById('new-skill-input');
+  const val = input.value.trim();
+  if(!val) return;
+  if(tempSkills.includes(val)) { toast('Habilidade já listada!','error'); return; }
+  tempSkills.push(val);
+  input.value = '';
+  renderTempSkills();
+}
+
+function removeSkill(index) {
+  tempSkills.splice(index, 1);
+  renderTempSkills();
+}
+
+function saveSkills() {
+  const m = MEMBERS.find(x=>x.id===editingSkillsUserId);
+  if(m) {
+      m.skills = [...tempSkills];
+      saveToFirebase();
+      toast('Habilidades salvas!','success');
+  }
+  closeModal('modal-skills');
+  if(document.getElementById('modal-member').classList.contains('open')){
+      openMemberModal(editingSkillsUserId); // re-render modal background
+  }
+}
+
+// ══════════════════════════════════════════════
+//  INIT DASHBOARD
+// ══════════════════════════════════════════════
 function initDashboard() {
   const u = currentUser;
   document.getElementById('sidebar-name').textContent = u.name;
@@ -1058,15 +987,13 @@ function initDashboard() {
   let roleLabel = u.isAdmin ? 'Administrador' : (member?.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
   document.getElementById('sidebar-role').textContent = roleLabel;
   const av = document.getElementById('sidebar-avatar');
-  av.textContent = u.isAdmin ? '👑' : (member?.avatar || u.name[0]);
-  av.style.background = u.isAdmin ? 'var(--gaia-gold)' : (member?.color || 'var(--gaia-blue)');
+  av.textContent = member?.avatar || u.name[0];
+  av.style.background = member?.color || 'var(--gaia-blue)';
 
   if(u.isAdmin) {
     document.getElementById('nav-admin').style.display='block';
-    document.getElementById('nav-personal').style.display='none';
   } else {
     document.getElementById('nav-admin').style.display='none';
-    document.getElementById('nav-personal').style.display='block';
   }
 
   updateBadges();
@@ -1104,14 +1031,13 @@ function showPage(page, el) {
 // ══════════════════════════════════════════════
 //  HOME PAGE
 // ══════════════════════════════════════════════
-
 function renderHomePage() {
   const allPts = MEMBERS.reduce((s,m)=> s + (memberPoints[m.id]||m.pts), 0);
   const tasksDone = tasks.filter(t=>t.status==='done').length;
   const tasksAvail = tasks.filter(t=>t.status==='available').length;
   document.getElementById('home-stats').innerHTML = `
-    <div class="card card-sm"><div class="card-label">Total de Membros</div><div class="card-value sm">${MEMBERS.length}</div><div class="card-change" style="color:var(--text-dim)">4 EQ · 4 Rob</div></div>
-    <div class="card card-sm"><div class="card-label">Pontos Totais</div><div class="card-value sm" style="color:var(--accent)">${allPts}</div><div class="card-change pos">acumulados</div></div>
+    <div class="card card-sm"><div class="card-label">Total de Membros</div><div class="card-value sm">${MEMBERS.length}</div><div class="card-change" style="color:var(--text-dim)">EQ e Robótica</div></div>
+    <div class="card card-sm"><div class="card-label">Pontos Totais</div><div class="card-value sm" style="color:var(--accent)">${allPts}</div><div class="card-change pos">acumulados na equipe</div></div>
     <div class="card card-sm"><div class="card-label">Tarefas Concluídas</div><div class="card-value sm" style="color:var(--accent2)">${tasksDone}</div><div class="card-change" style="color:var(--text-dim)">de ${tasks.length} totais</div></div>
     <div class="card card-sm"><div class="card-label">Tarefas Disponíveis</div><div class="card-value sm" style="color:var(--accent3)">${tasksAvail}</div><div class="card-change" style="color:var(--text-dim)">para assumir</div></div>
   `;
@@ -1135,10 +1061,8 @@ function renderHomePage() {
   renderMiniMembers('robotica','rob-members-overview');
 
   const activities = [
-    { icon:'✅', text:'<b>Fernanda Lima</b> concluiu "Atualizar README do repositório"', time:'há 2 dias', color:'var(--accent2)' },
-    { icon:'📋', text:'<b>Beatriz Santos</b> entregou "Nó ROS2 para leitura IMU" — aguardando revisão', time:'há 1 dia', color:'var(--accent3)' },
-    { icon:'🎯', text:'<b>Diego Souza</b> assumiu "Integrar Gazebo ao pipeline CI"', time:'há 3 dias', color:'var(--gaia-blue)' },
-    { icon:'🏆', text:'<b>Recompensa do ciclo</b> de Fevereiro foi definida pela coordenação', time:'há 5 dias', color:'var(--gaia-gold)' },
+    { icon:'🌟', text:'<b>Nova equipe cadastrada!</b> Sistema atualizado para a versão 3.0.', time:'agora', color:'var(--gaia-blue)' },
+    { icon:'🏆', text:'<b>Recompensa do ciclo</b> inicial foi cadastrada', time:'há 1 dia', color:'var(--gaia-gold)' },
   ];
   document.getElementById('recent-activity').innerHTML = activities.map(a=>`
     <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;">
@@ -1152,10 +1076,7 @@ function renderHomePage() {
 // ══════════════════════════════════════════════
 //  TASKS PAGE
 // ══════════════════════════════════════════════
-
-function renderTasksPage() {
-  filterTasks(currentTaskFilter);
-}
+function renderTasksPage() { filterTasks(currentTaskFilter); }
 
 function filterTasks(filter, el) {
   currentTaskFilter = filter;
@@ -1174,7 +1095,6 @@ function filterTasks(filter, el) {
     document.getElementById('tasks-list').innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Nenhuma tarefa encontrada nesta categoria.</div></div>`;
     return;
   }
-
   document.getElementById('tasks-list').innerHTML = filtered.map(t => renderTaskItem(t)).join('');
 }
 
@@ -1275,7 +1195,6 @@ function submitTask() {
 // ══════════════════════════════════════════════
 //  RANKING
 // ══════════════════════════════════════════════
-
 function renderRankingPage() { filterRanking(currentRankingFilter); }
 
 function filterRanking(filter, el) {
@@ -1306,12 +1225,7 @@ function filterRanking(filter, el) {
 // ══════════════════════════════════════════════
 //  MY PROFILE
 // ══════════════════════════════════════════════
-
 function renderMyProfile() {
-  if(currentUser.isAdmin) {
-    document.getElementById('my-profile-content').innerHTML = `<div class="empty-state"><div class="empty-icon">👑</div><div class="empty-text">Você está no painel de administração.<br>Gerencie a equipe pelos menus à esquerda.</div></div>`;
-    return;
-  }
   const m = MEMBERS.find(x=>x.id===currentUser.id);
   if(!m) return;
   const pts = memberPoints[m.id]||m.pts;
@@ -1319,6 +1233,10 @@ function renderMyProfile() {
   const myTasks = tasks.filter(t=>t.claimedBy===m.id);
   const mySubs = submissions.filter(s=>s.memberId===m.id);
   const approvedSubs = mySubs.filter(s=>s.status==='approved');
+  
+  const skillsList = m.skills && m.skills.length > 0 
+                     ? m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);padding:4px 12px;">${s}</span>`).join('')
+                     : '<span style="font-size:12px;color:var(--text-dim);">Nenhuma habilidade cadastrada.</span>';
 
   document.getElementById('my-profile-content').innerHTML = `
     <div class="profile-hero ${m.team}">
@@ -1353,9 +1271,12 @@ function renderMyProfile() {
       </div>
     </div>
 
-    <div class="section-header"><div class="section-title">🛠 Habilidades</div></div>
+    <div class="section-header">
+       <div class="section-title">🛠 Minhas Habilidades</div>
+       <button class="btn-ghost" style="padding:4px 10px; font-size:11px;" onclick="openEditSkillsModal('${m.id}')">Editar</button>
+    </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
-      ${m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);padding:4px 12px;">${s}</span>`).join('')}
+      ${skillsList}
     </div>
 
     <div class="section-header"><div class="section-title">📋 Histórico de Entregas</div></div>
@@ -1378,12 +1299,7 @@ function renderMyProfile() {
 // ══════════════════════════════════════════════
 //  MY METRICS
 // ══════════════════════════════════════════════
-
 function renderMyMetrics() {
-  if(currentUser.isAdmin) {
-    document.getElementById('my-metrics-content').innerHTML = `<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">Acesse as métricas de cada membro<br>na seção <b>Gestão de Membros</b>.</div></div>`;
-    return;
-  }
   const m = MEMBERS.find(x=>x.id===currentUser.id);
   if(!m) return;
   const labels = { presenca:'Presença', tarefas:'Conclusão de Tarefas', qualidade:'Qualidade de Entrega', pontualidade:'Pontualidade', colaboracao:'Colaboração' };
@@ -1399,7 +1315,7 @@ function renderMyMetrics() {
           <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;">Desempenho Geral</div>
         </div>
         <div style="flex:1;">
-          <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Baseado em avaliações da coordenação e histórico de entregas. Visível apenas para você e a coordenação.</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Baseado em avaliações da coordenação e histórico de entregas.</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <span class="tag" style="background:rgba(0,229,160,0.08);border-color:rgba(0,229,160,0.15);color:var(--gaia-green);">${m.tasks_done} tarefas feitas</span>
             <span class="tag tag-pts">+${memberPoints[m.id]||m.pts} pts totais</span>
@@ -1413,27 +1329,9 @@ function renderMyMetrics() {
         </div>
       `).join('')}
     </div>
-
     <div class="card" style="margin-bottom:20px;">
       <div class="card-title">💡 Análise Individual</div>
       ${generateAnalysis(m)}
-    </div>
-
-    <div class="reward-card">
-      <div class="reward-header">
-        <div class="reward-icon">🎁</div>
-        <div>
-          <div class="reward-title">Programa de Recompensas</div>
-          <div class="reward-desc">Membros com maior pontuação ao final do ciclo receberão reconhecimento especial. Continue entregando!</div>
-        </div>
-      </div>
-      <div style="margin-top:12px;">
-        ${rewards.map(r=>`<div style="padding:10px;background:var(--bg3);border-radius:var(--radius);border:1px solid rgba(255,209,102,0.15);">
-          <div style="font-size:12px;font-weight:500;">${r.period}</div>
-          <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">${r.desc}</div>
-          ${r.winner?`<div style="font-size:11px;color:var(--gaia-gold);margin-top:4px;">🏆 Vencedor: ${r.winner}</div>`:''}
-        </div>`).join('')}
-      </div>
     </div>
   `;
 }
@@ -1461,7 +1359,6 @@ function generateAnalysis(m) {
 // ══════════════════════════════════════════════
 //  ADMIN: MEMBERS
 // ══════════════════════════════════════════════
-
 function renderAdminMembers() { filterAdminMembers(currentAdminMemberFilter); }
 
 function filterAdminMembers(filter, el) {
@@ -1480,7 +1377,10 @@ function filterAdminMembers(filter, el) {
         return `<div class="member-card ${m.team}" onclick="openMemberModal('${m.id}')">
           <div class="member-header">
             <div class="member-avatar" style="background:${m.color}">${m.avatar}</div>
-            <div><div class="member-name">${m.name}</div><div class="member-role">${m.role}</div></div>
+            <div>
+              <div class="member-name">${m.name} ${m.isAdmin ? '<span style="color:var(--gaia-gold);">👑</span>' : ''}</div>
+              <div class="member-role">${m.role}</div>
+            </div>
             <span class="member-team-badge ${isEQ?'badge-eq':'badge-rob'}">${isEQ?'EQ':'Rob'}</span>
           </div>
           <div class="progress-item">
@@ -1505,7 +1405,6 @@ function filterAdminMembers(filter, el) {
 // ══════════════════════════════════════════════
 //  ADMIN: SUBMISSIONS
 // ══════════════════════════════════════════════
-
 function renderAdminSubmissions() {
   const pending = submissions.filter(s=>s.status==='pending');
   const reviewed = submissions.filter(s=>s.status!=='pending');
@@ -1564,14 +1463,12 @@ function reviewSubmission(id, verdict) {
 // ══════════════════════════════════════════════
 //  ADMIN: CREATE TASK
 // ══════════════════════════════════════════════
-
 function createTask() {
   const title = document.getElementById('new-task-title').value.trim();
   const desc = document.getElementById('new-task-desc').value.trim();
   if(!title||!desc){ toast('Preencha título e descrição','error'); return; }
   const task = {
-    id: 't'+Date.now(),
-    title, desc,
+    id: 't'+Date.now(), title, desc,
     team: document.getElementById('new-task-team').value,
     diff: document.getElementById('new-task-diff').value,
     pts: parseInt(document.getElementById('new-task-pts').value)||50,
@@ -1581,13 +1478,12 @@ function createTask() {
   tasks.unshift(task);
   ['new-task-title','new-task-desc'].forEach(id=>document.getElementById(id).value='');
   saveToFirebase();
-  toast('Tarefa criada e publicada para a equipe!','success');
+  toast('Tarefa criada e publicada!','success');
 }
 
 // ══════════════════════════════════════════════
 //  ADMIN: REWARDS
 // ══════════════════════════════════════════════
-
 function renderAdminRewards() {
   const sorted = [...MEMBERS].sort((a,b)=>(memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
   const leader = sorted[0];
@@ -1604,7 +1500,6 @@ function renderAdminRewards() {
         </div>
       </div>
     </div>
-
     <div class="section-header"><div class="section-title">Recompensas Anteriores</div></div>
     ${rewards.map(r=>`
       <div class="card card-sm" style="margin-bottom:8px;">
@@ -1613,7 +1508,6 @@ function renderAdminRewards() {
           ${r.winner?`<div class="tag" style="background:rgba(255,209,102,0.1);color:var(--gaia-gold);border:1px solid rgba(255,209,102,0.2);">🏆 ${r.winner}</div>`:''}
         </div>
       </div>`).join('')}
-    <button class="btn-ghost" style="margin-top:8px;" onclick="openModal('modal-reward')">+ Adicionar Recompensa</button>
   `;
 }
 
@@ -1631,13 +1525,9 @@ function saveReward() {
 // ══════════════════════════════════════════════
 //  MEMBER MODAL (admin view full metrics)
 // ══════════════════════════════════════════════
-
 function openMemberModal(id) {
   const m = MEMBERS.find(x=>x.id===id);
   if(!m) return;
-  if(!currentUser.isAdmin && currentUser.id !== id) {
-    toast('Você só pode ver suas próprias métricas.','error'); return;
-  }
   const isEQ = m.team==='eletroquad';
   const pts = memberPoints[m.id]||m.pts;
   const avg = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
@@ -1648,48 +1538,43 @@ function openMemberModal(id) {
 
   document.getElementById('modal-member-avatar').textContent = m.avatar;
   document.getElementById('modal-member-avatar').style.background = m.color;
-  document.getElementById('modal-member-name').textContent = m.name;
+  document.getElementById('modal-member-name').innerHTML = `${m.name} ${m.isAdmin ? '<span style="font-size:14px;color:var(--gaia-gold);">👑</span>' : ''}`;
   document.getElementById('modal-member-badge').innerHTML = `<span class="member-team-badge ${isEQ?'badge-eq':'badge-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>`;
+
+  const skillsList = m.skills && m.skills.length > 0 
+                     ? m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);">${s}</span>`).join('')
+                     : '<span style="font-size:12px;color:var(--text-dim);">Nenhuma habilidade cadastrada.</span>';
 
   document.getElementById('modal-member-content').innerHTML = `
     <div style="display:flex;gap:16px;margin-bottom:20px;">
-      <div class="card card-sm" style="flex:1;text-align:center;">
-        <div class="card-label">Desempenho</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:${avg>=90?'var(--accent2)':avg>=75?'var(--accent)':'var(--accent3)'};">${avg}%</div>
-      </div>
-      <div class="card card-sm" style="flex:1;text-align:center;">
-        <div class="card-label">Pontos</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--accent)">${pts}</div>
-      </div>
-      <div class="card card-sm" style="flex:1;text-align:center;">
-        <div class="card-label">Entregues</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--accent2)">${mySubs.filter(s=>s.status==='approved').length}</div>
-      </div>
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:${avg>=90?'var(--accent2)':avg>=75?'var(--accent)':'var(--accent3)'};">${avg}%</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--accent)">${pts}</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Entregues</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--accent2)">${mySubs.filter(s=>s.status==='approved').length}</div></div>
     </div>
-    ${entries.map(([k,v],i)=>`
-      <div class="progress-item">
-        <div class="progress-header"><span class="progress-label">${labels[k]}</span><span class="progress-val">${v}%</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${v}%;background:${colors[i]};"></div></div>
-      </div>
-    `).join('')}
+    ${entries.map(([k,v],i)=>`<div class="progress-item"><div class="progress-header"><span class="progress-label">${labels[k]}</span><span class="progress-val">${v}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${v}%;background:${colors[i]};"></div></div></div>`).join('')}
     <div class="divider"></div>
     <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Papel no projeto</div>
     <div style="font-size:13px;">${m.role}</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">${m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);">${s}</span>`).join('')}</div>
-    ${mySubs.length > 0 ? `<div class="divider"></div>
-    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Entregas</div>
-    ${mySubs.slice(0,3).map(s=>`<div class="submission-item">
-      <div class="submission-header"><div class="submission-task">${s.taskTitle}</div><span class="status-badge status-${s.status}">${{pending:'Pend.',approved:'OK',rejected:'Repr.'}[s.status]}</span></div>
-      <div style="font-size:10px;color:var(--text-muted);">${formatDate(s.date)}</div>
-    </div>`).join('')}` : ''}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">${skillsList}</div>
+    ${mySubs.length > 0 ? `<div class="divider"></div><div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Entregas Recentes</div>
+    ${mySubs.slice(0,3).map(s=>`<div class="submission-item"><div class="submission-header"><div class="submission-task">${s.taskTitle}</div><span class="status-badge status-${s.status}">${{pending:'Pend.',approved:'OK',rejected:'Repr.'}[s.status]}</span></div><div style="font-size:10px;color:var(--text-muted);">${formatDate(s.date)}</div></div>`).join('')}` : ''}
   `;
+
+  // Exibir botões de edição se for o próprio usuário ou se for ADM
+  if(currentUser.isAdmin) {
+      document.getElementById('modal-member-footer').style.display = 'flex';
+      document.getElementById('btn-admin-edit-user').onclick = () => { closeModal('modal-member'); openEditUserModal(id); };
+      document.getElementById('btn-admin-edit-skills').onclick = () => { openEditSkillsModal(id); };
+  } else {
+      document.getElementById('modal-member-footer').style.display = 'none';
+  }
+
   openModal('modal-member');
 }
 
 // ══════════════════════════════════════════════
 //  UTILITIES
 // ══════════════════════════════════════════════
-
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
