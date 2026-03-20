@@ -75,12 +75,13 @@
 
   .form-group { margin-bottom:16px; }
   .form-group label { display:block; font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
-  .form-group input, .form-group select {
+  .form-group input, .form-group select, .form-group textarea {
     width:100%; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 12px 16px; color: var(--text); font-family:'DM Sans',sans-serif; font-size:14px; outline:none;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
-  .form-group input:focus, .form-group select:focus { border-color: var(--border-active); box-shadow: 0 0 0 3px rgba(99,210,255,0.08); }
+  .form-group textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--border-active); box-shadow: 0 0 0 3px rgba(99,210,255,0.08); }
   
   .checkbox-group { display:flex; align-items:center; gap:10px; margin-bottom:16px; cursor:pointer; }
   .checkbox-group input { width:16px; height:16px; cursor:pointer; }
@@ -135,8 +136,6 @@
   .card-label { font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
   .card-value { font-family:'Syne',sans-serif; font-weight:700; font-size:28px; }
   .card-value.sm { font-size:20px; }
-  .card-change { font-size:11px; margin-top:4px; }
-  .pos { color:var(--accent2); } .neg { color:var(--accent-red); }
 
   .member-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
   .member-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
@@ -159,11 +158,8 @@
   .progress-bar { height:5px; background:var(--bg3); border-radius:100px; overflow:hidden; }
   .progress-fill { height:100%; border-radius:100px; transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
 
-  .task-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:10px; transition:all 0.2s; position:relative; }
+  .task-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:10px; }
   .task-header { display:flex; align-items:flex-start; gap:12px; }
-  .task-check { width:18px; height:18px; border-radius:5px; border:1.5px solid var(--text-muted); flex-shrink:0; display:flex; align-items:center; justify-content:center; margin-top:1px; }
-  .task-check.done { background:var(--accent2); border-color:var(--accent2); }
-  .task-check.done::after { content:'✓'; font-size:10px; color:#000; font-weight:700; }
   .task-content { flex:1; }
   .task-title { font-size:13px; font-weight:500; margin-bottom:4px; }
   .task-title.done { text-decoration:line-through; color:var(--text-dim); }
@@ -225,6 +221,10 @@
   .status-rejected { background:rgba(255,110,110,0.08); color:var(--accent-red); }
 
   .admin-review-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:10px; }
+  .admin-review-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .admin-review-actions { display:flex; gap:8px; margin-top:8px; }
+  .btn-approve { padding:7px 14px; background:rgba(0,229,160,0.1); border:1px solid rgba(0,229,160,0.25); border-radius:8px; color:var(--gaia-green); font-size:11px; font-weight:600; cursor:pointer; }
+  .btn-reject { padding:7px 14px; background:rgba(255,110,110,0.08); border:1px solid rgba(255,110,110,0.2); border-radius:8px; color:var(--accent-red); font-size:11px; font-weight:600; cursor:pointer; }
 
   .empty-state { text-align:center; padding:48px 20px; color:var(--text-muted); }
   .empty-icon { font-size:40px; margin-bottom:12px; }
@@ -236,6 +236,129 @@
   .profile-hero-inner { display:flex; align-items:center; gap:20px; }
   .profile-avatar-lg { width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:26px; color:#fff; flex-shrink:0; }
   .profile-name { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; }
+
+  .skill-chip { display:flex; align-items:center; gap:6px; padding:4px 10px; background:var(--bg3); border:1px solid var(--border); border-radius:100px; color:var(--text); font-size:12px; }
+  .skill-chip-remove { color:var(--accent-red); cursor:pointer; font-weight:bold; font-size:14px; }
+
+  hr { border:none; border-top:1px solid var(--border); margin:16px 0; }
+  .pts-big { font-family:'Syne',sans-serif; font-weight:800; font-size:36px; color:var(--accent); }
+  .pts-label { font-size:11px; color:var(--text-dim); letter-spacing:0.08em; text-transform:uppercase; }
+  .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .section-title { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; }
+
+  /* ──── MURAL DE AVISOS ──── */
+  .notice-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .notice-card::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  }
+  .notice-card.urgente::before { background: var(--accent-red); }
+  .notice-card.info::before { background: var(--gaia-blue); }
+  .notice-card.evento::before { background: var(--gaia-green); }
+  .notice-card.geral::before { background: var(--accent3); }
+  .notice-card:hover { border-color: rgba(255,255,255,0.12); }
+  .notice-type-badge {
+    display:inline-flex; align-items:center; gap:4px;
+    padding:3px 10px; border-radius:100px; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .notice-type-urgente { background:rgba(255,110,110,0.12); color:var(--accent-red); border:1px solid rgba(255,110,110,0.25); }
+  .notice-type-info    { background:rgba(26,143,255,0.12); color:var(--gaia-blue); border:1px solid rgba(26,143,255,0.25); }
+  .notice-type-evento  { background:rgba(0,229,160,0.1); color:var(--gaia-green); border:1px solid rgba(0,229,160,0.2); }
+  .notice-type-geral   { background:rgba(255,184,106,0.1); color:var(--accent3); border:1px solid rgba(255,184,106,0.2); }
+  .notice-title { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; margin-bottom:6px; }
+  .notice-body  { font-size:13px; color:var(--text-dim); line-height:1.6; white-space:pre-wrap; }
+  .notice-footer{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+  .notice-meta  { font-size:11px; color:var(--text-muted); }
+  .notice-delete{ font-size:11px; color:var(--accent-red); cursor:pointer; opacity:0.7; transition:opacity 0.2s; }
+  .notice-delete:hover { opacity:1; }
+  .notice-email-indicator { font-size:10px; color:var(--gaia-green); display:flex; align-items:center; gap:4px; }
+
+  /* ──── CALENDÁRIO ──── */
+  .calendar-wrapper {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px;
+    margin-bottom: 20px;
+  }
+  .calendar-header {
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;
+  }
+  .cal-month-label { font-family:'Syne',sans-serif; font-weight:700; font-size:18px; }
+  .cal-nav { display:flex; gap:8px; }
+  .cal-nav-btn {
+    width:32px; height:32px; border-radius:8px; background:var(--bg3); border:1px solid var(--border);
+    color:var(--text-dim); cursor:pointer; display:flex; align-items:center; justify-content:center;
+    font-size:14px; transition:all 0.2s;
+  }
+  .cal-nav-btn:hover { border-color:rgba(255,255,255,0.15); color:var(--text); }
+  .calendar-grid { display:grid; grid-template-columns: repeat(7,1fr); gap:2px; }
+  .cal-day-header {
+    text-align:center; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--text-muted); padding:8px 0;
+  }
+  .cal-day {
+    min-height:60px; padding:6px; border-radius:8px; border:1px solid transparent;
+    position:relative; cursor:pointer; transition:all 0.15s; background:transparent;
+  }
+  .cal-day:hover { background:var(--bg3); border-color:var(--border); }
+  .cal-day.other-month { opacity:0.3; pointer-events:none; }
+  .cal-day.today { border-color:rgba(26,143,255,0.4); background:rgba(26,143,255,0.06); }
+  .cal-day.has-events { border-color:rgba(99,210,255,0.25); }
+  .cal-day-num { font-size:12px; font-weight:500; color:var(--text-dim); margin-bottom:4px; }
+  .cal-day.today .cal-day-num { color:var(--gaia-blue); font-weight:700; }
+  .cal-event-dot { font-size:10px; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:2px; }
+  .cal-event-dot.reuniao    { color:var(--gaia-blue); }
+  .cal-event-dot.entrega    { color:var(--accent3); }
+  .cal-event-dot.evento     { color:var(--gaia-green); }
+  .cal-event-dot.outro      { color:var(--text-dim); }
+  .cal-add-btn {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:8px 18px; background:rgba(26,143,255,0.12); border:1px solid rgba(26,143,255,0.25);
+    border-radius:var(--radius); color:var(--gaia-blue); font-size:12px; font-weight:600; cursor:pointer;
+  }
+
+  /* Legenda calendário */
+  .cal-legend { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; }
+  .cal-legend-item { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-dim); }
+  .cal-legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+  /* ──── HORAS / CONTABILIZAÇÃO ──── */
+  .hours-summary-card {
+    background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg);
+    padding:20px; margin-bottom:16px;
+  }
+  .hours-member-row {
+    display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg3);
+    border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px;
+    transition:all 0.2s;
+  }
+  .hours-member-row:hover { border-color:rgba(255,255,255,0.12); }
+  .hours-bar-wrapper { flex:1; }
+  .hours-bar-label { display:flex; justify-content:space-between; margin-bottom:4px; }
+  .hours-bar-name  { font-size:12px; font-weight:500; }
+  .hours-bar-val   { font-family:'DM Mono',monospace; font-size:12px; color:#bb86fc; }
+  .hours-bar       { height:6px; background:var(--bg); border-radius:100px; overflow:hidden; }
+  .hours-bar-fill  { height:100%; border-radius:100px; background:linear-gradient(90deg, #7b5ea7, #bb86fc); transition:width 0.8s; }
+  .hours-goal-badge { font-size:10px; padding:2px 8px; border-radius:100px; font-weight:600; }
+  .hours-ok   { background:rgba(0,229,160,0.1); color:var(--gaia-green); border:1px solid rgba(0,229,160,0.2); }
+  .hours-warn { background:rgba(255,184,106,0.1); color:var(--accent3); border:1px solid rgba(255,184,106,0.2); }
+  .hours-low  { background:rgba(255,110,110,0.08); color:var(--accent-red); border:1px solid rgba(255,110,110,0.2); }
+  .hours-adj-btn { padding:5px 10px; border-radius:6px; background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; }
+  .hours-adj-btn:hover { border-color:rgba(255,255,255,0.15); color:var(--text); }
+
+  /* Config EmailJS card */
+  .config-card {
+    background:rgba(26,143,255,0.04); border:1px solid rgba(26,143,255,0.15); border-radius:var(--radius);
+    padding:16px; margin-bottom:20px; font-size:12px; color:var(--text-dim); line-height:1.6;
+  }
+  .config-card b { color:var(--accent); }
 
   @keyframes fadeIn { from{opacity:0} to{opacity:1} }
   @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
@@ -251,21 +374,12 @@
     .grid-4,.grid-3,.grid-2 { grid-template-columns:1fr; }
     .grid-auto { grid-template-columns:1fr; }
   }
-
-  .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
-  .section-title { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; }
-  .pts-big { font-family:'Syne',sans-serif; font-weight:800; font-size:36px; color:var(--accent); }
-  .pts-label { font-size:11px; color:var(--text-dim); letter-spacing:0.08em; text-transform:uppercase; }
-
-  .skill-chip { display:flex; align-items:center; gap:6px; padding:4px 10px; background:var(--bg3); border:1px solid var(--border); border-radius:100px; color:var(--text); font-size:12px; }
-  .skill-chip-remove { color:var(--accent-red); cursor:pointer; font-weight:bold; font-size:14px; }
-  
-  hr { border:none; border-top:1px solid var(--border); margin:16px 0; }
 </style>
 </head>
 <body>
 <div id="app">
 
+<!-- ══ LOGIN ══ -->
 <div id="screen-login" class="screen active">
   <div class="login-card">
     <div class="logo-area">
@@ -286,6 +400,7 @@
   </div>
 </div>
 
+<!-- ══ DASHBOARD ══ -->
 <div id="screen-dashboard" class="screen">
   <div class="sidebar">
     <div class="sidebar-logo">
@@ -302,6 +417,15 @@
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         Visão Geral
       </div>
+      <div class="nav-item" onclick="showPage('notices',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Mural de Avisos
+        <span id="notices-badge" style="margin-left:auto;background:rgba(255,110,110,0.2);color:var(--accent-red);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;display:none;"></span>
+      </div>
+      <div class="nav-item" onclick="showPage('calendar',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Calendário
+      </div>
       <div class="nav-item" onclick="showPage('tasks',this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M5 7h14M5 12h14M5 17h8"/></svg>
         Tarefas
@@ -313,7 +437,7 @@
       </div>
     </div>
 
-    <div class="nav-section" id="nav-personal">
+    <div class="nav-section">
       <div class="nav-section-label">Meu Espaço</div>
       <div class="nav-item" onclick="showPage('myprofile',this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
@@ -329,14 +453,19 @@
       <div class="nav-section-label">Administração</div>
       <div class="nav-item" onclick="showPage('admin-members',this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Membros (Gestão)
+        Membros
       </div>
       <div class="nav-item" onclick="showPage('admin-attendance',this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Lista de Presença
       </div>
+      <div class="nav-item" onclick="showPage('admin-hours',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Contabilização de Horas
+        <span id="hours-badge" style="margin-left:auto;background:rgba(187,134,252,0.2);color:#bb86fc;border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;display:none;"></span>
+      </div>
       <div class="nav-item" onclick="showPage('admin-submissions',this)">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Entregas
         <span id="submissions-badge" style="margin-left:auto;background:rgba(255,184,106,0.2);color:var(--accent3);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;"></span>
       </div>
@@ -347,6 +476,10 @@
       <div class="nav-item" onclick="showPage('admin-rewards',this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
         Recompensas
+      </div>
+      <div class="nav-item" onclick="showPage('admin-emailconfig',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Config. E-mail
       </div>
     </div>
 
@@ -364,8 +497,10 @@
     </div>
   </div>
 
+  <!-- MAIN -->
   <div class="main">
 
+    <!-- HOME -->
     <div id="page-home" class="page active">
       <div class="page-header">
         <div class="page-title" id="home-title">Visão Geral</div>
@@ -386,6 +521,50 @@
       <div id="recent-activity"></div>
     </div>
 
+    <!-- MURAL DE AVISOS -->
+    <div id="page-notices" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">📢 Mural de Avisos</div>
+          <div class="page-subtitle">Comunicados do projeto — novos avisos enviam e-mail automaticamente para os membros</div>
+        </div>
+        <div id="notice-admin-btn"></div>
+      </div>
+      <div id="notices-list"></div>
+    </div>
+
+    <!-- CALENDÁRIO -->
+    <div id="page-calendar" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">📅 Calendário do Projeto</div>
+          <div class="page-subtitle">Reuniões, prazos e eventos da equipe</div>
+        </div>
+        <div id="cal-admin-btn"></div>
+      </div>
+      <div class="calendar-wrapper">
+        <div class="calendar-header">
+          <div class="cal-month-label" id="cal-month-label"></div>
+          <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
+            <button class="cal-nav-btn" onclick="calNav(1)">›</button>
+          </div>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+        <div class="cal-legend">
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--gaia-blue)"></div>Reunião</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--accent3)"></div>Entrega</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--gaia-green)"></div>Evento</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--text-muted)"></div>Outro</div>
+        </div>
+      </div>
+      <div class="section-header" style="margin-top:8px;">
+        <div class="section-title">📋 Próximos Eventos</div>
+      </div>
+      <div id="upcoming-events"></div>
+    </div>
+
+    <!-- TAREFAS -->
     <div id="page-tasks" class="page">
       <div class="page-header">
         <div class="page-title">Tarefas do Projeto</div>
@@ -400,19 +579,11 @@
       <div id="tasks-list"></div>
     </div>
 
+    <!-- RANKING -->
     <div id="page-ranking" class="page">
       <div class="page-header">
         <div class="page-title">Ranking Geral</div>
         <div class="page-subtitle">Baseado em pontos por tarefas e contribuições</div>
-      </div>
-      <div class="reward-card">
-        <div class="reward-header">
-          <div class="reward-icon">🏆</div>
-          <div>
-            <div class="reward-title">Destaque do Mês</div>
-            <div class="reward-desc">O membro com mais pontos ao final do ciclo receberá uma recompensa especial.</div>
-          </div>
-        </div>
       </div>
       <div class="tabs">
         <div class="tab active" onclick="filterRanking('all',this)">Geral</div>
@@ -422,35 +593,32 @@
       <div id="ranking-list"></div>
     </div>
 
+    <!-- MEU PERFIL -->
     <div id="page-myprofile" class="page">
       <div class="page-header page-actions">
-        <div>
-          <div class="page-title">Meu Perfil</div>
-        </div>
-        <div>
-          <button class="btn-ghost" onclick="openEditUserModal(currentUser.id)">⚙️ Editar Conta</button>
-        </div>
+        <div><div class="page-title">Meu Perfil</div></div>
+        <button class="btn-ghost" onclick="openEditUserModal(currentUser.id)">⚙️ Editar Conta</button>
       </div>
       <div id="my-profile-content"></div>
     </div>
 
+    <!-- MINHAS MÉTRICAS -->
     <div id="page-mymetrics" class="page">
       <div class="page-header">
         <div class="page-title">Minhas Métricas</div>
-        <div class="page-subtitle">Seu desempenho individual — visível apenas para você e a coordenação</div>
+        <div class="page-subtitle">Seu desempenho individual</div>
       </div>
       <div id="my-metrics-content"></div>
     </div>
 
+    <!-- ADMIN: MEMBROS -->
     <div id="page-admin-members" class="page">
       <div class="page-header page-actions">
         <div>
           <div class="page-title">Gestão de Membros</div>
-          <div class="page-subtitle">Gerencie os usuários, senhas, horas e equipes do portal</div>
+          <div class="page-subtitle">Gerencie usuários, senhas, horas e equipes</div>
         </div>
-        <div>
-          <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="openAddUserModal()">+ Adicionar Usuário</button>
-        </div>
+        <button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="openAddUserModal()">+ Adicionar</button>
       </div>
       <div class="tabs">
         <div class="tab active" onclick="filterAdminMembers('all',this)">Todos</div>
@@ -460,46 +628,60 @@
       <div id="admin-members-list"></div>
     </div>
 
+    <!-- ADMIN: PRESENÇA -->
     <div id="page-admin-attendance" class="page">
       <div class="page-header">
         <div class="page-title">Lista de Presença</div>
-        <div class="page-subtitle">Registre reuniões e adicione horas de certificado automaticamente para os presentes</div>
+        <div class="page-subtitle">Registre reuniões — horas são adicionadas automaticamente</div>
       </div>
-      
       <div class="card" style="margin-bottom:20px;">
-        <div class="card-title">Nova Reunião / Evento</div>
         <div class="form-row">
           <div class="form-group" style="flex:1;">
             <label>Data</label>
             <input type="date" id="att-date" />
           </div>
           <div class="form-group" style="flex:2;">
-            <label>Descrição do Evento</label>
-            <input type="text" id="att-desc" placeholder="Ex: Reunião Geral de Sábado, Laboratório..." />
+            <label>Descrição</label>
+            <input type="text" id="att-desc" placeholder="Ex: Reunião Geral de Sábado" />
           </div>
           <div class="form-group" style="flex:1;">
             <label>Horas Validadas</label>
             <input type="number" id="att-hours" value="2" min="1" max="20" />
           </div>
         </div>
-        <label style="display:block; font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin:12px 0 8px;">Membros Presentes</label>
-        <div id="attendance-members-list" class="grid grid-3" style="background:var(--bg3); padding:16px; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:20px;">
-          </div>
-        <button class="btn-primary" onclick="saveAttendance()" style="width:auto; padding:12px 28px;">Registrar Presença e Adicionar Horas</button>
+        <label style="display:block;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin:12px 0 8px;">Membros Presentes</label>
+        <div id="attendance-members-list" class="grid grid-3" style="background:var(--bg3);padding:16px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;"></div>
+        <button class="btn-primary" onclick="saveAttendance()" style="width:auto;padding:12px 28px;">Registrar Presença e Adicionar Horas</button>
       </div>
-
       <div class="section-header"><div class="section-title">Histórico de Presenças</div></div>
       <div id="attendance-history"></div>
     </div>
 
+    <!-- ADMIN: CONTABILIZAÇÃO DE HORAS (NOVO) -->
+    <div id="page-admin-hours" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">⏱ Contabilização de Horas</div>
+          <div class="page-subtitle">Visão completa, metas e ajuste manual de horas de certificado</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn-ghost" style="font-size:12px;" onclick="exportHoursCSV()">📥 Exportar CSV</button>
+          <button class="btn-ghost" style="font-size:12px;" onclick="openModal('modal-hours-goal')">🎯 Meta de Horas</button>
+        </div>
+      </div>
+      <div id="hours-page-content"></div>
+    </div>
+
+    <!-- ADMIN: ENTREGAS -->
     <div id="page-admin-submissions" class="page">
       <div class="page-header">
         <div class="page-title">Entregas para Revisão</div>
-        <div class="page-subtitle">Avalie e aprove tarefas, adicione feedback para os membros</div>
+        <div class="page-subtitle">Avalie e aprove tarefas</div>
       </div>
       <div id="admin-submissions-list"></div>
     </div>
 
+    <!-- ADMIN: NOVA TAREFA -->
     <div id="page-admin-tasks" class="page">
       <div class="page-header">
         <div class="page-title">Nova Tarefa</div>
@@ -508,19 +690,19 @@
       <div class="card" style="max-width:580px;">
         <div class="form-group">
           <label>Título da Tarefa</label>
-          <input type="text" id="new-task-title" placeholder="Ex: Implementar filtro de Kalman no controle de altitude" />
+          <input type="text" id="new-task-title" placeholder="Ex: Implementar filtro de Kalman" />
         </div>
         <div class="form-group">
           <label>Descrição</label>
-          <textarea id="new-task-desc" placeholder="Detalhe o que precisa ser feito, recursos necessários e critérios de aceitação..."></textarea>
+          <textarea id="new-task-desc" placeholder="Detalhe o que precisa ser feito..."></textarea>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>Equipe</label>
             <select id="new-task-team">
-              <option value="both">Ambas as equipes</option>
-              <option value="eletroquad">Gaia EletroQuad</option>
-              <option value="robotica">Gaia Robótica</option>
+              <option value="both">Ambas</option>
+              <option value="eletroquad">EletroQuad</option>
+              <option value="robotica">Robótica</option>
             </select>
           </div>
           <div class="form-group">
@@ -534,7 +716,7 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Pontos de Ranking</label>
+            <label>Pontos</label>
             <input type="number" id="new-task-pts" value="50" min="5" max="500" />
           </div>
           <div class="form-group">
@@ -550,6 +732,7 @@
       </div>
     </div>
 
+    <!-- ADMIN: RECOMPENSAS -->
     <div id="page-admin-rewards" class="page">
       <div class="page-header">
         <div class="page-title">Recompensas</div>
@@ -558,10 +741,23 @@
       <div id="admin-rewards-content"></div>
     </div>
 
-  </div>
-</div>
+    <!-- ADMIN: CONFIG E-MAIL (NOVO) -->
+    <div id="page-admin-emailconfig" class="page">
+      <div class="page-header">
+        <div class="page-title">⚙️ Configuração de E-mail</div>
+        <div class="page-subtitle">Configure o EmailJS para envio de notificações automáticas</div>
+      </div>
+      <div id="email-config-content"></div>
+    </div>
 
-</div><div id="modal-member" class="modal-overlay">
+  </div><!-- /main -->
+</div><!-- /screen-dashboard -->
+</div><!-- /app -->
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- Modal Member -->
+<div id="modal-member" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
       <div id="modal-member-avatar" class="sidebar-avatar" style="width:40px;height:40px;font-size:16px;"></div>
@@ -572,11 +768,11 @@
       <div class="modal-close" onclick="closeModal('modal-member')">✕</div>
     </div>
     <div id="modal-member-content"></div>
-    <div class="modal-footer" id="modal-member-footer" style="display:none; justify-content: flex-start; flex-wrap: wrap; gap:8px;">
-        </div>
+    <div class="modal-footer" id="modal-member-footer" style="display:none;justify-content:flex-start;flex-wrap:wrap;gap:8px;"></div>
   </div>
 </div>
 
+<!-- Modal Attendance Details -->
 <div id="modal-attendance-details" class="modal-overlay">
   <div class="modal">
     <div class="modal-header" style="margin-bottom:16px;">
@@ -587,6 +783,7 @@
   </div>
 </div>
 
+<!-- Modal Task Submit -->
 <div id="modal-task-submit" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
@@ -611,35 +808,24 @@
   </div>
 </div>
 
+<!-- Modal Reward -->
 <div id="modal-reward" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">🏆 Definir Recompensa</div>
       <div class="modal-close" onclick="closeModal('modal-reward')">✕</div>
     </div>
-    <div class="form-group">
-      <label>Ciclo / Período</label>
-      <input type="text" id="reward-period" placeholder="Ex: Março 2026" />
-    </div>
-    <div class="form-group">
-      <label>Descrição</label>
-      <textarea id="reward-desc" placeholder="Ex: Certificado de destaque..."></textarea>
-    </div>
-    <div class="form-group">
-      <label>Equipe</label>
-      <select id="reward-team">
-        <option value="all">Toda a equipe</option>
-        <option value="eletroquad">EletroQuad</option>
-        <option value="robotica">Robótica</option>
-      </select>
-    </div>
+    <div class="form-group"><label>Ciclo / Período</label><input type="text" id="reward-period" placeholder="Ex: Março 2026" /></div>
+    <div class="form-group"><label>Descrição</label><textarea id="reward-desc" placeholder="Ex: Certificado de destaque..."></textarea></div>
+    <div class="form-group"><label>Equipe</label><select id="reward-team"><option value="all">Toda a equipe</option><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option></select></div>
     <div class="modal-footer">
       <button class="btn-ghost" onclick="closeModal('modal-reward')">Cancelar</button>
-      <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="saveReward()">Salvar Recompensa</button>
+      <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="saveReward()">Salvar</button>
     </div>
   </div>
 </div>
 
+<!-- Modal User Form -->
 <div id="modal-user-form" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
@@ -647,119 +833,225 @@
       <div class="modal-close" onclick="closeModal('modal-user-form')">✕</div>
     </div>
     <input type="hidden" id="user-id" />
-    <div class="form-group">
-      <label>Nome Completo</label>
-      <input type="text" id="user-name" placeholder="Ex: João da Silva" />
-    </div>
+    <div class="form-group"><label>Nome Completo</label><input type="text" id="user-name" placeholder="Ex: João da Silva" /></div>
     <div class="form-row">
-        <div class="form-group">
-          <label>Usuário de Login</label>
-          <input type="text" id="user-username" placeholder="Para entrar no portal" />
-        </div>
-        <div class="form-group">
-          <label>Senha</label>
-          <input type="text" id="user-password" placeholder="Senha do membro" />
-        </div>
+      <div class="form-group"><label>Usuário de Login</label><input type="text" id="user-username" /></div>
+      <div class="form-group"><label>Senha</label><input type="text" id="user-password" /></div>
     </div>
+    <div class="form-group"><label>E-mail (para notificações)</label><input type="email" id="user-email" placeholder="membro@email.com" /></div>
     <div class="form-row" id="admin-only-fields">
-        <div class="form-group">
-          <label>Equipe</label>
-          <select id="user-team">
-            <option value="eletroquad">Gaia EletroQuad</option>
-            <option value="robotica">Gaia Robótica</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Cargo/Função</label>
-          <input type="text" id="user-role" placeholder="Ex: Desenvolvedor ROS" />
-        </div>
+      <div class="form-group"><label>Equipe</label><select id="user-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option></select></div>
+      <div class="form-group"><label>Cargo/Função</label><input type="text" id="user-role" placeholder="Ex: Desenvolvedor ROS" /></div>
     </div>
     <label class="checkbox-group" id="admin-only-checkbox">
-        <input type="checkbox" id="user-isadmin" />
-        <span style="font-size:13px; font-weight:500;">Conceder acesso de Administrador (ADM)</span>
+      <input type="checkbox" id="user-isadmin" />
+      <span style="font-size:13px;font-weight:500;">Conceder acesso de Administrador</span>
     </label>
-    <div class="modal-footer" style="margin-top: 10px;">
-      <button class="btn-danger" id="btn-delete-user" onclick="deleteUser()" style="margin-right:auto; display:none;">Excluir Usuário</button>
+    <div class="modal-footer" style="margin-top:10px;">
+      <button class="btn-danger" id="btn-delete-user" onclick="deleteUser()" style="margin-right:auto;display:none;">Excluir</button>
       <button class="btn-ghost" onclick="closeModal('modal-user-form')">Cancelar</button>
-      <button class="btn-success" onclick="saveUser()">Salvar Configurações</button>
+      <button class="btn-success" onclick="saveUser()">Salvar</button>
     </div>
   </div>
 </div>
 
+<!-- Modal Skills -->
 <div id="modal-skills" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">Gerenciar Habilidades</div>
       <div class="modal-close" onclick="closeModal('modal-skills')">✕</div>
     </div>
-    <div style="font-size:12px; color:var(--text-dim); margin-bottom:16px;">Habilidades atuais (clique no X para remover):</div>
-    
-    <div id="skills-container" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; min-height: 40px; padding: 12px; background: var(--bg3); border-radius: var(--radius); border: 1px solid var(--border);"></div>
-    
+    <div id="skills-container" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;min-height:40px;padding:12px;background:var(--bg3);border-radius:var(--radius);border:1px solid var(--border);"></div>
     <div class="form-row" style="align-items:flex-end;">
-       <div class="form-group" style="flex:1; margin-bottom:0;">
-         <label>Adicionar Nova Habilidade</label>
-         <input type="text" id="new-skill-input" placeholder="Ex: Python, ROS2, Solda..." onkeypress="if(event.key==='Enter') addSkill()" />
-       </div>
-       <button class="btn-primary" onclick="addSkill()" style="width:auto; padding: 12px 20px; margin-top:0;">Adicionar</button>
+      <div class="form-group" style="flex:1;margin-bottom:0;">
+        <label>Nova Habilidade</label>
+        <input type="text" id="new-skill-input" placeholder="Ex: Python, ROS2..." onkeypress="if(event.key==='Enter') addSkill()" />
+      </div>
+      <button class="btn-primary" onclick="addSkill()" style="width:auto;padding:12px 20px;">Adicionar</button>
     </div>
     <div class="modal-footer">
       <button class="btn-ghost" onclick="closeModal('modal-skills')">Cancelar</button>
-      <button class="btn-success" onclick="saveSkills()">Salvar Mudanças</button>
+      <button class="btn-success" onclick="saveSkills()">Salvar</button>
     </div>
   </div>
 </div>
 
+<!-- Modal Metrics -->
 <div id="modal-metrics" class="modal-overlay">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">Editar Métricas do Membro</div>
+      <div class="modal-title">Editar Métricas</div>
       <div class="modal-close" onclick="closeModal('modal-metrics')">✕</div>
     </div>
-    <div style="font-size:12px; color:var(--text-dim); margin-bottom:16px;">Ajuste o desempenho (0 a 100%). As barras serão atualizadas em tempo real.</div>
     <input type="hidden" id="metrics-user-id" />
-    
     <div class="form-row">
-      <div class="form-group">
-        <label>Presença (%)</label>
-        <input type="number" id="metric-presenca" min="0" max="100" />
-      </div>
-      <div class="form-group">
-        <label>Conclusão de Tarefas (%)</label>
-        <input type="number" id="metric-tarefas" min="0" max="100" />
-      </div>
+      <div class="form-group"><label>Presença (%)</label><input type="number" id="metric-presenca" min="0" max="100" /></div>
+      <div class="form-group"><label>Conclusão de Tarefas (%)</label><input type="number" id="metric-tarefas" min="0" max="100" /></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Qualidade de Entrega (%)</label><input type="number" id="metric-qualidade" min="0" max="100" /></div>
+      <div class="form-group"><label>Pontualidade (%)</label><input type="number" id="metric-pontualidade" min="0" max="100" /></div>
+    </div>
+    <div class="form-group"><label>Colaboração (%)</label><input type="number" id="metric-colaboracao" min="0" max="100" /></div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-metrics')">Cancelar</button>
+      <button class="btn-success" onclick="saveMetrics()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo Aviso (NOVO) -->
+<div id="modal-notice" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📢 Publicar Aviso</div>
+      <div class="modal-close" onclick="closeModal('modal-notice')">✕</div>
+    </div>
+    <div class="form-group">
+      <label>Título do Aviso</label>
+      <input type="text" id="notice-title" placeholder="Ex: Reunião confirmada para sábado" />
+    </div>
+    <div class="form-group">
+      <label>Mensagem</label>
+      <textarea id="notice-body" style="min-height:120px;" placeholder="Escreva o aviso completo aqui..."></textarea>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>Qualidade de Entrega (%)</label>
-        <input type="number" id="metric-qualidade" min="0" max="100" />
+        <label>Tipo</label>
+        <select id="notice-type">
+          <option value="info">ℹ️ Informação</option>
+          <option value="urgente">🚨 Urgente</option>
+          <option value="evento">🗓 Evento</option>
+          <option value="geral">📌 Geral</option>
+        </select>
       </div>
       <div class="form-group">
-        <label>Pontualidade (%)</label>
-        <input type="number" id="metric-pontualidade" min="0" max="100" />
+        <label>Equipe Alvo</label>
+        <select id="notice-team">
+          <option value="all">Toda a equipe</option>
+          <option value="eletroquad">EletroQuad</option>
+          <option value="robotica">Robótica</option>
+        </select>
+      </div>
+    </div>
+    <label class="checkbox-group">
+      <input type="checkbox" id="notice-sendemail" checked />
+      <span style="font-size:13px;font-weight:500;">Enviar notificação por e-mail para os membros</span>
+    </label>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-notice')">Cancelar</button>
+      <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="publishNotice()">Publicar Aviso</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo Evento Calendário (NOVO) -->
+<div id="modal-cal-event" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📅 Novo Evento</div>
+      <div class="modal-close" onclick="closeModal('modal-cal-event')">✕</div>
+    </div>
+    <div class="form-group">
+      <label>Título do Evento</label>
+      <input type="text" id="cal-event-title" placeholder="Ex: Reunião de sábado, Entrega do relatório..." />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date" id="cal-event-date" />
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="cal-event-type">
+          <option value="reuniao">Reunião</option>
+          <option value="entrega">Entrega/Prazo</option>
+          <option value="evento">Evento</option>
+          <option value="outro">Outro</option>
+        </select>
       </div>
     </div>
     <div class="form-group">
-      <label>Colaboração (%)</label>
-      <input type="number" id="metric-colaboracao" min="0" max="100" />
+      <label>Descrição (opcional)</label>
+      <input type="text" id="cal-event-desc" placeholder="Detalhes adicionais..." />
     </div>
-
+    <label class="checkbox-group">
+      <input type="checkbox" id="cal-event-sendemail" />
+      <span style="font-size:13px;font-weight:500;">Notificar membros por e-mail sobre este evento</span>
+    </label>
     <div class="modal-footer">
-      <button class="btn-ghost" onclick="closeModal('modal-metrics')">Cancelar</button>
-      <button class="btn-success" onclick="saveMetrics()">Salvar Métricas</button>
+      <button class="btn-ghost" onclick="closeModal('modal-cal-event')">Cancelar</button>
+      <button class="btn-success" onclick="saveCalEvent()">Adicionar ao Calendário</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Ajuste Manual de Horas (NOVO) -->
+<div id="modal-hours-adjust" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⏱ Ajustar Horas</div>
+      <div class="modal-close" onclick="closeModal('modal-hours-adjust')">✕</div>
+    </div>
+    <input type="hidden" id="adj-member-id" />
+    <div style="font-size:13px;color:var(--text-dim);margin-bottom:16px;" id="adj-member-name-label"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Operação</label>
+        <select id="adj-op">
+          <option value="add">➕ Adicionar horas</option>
+          <option value="sub">➖ Remover horas</option>
+          <option value="set">✏️ Definir total exato</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Quantidade de Horas</label>
+        <input type="number" id="adj-hours-val" value="1" min="0" max="999" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Motivo / Observação</label>
+      <input type="text" id="adj-reason" placeholder="Ex: Participação em evento externo..." />
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-hours-adjust')">Cancelar</button>
+      <button class="btn-success" onclick="applyHoursAdjust()">Aplicar Ajuste</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Meta de Horas (NOVO) -->
+<div id="modal-hours-goal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🎯 Meta de Horas do Ciclo</div>
+      <div class="modal-close" onclick="closeModal('modal-hours-goal')">✕</div>
+    </div>
+    <div class="form-group">
+      <label>Meta de Horas por Membro (total do ciclo)</label>
+      <input type="number" id="hours-goal-val" value="20" min="1" max="999" />
+    </div>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">A barra de progresso de cada membro será calculada com base nessa meta.</div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-hours-goal')">Cancelar</button>
+      <button class="btn-success" onclick="saveHoursGoal()">Salvar Meta</button>
     </div>
   </div>
 </div>
 
 <div id="toast-container"></div>
 
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 <script>
-// ══════════════════════════════════════════════
-//  CONFIGURAÇÃO DO FIREBASE
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// FIREBASE CONFIG
+// ══════════════════════════════════════════
 const firebaseConfig = {
   apiKey: "AIzaSyCgbRDXE3Y61m6FLQt6hThebmd_bz21VGY",
   authDomain: "portal-gaia-f5c93.firebaseapp.com",
@@ -769,42 +1061,43 @@ const firebaseConfig = {
   appId: "1:228822751950:web:8aeacdd4c599f07eec8e9f",
   databaseURL: "https://portal-gaia-f5c93-default-rtdb.firebaseio.com"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const dbRef = db.ref('portal_gaia_data_v4');
+const dbRef = db.ref('portal_gaia_data_v5');
 
-// ══════════════════════════════════════════════
-//  DADOS INICIAIS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// DADOS INICIAIS
+// ══════════════════════════════════════════
 const INITIAL_MEMBERS = [
-  // ──── ADMS ────
-  { id:'m1', username: 'Pedro Henrique', password: '123', name:'Pedro Henrique', team:'eletroquad', role:'Coordenador ADM', isAdmin: true, avatar:'PH', color:'#1a8fff', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Gestão','Engenharia Mecânica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  { id:'m2', username: 'Laura Capanema', password: '123', name:'Laura Capanema', team:'robotica', role:'Coordenadora ADM', isAdmin: true, avatar:'LC', color:'#00c984', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Gestão','Projetos'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  { id:'m3', username: 'Júlia Origuela', password: '123', name:'Júlia Origuela', team:'eletroquad', role:'Administradora', isAdmin: true, avatar:'JO', color:'#5b8cff', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Liderança','Mecânica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  { id:'m4', username: 'Wanessa Karoline', password: '123', name:'Wanessa Karoline', team:'robotica', role:'Administradora', isAdmin: true, avatar:'WK', color:'#00e5a0', metrics:{ presenca:100, tarefas:100, qualidade:100, pontualidade:100, colaboracao:100 }, skills:['Liderança','Programação'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  
-  // ──── MEMBROS ELETROQUAD ────
-  { id:'m5', username: 'Carlos Gabriel', password: '123', name:'Carlos Gabriel', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'CG', color:'#00b4d8', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Eletrônica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  { id:'m6', username: 'João Paulo', password: '123', name:'João Paulo', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'JP', color:'#48cae4', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Hardware'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  { id:'m7', username: 'João Maerbal', password: '123', name:'João Maerbal', team:'eletroquad', role:'Membro EletroQuad', isAdmin: false, avatar:'JM', color:'#1a8fff', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Autonomia'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  
-  // ──── MEMBROS ROBÓTICA ────
-  { id:'m8', username: 'Murilo Tristão', password: '123', name:'Murilo Tristão', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'MT', color:'#38cf7f', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Mecânica','CAD'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  { id:'m9', username: 'Felipe (Braia)', password: '123', name:'Felipe (Braia)', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'FB', color:'#0fbf70', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['ROS2','Linux'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  { id:'m10', username: 'Júlia Vitalino', password: '123', name:'Júlia Vitalino', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'JV', color:'#00e5a0', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Visão Computacional'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
-  { id:'m11', username: 'Eloiza Lopes', password: '123', name:'Eloiza Lopes', team:'robotica', role:'Membro Robótica', isAdmin: false, avatar:'EL', color:'#00c984', metrics:{ presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 }, skills:['Controle','Programação'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m1', username:'Pedro Henrique', password:'123', name:'Pedro Henrique', email:'', team:'eletroquad', role:'Coordenador ADM', isAdmin:true, avatar:'PH', color:'#1a8fff', metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100}, skills:['Gestão','Engenharia Mecânica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m2', username:'Laura Capanema', password:'123', name:'Laura Capanema', email:'', team:'robotica', role:'Coordenadora ADM', isAdmin:true, avatar:'LC', color:'#00c984', metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100}, skills:['Gestão','Projetos'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m3', username:'Júlia Origuela', password:'123', name:'Júlia Origuela', email:'', team:'eletroquad', role:'Administradora', isAdmin:true, avatar:'JO', color:'#5b8cff', metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100}, skills:['Liderança','Mecânica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m4', username:'Wanessa Karoline', password:'123', name:'Wanessa Karoline', email:'', team:'robotica', role:'Administradora', isAdmin:true, avatar:'WK', color:'#00e5a0', metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100}, skills:['Liderança','Programação'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m5', username:'Carlos Gabriel', password:'123', name:'Carlos Gabriel', email:'', team:'eletroquad', role:'Membro EletroQuad', isAdmin:false, avatar:'CG', color:'#00b4d8', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Eletrônica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m6', username:'João Paulo', password:'123', name:'João Paulo', email:'', team:'eletroquad', role:'Membro EletroQuad', isAdmin:false, avatar:'JP', color:'#48cae4', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Hardware'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m7', username:'João Maerbal', password:'123', name:'João Maerbal', email:'', team:'eletroquad', role:'Membro EletroQuad', isAdmin:false, avatar:'JM', color:'#1a8fff', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Autonomia'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m8', username:'Murilo Tristão', password:'123', name:'Murilo Tristão', email:'', team:'robotica', role:'Membro Robótica', isAdmin:false, avatar:'MT', color:'#38cf7f', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Mecânica','CAD'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m9', username:'Felipe (Braia)', password:'123', name:'Felipe (Braia)', email:'', team:'robotica', role:'Membro Robótica', isAdmin:false, avatar:'FB', color:'#0fbf70', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['ROS2','Linux'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m10', username:'Júlia Vitalino', password:'123', name:'Júlia Vitalino', email:'', team:'robotica', role:'Membro Robótica', isAdmin:false, avatar:'JV', color:'#00e5a0', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Visão Computacional'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m11', username:'Eloiza Lopes', password:'123', name:'Eloiza Lopes', email:'', team:'robotica', role:'Membro Robótica', isAdmin:false, avatar:'EL', color:'#00c984', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Controle','Programação'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
 ];
 
 const INITIAL_TASKS = [
-  { id:'t1', title:'Configurar o novo Portal (v4)', desc:'Fazer login, testar o sistema de assumir/entregar tarefas e aprovação de horas.', team:'both', diff:'easy', pts:50, hours:2, deadline:'2026-03-31', status:'available', claimedBy:null, submittedBy:[] }
+  { id:'t1', title:'Configurar o novo Portal (v5)', desc:'Fazer login, testar o sistema de avisos, calendário e aprovação de horas.', team:'both', diff:'easy', pts:50, hours:2, deadline:'2026-03-31', status:'available', claimedBy:null, submittedBy:[] }
 ];
 
+// ══════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════
 let currentUser = null;
 let currentTaskFilter = 'all';
 let currentRankingFilter = 'all';
 let currentAdminMemberFilter = 'all';
 let pendingTaskId = null;
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let editingSkillsUserId = null;
+let tempSkills = [];
 
 let MEMBERS = [];
 let tasks = [];
@@ -812,84 +1105,83 @@ let submissions = [];
 let rewards = [];
 let memberPoints = {};
 let attendance = [];
+let notices = [];
+let calEvents = [];
+let emailConfig = { serviceId:'', templateId:'', publicKey:'', configured:false };
+let hoursGoal = 20;
+let hoursLog = []; // log de ajustes manuais
 
-// ══════════════════════════════════════════════
-//  SINCRONIZAÇÃO E NUVEM
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// FIREBASE SYNC
+// ══════════════════════════════════════════
 dbRef.on('value', (snapshot) => {
   const data = snapshot.val();
-  
   if (data && data.members) {
-    MEMBERS = data.members.map(m => ({...m, hours: m.hours || 0}));
-    tasks = data.tasks || [];
-    submissions = data.submissions || [];
-    rewards = data.rewards || [];
-    memberPoints = data.memberPoints || {};
-    attendance = data.attendance || [];
+    MEMBERS       = data.members.map(m => ({...m, hours: m.hours || 0, email: m.email || ''}));
+    tasks         = data.tasks || [];
+    submissions   = data.submissions || [];
+    rewards       = data.rewards || [];
+    memberPoints  = data.memberPoints || {};
+    attendance    = data.attendance || [];
+    notices       = data.notices || [];
+    calEvents     = data.calEvents || [];
+    emailConfig   = data.emailConfig || { serviceId:'', templateId:'', publicKey:'', configured:false };
+    hoursGoal     = data.hoursGoal || 20;
+    hoursLog      = data.hoursLog || [];
   } else {
     MEMBERS = JSON.parse(JSON.stringify(INITIAL_MEMBERS));
-    tasks = JSON.parse(JSON.stringify(INITIAL_TASKS));
-    submissions = [];
-    rewards = [];
-    attendance = [];
+    tasks   = JSON.parse(JSON.stringify(INITIAL_TASKS));
+    submissions = []; rewards = []; attendance = [];
+    notices = []; calEvents = []; hoursLog = [];
     MEMBERS.forEach(m => { memberPoints[m.id] = m.pts; });
     saveToFirebase();
   }
 
   if (currentUser) {
-    const updatedUser = MEMBERS.find(m=>m.id === currentUser.id);
-    if(updatedUser) {
-        currentUser.name = updatedUser.name;
-        currentUser.isAdmin = updatedUser.isAdmin;
-        document.getElementById('sidebar-name').textContent = currentUser.name;
-        document.getElementById('sidebar-role').textContent = currentUser.isAdmin ? 'Administrador' : (updatedUser.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
-        
-        if(currentUser.isAdmin) {
-            document.getElementById('nav-admin').style.display='block';
-        } else {
-            document.getElementById('nav-admin').style.display='none';
-            if(document.getElementById('page-admin-members').classList.contains('active')){ showPage('home'); }
-        }
-    } else {
-        doLogout();
-    }
+    const updatedUser = MEMBERS.find(m => m.id === currentUser.id);
+    if (updatedUser) {
+      currentUser.name    = updatedUser.name;
+      currentUser.isAdmin = updatedUser.isAdmin;
+      document.getElementById('sidebar-name').textContent = currentUser.name;
+      document.getElementById('sidebar-role').textContent = currentUser.isAdmin ? 'Administrador' : (updatedUser.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
+      document.getElementById('nav-admin').style.display = currentUser.isAdmin ? 'block' : 'none';
+    } else { doLogout(); return; }
 
     updateBadges();
-    if (document.getElementById('page-tasks').classList.contains('active')) filterTasks(currentTaskFilter);
-    if (document.getElementById('page-home').classList.contains('active')) renderHomePage();
-    if (document.getElementById('page-ranking').classList.contains('active')) filterRanking(currentRankingFilter);
-    if (document.getElementById('page-admin-submissions').classList.contains('active')) renderAdminSubmissions();
-    if (document.getElementById('page-admin-members').classList.contains('active')) filterAdminMembers(currentAdminMemberFilter);
-    if (document.getElementById('page-myprofile').classList.contains('active')) renderMyProfile();
-    if (document.getElementById('page-admin-attendance').classList.contains('active')) renderAdminAttendance();
+    // re-render página ativa
+    const pages = ['home','notices','calendar','tasks','ranking','myprofile','mymetrics',
+                   'admin-members','admin-attendance','admin-hours','admin-submissions','admin-rewards','admin-emailconfig'];
+    pages.forEach(p => {
+      if (document.getElementById('page-'+p) && document.getElementById('page-'+p).classList.contains('active')) {
+        renderPage(p);
+      }
+    });
   }
 });
 
 function saveToFirebase() {
-  dbRef.set({ tasks, submissions, rewards, memberPoints, members: MEMBERS, attendance });
+  dbRef.set({ tasks, submissions, rewards, memberPoints, members:MEMBERS, attendance,
+              notices, calEvents, emailConfig, hoursGoal, hoursLog });
 }
 
-// ══════════════════════════════════════════════
-//  AUTH
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
 function doLogin() {
-  const usernameVal = document.getElementById('login-username').value.trim();
-  const passwordVal = document.getElementById('login-password').value.trim();
-
-  if(!usernameVal || !passwordVal) { toast('Preencha usuário e senha','error'); return; }
-  if(MEMBERS.length === 0) { toast('Carregando banco de dados... tente novamente em 1s','error'); return; }
-
-  const member = MEMBERS.find(m => m.username.toLowerCase() === usernameVal.toLowerCase() && m.password === passwordVal);
-  
+  const u = document.getElementById('login-username').value.trim();
+  const p = document.getElementById('login-password').value.trim();
+  if (!u || !p) { toast('Preencha usuário e senha','error'); return; }
+  if (MEMBERS.length === 0) { toast('Carregando banco... tente novamente','error'); return; }
+  const member = MEMBERS.find(m => m.username.toLowerCase() === u.toLowerCase() && m.password === p);
   if (member) {
-    currentUser = { id: member.id, name: member.name, isAdmin: member.isAdmin };
+    currentUser = { id:member.id, name:member.name, isAdmin:member.isAdmin };
     document.getElementById('login-username').value = '';
     document.getElementById('login-password').value = '';
     initDashboard();
     switchScreen('login','dashboard');
     toast(`Bem-vindo(a), ${member.name.split(' ')[0]}!`, 'success');
   } else {
-    toast('Usuário ou senha incorretos!', 'error');
+    toast('Usuário ou senha incorretos!','error');
   }
 }
 
@@ -903,273 +1195,93 @@ function switchScreen(from, to) {
   document.getElementById('screen-'+to).classList.add('active');
 }
 
-// ══════════════════════════════════════════════
-//  CRUD DE USUÁRIOS E HABILIDADES
-// ══════════════════════════════════════════════
-function openAddUserModal() {
-  document.getElementById('user-form-title').textContent = 'Adicionar Novo Membro';
-  document.getElementById('user-id').value = '';
-  document.getElementById('user-name').value = '';
-  document.getElementById('user-username').value = '';
-  document.getElementById('user-password').value = '123';
-  document.getElementById('user-team').value = 'eletroquad';
-  document.getElementById('user-role').value = 'Membro';
-  document.getElementById('user-isadmin').checked = false;
-  
-  document.getElementById('admin-only-fields').style.display = 'flex';
-  document.getElementById('admin-only-checkbox').style.display = 'flex';
-  document.getElementById('btn-delete-user').style.display = 'none';
-  openModal('modal-user-form');
-}
-
-function openEditUserModal(id) {
-  const m = MEMBERS.find(x=>x.id===id);
-  if(!m) return;
-
-  document.getElementById('user-form-title').textContent = (id === currentUser.id) ? 'Minha Conta' : 'Editar Usuário';
-  document.getElementById('user-id').value = m.id;
-  document.getElementById('user-name').value = m.name;
-  document.getElementById('user-username').value = m.username;
-  document.getElementById('user-password').value = m.password;
-  
-  if (currentUser.isAdmin) {
-      document.getElementById('user-team').value = m.team;
-      document.getElementById('user-role').value = m.role;
-      document.getElementById('user-isadmin').checked = m.isAdmin;
-      document.getElementById('admin-only-fields').style.display = 'flex';
-      document.getElementById('admin-only-checkbox').style.display = 'flex';
-      document.getElementById('btn-delete-user').style.display = (id === currentUser.id) ? 'none' : 'block';
-  } else {
-      document.getElementById('admin-only-fields').style.display = 'none';
-      document.getElementById('admin-only-checkbox').style.display = 'none';
-      document.getElementById('btn-delete-user').style.display = 'none';
-  }
-  
-  openModal('modal-user-form');
-}
-
-function saveUser() {
-  const id = document.getElementById('user-id').value;
-  const name = document.getElementById('user-name').value.trim();
-  const username = document.getElementById('user-username').value.trim();
-  const password = document.getElementById('user-password').value.trim();
-  
-  if(!name || !username || !password) { toast('Preencha os dados básicos!','error'); return; }
-
-  const exists = MEMBERS.find(m => m.username.toLowerCase() === username.toLowerCase() && m.id !== id);
-  if(exists) { toast('Este nome de usuário já está em uso!','error'); return; }
-
-  if(id) {
-    const m = MEMBERS.find(x=>x.id===id);
-    m.name = name; m.username = username; m.password = password;
-    if(currentUser.isAdmin) {
-        m.team = document.getElementById('user-team').value;
-        m.role = document.getElementById('user-role').value.trim() || 'Membro';
-        m.isAdmin = document.getElementById('user-isadmin').checked;
-        m.color = (m.team === 'eletroquad') ? '#1a8fff' : '#00e5a0';
-    }
-    toast('Dados salvos!','success');
-  } else {
-    const team = document.getElementById('user-team').value;
-    const isEq = team === 'eletroquad';
-    const newMember = {
-        id: 'm'+Date.now(),
-        name: name, username: username, password: password,
-        team: team,
-        role: document.getElementById('user-role').value.trim() || 'Membro',
-        isAdmin: document.getElementById('user-isadmin').checked,
-        avatar: name.substring(0,2).toUpperCase(),
-        color: isEq ? '#1a8fff' : '#00e5a0',
-        metrics: { presenca:85, tarefas:85, qualidade:85, pontualidade:85, colaboracao:85 },
-        skills: ['Gaia'], pts:0, hours:0, tasks_done:0, tasks_pending:0
-    };
-    MEMBERS.push(newMember);
-    memberPoints[newMember.id] = 0;
-    toast('Usuário criado!','success');
-  }
-  
-  saveToFirebase();
-  closeModal('modal-user-form');
-}
-
-function deleteUser() {
-  const id = document.getElementById('user-id').value;
-  if(id === currentUser.id) { toast('Você não pode excluir sua própria conta.','error'); return; }
-  
-  if(confirm("Tem certeza que deseja EXCLUIR este usuário do portal? Essa ação não tem volta.")) {
-      MEMBERS = MEMBERS.filter(m => m.id !== id);
-      saveToFirebase();
-      closeModal('modal-user-form');
-      closeModal('modal-member');
-      toast('Usuário excluído!','success');
-  }
-}
-
-// ----- HABILIDADES -----
-let tempSkills = [];
-let editingSkillsUserId = null;
-
-function openEditSkillsModal(userId) {
-  editingSkillsUserId = userId;
-  const m = MEMBERS.find(x=>x.id===userId);
-  if(!m) return;
-  tempSkills = [...(m.skills || [])];
-  renderTempSkills();
-  openModal('modal-skills');
-}
-
-function renderTempSkills() {
-  const container = document.getElementById('skills-container');
-  if(tempSkills.length === 0) {
-      container.innerHTML = `<div style="color:var(--text-muted); font-size:12px;">Nenhuma habilidade cadastrada.</div>`;
-      return;
-  }
-  container.innerHTML = tempSkills.map((s, i) => `
-      <div class="skill-chip">
-          ${s} <span class="skill-chip-remove" onclick="removeSkill(${i})">✕</span>
-      </div>
-  `).join('');
-}
-
-function addSkill() {
-  const input = document.getElementById('new-skill-input');
-  const val = input.value.trim();
-  if(!val) return;
-  if(tempSkills.includes(val)) { toast('Habilidade já listada!','error'); return; }
-  tempSkills.push(val);
-  input.value = '';
-  renderTempSkills();
-}
-
-function removeSkill(index) {
-  tempSkills.splice(index, 1);
-  renderTempSkills();
-}
-
-function saveSkills() {
-  const m = MEMBERS.find(x=>x.id===editingSkillsUserId);
-  if(m) {
-      m.skills = [...tempSkills];
-      saveToFirebase();
-      toast('Habilidades salvas!','success');
-  }
-  closeModal('modal-skills');
-  if(document.getElementById('modal-member').classList.contains('open')){
-      openMemberModal(editingSkillsUserId);
-  }
-}
-
-// ----- MÉTRICAS (ADMs) -----
-function openEditMetricsModal(userId) {
-  const m = MEMBERS.find(x=>x.id===userId);
-  if(!m) return;
-  document.getElementById('metrics-user-id').value = userId;
-  document.getElementById('metric-presenca').value = m.metrics.presenca || 0;
-  document.getElementById('metric-tarefas').value = m.metrics.tarefas || 0;
-  document.getElementById('metric-qualidade').value = m.metrics.qualidade || 0;
-  document.getElementById('metric-pontualidade').value = m.metrics.pontualidade || 0;
-  document.getElementById('metric-colaboracao').value = m.metrics.colaboracao || 0;
-  openModal('modal-metrics');
-}
-
-function saveMetrics() {
-  const id = document.getElementById('metrics-user-id').value;
-  const m = MEMBERS.find(x=>x.id===id);
-  if(!m) return;
-
-  m.metrics.presenca = parseInt(document.getElementById('metric-presenca').value) || 0;
-  m.metrics.tarefas = parseInt(document.getElementById('metric-tarefas').value) || 0;
-  m.metrics.qualidade = parseInt(document.getElementById('metric-qualidade').value) || 0;
-  m.metrics.pontualidade = parseInt(document.getElementById('metric-pontualidade').value) || 0;
-  m.metrics.colaboracao = parseInt(document.getElementById('metric-colaboracao').value) || 0;
-
-  saveToFirebase();
-  toast('Métricas atualizadas!','success');
-  closeModal('modal-metrics');
-  
-  if(document.getElementById('modal-member').classList.contains('open')){
-      openMemberModal(id);
-  }
-}
-
-// ══════════════════════════════════════════════
-//  INIT DASHBOARD
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// INIT DASHBOARD
+// ══════════════════════════════════════════
 function initDashboard() {
-  const u = currentUser;
-  document.getElementById('sidebar-name').textContent = u.name;
-  const member = MEMBERS.find(m=>m.id===u.id);
-  let roleLabel = u.isAdmin ? 'Administrador' : (member?.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
-  document.getElementById('sidebar-role').textContent = roleLabel;
+  const member = MEMBERS.find(m => m.id === currentUser.id);
+  document.getElementById('sidebar-name').textContent = currentUser.name;
+  document.getElementById('sidebar-role').textContent = currentUser.isAdmin ? 'Administrador' : (member?.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
   const av = document.getElementById('sidebar-avatar');
-  av.textContent = member?.avatar || u.name[0];
+  av.textContent = member?.avatar || currentUser.name[0];
   av.style.background = member?.color || 'var(--gaia-blue)';
-
-  if(u.isAdmin) {
-    document.getElementById('nav-admin').style.display='block';
-  } else {
-    document.getElementById('nav-admin').style.display='none';
-  }
-
+  document.getElementById('nav-admin').style.display = currentUser.isAdmin ? 'block' : 'none';
   updateBadges();
-  renderHomePage();
-  showPage('home', document.querySelector('.nav-item.active'));
+  renderPage('home');
 }
 
 function updateBadges() {
-  const avail = tasks.filter(t=>t.status==='available').length;
+  const avail = tasks.filter(t => t.status === 'available').length;
   document.getElementById('tasks-badge').textContent = avail;
-  const pending = submissions.filter(s=>s.status==='pending').length;
+  const pendingSubs = submissions.filter(s => s.status === 'pending').length;
   const sb = document.getElementById('submissions-badge');
-  if(sb) sb.textContent = pending > 0 ? pending : '';
+  if (sb) sb.textContent = pendingSubs > 0 ? pendingSubs : '';
+  // notices badge: urgentes não lidas (simplificado: conta urgentes)
+  const urgentes = notices.filter(n => n.type === 'urgente').length;
+  const nb = document.getElementById('notices-badge');
+  if (nb) { nb.textContent = urgentes > 0 ? urgentes : ''; nb.style.display = urgentes > 0 ? 'inline' : 'none'; }
+  // hours badge: membros abaixo de 50% da meta
+  const below = MEMBERS.filter(m => (m.hours||0) < hoursGoal * 0.5).length;
+  const hb = document.getElementById('hours-badge');
+  if (hb) { hb.textContent = below > 0 ? below : ''; hb.style.display = below > 0 ? 'inline' : 'none'; }
 }
 
 function showPage(page, el) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  if(el) el.classList.add('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
   document.getElementById('page-'+page).classList.add('active');
-  const renders = {
-    'home': renderHomePage,
-    'tasks': renderTasksPage,
-    'ranking': renderRankingPage,
-    'myprofile': renderMyProfile,
-    'mymetrics': renderMyMetrics,
-    'admin-members': renderAdminMembers,
-    'admin-attendance': renderAdminAttendance,
-    'admin-submissions': renderAdminSubmissions,
-    'admin-tasks': ()=>{},
-    'admin-rewards': renderAdminRewards,
-  };
-  if(renders[page]) renders[page]();
+  renderPage(page);
 }
 
-// ══════════════════════════════════════════════
-//  HOME PAGE & ATIVIDADE RECENTE DINÂMICA
-// ══════════════════════════════════════════════
+function renderPage(page) {
+  const map = {
+    'home':               renderHomePage,
+    'notices':            renderNoticesPage,
+    'calendar':           renderCalendarPage,
+    'tasks':              renderTasksPage,
+    'ranking':            renderRankingPage,
+    'myprofile':          renderMyProfile,
+    'mymetrics':          renderMyMetrics,
+    'admin-members':      renderAdminMembers,
+    'admin-attendance':   renderAdminAttendance,
+    'admin-hours':        renderHoursPage,
+    'admin-submissions':  renderAdminSubmissions,
+    'admin-rewards':      renderAdminRewards,
+    'admin-emailconfig':  renderEmailConfig,
+    'admin-tasks':        () => {},
+  };
+  if (map[page]) map[page]();
+}
+
+// ══════════════════════════════════════════
+// HOME PAGE
+// ══════════════════════════════════════════
 function renderHomePage() {
-  const allPts = MEMBERS.reduce((s,m)=> s + (memberPoints[m.id]||m.pts), 0);
-  const tasksDone = tasks.filter(t=>t.status==='done').length;
-  const tasksAvail = tasks.filter(t=>t.status==='available').length;
+  const allPts   = MEMBERS.reduce((s,m) => s + (memberPoints[m.id]||m.pts), 0);
+  const tasksDone  = tasks.filter(t => t.status === 'done').length;
+  const tasksAvail = tasks.filter(t => t.status === 'available').length;
+  const totalHours = MEMBERS.reduce((s,m) => s + (m.hours||0), 0);
+
   document.getElementById('home-stats').innerHTML = `
-    <div class="card card-sm"><div class="card-label">Total de Membros</div><div class="card-value sm">${MEMBERS.length}</div><div class="card-change" style="color:var(--text-dim)">EQ e Robótica</div></div>
-    <div class="card card-sm"><div class="card-label">Pontos Totais</div><div class="card-value sm" style="color:var(--accent)">${allPts}</div><div class="card-change pos">acumulados na equipe</div></div>
-    <div class="card card-sm"><div class="card-label">Tarefas Concluídas</div><div class="card-value sm" style="color:var(--accent2)">${tasksDone}</div><div class="card-change" style="color:var(--text-dim)">de ${tasks.length} totais</div></div>
-    <div class="card card-sm"><div class="card-label">Tarefas Disponíveis</div><div class="card-value sm" style="color:var(--accent3)">${tasksAvail}</div><div class="card-change" style="color:var(--text-dim)">para assumir</div></div>
+    <div class="card card-sm"><div class="card-label">Total de Membros</div><div class="card-value sm">${MEMBERS.length}</div><div style="font-size:11px;color:var(--text-dim);">EQ e Robótica</div></div>
+    <div class="card card-sm"><div class="card-label">Pontos Totais</div><div class="card-value sm" style="color:var(--accent)">${allPts}</div><div style="font-size:11px;color:var(--accent2);">acumulados</div></div>
+    <div class="card card-sm"><div class="card-label">Tarefas Concluídas</div><div class="card-value sm" style="color:var(--accent2)">${tasksDone}</div><div style="font-size:11px;color:var(--text-dim);">de ${tasks.length} totais</div></div>
+    <div class="card card-sm"><div class="card-label">Horas de Certificado</div><div class="card-value sm" style="color:#bb86fc;">${totalHours}h</div><div style="font-size:11px;color:var(--text-dim);">meta: ${hoursGoal}h/membro</div></div>
   `;
 
   const renderMiniMembers = (team, containerId) => {
-    const members = MEMBERS.filter(m=>m.team===team);
+    const members = MEMBERS.filter(m => m.team === team);
     document.getElementById(containerId).innerHTML = members.map(m => {
-      const pts = memberPoints[m.id]||m.pts;
+      const pts   = memberPoints[m.id]||m.pts;
       const hours = m.hours || 0;
-      const avg = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
+      const avg   = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
       return `<div class="rank-item" onclick="openMemberModal('${m.id}')" style="cursor:pointer;">
         <div class="rank-avatar" style="background:${m.color}">${m.avatar}</div>
         <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-detail">${m.role}</div></div>
         <div style="text-align:right;">
           <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--accent)">${pts} pts</div>
-          <div style="font-size:10px;color:var(--text-muted)">⏱ ${hours}h • perf. ${avg}%</div>
+          <div style="font-size:10px;color:var(--text-muted);">⏱ ${hours}h • ${avg}%</div>
         </div>
       </div>`;
     }).join('');
@@ -1177,111 +1289,556 @@ function renderHomePage() {
   renderMiniMembers('eletroquad','eq-members-overview');
   renderMiniMembers('robotica','rob-members-overview');
 
-  // ---- FEED DINÂMICO ----
+  // Atividade recente
   let activities = [];
-  const approvedSubs = submissions.filter(s => s.status === 'approved');
-  const recentSubs = approvedSubs.slice(-4).reverse();
-
+  const recentSubs = submissions.filter(s => s.status === 'approved').slice(-4).reverse();
   recentSubs.forEach(sub => {
-    activities.push({
-      icon: '✅',
-      text: `<b>${sub.memberName}</b> concluiu a tarefa "${sub.taskTitle}" (+${sub.pts} pts / +${sub.hours||0}h)`,
-      time: formatDate(sub.date),
-      color: 'var(--accent2)'
-    });
+    activities.push({ icon:'✅', text:`<b>${sub.memberName}</b> concluiu "${sub.taskTitle}" (+${sub.pts} pts / +${sub.hours||0}h)`, time: formatDate(sub.date) });
   });
-
+  const recentNotices = [...notices].reverse().slice(0,2);
+  recentNotices.forEach(n => {
+    activities.push({ icon:'📢', text:`<b>Novo aviso:</b> ${n.title}`, time: formatDate(n.date) });
+  });
+  const upcoming = calEvents.filter(e => e.date >= new Date().toISOString().split('T')[0]).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,2);
+  upcoming.forEach(e => {
+    activities.push({ icon:'📅', text:`<b>Próximo evento:</b> ${e.title}`, time: formatDate(e.date) });
+  });
   if (activities.length === 0) {
-    activities.push({ icon:'🌟', text:'<b>Portal Gaia online!</b> Assuma tarefas e comece a pontuar para aparecer aqui.', time:'agora', color:'var(--gaia-blue)' });
+    activities.push({ icon:'🌟', text:'<b>Portal Gaia online!</b> Assuma tarefas e comece a pontuar.', time:'agora' });
   }
-
-  document.getElementById('recent-activity').innerHTML = activities.map(a=>`
+  document.getElementById('recent-activity').innerHTML = activities.map(a => `
     <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;">
       <div style="font-size:18px;">${a.icon}</div>
-      <div style="flex:1;font-size:12px;line-height:1.5;" >${a.text}</div>
+      <div style="flex:1;font-size:12px;line-height:1.5;">${a.text}</div>
       <div style="font-size:10px;color:var(--text-muted);white-space:nowrap;">${a.time}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-// ══════════════════════════════════════════════
-//  TASKS PAGE
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// MURAL DE AVISOS
+// ══════════════════════════════════════════
+function renderNoticesPage() {
+  const isAdmin = currentUser.isAdmin;
+  const member  = MEMBERS.find(m => m.id === currentUser.id);
+  
+  document.getElementById('notice-admin-btn').innerHTML = isAdmin
+    ? `<button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="openModal('modal-notice')">+ Publicar Aviso</button>`
+    : '';
+
+  let filtered = [...notices].reverse();
+  if (member && !isAdmin) {
+    filtered = filtered.filter(n => n.team === 'all' || n.team === member.team);
+  }
+
+  if (filtered.length === 0) {
+    document.getElementById('notices-list').innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div style="color:var(--text-muted);">Nenhum aviso publicado ainda.</div></div>`;
+    return;
+  }
+
+  const typeIcons = { urgente:'🚨', info:'ℹ️', evento:'🗓', geral:'📌' };
+  const typeLabels = { urgente:'Urgente', info:'Informação', evento:'Evento', geral:'Geral' };
+
+  document.getElementById('notices-list').innerHTML = filtered.map(n => `
+    <div class="notice-card ${n.type}">
+      <span class="notice-type-badge notice-type-${n.type}">${typeIcons[n.type]} ${typeLabels[n.type]}</span>
+      <div class="notice-title">${n.title}</div>
+      <div class="notice-body">${n.body}</div>
+      <div class="notice-footer">
+        <div>
+          <div class="notice-meta">Por ${n.author} · ${formatDate(n.date)}</div>
+          ${n.emailSent ? `<div class="notice-email-indicator">✉️ E-mail enviado aos membros</div>` : ''}
+        </div>
+        ${isAdmin ? `<span class="notice-delete" onclick="deleteNotice('${n.id}')">🗑 Excluir</span>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function publishNotice() {
+  const title = document.getElementById('notice-title').value.trim();
+  const body  = document.getElementById('notice-body').value.trim();
+  if (!title || !body) { toast('Preencha título e mensagem!','error'); return; }
+
+  const sendEmail = document.getElementById('notice-sendemail').checked;
+  const team      = document.getElementById('notice-team').value;
+
+  const notice = {
+    id:        'n'+Date.now(),
+    title,
+    body,
+    type:      document.getElementById('notice-type').value,
+    team,
+    author:    currentUser.name,
+    date:      new Date().toISOString().split('T')[0],
+    emailSent: false,
+  };
+
+  if (sendEmail && emailConfig.configured) {
+    const targets = MEMBERS.filter(m => (team === 'all' || m.team === team) && m.email);
+    let sentCount = 0;
+    targets.forEach(m => {
+      emailjs.send(emailConfig.serviceId, emailConfig.templateId, {
+        to_email:   m.email,
+        to_name:    m.name,
+        notice_title:  title,
+        notice_body:   body,
+        notice_type:   notice.type,
+        portal_name:   'Portal Gaia · UFTM',
+      }, emailConfig.publicKey).then(() => sentCount++).catch(() => {});
+    });
+    notice.emailSent = true;
+    toast(`Aviso publicado! E-mail enviado para ${targets.length} membros.`, 'success');
+  } else if (sendEmail && !emailConfig.configured) {
+    toast('Aviso publicado! (Configure o EmailJS em Config. E-mail para enviar e-mails)', 'success');
+  } else {
+    toast('Aviso publicado!', 'success');
+  }
+
+  notices.push(notice);
+  ['notice-title','notice-body'].forEach(id => document.getElementById(id).value = '');
+  closeModal('modal-notice');
+  saveToFirebase();
+}
+
+function deleteNotice(id) {
+  if (!confirm('Excluir este aviso?')) return;
+  notices = notices.filter(n => n.id !== id);
+  saveToFirebase();
+  toast('Aviso excluído.','success');
+}
+
+// ══════════════════════════════════════════
+// CALENDÁRIO
+// ══════════════════════════════════════════
+function renderCalendarPage() {
+  const isAdmin = currentUser.isAdmin;
+  document.getElementById('cal-admin-btn').innerHTML = isAdmin
+    ? `<button class="cal-add-btn" onclick="openModal('modal-cal-event')">+ Adicionar Evento</button>`
+    : '';
+  renderCalendar();
+  renderUpcomingEvents();
+}
+
+function calNav(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  renderCalendar();
+  renderUpcomingEvents();
+}
+
+function renderCalendar() {
+  const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('cal-month-label').textContent = `${months[calMonth]} ${calYear}`;
+  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const today = new Date().toISOString().split('T')[0];
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const daysInPrev  = new Date(calYear, calMonth, 0).getDate();
+
+  let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
+
+  // dias anteriores (cinza)
+  for (let i = firstDay - 1; i >= 0; i--) {
+    html += `<div class="cal-day other-month"><div class="cal-day-num">${daysInPrev - i}</div></div>`;
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayEvents = calEvents.filter(e => e.date === dateStr);
+    const isToday   = dateStr === today;
+    const hasEvs    = dayEvents.length > 0;
+
+    let evHtml = dayEvents.slice(0,2).map(e =>
+      `<div class="cal-event-dot ${e.type}">● ${e.title}</div>`
+    ).join('');
+    if (dayEvents.length > 2) evHtml += `<div style="font-size:9px;color:var(--text-muted);">+${dayEvents.length-2} mais</div>`;
+
+    html += `<div class="cal-day${isToday?' today':''}${hasEvs?' has-events':''}" onclick="${currentUser.isAdmin?`openCalDayModal('${dateStr}')`:''}" style="${currentUser.isAdmin?'cursor:pointer;':''}">
+      <div class="cal-day-num">${d}</div>
+      ${evHtml}
+    </div>`;
+  }
+
+  // dias seguintes
+  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+  let next = 1;
+  for (let i = firstDay + daysInMonth; i < totalCells; i++, next++) {
+    html += `<div class="cal-day other-month"><div class="cal-day-num">${next}</div></div>`;
+  }
+
+  document.getElementById('calendar-grid').innerHTML = html;
+}
+
+function renderUpcomingEvents() {
+  const today = new Date().toISOString().split('T')[0];
+  const upcoming = calEvents.filter(e => e.date >= today).sort((a,b) => a.date.localeCompare(b.date)).slice(0,8);
+
+  if (upcoming.length === 0) {
+    document.getElementById('upcoming-events').innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><div style="color:var(--text-muted);">Nenhum evento futuro cadastrado.</div></div>`;
+    return;
+  }
+
+  const typeColors = { reuniao:'var(--gaia-blue)', entrega:'var(--accent3)', evento:'var(--gaia-green)', outro:'var(--text-muted)' };
+  const typeLabels = { reuniao:'Reunião', entrega:'Entrega/Prazo', evento:'Evento', outro:'Outro' };
+
+  document.getElementById('upcoming-events').innerHTML = upcoming.map(e => `
+    <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;">
+      <div style="width:4px;height:40px;border-radius:4px;background:${typeColors[e.type]||'var(--text-muted)'};flex-shrink:0;"></div>
+      <div style="text-align:center;min-width:40px;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;line-height:1;color:${typeColors[e.type]}">${e.date.split('-')[2]}</div>
+        <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;">${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][parseInt(e.date.split('-')[1])-1]}</div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:500;">${e.title}</div>
+        ${e.desc ? `<div style="font-size:11px;color:var(--text-dim);margin-top:2px;">${e.desc}</div>` : ''}
+      </div>
+      <div>
+        <span class="tag" style="border:1px solid ${typeColors[e.type]}33;color:${typeColors[e.type]};background:${typeColors[e.type]}15;">${typeLabels[e.type]}</span>
+      </div>
+      ${currentUser.isAdmin ? `<span style="font-size:11px;color:var(--accent-red);cursor:pointer;opacity:0.6;" onclick="deleteCalEvent('${e.id}')">🗑</span>` : ''}
+    </div>`).join('');
+}
+
+function openCalDayModal(dateStr) {
+  document.getElementById('cal-event-date').value = dateStr;
+  openModal('modal-cal-event');
+}
+
+function saveCalEvent() {
+  const title = document.getElementById('cal-event-title').value.trim();
+  const date  = document.getElementById('cal-event-date').value;
+  if (!title || !date) { toast('Preencha título e data!','error'); return; }
+
+  const sendEmail = document.getElementById('cal-event-sendemail').checked;
+  const ev = {
+    id:    'e'+Date.now(),
+    title,
+    date,
+    type:  document.getElementById('cal-event-type').value,
+    desc:  document.getElementById('cal-event-desc').value.trim(),
+    createdBy: currentUser.name,
+  };
+
+  if (sendEmail && emailConfig.configured) {
+    const targets = MEMBERS.filter(m => m.email);
+    targets.forEach(m => {
+      emailjs.send(emailConfig.serviceId, emailConfig.templateId, {
+        to_email:   m.email,
+        to_name:    m.name,
+        notice_title:  `📅 Novo evento: ${title}`,
+        notice_body:   `Data: ${formatDate(date)}\nTipo: ${ev.type}\n${ev.desc}`,
+        notice_type:   'Evento',
+        portal_name:   'Portal Gaia · UFTM',
+      }, emailConfig.publicKey).catch(() => {});
+    });
+    toast(`Evento adicionado! E-mail enviado.`, 'success');
+  } else {
+    toast('Evento adicionado ao calendário!','success');
+  }
+
+  calEvents.push(ev);
+  closeModal('modal-cal-event');
+  document.getElementById('cal-event-title').value = '';
+  document.getElementById('cal-event-desc').value = '';
+  saveToFirebase();
+  renderCalendar();
+  renderUpcomingEvents();
+}
+
+function deleteCalEvent(id) {
+  if (!confirm('Remover este evento?')) return;
+  calEvents = calEvents.filter(e => e.id !== id);
+  saveToFirebase();
+  renderCalendar();
+  renderUpcomingEvents();
+}
+
+// ══════════════════════════════════════════
+// CONTABILIZAÇÃO DE HORAS (NOVO)
+// ══════════════════════════════════════════
+function renderHoursPage() {
+  const sorted = [...MEMBERS].sort((a,b) => (b.hours||0) - (a.hours||0));
+  const maxHours = Math.max(...sorted.map(m => m.hours||0), hoursGoal);
+  const totalH   = sorted.reduce((s,m) => s + (m.hours||0), 0);
+  const avgH     = MEMBERS.length > 0 ? Math.round(totalH / MEMBERS.length) : 0;
+  const atGoal   = sorted.filter(m => (m.hours||0) >= hoursGoal).length;
+
+  // Estatísticas gerais
+  let html = `
+    <div class="grid grid-4" style="margin-bottom:20px;">
+      <div class="card card-sm"><div class="card-label">Total de Horas</div><div class="card-value sm" style="color:#bb86fc;">${totalH}h</div><div style="font-size:11px;color:var(--text-dim);">toda a equipe</div></div>
+      <div class="card card-sm"><div class="card-label">Média por Membro</div><div class="card-value sm" style="color:var(--accent)">${avgH}h</div><div style="font-size:11px;color:var(--text-dim);">meta: ${hoursGoal}h</div></div>
+      <div class="card card-sm"><div class="card-label">Atingiram a Meta</div><div class="card-value sm" style="color:var(--accent2)">${atGoal}</div><div style="font-size:11px;color:var(--text-dim);">de ${MEMBERS.length} membros</div></div>
+      <div class="card card-sm"><div class="card-label">Meta do Ciclo</div><div class="card-value sm" style="color:var(--accent3)">${hoursGoal}h</div><div style="font-size:11px;color:var(--text-dim);">por membro</div></div>
+    </div>
+    <div class="hours-summary-card">
+      <div class="section-header" style="margin-bottom:16px;">
+        <div class="section-title">Horas por Membro</div>
+        <div style="display:flex;gap:8px;">
+          <div class="cal-legend" style="margin:0;gap:12px;">
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--gaia-green)"></div>Meta atingida (≥${hoursGoal}h)</div>
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--accent3)"></div>Em progresso (≥50%)</div>
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--accent-red)"></div>Abaixo de 50%</div>
+          </div>
+        </div>
+      </div>
+  `;
+
+  sorted.forEach(m => {
+    const h   = m.hours || 0;
+    const pct = Math.min(100, Math.round((h / hoursGoal) * 100));
+    let badgeClass, badgeLabel;
+    if (h >= hoursGoal)      { badgeClass='hours-ok';   badgeLabel=`✓ Meta atingida`; }
+    else if (pct >= 50)      { badgeClass='hours-warn'; badgeLabel=`${pct}% da meta`; }
+    else                     { badgeClass='hours-low';  badgeLabel=`${pct}% da meta`; }
+
+    html += `
+      <div class="hours-member-row">
+        <div class="rank-avatar" style="background:${m.color};width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">${m.avatar}</div>
+        <div class="hours-bar-wrapper">
+          <div class="hours-bar-label">
+            <span class="hours-bar-name">${m.name} <span style="font-size:10px;color:var(--text-muted);">(${m.role})</span></span>
+            <span class="hours-bar-val">${h}h / ${hoursGoal}h</span>
+          </div>
+          <div class="hours-bar"><div class="hours-bar-fill" style="width:${pct}%;"></div></div>
+        </div>
+        <span class="hours-goal-badge ${badgeClass}">${badgeLabel}</span>
+        <button class="hours-adj-btn" onclick="openHoursAdjust('${m.id}')">Ajustar ✎</button>
+      </div>`;
+  });
+  html += `</div>`;
+
+  // Log de ajustes manuais
+  if (hoursLog.length > 0) {
+    html += `
+      <div class="section-header" style="margin-top:20px;"><div class="section-title">📋 Histórico de Ajustes Manuais</div></div>
+      <div class="card card-sm">`;
+    [...hoursLog].reverse().slice(0,20).forEach(log => {
+      html += `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+          <div>
+            <span style="font-size:13px;font-weight:500;">${log.memberName}</span>
+            <span style="font-size:11px;color:var(--text-dim);margin-left:8px;">${log.reason || '—'}</span>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-family:'DM Mono',monospace;font-size:13px;color:${log.delta>0?'var(--gaia-green)':log.delta<0?'var(--accent-red)':'var(--text-dim)'};">${log.delta>0?'+':''}${log.delta}h</span>
+            <div style="font-size:10px;color:var(--text-muted);">${formatDate(log.date)} · por ${log.by}</div>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  document.getElementById('hours-page-content').innerHTML = html;
+}
+
+function openHoursAdjust(memberId) {
+  const m = MEMBERS.find(x => x.id === memberId);
+  if (!m) return;
+  document.getElementById('adj-member-id').value = memberId;
+  document.getElementById('adj-member-name-label').textContent = `Membro: ${m.name} · Horas atuais: ${m.hours||0}h`;
+  document.getElementById('adj-hours-val').value = 1;
+  document.getElementById('adj-reason').value = '';
+  openModal('modal-hours-adjust');
+}
+
+function applyHoursAdjust() {
+  const id     = document.getElementById('adj-member-id').value;
+  const op     = document.getElementById('adj-op').value;
+  const val    = parseInt(document.getElementById('adj-hours-val').value) || 0;
+  const reason = document.getElementById('adj-reason').value.trim();
+  const m = MEMBERS.find(x => x.id === id);
+  if (!m) return;
+
+  const before = m.hours || 0;
+  if      (op === 'add') m.hours = before + val;
+  else if (op === 'sub') m.hours = Math.max(0, before - val);
+  else if (op === 'set') m.hours = Math.max(0, val);
+
+  const delta = m.hours - before;
+  hoursLog.push({
+    memberId: id, memberName: m.name,
+    op, delta, reason,
+    date: new Date().toISOString().split('T')[0],
+    by:   currentUser.name,
+  });
+
+  saveToFirebase();
+  closeModal('modal-hours-adjust');
+  toast(`Horas de ${m.name} ajustadas para ${m.hours}h`, 'success');
+}
+
+function saveHoursGoal() {
+  const g = parseInt(document.getElementById('hours-goal-val').value) || 20;
+  hoursGoal = g;
+  saveToFirebase();
+  closeModal('modal-hours-goal');
+  toast(`Meta atualizada para ${g}h por membro!`, 'success');
+}
+
+function exportHoursCSV() {
+  const sorted = [...MEMBERS].sort((a,b) => (b.hours||0) - (a.hours||0));
+  let csv = 'Nome,Equipe,Horas,Meta,% da Meta,Status\n';
+  sorted.forEach(m => {
+    const h   = m.hours || 0;
+    const pct = Math.round((h / hoursGoal) * 100);
+    const status = h >= hoursGoal ? 'Meta atingida' : pct >= 50 ? 'Em progresso' : 'Abaixo da meta';
+    csv += `"${m.name}","${m.team === 'eletroquad'?'EletroQuad':'Robótica'}",${h},${hoursGoal},${pct}%,"${status}"\n`;
+  });
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `horas-gaia-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  toast('CSV exportado!', 'success');
+}
+
+// ══════════════════════════════════════════
+// CONFIG DE E-MAIL (EmailJS)
+// ══════════════════════════════════════════
+function renderEmailConfig() {
+  document.getElementById('email-config-content').innerHTML = `
+    <div class="config-card">
+      <b>Como configurar o envio de e-mails com EmailJS (gratuito)</b><br><br>
+      1. Acesse <b>emailjs.com</b> e crie uma conta gratuita (até 200 e-mails/mês grátis).<br>
+      2. Em <b>Email Services</b>, conecte seu Gmail ou outro serviço e copie o <b>Service ID</b>.<br>
+      3. Em <b>Email Templates</b>, crie um template com as variáveis:<br>
+      &nbsp;&nbsp;&nbsp;<code>{{to_email}}</code>, <code>{{to_name}}</code>, <code>{{notice_title}}</code>, <code>{{notice_body}}</code>, <code>{{portal_name}}</code><br>
+      &nbsp;&nbsp;&nbsp;Copie o <b>Template ID</b>.<br>
+      4. Em <b>Account → API Keys</b>, copie a <b>Public Key</b>.<br>
+      5. Cole os três valores abaixo e clique em Salvar.<br><br>
+      <b>⚠️ Importante:</b> Adicione o e-mail de cada membro no cadastro deles (Gestão de Membros → Editar).
+    </div>
+    <div class="card" style="max-width:520px;">
+      <div class="form-group">
+        <label>Service ID</label>
+        <input type="text" id="cfg-service" value="${emailConfig.serviceId}" placeholder="service_xxxxxxx" />
+      </div>
+      <div class="form-group">
+        <label>Template ID</label>
+        <input type="text" id="cfg-template" value="${emailConfig.templateId}" placeholder="template_xxxxxxx" />
+      </div>
+      <div class="form-group">
+        <label>Public Key</label>
+        <input type="text" id="cfg-pubkey" value="${emailConfig.publicKey}" placeholder="xxxxxxxxxxxxxxxxxxxx" />
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">
+        <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="saveEmailConfig()">Salvar Configuração</button>
+        <button class="btn-ghost" onclick="testEmail()">Enviar e-mail de teste para mim</button>
+        ${emailConfig.configured ? `<span style="padding:10px 16px;font-size:12px;color:var(--gaia-green);">✓ E-mail configurado</span>` : ''}
+      </div>
+    </div>
+    <div style="margin-top:24px;">
+      <div class="section-title" style="margin-bottom:12px;">E-mails cadastrados dos membros</div>
+      <div class="grid grid-2">
+        ${MEMBERS.map(m => `
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);">
+            <div style="width:28px;height:28px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;">${m.avatar}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:12px;font-weight:500;">${m.name}</div>
+              <div style="font-size:11px;color:${m.email?'var(--gaia-green)':'var(--accent-red)'};">${m.email || '⚠ E-mail não cadastrado'}</div>
+            </div>
+            <button class="hours-adj-btn" style="font-size:10px;" onclick="closeModal(''); openEditUserModal('${m.id}')">Editar</button>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function saveEmailConfig() {
+  emailConfig.serviceId  = document.getElementById('cfg-service').value.trim();
+  emailConfig.templateId = document.getElementById('cfg-template').value.trim();
+  emailConfig.publicKey  = document.getElementById('cfg-pubkey').value.trim();
+  emailConfig.configured = !!(emailConfig.serviceId && emailConfig.templateId && emailConfig.publicKey);
+  if (emailConfig.configured) {
+    emailjs.init(emailConfig.publicKey);
+  }
+  saveToFirebase();
+  toast(emailConfig.configured ? 'Configuração de e-mail salva! ✓' : 'Preencha todos os campos.', emailConfig.configured ? 'success' : 'error');
+  renderEmailConfig();
+}
+
+function testEmail() {
+  const member = MEMBERS.find(m => m.id === currentUser.id);
+  if (!member || !member.email) { toast('Cadastre seu e-mail no perfil primeiro!','error'); return; }
+  if (!emailConfig.configured)  { toast('Configure o EmailJS primeiro!','error'); return; }
+  emailjs.send(emailConfig.serviceId, emailConfig.templateId, {
+    to_email:     member.email,
+    to_name:      member.name,
+    notice_title: '🧪 Teste de Notificação — Portal Gaia',
+    notice_body:  'Se você está vendo este e-mail, a integração com o EmailJS está funcionando corretamente!',
+    notice_type:  'Teste',
+    portal_name:  'Portal Gaia · UFTM',
+  }, emailConfig.publicKey).then(() => {
+    toast('E-mail de teste enviado! Verifique sua caixa de entrada.','success');
+  }).catch(e => {
+    toast('Erro ao enviar e-mail. Verifique as configurações.','error');
+  });
+}
+
+// ══════════════════════════════════════════
+// TASKS
+// ══════════════════════════════════════════
 function renderTasksPage() { filterTasks(currentTaskFilter); }
 
 function filterTasks(filter, el) {
   currentTaskFilter = filter;
-  if(el){ document.querySelectorAll('#page-tasks .tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
+  if (el) { document.querySelectorAll('#page-tasks .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
   let filtered = [...tasks];
-  if(filter === 'available') filtered = filtered.filter(t=>t.status==='available');
-  else if(filter === 'claimed') filtered = filtered.filter(t=>t.status==='claimed');
-  else if(filter === 'done') filtered = filtered.filter(t=>t.status==='done');
+  if (filter === 'available') filtered = filtered.filter(t => t.status === 'available');
+  else if (filter === 'claimed') filtered = filtered.filter(t => t.status === 'claimed');
+  else if (filter === 'done')    filtered = filtered.filter(t => t.status === 'done');
+  const member = MEMBERS.find(m => m.id === currentUser.id);
+  if (member) filtered = filtered.filter(t => t.team === member.team || t.team === 'both');
 
-  const member = MEMBERS.find(m=>m.id===currentUser.id);
-  if(member) {
-      filtered = filtered.filter(t=> t.team===member.team || t.team==='both');
-  }
-
-  if(filtered.length === 0) {
-    document.getElementById('tasks-list').innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Nenhuma tarefa encontrada nesta categoria.</div></div>`;
+  if (filtered.length === 0) {
+    document.getElementById('tasks-list').innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div style="color:var(--text-muted);">Nenhuma tarefa encontrada.</div></div>`;
     return;
   }
   document.getElementById('tasks-list').innerHTML = filtered.map(t => renderTaskItem(t)).join('');
 }
 
 function renderTaskItem(t) {
-  const teamTag = t.team === 'both' ? `<span class="tag tag-both">Ambas</span>` : t.team === 'eletroquad' ? `<span class="tag tag-eq">EletroQuad</span>` : `<span class="tag tag-rob">Robótica</span>`;
-  const diffTag = { easy: `<span class="tag tag-diff-easy">Fácil</span>`, medium: `<span class="tag tag-diff-med">Médio</span>`, hard: `<span class="tag tag-diff-hard">Difícil</span>` }[t.diff];
-  const ptsTag = `<span class="tag tag-pts">+${t.pts} pts</span>`;
-  const hoursTag = `<span class="tag tag-hours">⏱ ${t.hours || 0}h</span>`;
-  const deadlineTag = `<span class="tag tag-deadline">📅 ${formatDate(t.deadline)}</span>`;
+  const teamTag  = t.team === 'both' ? `<span class="tag tag-both">Ambas</span>` : t.team === 'eletroquad' ? `<span class="tag tag-eq">EletroQuad</span>` : `<span class="tag tag-rob">Robótica</span>`;
+  const diffTag  = { easy:`<span class="tag tag-diff-easy">Fácil</span>`, medium:`<span class="tag tag-diff-med">Médio</span>`, hard:`<span class="tag tag-diff-hard">Difícil</span>` }[t.diff];
+  const ptsTag   = `<span class="tag tag-pts">+${t.pts} pts</span>`;
+  const hoursTag = `<span class="tag tag-hours">⏱ ${t.hours||0}h</span>`;
+  const deadTag  = `<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);">📅 ${formatDate(t.deadline)}</span>`;
 
-  let actionHtml = '';
-  
-  const isMyClaim = t.claimedBy === currentUser.id;
+  const isMyClaim  = t.claimedBy === currentUser.id;
   const isMySubmit = t.submittedBy && t.submittedBy.includes(currentUser.id);
-
-  if(t.status === 'available') {
+  let actionHtml = '';
+  if (t.status === 'available') {
     actionHtml = `<button class="btn-claim" onclick="claimTask('${t.id}')">Assumir</button>`;
-  } else if(t.status === 'claimed' && isMyClaim && !isMySubmit) {
+  } else if (t.status === 'claimed' && isMyClaim && !isMySubmit) {
     actionHtml = `<button class="btn-claim" onclick="openSubmitModal('${t.id}')">Entregar</button>`;
-  } else if(isMySubmit) {
+  } else if (isMySubmit) {
     actionHtml = `<button class="btn-claim claimed" disabled>Aguardando Revisão ⏳</button>`;
   }
-
-  let claimer = '';
-  if(t.claimedBy) {
-    const m = MEMBERS.find(x=>x.id===t.claimedBy);
-    if(m) claimer = `<div class="task-claimer"><div class="task-claimer-avatar" style="background:${m.color}">${m.avatar}</div>${m.name}</div>`;
-  }
-
-  const isDone = t.status === 'done';
-
   return `<div class="task-item">
     <div class="task-header">
       <div class="task-content">
-        <div class="task-title ${isDone?'done':''}">${t.title}</div>
+        <div class="task-title ${t.status==='done'?'done':''}">${t.title}</div>
         <div class="task-desc">${t.desc}</div>
-        <div class="task-meta">${teamTag}${diffTag}${ptsTag}${hoursTag}${deadlineTag}${claimer}${actionHtml}</div>
+        <div class="task-meta">${teamTag}${diffTag}${ptsTag}${hoursTag}${deadTag}${actionHtml}</div>
       </div>
     </div>
   </div>`;
 }
 
 function claimTask(id) {
-  const t = tasks.find(x=>x.id===id);
-  if(!t || t.status!=='available') return;
-  t.status = 'claimed';
-  t.claimedBy = currentUser.id;
-  const member = MEMBERS.find(m=>m.id===currentUser.id);
-  if(member) member.tasks_pending = (member.tasks_pending||0)+1;
+  const t = tasks.find(x => x.id === id);
+  if (!t || t.status !== 'available') return;
+  t.status = 'claimed'; t.claimedBy = currentUser.id;
+  const m = MEMBERS.find(x => x.id === currentUser.id);
+  if (m) m.tasks_pending = (m.tasks_pending||0)+1;
   saveToFirebase();
-  toast(`Tarefa assumida! Boa sorte, ${currentUser.name.split(' ')[0]}!`,'success');
+  toast(`Tarefa assumida! Boa sorte, ${currentUser.name.split(' ')[0]}!`, 'success');
 }
 
 function openSubmitModal(taskId) {
-  const t = tasks.find(x=>x.id===taskId);
-  if(!t) return;
+  const t = tasks.find(x => x.id === taskId);
+  if (!t) return;
   pendingTaskId = taskId;
   document.getElementById('submit-task-name').textContent = t.title;
   document.getElementById('submit-desc').value = '';
@@ -1291,49 +1848,42 @@ function openSubmitModal(taskId) {
 
 function submitTask() {
   const desc = document.getElementById('submit-desc').value.trim();
-  if(!desc) { toast('Adicione uma descrição da entrega','error'); return; }
-  const t = tasks.find(x=>x.id===pendingTaskId);
-  if(!t) return;
+  if (!desc) { toast('Adicione uma descrição da entrega','error'); return; }
+  const t = tasks.find(x => x.id === pendingTaskId);
+  if (!t) return;
   if (!t.submittedBy) t.submittedBy = [];
   t.submittedBy.push(currentUser.id);
   t.status = 'done';
   const sub = {
-    id: 's'+Date.now(),
-    taskId: pendingTaskId,
-    taskTitle: t.title,
-    memberId: currentUser.id,
-    memberName: currentUser.name,
-    desc: desc,
-    link: document.getElementById('submit-link').value,
-    date: new Date().toISOString().split('T')[0],
-    pts: t.pts,
-    hours: t.hours || 0,
-    status: 'pending',
+    id:'s'+Date.now(), taskId:pendingTaskId, taskTitle:t.title,
+    memberId:currentUser.id, memberName:currentUser.name,
+    desc, link:document.getElementById('submit-link').value,
+    date:new Date().toISOString().split('T')[0],
+    pts:t.pts, hours:t.hours||0, status:'pending',
   };
   submissions.push(sub);
   closeModal('modal-task-submit');
   saveToFirebase();
-  toast('Entrega registrada! Aguardando aprovação da coordenação.','success');
+  toast('Entrega registrada! Aguardando aprovação.','success');
 }
 
-// ══════════════════════════════════════════════
-//  RANKING
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// RANKING
+// ══════════════════════════════════════════
 function renderRankingPage() { filterRanking(currentRankingFilter); }
 
 function filterRanking(filter, el) {
   currentRankingFilter = filter;
-  if(el){ document.querySelectorAll('#page-ranking .tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
+  if (el) { document.querySelectorAll('#page-ranking .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
   let members = [...MEMBERS];
-  if(filter !== 'all') members = members.filter(m=>m.team===filter);
-  members.sort((a,b)=>(memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
+  if (filter !== 'all') members = members.filter(m => m.team === filter);
+  members.sort((a,b) => (memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
   const posClass = ['gold','silver','bronze'];
-  document.getElementById('ranking-list').innerHTML = members.map((m,i)=>{
-    const pts = memberPoints[m.id]||m.pts;
-    const hours = m.hours || 0;
-    const pc = posClass[i] || '';
+  document.getElementById('ranking-list').innerHTML = members.map((m,i) => {
+    const pts   = memberPoints[m.id]||m.pts;
+    const hours = m.hours||0;
     return `<div class="rank-item" onclick="openMemberModal('${m.id}')" style="cursor:pointer;">
-      <div class="rank-pos ${pc}">${i+1}</div>
+      <div class="rank-pos ${posClass[i]||''}">${i+1}</div>
       <div class="rank-avatar" style="background:${m.color}">${m.avatar}</div>
       <div class="rank-info">
         <div class="rank-name">${m.name}</div>
@@ -1341,28 +1891,29 @@ function filterRanking(filter, el) {
       </div>
       <div style="text-align:right;">
         <div class="rank-score">${pts} pts</div>
-        <div class="rank-pts-label">⏱ ${hours}h</div>
+        <div style="font-size:10px;color:var(--text-muted);">⏱ ${hours}h</div>
       </div>
     </div>`;
   }).join('');
 }
 
-// ══════════════════════════════════════════════
-//  MY PROFILE
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// MY PROFILE
+// ══════════════════════════════════════════
 function renderMyProfile() {
-  const m = MEMBERS.find(x=>x.id===currentUser.id);
-  if(!m) return;
-  const pts = memberPoints[m.id]||m.pts;
-  const hours = m.hours || 0;
-  const isEQ = m.team==='eletroquad';
-  const myTasks = tasks.filter(t=>t.claimedBy===m.id);
-  const mySubs = submissions.filter(s=>s.memberId===m.id);
-  const approvedSubs = mySubs.filter(s=>s.status==='approved');
-  
-  const skillsList = m.skills && m.skills.length > 0 
-                     ? m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);padding:4px 12px;">${s}</span>`).join('')
-                     : '<span style="font-size:12px;color:var(--text-dim);">Nenhuma habilidade cadastrada.</span>';
+  const m = MEMBERS.find(x => x.id === currentUser.id);
+  if (!m) return;
+  const pts   = memberPoints[m.id]||m.pts;
+  const hours = m.hours||0;
+  const isEQ  = m.team === 'eletroquad';
+  const myTasks = tasks.filter(t => t.claimedBy === m.id);
+  const mySubs  = submissions.filter(s => s.memberId === m.id);
+  const approvedSubs = mySubs.filter(s => s.status === 'approved');
+  const pct   = Math.min(100, Math.round((hours/hoursGoal)*100));
+
+  const skillsList = m.skills && m.skills.length > 0
+    ? m.skills.map(s => `<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);padding:4px 12px;">${s}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--text-dim);">Nenhuma habilidade cadastrada.</span>';
 
   document.getElementById('my-profile-content').innerHTML = `
     <div class="profile-hero ${m.team}">
@@ -1370,7 +1921,7 @@ function renderMyProfile() {
         <div class="profile-avatar-lg" style="background:${m.color}">${m.avatar}</div>
         <div>
           <div class="profile-name">${m.name}</div>
-          <div class="profile-meta">
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
             <span class="member-team-badge ${isEQ?'badge-eq':'badge-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>
             <span style="color:var(--text-dim);font-size:12px;">${m.role}</span>
           </div>
@@ -1378,62 +1929,52 @@ function renderMyProfile() {
         <div style="margin-left:auto;text-align:right;">
           <div class="pts-big">${pts}</div>
           <div class="pts-label">pontos · <span style="color:#bb86fc;">⏱ ${hours}h</span></div>
+          <div style="margin-top:4px;">
+            <div class="progress-bar" style="width:100px;display:inline-block;"><div class="hours-bar-fill" style="width:${pct}%;height:5px;border-radius:100px;background:linear-gradient(90deg,#7b5ea7,#bb86fc);"></div></div>
+            <div style="font-size:9px;color:var(--text-muted);margin-top:2px;">${pct}% da meta de ${hoursGoal}h</div>
+          </div>
         </div>
       </div>
     </div>
-
     <div class="grid grid-3" style="margin-bottom:20px;">
-      <div class="card card-sm" style="text-align:center;">
-        <div class="card-label">Tarefas Feitas</div>
-        <div class="card-value sm" style="color:var(--accent2)">${approvedSubs.length}</div>
-      </div>
-      <div class="card card-sm" style="text-align:center;">
-        <div class="card-label">Em Andamento</div>
-        <div class="card-value sm" style="color:var(--accent3)">${myTasks.filter(t=>t.status==='claimed').length}</div>
-      </div>
-      <div class="card card-sm" style="text-align:center;">
-        <div class="card-label">Horas Certificado</div>
-        <div class="card-value sm" style="color:#bb86fc;">${hours}h</div>
-      </div>
+      <div class="card card-sm" style="text-align:center;"><div class="card-label">Tarefas Feitas</div><div class="card-value sm" style="color:var(--accent2)">${approvedSubs.length}</div></div>
+      <div class="card card-sm" style="text-align:center;"><div class="card-label">Em Andamento</div><div class="card-value sm" style="color:var(--accent3)">${myTasks.filter(t=>t.status==='claimed').length}</div></div>
+      <div class="card card-sm" style="text-align:center;"><div class="card-label">Horas Certificado</div><div class="card-value sm" style="color:#bb86fc;">${hours}h</div></div>
     </div>
-
     <div class="section-header">
-       <div class="section-title">🛠 Minhas Habilidades</div>
-       <button class="btn-ghost" style="padding:4px 10px; font-size:11px;" onclick="openEditSkillsModal('${m.id}')">Editar</button>
+      <div class="section-title">🛠 Minhas Habilidades</div>
+      <button class="btn-ghost" style="padding:4px 10px;font-size:11px;" onclick="openEditSkillsModal('${m.id}')">Editar</button>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
-      ${skillsList}
-    </div>
-
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">${skillsList}</div>
     <div class="section-header"><div class="section-title">📋 Histórico de Entregas</div></div>
-    ${mySubs.length === 0 ? '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">Nenhuma entrega ainda. Assuma uma tarefa!</div></div>'
-    : mySubs.slice().reverse().map(s=>`
-      <div class="submission-item">
-        <div class="submission-header">
-          <div class="submission-task">${s.taskTitle}</div>
-          <span class="status-badge status-${s.status}">${{pending:'Aguardando',approved:'Aprovado',rejected:'Reprovado'}[s.status]}</span>
-        </div>
-        <div style="font-size:11px;color:var(--text-dim);">${s.desc.substring(0,100)}${s.desc.length>100?'...':''}</div>
-        ${s.adminFeedback ? `<div style="margin-top:6px; padding:6px; background:rgba(255,209,102,0.05); border-left:2px solid var(--gaia-gold); font-size:10px; color:var(--text-dim);"><b>Obs do ADM:</b> ${s.adminFeedback}</div>` : ''}
-        <div style="display:flex;justify-content:space-between;margin-top:8px;">
-          <div class="submission-date">${formatDate(s.date)}</div>
-          ${s.status==='approved'?`<div class="submission-pts">+${s.pts} pts | ⏱ ${s.hours||0}h</div>`:''}
-        </div>
-      </div>`).join('')}
+    ${mySubs.length === 0
+      ? '<div class="empty-state"><div class="empty-icon">📭</div><div style="color:var(--text-muted);">Nenhuma entrega ainda. Assuma uma tarefa!</div></div>'
+      : mySubs.slice().reverse().map(s => `
+        <div class="submission-item">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-size:13px;font-weight:500;">${s.taskTitle}</div>
+            <span class="status-badge status-${s.status}">${{pending:'Aguardando',approved:'Aprovado',rejected:'Reprovado'}[s.status]}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-dim);">${s.desc.substring(0,100)}${s.desc.length>100?'...':''}</div>
+          ${s.adminFeedback ? `<div style="margin-top:6px;padding:6px;background:rgba(255,209,102,0.05);border-left:2px solid var(--gaia-gold);font-size:10px;color:var(--text-dim);"><b>Obs:</b> ${s.adminFeedback}</div>` : ''}
+          <div style="display:flex;justify-content:space-between;margin-top:8px;">
+            <div style="font-size:10px;color:var(--text-muted);">${formatDate(s.date)}</div>
+            ${s.status==='approved'?`<div style="font-size:11px;color:var(--accent2);">+${s.pts} pts | ⏱ ${s.hours||0}h</div>`:''}
+          </div>
+        </div>`).join('')}
   `;
 }
 
-// ══════════════════════════════════════════════
-//  MY METRICS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// MY METRICS
+// ══════════════════════════════════════════
 function renderMyMetrics() {
-  const m = MEMBERS.find(x=>x.id===currentUser.id);
-  if(!m) return;
-  const labels = { presenca:'Presença', tarefas:'Conclusão de Tarefas', qualidade:'Qualidade de Entrega', pontualidade:'Pontualidade', colaboracao:'Colaboração' };
-  const colors = [ 'var(--gaia-blue)','var(--gaia-green)','var(--accent)','var(--accent3)','var(--accent2)' ];
+  const m = MEMBERS.find(x => x.id === currentUser.id);
+  if (!m) return;
+  const labels = { presenca:'Presença', tarefas:'Conclusão de Tarefas', qualidade:'Qualidade', pontualidade:'Pontualidade', colaboracao:'Colaboração' };
+  const colors  = ['var(--gaia-blue)','var(--gaia-green)','var(--accent)','var(--accent3)','var(--accent2)'];
   const entries = Object.entries(m.metrics);
-  const avg = Math.round(entries.reduce((s,[,v])=>s+v,0)/entries.length);
-
+  const avg     = Math.round(entries.reduce((s,[,v]) => s+v, 0) / entries.length);
   document.getElementById('my-metrics-content').innerHTML = `
     <div class="card" style="margin-bottom:20px;">
       <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
@@ -1442,31 +1983,28 @@ function renderMyMetrics() {
           <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;">Desempenho Geral</div>
         </div>
         <div style="flex:1;">
-          <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Baseado em avaliações da coordenação e histórico de entregas.</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Baseado em avaliações da coordenação.</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <span class="tag" style="background:rgba(0,229,160,0.08);border-color:rgba(0,229,160,0.15);color:var(--gaia-green);">${m.tasks_done} tarefas feitas</span>
-            <span class="tag tag-pts">+${memberPoints[m.id]||m.pts} pts totais</span>
-            <span class="tag tag-hours">⏱ ${m.hours||0} horas</span>
+            <span class="tag tag-pts">+${memberPoints[m.id]||m.pts} pts</span>
+            <span class="tag tag-hours">⏱ ${m.hours||0}h</span>
           </div>
         </div>
       </div>
-      ${entries.map(([k,v],i)=>`
+      ${entries.map(([k,v],i) => `
         <div class="progress-item">
           <div class="progress-header"><span class="progress-label">${labels[k]}</span><span class="progress-val">${v}%</span></div>
           <div class="progress-bar"><div class="progress-fill" style="width:${v}%;background:${colors[i]};"></div></div>
-        </div>
-      `).join('')}
+        </div>`).join('')}
     </div>
-    <div class="card" style="margin-bottom:20px;">
-      <div class="card-title">💡 Análise Individual</div>
+    <div class="card">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px;">💡 Análise Individual</div>
       ${generateAnalysis(m)}
-    </div>
-  `;
+    </div>`;
 }
 
 function generateAnalysis(m) {
-  const sorted = Object.entries(m.metrics).sort((a,b)=>b[1]-a[1]);
-  const best = sorted[0]; const worst = sorted[sorted.length-1];
+  const sorted = Object.entries(m.metrics).sort((a,b) => b[1]-a[1]);
+  const best   = sorted[0]; const worst = sorted[sorted.length-1];
   const labels = { presenca:'Presença', tarefas:'Conclusão de Tarefas', qualidade:'Qualidade de Entrega', pontualidade:'Pontualidade', colaboracao:'Colaboração' };
   return `
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
@@ -1480,201 +2018,166 @@ function generateAnalysis(m) {
         <div style="font-size:13px;font-weight:500;">${labels[worst[0]]}</div>
         <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent3);">${worst[1]}%</div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
-// ══════════════════════════════════════════════
-//  ADMIN: MEMBERS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// ADMIN: MEMBROS
+// ══════════════════════════════════════════
 function renderAdminMembers() { filterAdminMembers(currentAdminMemberFilter); }
 
 function filterAdminMembers(filter, el) {
   currentAdminMemberFilter = filter;
-  if(el){ document.querySelectorAll('#page-admin-members .tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
+  if (el) { document.querySelectorAll('#page-admin-members .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
   let members = [...MEMBERS];
-  if(filter !== 'all') members = members.filter(m=>m.team===filter);
-  members.sort((a,b)=>(memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
+  if (filter !== 'all') members = members.filter(m => m.team === filter);
+  members.sort((a,b) => (memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
 
-  document.getElementById('admin-members-list').innerHTML = `
-    <div class="grid grid-auto">
-      ${members.map(m => {
-        const pts = memberPoints[m.id]||m.pts;
-        const hours = m.hours || 0;
-        const avg = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
-        const isEQ = m.team==='eletroquad';
-        return `<div class="member-card ${m.team}" onclick="openMemberModal('${m.id}')">
-          <div class="member-header">
-            <div class="member-avatar" style="background:${m.color}">${m.avatar}</div>
-            <div>
-              <div class="member-name">${m.name} ${m.isAdmin ? '<span style="color:var(--gaia-gold);">👑</span>' : ''}</div>
-              <div class="member-role">${m.role}</div>
-            </div>
-            <span class="member-team-badge ${isEQ?'badge-eq':'badge-rob'}">${isEQ?'EQ':'Rob'}</span>
-          </div>
-          <div class="progress-item">
-            <div class="progress-header"><span class="progress-label">Desempenho Geral</span><span class="progress-val">${avg}%</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:${avg}%;background:${m.color};"></div></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
-            <div>
-              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:var(--accent)">${pts} <span style="font-size:12px;color:var(--text-muted);font-weight:normal;">pts</span></div>
-              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#bb86fc;">⏱ ${hours}h</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:13px;font-weight:500;">${m.tasks_done} feitas</div>
-              <div style="font-size:10px;color:var(--text-dim);">${m.tasks_pending} em andamento</div>
-            </div>
-          </div>
-        </div>`;
-      }).join('')}
+  document.getElementById('admin-members-list').innerHTML = `<div class="grid grid-auto">${members.map(m => {
+    const pts   = memberPoints[m.id]||m.pts;
+    const hours = m.hours||0;
+    const avg   = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
+    const isEQ  = m.team === 'eletroquad';
+    return `<div class="member-card ${m.team}" onclick="openMemberModal('${m.id}')">
+      <div class="member-header">
+        <div class="member-avatar" style="background:${m.color}">${m.avatar}</div>
+        <div>
+          <div class="member-name">${m.name} ${m.isAdmin?'<span style="color:var(--gaia-gold);">👑</span>':''}</div>
+          <div class="member-role">${m.role}</div>
+        </div>
+        <span class="member-team-badge ${isEQ?'badge-eq':'badge-rob'}">${isEQ?'EQ':'Rob'}</span>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">Desempenho</span><span class="progress-val">${avg}%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${avg}%;background:${m.color};"></div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:var(--accent)">${pts} <span style="font-size:12px;color:var(--text-muted);font-weight:normal;">pts</span></div>
+          <div style="font-size:12px;color:#bb86fc;">⏱ ${hours}h</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:13px;font-weight:500;">${m.tasks_done} feitas</div>
+          <div style="font-size:10px;color:var(--text-dim);">${m.tasks_pending} andamento</div>
+          ${m.email ? `<div style="font-size:9px;color:var(--gaia-green);margin-top:2px;">✉ e-mail cadastrado</div>` : `<div style="font-size:9px;color:var(--accent-red);margin-top:2px;">⚠ sem e-mail</div>`}
+        </div>
+      </div>
     </div>`;
+  }).join('')}</div>`;
 }
 
-// ══════════════════════════════════════════════
-//  ADMIN: ATTENDANCE (PRESENÇA) E DETALHES
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// ADMIN: PRESENÇA
+// ══════════════════════════════════════════
 function renderAdminAttendance() {
-    // Rendereiza os checkboxes para os membros
-    const checkboxesHtml = MEMBERS.map(m => `
-        <label class="checkbox-group" style="padding:8px; background:var(--bg2); border-radius:8px; border:1px solid var(--border);">
-            <input type="checkbox" class="att-member-check" value="${m.id}" />
-            <span style="font-size:13px; font-weight:500; margin-left:6px;">${m.name}</span>
-        </label>
-    `).join('');
-    document.getElementById('attendance-members-list').innerHTML = checkboxesHtml;
+  document.getElementById('attendance-members-list').innerHTML = MEMBERS.map(m => `
+    <label class="checkbox-group" style="padding:8px;background:var(--bg2);border-radius:8px;border:1px solid var(--border);">
+      <input type="checkbox" class="att-member-check" value="${m.id}" />
+      <span style="font-size:13px;font-weight:500;margin-left:6px;">${m.name}</span>
+    </label>`).join('');
 
-    // Rendereiza o histórico
-    if (attendance.length === 0) {
-        document.getElementById('attendance-history').innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">Nenhuma reunião registrada.</div></div>`;
-        return;
-    }
-
-    const historyHtml = attendance.slice().reverse().map(a => {
-        return `
-        <div class="card card-sm" style="margin-bottom:12px; cursor:pointer;" onclick="openAttendanceDetails('${a.id}')">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div>
-                    <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--text);">${a.desc}</div>
-                    <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">📅 ${formatDate(a.date)}</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="tag tag-hours" style="font-size:12px; padding:4px 10px;">⏱ +${a.hours}h</div>
-                    <div style="font-size:10px; color:var(--accent); margin-top:6px; font-weight:600;">Ver lista (${a.attendees.length})</div>
-                </div>
-            </div>
-        </div>`;
-    }).join('');
-    document.getElementById('attendance-history').innerHTML = historyHtml;
+  if (attendance.length === 0) {
+    document.getElementById('attendance-history').innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><div style="color:var(--text-muted);">Nenhuma reunião registrada.</div></div>`;
+    return;
+  }
+  document.getElementById('attendance-history').innerHTML = [...attendance].reverse().map(a => `
+    <div class="card card-sm" style="margin-bottom:12px;cursor:pointer;" onclick="openAttendanceDetails('${a.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">${a.desc}</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">📅 ${formatDate(a.date)}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="tag tag-hours" style="font-size:12px;padding:4px 10px;">⏱ +${a.hours}h</div>
+          <div style="font-size:10px;color:var(--accent);margin-top:6px;font-weight:600;">Ver lista (${a.attendees.length})</div>
+        </div>
+      </div>
+    </div>`).join('');
 }
 
 function saveAttendance() {
-    const date = document.getElementById('att-date').value;
-    const desc = document.getElementById('att-desc').value.trim();
-    const hours = parseInt(document.getElementById('att-hours').value);
+  const date  = document.getElementById('att-date').value;
+  const desc  = document.getElementById('att-desc').value.trim();
+  const hours = parseInt(document.getElementById('att-hours').value);
+  if (!date || !desc || isNaN(hours)) { toast('Preencha Data, Descrição e Horas!','error'); return; }
+  const checkboxes = document.querySelectorAll('.att-member-check');
+  const presentIds = [];
+  checkboxes.forEach(cb => { if (cb.checked) presentIds.push(cb.value); });
+  if (presentIds.length === 0) { toast('Marque pelo menos um membro!','error'); return; }
 
-    if(!date || !desc || isNaN(hours)) { toast('Preencha Data, Descrição e Horas!', 'error'); return; }
+  attendance.push({ id:'a'+Date.now(), date, desc, hours, attendees:presentIds });
+  presentIds.forEach(id => {
+    const m = MEMBERS.find(x => x.id === id);
+    if (m) m.hours = (m.hours||0) + hours;
+  });
 
-    const checkboxes = document.querySelectorAll('.att-member-check');
-    const presentIds = [];
-    checkboxes.forEach(cb => { if(cb.checked) presentIds.push(cb.value); });
+  // Registra no log
+  presentIds.forEach(id => {
+    const m = MEMBERS.find(x => x.id === id);
+    if (m) hoursLog.push({ memberId:id, memberName:m.name, op:'add', delta:hours, reason:`Presença: ${desc}`, date, by:currentUser.name });
+  });
 
-    if(presentIds.length === 0) { toast('Marque pelo menos uma pessoa presente!', 'error'); return; }
+  document.getElementById('att-date').value = '';
+  document.getElementById('att-desc').value = '';
+  document.getElementById('att-hours').value = '2';
+  checkboxes.forEach(cb => cb.checked = false);
 
-    // Salva o log de presença
-    const newAtt = {
-        id: 'a'+Date.now(),
-        date: date,
-        desc: desc,
-        hours: hours,
-        attendees: presentIds
-    };
-    attendance.push(newAtt);
-
-    // Adiciona as horas pros membros
-    presentIds.forEach(id => {
-        const m = MEMBERS.find(x => x.id === id);
-        if(m) {
-            m.hours = (m.hours || 0) + hours;
-        }
-    });
-
-    // Limpa o formulário
-    document.getElementById('att-date').value = '';
-    document.getElementById('att-desc').value = '';
-    document.getElementById('att-hours').value = '2';
-    checkboxes.forEach(cb => cb.checked = false);
-
-    saveToFirebase();
-    toast(`Presença registrada! +${hours}h para ${presentIds.length} membros.`, 'success');
+  saveToFirebase();
+  toast(`Presença registrada! +${hours}h para ${presentIds.length} membros.`, 'success');
 }
 
 function openAttendanceDetails(attId) {
-    const att = attendance.find(a => a.id === attId);
-    if(!att) return;
-
-    // Busca os dados atuais dos membros que estavam presentes
-    const presentMembers = MEMBERS.filter(m => att.attendees.includes(m.id));
-    
-    let html = `
-        <div style="margin-bottom: 20px;">
-            <div style="font-size:16px; font-weight:bold; color:var(--text); margin-bottom:4px;">${att.desc}</div>
-            <div style="font-size:12px; color:var(--text-dim);">📅 ${formatDate(att.date)} • ⏱ ${att.hours} horas concedidas</div>
-        </div>
-        <div style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Membros Presentes (${presentMembers.length})</div>
-        <div class="grid grid-auto" style="grid-template-columns: repeat(auto-fill, minmax(180px,1fr));">
-    `;
-
-    presentMembers.forEach(m => {
-        html += `
-            <div style="display:flex; align-items:center; gap:10px; padding:10px; background:var(--bg3); border:1px solid var(--border); border-radius:8px;">
-                <div style="width:28px; height:28px; border-radius:50%; background:${m.color}; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:bold; color:#fff; flex-shrink:0;">${m.avatar}</div>
-                <div>
-                  <div style="font-size:13px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${m.name}</div>
-                  <div style="font-size:10px; color:var(--text-dim);">${m.team === 'eletroquad' ? 'EletroQuad' : 'Robótica'}</div>
-                </div>
-            </div>
-        `;
-    });
-
-    html += `</div>`;
-
-    document.getElementById('attendance-details-content').innerHTML = html;
-    openModal('modal-attendance-details');
+  const att = attendance.find(a => a.id === attId);
+  if (!att) return;
+  const presentMembers = MEMBERS.filter(m => att.attendees.includes(m.id));
+  let html = `
+    <div style="margin-bottom:20px;">
+      <div style="font-size:16px;font-weight:bold;margin-bottom:4px;">${att.desc}</div>
+      <div style="font-size:12px;color:var(--text-dim);">📅 ${formatDate(att.date)} · ⏱ ${att.hours} horas</div>
+    </div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Presentes (${presentMembers.length})</div>
+    <div class="grid grid-auto" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));">`;
+  presentMembers.forEach(m => {
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;color:#fff;">${m.avatar}</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">${m.name}</div>
+        <div style="font-size:10px;color:var(--text-dim);">${m.team==='eletroquad'?'EletroQuad':'Robótica'}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  document.getElementById('attendance-details-content').innerHTML = html;
+  openModal('modal-attendance-details');
 }
 
-// ══════════════════════════════════════════════
-//  ADMIN: SUBMISSIONS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// ADMIN: ENTREGAS
+// ══════════════════════════════════════════
 function renderAdminSubmissions() {
-  const pending = submissions.filter(s=>s.status==='pending');
-  const reviewed = submissions.filter(s=>s.status!=='pending');
-
+  const pending  = submissions.filter(s => s.status === 'pending');
+  const reviewed = submissions.filter(s => s.status !== 'pending');
   let html = '';
-  if(pending.length === 0) {
-    html += `<div class="empty-state" style="margin-bottom:20px;"><div class="empty-icon">🎉</div><div class="empty-text">Nenhuma entrega pendente de revisão!</div></div>`;
+  if (pending.length === 0) {
+    html += `<div class="empty-state" style="margin-bottom:20px;"><div class="empty-icon">🎉</div><div style="color:var(--text-muted);">Nenhuma entrega pendente!</div></div>`;
   } else {
-    html += `<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--accent3);">⏳ Aguardando Revisão (${pending.length})</div>`;
+    html += `<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--accent3);">⏳ Aguardando (${pending.length})</div>`;
     html += pending.map(s => renderSubmissionReview(s, false)).join('');
   }
-  if(reviewed.length > 0) {
-    html += `<div class="divider"></div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--text-dim);">Histórico Revisado</div>`;
-    html += reviewed.slice().reverse().map(s => renderSubmissionReview(s, true)).join('');
+  if (reviewed.length > 0) {
+    html += `<hr><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--text-dim);">Histórico</div>`;
+    html += [...reviewed].reverse().map(s => renderSubmissionReview(s, true)).join('');
   }
   document.getElementById('admin-submissions-list').innerHTML = html;
 }
 
 function renderSubmissionReview(s, readonly=false) {
-  const m = MEMBERS.find(x=>x.id===s.memberId);
-  const feedbackHtml = s.adminFeedback ? `<div style="margin-top:8px; padding:8px; background:rgba(255,209,102,0.05); border:1px solid rgba(255,209,102,0.15); border-radius:6px; font-size:11px; color:var(--text); border-left: 3px solid var(--gaia-gold);"><b>Observação (Feedback):</b> <span style="color:var(--text-dim);">${s.adminFeedback}</span></div>` : '';
-
+  const m = MEMBERS.find(x => x.id === s.memberId);
+  const feedbackHtml = s.adminFeedback ? `<div style="margin-top:8px;padding:8px;background:rgba(255,209,102,0.05);border:1px solid rgba(255,209,102,0.15);border-radius:6px;font-size:11px;border-left:3px solid var(--gaia-gold);"><b>Feedback:</b> <span style="color:var(--text-dim);">${s.adminFeedback}</span></div>` : '';
   return `<div class="admin-review-item">
     <div class="admin-review-header">
-      <div class="task-claimer-avatar" style="background:${m?.color||'#888'};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;">${m?.avatar||'?'}</div>
-      <div style="flex:1;">
-        <div style="font-size:13px;font-weight:500;">${s.memberName}</div>
-        <div style="font-size:11px;color:var(--text-dim);">${s.taskTitle}</div>
-      </div>
+      <div style="width:32px;height:32px;border-radius:50%;background:${m?.color||'#888'};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">${m?.avatar||'?'}</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:500;">${s.memberName}</div><div style="font-size:11px;color:var(--text-dim);">${s.taskTitle}</div></div>
       <span class="status-badge status-${s.status}">${{pending:'Pendente',approved:'Aprovado',rejected:'Reprovado'}[s.status]}</span>
       <span class="tag tag-pts">+${s.pts} pts</span>
       <span class="tag tag-hours">⏱ ${s.hours||0}h</span>
@@ -1683,75 +2186,72 @@ function renderSubmissionReview(s, readonly=false) {
     ${s.link ? `<a href="${s.link}" target="_blank" style="font-size:11px;color:var(--accent);text-decoration:none;">🔗 ${s.link}</a>` : ''}
     ${feedbackHtml}
     <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${formatDate(s.date)}</div>
-    ${!readonly ? `<div style="margin-top:12px;"><input type="text" id="feedback-${s.id}" placeholder="Escreva uma observação de revisão (opcional)..." style="width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:6px; padding:8px 12px; color:var(--text); font-size:11px; outline:none; margin-bottom:8px;"></div>
-    <div class="admin-review-actions">
-      <button class="btn-approve" onclick="reviewSubmission('${s.id}','approved')">✓ Aprovar (+${s.pts}pts / +${s.hours||0}h)</button>
-      <button class="btn-reject" onclick="reviewSubmission('${s.id}','rejected')">✕ Reprovar</button>
-    </div>` : ''}
+    ${!readonly ? `
+      <input type="text" id="feedback-${s.id}" placeholder="Observação/Feedback (opcional)..." style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-size:11px;outline:none;margin:8px 0;">
+      <div class="admin-review-actions">
+        <button class="btn-approve" onclick="reviewSubmission('${s.id}','approved')">✓ Aprovar (+${s.pts}pts / +${s.hours||0}h)</button>
+        <button class="btn-reject"  onclick="reviewSubmission('${s.id}','rejected')">✕ Reprovar</button>
+      </div>` : ''}
   </div>`;
 }
 
 function reviewSubmission(id, verdict) {
-  const sub = submissions.find(s=>s.id===id);
-  if(!sub) return;
-
+  const sub = submissions.find(s => s.id === id);
+  if (!sub) return;
   const feedbackInput = document.getElementById(`feedback-${id}`);
-  if(feedbackInput && feedbackInput.value.trim()) {
-     sub.adminFeedback = feedbackInput.value.trim();
-  }
-
+  if (feedbackInput && feedbackInput.value.trim()) sub.adminFeedback = feedbackInput.value.trim();
   sub.status = verdict;
-  if(verdict === 'approved') {
+  if (verdict === 'approved') {
     memberPoints[sub.memberId] = (memberPoints[sub.memberId]||0) + sub.pts;
-    const m = MEMBERS.find(x=>x.id===sub.memberId);
-    if(m){ 
-      m.tasks_done++; 
-      m.tasks_pending = Math.max(0,(m.tasks_pending||0)-1); 
-      m.hours = (m.hours || 0) + (sub.hours || 0); // Soma as horas pro certificado
+    const m = MEMBERS.find(x => x.id === sub.memberId);
+    if (m) {
+      m.tasks_done++; m.tasks_pending = Math.max(0,(m.tasks_pending||0)-1);
+      m.hours = (m.hours||0) + (sub.hours||0);
+      hoursLog.push({ memberId:m.id, memberName:m.name, op:'add', delta:sub.hours||0, reason:`Tarefa aprovada: ${sub.taskTitle}`, date:new Date().toISOString().split('T')[0], by:currentUser.name });
     }
-    toast(`Entrega aprovada! +${sub.pts} pts e +${sub.hours||0}h para ${sub.memberName}`,'success');
+    toast(`Aprovado! +${sub.pts} pts / +${sub.hours||0}h para ${sub.memberName}`, 'success');
   } else {
-    toast(`Entrega de ${sub.memberName} reprovada.`,'error');
+    toast(`Entrega de ${sub.memberName} reprovada.`, 'error');
   }
   saveToFirebase();
 }
 
-// ══════════════════════════════════════════════
-//  ADMIN: CREATE TASK
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// ADMIN: CRIAR TAREFA
+// ══════════════════════════════════════════
 function createTask() {
   const title = document.getElementById('new-task-title').value.trim();
-  const desc = document.getElementById('new-task-desc').value.trim();
-  if(!title||!desc){ toast('Preencha título e descrição','error'); return; }
+  const desc  = document.getElementById('new-task-desc').value.trim();
+  if (!title || !desc) { toast('Preencha título e descrição','error'); return; }
   const task = {
-    id: 't'+Date.now(), title, desc,
-    team: document.getElementById('new-task-team').value,
-    diff: document.getElementById('new-task-diff').value,
-    pts: parseInt(document.getElementById('new-task-pts').value)||50,
-    hours: parseInt(document.getElementById('new-task-hours').value)||2, // Puxa as horas!
+    id:'t'+Date.now(), title, desc,
+    team:     document.getElementById('new-task-team').value,
+    diff:     document.getElementById('new-task-diff').value,
+    pts:      parseInt(document.getElementById('new-task-pts').value)||50,
+    hours:    parseInt(document.getElementById('new-task-hours').value)||2,
     deadline: document.getElementById('new-task-deadline').value || '2026-12-31',
-    status: 'available', claimedBy: null, submittedBy: [],
+    status:'available', claimedBy:null, submittedBy:[],
   };
   tasks.unshift(task);
-  ['new-task-title','new-task-desc'].forEach(id=>document.getElementById(id).value='');
+  ['new-task-title','new-task-desc'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('new-task-hours').value = 2;
   saveToFirebase();
   toast('Tarefa criada e publicada!','success');
 }
 
-// ══════════════════════════════════════════════
-//  ADMIN: REWARDS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// ADMIN: RECOMPENSAS
+// ══════════════════════════════════════════
 function renderAdminRewards() {
-  const sorted = [...MEMBERS].sort((a,b)=>(memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
+  const sorted = [...MEMBERS].sort((a,b) => (memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
   const leader = sorted[0];
   document.getElementById('admin-rewards-content').innerHTML = `
-    <div class="reward-card" style="margin-bottom:20px;">
-      <div class="reward-header">
-        <div class="reward-icon">👑</div>
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="font-size:32px;">👑</div>
         <div>
-          <div class="reward-title">Líder Atual do Ciclo</div>
-          <div class="reward-desc">${leader.name} · ${memberPoints[leader.id]||leader.pts} pontos</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;">Líder Atual</div>
+          <div style="color:var(--text-dim);font-size:13px;">${leader.name} · ${memberPoints[leader.id]||leader.pts} pontos</div>
         </div>
         <div style="margin-left:auto;">
           <button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="openModal('modal-reward')">Definir Recompensa</button>
@@ -1759,11 +2259,11 @@ function renderAdminRewards() {
       </div>
     </div>
     <div class="section-header"><div class="section-title">Recompensas Anteriores</div></div>
-    ${rewards.map(r=>`
+    ${rewards.length === 0 ? '<div class="empty-state"><div class="empty-icon">🏆</div><div style="color:var(--text-muted);">Nenhuma recompensa definida ainda.</div></div>' : rewards.map(r => `
       <div class="card card-sm" style="margin-bottom:8px;">
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div><div style="font-size:13px;font-weight:500;">${r.period}</div><div style="font-size:11px;color:var(--text-dim);margin-top:2px;">${r.desc}</div></div>
-          ${r.winner?`<div class="tag" style="background:rgba(255,209,102,0.1);color:var(--gaia-gold);border:1px solid rgba(255,209,102,0.2);">🏆 ${r.winner}</div>`:''}
+          <div><div style="font-size:13px;font-weight:500;">${r.period}</div><div style="font-size:11px;color:var(--text-dim);">${r.desc}</div></div>
+          ${r.winner ? `<div class="tag" style="background:rgba(255,209,102,0.1);color:var(--gaia-gold);border:1px solid rgba(255,209,102,0.2);">🏆 ${r.winner}</div>` : ''}
         </div>
       </div>`).join('')}
   `;
@@ -1771,105 +2271,261 @@ function renderAdminRewards() {
 
 function saveReward() {
   const period = document.getElementById('reward-period').value.trim();
-  const desc = document.getElementById('reward-desc').value.trim();
-  if(!period||!desc){ toast('Preencha todos os campos','error'); return; }
-  const sorted = [...MEMBERS].sort((a,b)=>(memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
-  rewards.unshift({ id:'r'+Date.now(), period, desc, team: document.getElementById('reward-team').value, winner: sorted[0].name, date: new Date().toISOString().split('T')[0] });
+  const desc   = document.getElementById('reward-desc').value.trim();
+  if (!period || !desc) { toast('Preencha todos os campos','error'); return; }
+  const sorted = [...MEMBERS].sort((a,b) => (memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
+  rewards.unshift({ id:'r'+Date.now(), period, desc, team:document.getElementById('reward-team').value, winner:sorted[0].name, date:new Date().toISOString().split('T')[0] });
   closeModal('modal-reward');
   saveToFirebase();
   toast('Recompensa registrada!','success');
 }
 
-// ══════════════════════════════════════════════
-//  MEMBER MODAL (admin view full metrics)
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// CRUD USUÁRIOS
+// ══════════════════════════════════════════
+function openAddUserModal() {
+  document.getElementById('user-form-title').textContent = 'Adicionar Novo Membro';
+  document.getElementById('user-id').value = '';
+  ['user-name','user-username','user-email','user-role'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('user-password').value = '123';
+  document.getElementById('user-team').value = 'eletroquad';
+  document.getElementById('user-isadmin').checked = false;
+  document.getElementById('admin-only-fields').style.display = 'flex';
+  document.getElementById('admin-only-checkbox').style.display = 'flex';
+  document.getElementById('btn-delete-user').style.display = 'none';
+  openModal('modal-user-form');
+}
+
+function openEditUserModal(id) {
+  const m = MEMBERS.find(x => x.id === id);
+  if (!m) return;
+  document.getElementById('user-form-title').textContent = id === currentUser.id ? 'Minha Conta' : 'Editar Usuário';
+  document.getElementById('user-id').value       = m.id;
+  document.getElementById('user-name').value     = m.name;
+  document.getElementById('user-username').value = m.username;
+  document.getElementById('user-password').value = m.password;
+  document.getElementById('user-email').value    = m.email || '';
+  if (currentUser.isAdmin) {
+    document.getElementById('user-team').value   = m.team;
+    document.getElementById('user-role').value   = m.role;
+    document.getElementById('user-isadmin').checked = m.isAdmin;
+    document.getElementById('admin-only-fields').style.display = 'flex';
+    document.getElementById('admin-only-checkbox').style.display = 'flex';
+    document.getElementById('btn-delete-user').style.display = id === currentUser.id ? 'none' : 'block';
+  } else {
+    document.getElementById('admin-only-fields').style.display = 'none';
+    document.getElementById('admin-only-checkbox').style.display = 'none';
+    document.getElementById('btn-delete-user').style.display = 'none';
+  }
+  openModal('modal-user-form');
+}
+
+function saveUser() {
+  const id       = document.getElementById('user-id').value;
+  const name     = document.getElementById('user-name').value.trim();
+  const username = document.getElementById('user-username').value.trim();
+  const password = document.getElementById('user-password').value.trim();
+  const email    = document.getElementById('user-email').value.trim();
+  if (!name || !username || !password) { toast('Preencha os dados básicos!','error'); return; }
+  const exists = MEMBERS.find(m => m.username.toLowerCase() === username.toLowerCase() && m.id !== id);
+  if (exists) { toast('Usuário já existe!','error'); return; }
+
+  if (id) {
+    const m = MEMBERS.find(x => x.id === id);
+    m.name = name; m.username = username; m.password = password; m.email = email;
+    if (currentUser.isAdmin) {
+      m.team    = document.getElementById('user-team').value;
+      m.role    = document.getElementById('user-role').value.trim() || 'Membro';
+      m.isAdmin = document.getElementById('user-isadmin').checked;
+      m.color   = m.team === 'eletroquad' ? '#1a8fff' : '#00e5a0';
+    }
+    toast('Dados salvos!','success');
+  } else {
+    const team = document.getElementById('user-team').value;
+    const newM = {
+      id:'m'+Date.now(), name, username, password, email,
+      team, role:document.getElementById('user-role').value.trim()||'Membro',
+      isAdmin:document.getElementById('user-isadmin').checked,
+      avatar:name.substring(0,2).toUpperCase(), color:team==='eletroquad'?'#1a8fff':'#00e5a0',
+      metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},
+      skills:['Gaia'], pts:0, hours:0, tasks_done:0, tasks_pending:0,
+    };
+    MEMBERS.push(newM); memberPoints[newM.id] = 0;
+    toast('Usuário criado!','success');
+  }
+  saveToFirebase();
+  closeModal('modal-user-form');
+}
+
+function deleteUser() {
+  const id = document.getElementById('user-id').value;
+  if (id === currentUser.id) { toast('Você não pode excluir sua própria conta.','error'); return; }
+  if (confirm('Excluir este usuário?')) {
+    MEMBERS = MEMBERS.filter(m => m.id !== id);
+    saveToFirebase();
+    closeModal('modal-user-form'); closeModal('modal-member');
+    toast('Usuário excluído!','success');
+  }
+}
+
+// ══════════════════════════════════════════
+// HABILIDADES
+// ══════════════════════════════════════════
+function openEditSkillsModal(userId) {
+  editingSkillsUserId = userId;
+  const m = MEMBERS.find(x => x.id === userId);
+  if (!m) return;
+  tempSkills = [...(m.skills||[])];
+  renderTempSkills();
+  openModal('modal-skills');
+}
+
+function renderTempSkills() {
+  const c = document.getElementById('skills-container');
+  c.innerHTML = tempSkills.length === 0
+    ? `<div style="color:var(--text-muted);font-size:12px;">Nenhuma habilidade cadastrada.</div>`
+    : tempSkills.map((s,i) => `<div class="skill-chip">${s} <span class="skill-chip-remove" onclick="removeSkill(${i})">✕</span></div>`).join('');
+}
+
+function addSkill() {
+  const input = document.getElementById('new-skill-input');
+  const val   = input.value.trim();
+  if (!val) return;
+  if (tempSkills.includes(val)) { toast('Habilidade já listada!','error'); return; }
+  tempSkills.push(val); input.value = ''; renderTempSkills();
+}
+
+function removeSkill(i) { tempSkills.splice(i,1); renderTempSkills(); }
+
+function saveSkills() {
+  const m = MEMBERS.find(x => x.id === editingSkillsUserId);
+  if (m) { m.skills = [...tempSkills]; saveToFirebase(); toast('Habilidades salvas!','success'); }
+  closeModal('modal-skills');
+}
+
+// ══════════════════════════════════════════
+// MÉTRICAS
+// ══════════════════════════════════════════
+function openEditMetricsModal(userId) {
+  const m = MEMBERS.find(x => x.id === userId);
+  if (!m) return;
+  document.getElementById('metrics-user-id').value = userId;
+  ['presenca','tarefas','qualidade','pontualidade','colaboracao'].forEach(k => {
+    document.getElementById('metric-'+k).value = m.metrics[k]||0;
+  });
+  openModal('modal-metrics');
+}
+
+function saveMetrics() {
+  const id = document.getElementById('metrics-user-id').value;
+  const m  = MEMBERS.find(x => x.id === id);
+  if (!m) return;
+  ['presenca','tarefas','qualidade','pontualidade','colaboracao'].forEach(k => {
+    m.metrics[k] = parseInt(document.getElementById('metric-'+k).value)||0;
+  });
+  saveToFirebase();
+  toast('Métricas atualizadas!','success');
+  closeModal('modal-metrics');
+  if (document.getElementById('modal-member').classList.contains('open')) openMemberModal(id);
+}
+
+// ══════════════════════════════════════════
+// MEMBER MODAL
+// ══════════════════════════════════════════
 function openMemberModal(id) {
-  const m = MEMBERS.find(x=>x.id===id);
-  if(!m) return;
-  const isEQ = m.team==='eletroquad';
-  const pts = memberPoints[m.id]||m.pts;
-  const hours = m.hours || 0;
-  const avg = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
+  const m = MEMBERS.find(x => x.id === id);
+  if (!m) return;
+  const isEQ  = m.team === 'eletroquad';
+  const pts   = memberPoints[m.id]||m.pts;
+  const hours = m.hours||0;
+  const avg   = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
   const labels = { presenca:'Presença', tarefas:'Tarefas', qualidade:'Qualidade', pontualidade:'Pontualidade', colaboracao:'Colaboração' };
-  const colors = [ 'var(--gaia-blue)','var(--gaia-green)','var(--accent)','var(--accent3)','var(--accent2)' ];
+  const colors  = ['var(--gaia-blue)','var(--gaia-green)','var(--accent)','var(--accent3)','var(--accent2)'];
   const entries = Object.entries(m.metrics);
-  const mySubs = submissions.filter(s=>s.memberId===id);
+  const mySubs  = submissions.filter(s => s.memberId === id);
+  const skillsList = m.skills && m.skills.length > 0
+    ? m.skills.map(s => `<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);">${s}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--text-dim);">Sem habilidades cadastradas.</span>';
 
   document.getElementById('modal-member-avatar').textContent = m.avatar;
   document.getElementById('modal-member-avatar').style.background = m.color;
-  document.getElementById('modal-member-name').innerHTML = `${m.name} ${m.isAdmin ? '<span style="font-size:14px;color:var(--gaia-gold);">👑</span>' : ''}`;
+  document.getElementById('modal-member-name').innerHTML = `${m.name} ${m.isAdmin?'<span style="font-size:14px;color:var(--gaia-gold);">👑</span>':''}`;
   document.getElementById('modal-member-badge').innerHTML = `<span class="member-team-badge ${isEQ?'badge-eq':'badge-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>`;
-
-  const skillsList = m.skills && m.skills.length > 0 
-                     ? m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);">${s}</span>`).join('')
-                     : '<span style="font-size:12px;color:var(--text-dim);">Nenhuma habilidade cadastrada.</span>';
 
   document.getElementById('modal-member-content').innerHTML = `
     <div style="display:flex;gap:16px;margin-bottom:20px;">
-      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:${avg>=90?'var(--accent2)':avg>=75?'var(--accent)':'var(--accent3)'};">${avg}%</div></div>
-      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:var(--accent)">${pts}</div></div>
-      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Horas Certif.</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;color:#bb86fc;">${hours}h</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:${avg>=90?'var(--accent2)':avg>=75?'var(--accent)':'var(--accent3)'};">${avg}%</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--accent)">${pts}</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Horas</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#bb86fc;">${hours}h</div></div>
     </div>
-    ${entries.map(([k,v],i)=>`<div class="progress-item"><div class="progress-header"><span class="progress-label">${labels[k]}</span><span class="progress-val">${v}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${v}%;background:${colors[i]};"></div></div></div>`).join('')}
-    <div class="divider"></div>
-    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Papel no projeto</div>
-    <div style="font-size:13px;">${m.role}</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">${skillsList}</div>
-    ${mySubs.length > 0 ? `<div class="divider"></div><div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Entregas Recentes</div>
-    ${mySubs.slice().reverse().slice(0,3).map(s=>`
-      <div class="submission-item">
-        <div class="submission-header"><div class="submission-task">${s.taskTitle}</div><span class="status-badge status-${s.status}">${{pending:'Pend.',approved:'OK',rejected:'Repr.'}[s.status]}</span></div>
-        ${s.adminFeedback ? `<div style="margin-top:4px; padding:4px 6px; background:rgba(255,209,102,0.05); border-left:2px solid var(--gaia-gold); font-size:10px; color:var(--text-dim);"><b>Obs:</b> ${s.adminFeedback}</div>` : ''}
-        <div style="font-size:10px;color:var(--text-muted); margin-top:4px;">${formatDate(s.date)}</div>
-      </div>
-    `).join('')}` : ''}
+    ${entries.map(([k,v],i) => `
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">${labels[k]}</span><span class="progress-val">${v}%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${v}%;background:${colors[i]};"></div></div>
+      </div>`).join('')}
+    <hr>
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Cargo: ${m.role}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">${skillsList}</div>
+    ${mySubs.length > 0 ? `<hr>
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Entregas Recentes</div>
+      ${mySubs.slice().reverse().slice(0,3).map(s => `
+        <div class="submission-item">
+          <div style="display:flex;justify-content:space-between;"><div style="font-size:12px;font-weight:500;">${s.taskTitle}</div><span class="status-badge status-${s.status}">${{pending:'Pend.',approved:'OK',rejected:'Repr.'}[s.status]}</span></div>
+          ${s.adminFeedback ? `<div style="margin-top:4px;padding:4px 6px;background:rgba(255,209,102,0.05);border-left:2px solid var(--gaia-gold);font-size:10px;color:var(--text-dim);"><b>Obs:</b> ${s.adminFeedback}</div>` : ''}
+          <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${formatDate(s.date)}</div>
+        </div>`).join('')}` : ''}
   `;
 
-  document.getElementById('modal-member-footer').innerHTML = '';
-  if(currentUser.isAdmin) {
-      document.getElementById('modal-member-footer').style.display = 'flex';
-      document.getElementById('modal-member-footer').innerHTML = `
-          <button class="btn-ghost" onclick="closeModal('modal-member'); openEditUserModal('${id}')">⚙️ Conta/Senha</button>
-          <button class="btn-ghost" onclick="openEditSkillsModal('${id}')">🛠 Habilidades</button>
-          <button class="btn-ghost" style="color:var(--accent);" onclick="openEditMetricsModal('${id}')">📊 Métricas</button>
-      `;
-  } else if(currentUser.id === id) {
-      document.getElementById('modal-member-footer').style.display = 'flex';
-      document.getElementById('modal-member-footer').innerHTML = `
-          <button class="btn-ghost" onclick="closeModal('modal-member'); openEditUserModal('${id}')">⚙️ Conta/Senha</button>
-          <button class="btn-ghost" onclick="openEditSkillsModal('${id}')">🛠 Habilidades</button>
-      `;
-  } else {
-      document.getElementById('modal-member-footer').style.display = 'none';
-  }
+  const footer = document.getElementById('modal-member-footer');
+  if (currentUser.isAdmin) {
+    footer.style.display = 'flex';
+    footer.innerHTML = `
+      <button class="btn-ghost" onclick="closeModal('modal-member');openEditUserModal('${id}')">⚙️ Conta</button>
+      <button class="btn-ghost" onclick="openEditSkillsModal('${id}')">🛠 Habilidades</button>
+      <button class="btn-ghost" style="color:var(--accent);" onclick="openEditMetricsModal('${id}')">📊 Métricas</button>
+      <button class="btn-ghost" style="color:#bb86fc;" onclick="closeModal('modal-member');openHoursAdjust('${id}')">⏱ Horas</button>`;
+  } else if (currentUser.id === id) {
+    footer.style.display = 'flex';
+    footer.innerHTML = `
+      <button class="btn-ghost" onclick="closeModal('modal-member');openEditUserModal('${id}')">⚙️ Minha Conta</button>
+      <button class="btn-ghost" onclick="openEditSkillsModal('${id}')">🛠 Habilidades</button>`;
+  } else { footer.style.display = 'none'; }
 
   openModal('modal-member');
 }
 
-// ══════════════════════════════════════════════
-//  UTILITIES
-// ══════════════════════════════════════════════
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+// ══════════════════════════════════════════
+// UTILITIES
+// ══════════════════════════════════════════
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { if (id) document.getElementById(id).classList.remove('open'); }
 
-document.querySelectorAll('.modal-overlay').forEach(el=>{
-  el.addEventListener('click', e=>{ if(e.target===el) el.classList.remove('open'); });
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
 });
 
 function toast(msg, type='success') {
   const t = document.createElement('div');
   t.className = `toast ${type}`;
-  t.innerHTML = `<span class="toast-icon">${type==='success'?'✓':'✕'}</span><span>${msg}</span>`;
+  t.innerHTML = `<span>${type==='success'?'✓':'✕'}</span><span>${msg}</span>`;
   document.getElementById('toast-container').appendChild(t);
-  setTimeout(()=>t.remove(), 3500);
+  setTimeout(() => t.remove(), 3500);
 }
 
 function formatDate(d) {
-  if(!d) return '';
+  if (!d) return '';
   const [y,m,day] = d.split('-');
   const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   return `${day} ${months[parseInt(m)-1]} ${y}`;
 }
+
+// Init EmailJS se já configurado
+setTimeout(() => {
+  if (emailConfig && emailConfig.publicKey && emailConfig.configured) {
+    emailjs.init(emailConfig.publicKey);
+  }
+}, 2000);
 </script>
 </body>
 </html>
+
