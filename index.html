@@ -360,6 +360,75 @@
   }
   .config-card b { color:var(--accent); }
 
+  /* ──── CHAT ──── */
+  .chat-wrapper { display:flex; flex-direction:column; height:calc(100vh - 180px); min-height:400px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
+  .chat-messages { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:12px; }
+  .chat-msg { display:flex; gap:10px; max-width:80%; }
+  .chat-msg.mine { flex-direction:row-reverse; align-self:flex-end; }
+  .chat-msg-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; }
+  .chat-bubble { background:var(--bg3); border:1px solid var(--border); border-radius:14px 14px 14px 4px; padding:10px 14px; max-width:100%; }
+  .chat-msg.mine .chat-bubble { background:rgba(26,143,255,0.12); border-color:rgba(26,143,255,0.25); border-radius:14px 14px 4px 14px; }
+  .chat-bubble-name { font-size:10px; font-weight:600; color:var(--accent); margin-bottom:4px; }
+  .chat-msg.mine .chat-bubble-name { text-align:right; color:var(--gaia-blue); }
+  .chat-bubble-text { font-size:13px; line-height:1.5; word-break:break-word; }
+  .chat-bubble-time { font-size:10px; color:var(--text-muted); margin-top:4px; }
+  .chat-msg.mine .chat-bubble-time { text-align:right; }
+  .chat-bubble-file { display:flex; align-items:center; gap:8px; margin-top:6px; padding:8px 10px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; cursor:pointer; text-decoration:none; }
+  .chat-bubble-file:hover { border-color:rgba(255,255,255,0.15); }
+  .chat-file-icon { font-size:18px; flex-shrink:0; }
+  .chat-file-info { flex:1; min-width:0; }
+  .chat-file-name { font-size:12px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .chat-file-size { font-size:10px; color:var(--text-dim); }
+  .chat-input-area { border-top:1px solid var(--border); padding:16px; display:flex; flex-direction:column; gap:10px; background:var(--bg2); }
+  .chat-input-row { display:flex; gap:10px; align-items:flex-end; }
+  .chat-textarea { flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; outline:none; resize:none; min-height:40px; max-height:120px; line-height:1.5; transition:border-color 0.2s; }
+  .chat-textarea:focus { border-color:var(--border-active); }
+  .chat-send-btn { width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg,var(--gaia-blue),#0d6fff); border:none; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
+  .chat-send-btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(26,143,255,0.4); }
+  .chat-attach-btn { width:40px; height:40px; border-radius:10px; background:var(--bg3); border:1px solid var(--border); color:var(--text-dim); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
+  .chat-attach-btn:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
+  .chat-attach-preview { display:none; align-items:center; gap:8px; padding:8px 12px; background:rgba(99,210,255,0.06); border:1px dashed rgba(99,210,255,0.25); border-radius:8px; font-size:12px; color:var(--text-dim); }
+  .chat-attach-preview.active { display:flex; }
+  .chat-attach-remove { cursor:pointer; color:var(--accent-red); font-weight:bold; margin-left:auto; }
+  .chat-date-divider { text-align:center; font-size:10px; color:var(--text-muted); position:relative; margin:8px 0; }
+  .chat-date-divider::before { content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:var(--border); z-index:0; }
+  .chat-date-divider span { background:var(--bg2); padding:0 10px; position:relative; z-index:1; }
+  .chat-task-badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; background:rgba(255,209,102,0.1); border:1px solid rgba(255,209,102,0.2); border-radius:100px; font-size:10px; color:var(--gaia-gold); margin-top:4px; }
+
+  /* ──── TAREFAS - chip de responsável ──── */
+  .task-assignees { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .task-assignee-chip { display:flex; align-items:center; gap:6px; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:500; background:rgba(26,143,255,0.08); border:1px solid rgba(26,143,255,0.2); color:var(--gaia-blue); }
+  .task-assignee-chip.rob { background:rgba(0,229,160,0.07); border-color:rgba(0,229,160,0.18); color:var(--gaia-green); }
+
+  /* ──── ARQUIVOS ──── */
+  .files-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; }
+  .file-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; gap:10px; transition:all 0.2s; cursor:pointer; position:relative; }
+  .file-card:hover { border-color:rgba(255,255,255,0.12); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.25); }
+  .file-card-icon { font-size:28px; line-height:1; }
+  .file-card-name { font-size:13px; font-weight:600; word-break:break-word; }
+  .file-card-meta { font-size:10px; color:var(--text-dim); }
+  .file-card-tags { display:flex; gap:4px; flex-wrap:wrap; }
+  .file-del-btn { position:absolute; top:8px; right:8px; width:22px; height:22px; border-radius:50%; background:rgba(255,110,110,0.1); border:1px solid rgba(255,110,110,0.2); color:var(--accent-red); cursor:pointer; display:none; align-items:center; justify-content:center; font-size:11px; }
+  .file-card:hover .file-del-btn { display:flex; }
+
+  /* ──── MAPA DE CÓDIGO ──── */
+  .codemap-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); margin-bottom:12px; overflow:hidden; }
+  .codemap-header { display:flex; align-items:center; gap:12px; padding:14px 18px; cursor:pointer; transition:background 0.15s; }
+  .codemap-header:hover { background:var(--card-hover); }
+  .codemap-lang-badge { padding:3px 10px; border-radius:6px; font-family:'DM Mono',monospace; font-size:10px; font-weight:600; }
+  .codemap-name { font-family:'DM Mono',monospace; font-size:13px; font-weight:500; }
+  .codemap-path { font-size:11px; color:var(--text-muted); }
+  .codemap-body { border-top:1px solid var(--border); padding:16px 18px; display:none; }
+  .codemap-body.open { display:block; }
+  .codemap-desc-area { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; resize:vertical; min-height:80px; line-height:1.5; outline:none; margin-bottom:12px; }
+  .codemap-desc-area:focus { border-color:var(--border-active); }
+  .codemap-author { font-size:11px; color:var(--text-dim); margin-top:8px; }
+  .lang-py { background:rgba(255,214,0,0.12); color:#ffd600; }
+  .lang-cpp { background:rgba(0,174,255,0.1); color:#00aeff; }
+  .lang-ros { background:rgba(0,229,160,0.1); color:var(--gaia-green); }
+  .lang-js { background:rgba(255,184,0,0.1); color:#ffb800; }
+  .lang-other { background:rgba(255,255,255,0.06); color:var(--text-dim); }
+
   @keyframes fadeIn { from{opacity:0} to{opacity:1} }
   @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
   @keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
@@ -435,7 +504,19 @@
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
         Ranking
       </div>
-    </div>
+      <div class="nav-item" onclick="showPage('chat',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat Geral
+        <span id="chat-badge" style="margin-left:auto;background:rgba(0,229,160,0.2);color:var(--gaia-green);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;display:none;"></span>
+      </div>
+      <div class="nav-item" onclick="showPage('files',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Arquivos
+      </div>
+      <div class="nav-item" onclick="showPage('codemap',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Mapa de Código
+      </div>
 
     <div class="nav-section">
       <div class="nav-section-label">Meu Espaço</div>
@@ -480,6 +561,11 @@
       <div class="nav-item" onclick="showPage('admin-emailconfig',this)">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Config. E-mail
+      </div>
+      <div class="nav-item" onclick="showPage('admin-chat',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1"/><path d="M15 2H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2v4l4-4h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+        Chat dos ADMs
+        <span id="admchat-badge" style="margin-left:auto;background:rgba(255,209,102,0.2);color:var(--gaia-gold);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;display:none;"></span>
       </div>
     </div>
 
@@ -748,6 +834,116 @@
         <div class="page-subtitle">Configure o EmailJS para envio de notificações automáticas</div>
       </div>
       <div id="email-config-content"></div>
+    </div>
+
+    <!-- CHAT GERAL -->
+    <div id="page-chat" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">💬 Chat Geral</div>
+          <div class="page-subtitle">Canal aberto para toda a equipe — suporta arquivos e imagens</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span id="chat-online-count" style="font-size:11px;color:var(--text-dim);"></span>
+        </div>
+      </div>
+      <div class="chat-wrapper">
+        <div class="chat-messages" id="chat-messages-list">
+          <div class="empty-state"><div class="empty-icon">💬</div><div style="color:var(--text-muted);">Nenhuma mensagem ainda. Seja o primeiro!</div></div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-attach-preview" id="chat-attach-preview">
+            <span id="chat-attach-name">arquivo.pdf</span>
+            <span id="chat-attach-size" style="color:var(--text-muted);font-size:10px;margin-left:4px;"></span>
+            <span class="chat-attach-remove" onclick="clearChatAttach()">✕</span>
+          </div>
+          <div class="chat-input-row">
+            <button class="chat-attach-btn" onclick="document.getElementById('chat-file-input').click()" title="Anexar arquivo">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            </button>
+            <input type="file" id="chat-file-input" style="display:none" onchange="handleChatFileSelect(this)" />
+            <textarea class="chat-textarea" id="chat-input" placeholder="Mensagem para toda a equipe... (Enter para enviar)" rows="1"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"
+              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+            <button class="chat-send-btn" onclick="sendChatMsg()" title="Enviar">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT ADMs -->
+    <div id="page-admin-chat" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">🔐 Chat dos ADMs</div>
+          <div class="page-subtitle">Canal privado exclusivo para administradores</div>
+        </div>
+      </div>
+      <div class="chat-wrapper">
+        <div class="chat-messages" id="admchat-messages-list">
+          <div class="empty-state"><div class="empty-icon">🔐</div><div style="color:var(--text-muted);">Canal privado dos administradores.</div></div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-attach-preview" id="admchat-attach-preview">
+            <span id="admchat-attach-name">arquivo.pdf</span>
+            <span id="admchat-attach-size" style="color:var(--text-muted);font-size:10px;margin-left:4px;"></span>
+            <span class="chat-attach-remove" onclick="clearAdmChatAttach()">✕</span>
+          </div>
+          <div class="chat-input-row">
+            <button class="chat-attach-btn" onclick="document.getElementById('admchat-file-input').click()" title="Anexar arquivo">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            </button>
+            <input type="file" id="admchat-file-input" style="display:none" onchange="handleAdmChatFileSelect(this)" />
+            <textarea class="chat-textarea" id="admchat-input" placeholder="Mensagem privada para os ADMs... (Enter para enviar)" rows="1"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAdmChatMsg();}"
+              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+            <button class="chat-send-btn" onclick="sendAdmChatMsg()" title="Enviar">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARQUIVOS -->
+    <div id="page-files" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">📁 Arquivos do Projeto</div>
+          <div class="page-subtitle">Repositório central de arquivos — imagens, PDFs, planilhas, códigos e mais</div>
+        </div>
+        <button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="document.getElementById('files-upload-input').click()">
+          + Adicionar Arquivo
+        </button>
+        <input type="file" id="files-upload-input" style="display:none" multiple onchange="handleFilesUpload(this)" />
+      </div>
+      <div class="tabs" id="files-tabs">
+        <div class="tab active" onclick="filterFiles('all',this)">Todos</div>
+        <div class="tab" onclick="filterFiles('image',this)">🖼 Imagens</div>
+        <div class="tab" onclick="filterFiles('pdf',this)">📄 PDFs</div>
+        <div class="tab" onclick="filterFiles('code',this)">💻 Código</div>
+        <div class="tab" onclick="filterFiles('other',this)">📦 Outros</div>
+      </div>
+      <div id="files-grid-container"></div>
+    </div>
+
+    <!-- MAPA DE CÓDIGO -->
+    <div id="page-codemap" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">🗺 Mapa de Código</div>
+          <div class="page-subtitle">Documentação e visão geral de todos os módulos e scripts do projeto</div>
+        </div>
+        <button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="openModal('modal-codemap-new')">+ Novo Módulo</button>
+      </div>
+      <div class="tabs" id="codemap-tabs">
+        <div class="tab active" onclick="filterCodemap('all',this)">Todos</div>
+        <div class="tab" onclick="filterCodemap('eletroquad',this)">EletroQuad</div>
+        <div class="tab" onclick="filterCodemap('robotica',this)">Robótica</div>
+      </div>
+      <div id="codemap-list"></div>
     </div>
 
   </div><!-- /main -->
@@ -1040,6 +1236,54 @@
   </div>
 </div>
 
+<!-- Modal: Novo Módulo de Código -->
+<div id="modal-codemap-new" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🗺 Novo Módulo</div>
+      <div class="modal-close" onclick="closeModal('modal-codemap-new')">✕</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nome do Arquivo / Módulo</label>
+        <input type="text" id="cm-name" placeholder="Ex: imu_filter.py, navigation.cpp" />
+      </div>
+      <div class="form-group">
+        <label>Linguagem</label>
+        <select id="cm-lang">
+          <option value="py">Python (.py)</option>
+          <option value="cpp">C++ (.cpp / .h)</option>
+          <option value="ros">ROS / YAML / Launch</option>
+          <option value="js">JavaScript / TypeScript</option>
+          <option value="other">Outro</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Caminho / Repositório</label>
+        <input type="text" id="cm-path" placeholder="Ex: /src/navigation/imu_filter.py" />
+      </div>
+      <div class="form-group">
+        <label>Equipe</label>
+        <select id="cm-team">
+          <option value="eletroquad">EletroQuad</option>
+          <option value="robotica">Robótica</option>
+          <option value="both">Ambas</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Descrição / Documentação Inicial</label>
+      <textarea id="cm-desc" style="min-height:100px;" placeholder="Descreva o que esse módulo faz, suas funções principais, dependências..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-codemap-new')">Cancelar</button>
+      <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="saveCodemapModule()">Adicionar ao Mapa</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast-container"></div>
 
 <!-- Firebase -->
@@ -1063,7 +1307,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const dbRef = db.ref('portal_gaia_data_v5');
+const dbRef = db.ref('portal_gaia_data_v6');
 
 // ══════════════════════════════════════════
 // DADOS INICIAIS
@@ -1083,7 +1327,7 @@ const INITIAL_MEMBERS = [
 ];
 
 const INITIAL_TASKS = [
-  { id:'t1', title:'Configurar o novo Portal (v5)', desc:'Fazer login, testar o sistema de avisos, calendário e aprovação de horas.', team:'both', diff:'easy', pts:50, hours:2, deadline:'2026-03-31', status:'available', claimedBy:null, submittedBy:[] }
+  { id:'t1', title:'Configurar o novo Portal (v6)', desc:'Fazer login, testar chat, arquivos, mapa de código e demais funcionalidades.', team:'both', diff:'easy', pts:50, hours:2, deadline:'2026-04-15', status:'available', claimedBy:null, submittedBy:[] }
 ];
 
 // ══════════════════════════════════════════
@@ -1109,7 +1353,18 @@ let notices = [];
 let calEvents = [];
 let emailConfig = { serviceId:'', templateId:'', publicKey:'', configured:false };
 let hoursGoal = 20;
-let hoursLog = []; // log de ajustes manuais
+let hoursLog = [];
+// NOVO v6
+let chatMessages = [];
+let admChatMessages = [];
+let projectFiles = [];
+let codemapModules = [];
+let currentFilesFilter = 'all';
+let currentCodemapFilter = 'all';
+let chatPendingFile = null;
+let admChatPendingFile = null;
+let lastSeenChatCount = 0;
+let lastSeenAdmChatCount = 0;
 
 // ══════════════════════════════════════════
 // FIREBASE SYNC
@@ -1128,11 +1383,16 @@ dbRef.on('value', (snapshot) => {
     emailConfig   = data.emailConfig || { serviceId:'', templateId:'', publicKey:'', configured:false };
     hoursGoal     = data.hoursGoal || 20;
     hoursLog      = data.hoursLog || [];
+    chatMessages  = data.chatMessages || [];
+    admChatMessages = data.admChatMessages || [];
+    projectFiles  = data.projectFiles || [];
+    codemapModules = data.codemapModules || [];
   } else {
     MEMBERS = JSON.parse(JSON.stringify(INITIAL_MEMBERS));
     tasks   = JSON.parse(JSON.stringify(INITIAL_TASKS));
     submissions = []; rewards = []; attendance = [];
     notices = []; calEvents = []; hoursLog = [];
+    chatMessages = []; admChatMessages = []; projectFiles = []; codemapModules = [];
     MEMBERS.forEach(m => { memberPoints[m.id] = m.pts; });
     saveToFirebase();
   }
@@ -1150,7 +1410,8 @@ dbRef.on('value', (snapshot) => {
     updateBadges();
     // re-render página ativa
     const pages = ['home','notices','calendar','tasks','ranking','myprofile','mymetrics',
-                   'admin-members','admin-attendance','admin-hours','admin-submissions','admin-rewards','admin-emailconfig'];
+                   'admin-members','admin-attendance','admin-hours','admin-submissions','admin-rewards','admin-emailconfig',
+                   'chat','admin-chat','files','codemap'];
     pages.forEach(p => {
       if (document.getElementById('page-'+p) && document.getElementById('page-'+p).classList.contains('active')) {
         renderPage(p);
@@ -1161,7 +1422,8 @@ dbRef.on('value', (snapshot) => {
 
 function saveToFirebase() {
   dbRef.set({ tasks, submissions, rewards, memberPoints, members:MEMBERS, attendance,
-              notices, calEvents, emailConfig, hoursGoal, hoursLog });
+              notices, calEvents, emailConfig, hoursGoal, hoursLog,
+              chatMessages, admChatMessages, projectFiles, codemapModules });
 }
 
 // ══════════════════════════════════════════
@@ -1224,6 +1486,16 @@ function updateBadges() {
   const below = MEMBERS.filter(m => (m.hours||0) < hoursGoal * 0.5).length;
   const hb = document.getElementById('hours-badge');
   if (hb) { hb.textContent = below > 0 ? below : ''; hb.style.display = below > 0 ? 'inline' : 'none'; }
+  // chat badge: novas mensagens não vistas
+  const newChat = chatMessages.length - lastSeenChatCount;
+  const cb = document.getElementById('chat-badge');
+  if (cb) { cb.textContent = newChat > 0 ? newChat : ''; cb.style.display = newChat > 0 ? 'inline' : 'none'; }
+  // adm chat badge
+  if (currentUser && currentUser.isAdmin) {
+    const newAdm = admChatMessages.length - lastSeenAdmChatCount;
+    const ab = document.getElementById('admchat-badge');
+    if (ab) { ab.textContent = newAdm > 0 ? newAdm : ''; ab.style.display = newAdm > 0 ? 'inline' : 'none'; }
+  }
 }
 
 function showPage(page, el) {
@@ -1231,6 +1503,9 @@ function showPage(page, el) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if (el) el.classList.add('active');
   document.getElementById('page-'+page).classList.add('active');
+  // mark as seen
+  if (page === 'chat') { lastSeenChatCount = chatMessages.length; updateBadges(); }
+  if (page === 'admin-chat') { lastSeenAdmChatCount = admChatMessages.length; updateBadges(); }
   renderPage(page);
 }
 
@@ -1250,6 +1525,10 @@ function renderPage(page) {
     'admin-rewards':      renderAdminRewards,
     'admin-emailconfig':  renderEmailConfig,
     'admin-tasks':        () => {},
+    'chat':               renderChatPage,
+    'admin-chat':         renderAdmChatPage,
+    'files':              renderFilesPage,
+    'codemap':            renderCodemapPage,
   };
   if (map[page]) map[page]();
 }
@@ -1815,12 +2094,30 @@ function renderTaskItem(t) {
   } else if (isMySubmit) {
     actionHtml = `<button class="btn-claim claimed" disabled>Aguardando Revisão ⏳</button>`;
   }
+
+  // Responsáveis visíveis para todos
+  let assigneeHtml = '';
+  if (t.claimedBy) {
+    const assignee = MEMBERS.find(m => m.id === t.claimedBy);
+    if (assignee) {
+      const isRob = assignee.team === 'robotica';
+      const statusLabel = t.status === 'done' ? '✓ Concluído' : '⚡ Em andamento';
+      assigneeHtml = `<div class="task-assignees">
+        <div class="task-assignee-chip ${isRob?'rob':''}">
+          <div style="width:18px;height:18px;border-radius:50%;background:${assignee.color};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;">${assignee.avatar}</div>
+          ${assignee.name.split(' ')[0]} · ${statusLabel}
+        </div>
+      </div>`;
+    }
+  }
+
   return `<div class="task-item">
     <div class="task-header">
       <div class="task-content">
         <div class="task-title ${t.status==='done'?'done':''}">${t.title}</div>
         <div class="task-desc">${t.desc}</div>
         <div class="task-meta">${teamTag}${diffTag}${ptsTag}${hoursTag}${deadTag}${actionHtml}</div>
+        ${assigneeHtml}
       </div>
     </div>
   </div>`;
@@ -2519,6 +2816,364 @@ function formatDate(d) {
   return `${day} ${months[parseInt(m)-1]} ${y}`;
 }
 
+// ══════════════════════════════════════════
+// CHAT GERAL
+// ══════════════════════════════════════════
+function renderChatPage() {
+  renderChatMessages('chat-messages-list', chatMessages);
+}
+
+function renderChatMessages(containerId, msgs) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (msgs.length === 0) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">💬</div><div style="color:var(--text-muted);">Nenhuma mensagem ainda. Seja o primeiro!</div></div>`;
+    return;
+  }
+  let html = '';
+  let lastDate = '';
+  msgs.forEach(msg => {
+    const isMine = msg.authorId === currentUser.id;
+    const m = MEMBERS.find(x => x.id === msg.authorId);
+    const color = m ? m.color : '#888';
+    const avatar = m ? m.avatar : '?';
+    const msgDate = msg.timestamp ? msg.timestamp.split('T')[0] : '';
+    if (msgDate && msgDate !== lastDate) {
+      html += `<div class="chat-date-divider"><span>${formatDate(msgDate)}</span></div>`;
+      lastDate = msgDate;
+    }
+    const timeStr = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : '';
+    let fileHtml = '';
+    if (msg.file) {
+      const icon = getFileIcon(msg.file.name);
+      const sizeStr = formatFileSize(msg.file.size);
+      if (msg.file.dataUrl && msg.file.name.match(/\.(png|jpg|jpeg|gif|webp)$/i)) {
+        fileHtml = `<div style="margin-top:8px;"><img src="${msg.file.dataUrl}" style="max-width:240px;max-height:180px;border-radius:8px;cursor:pointer;" onclick="window.open('${msg.file.dataUrl}','_blank')" /></div>`;
+      } else {
+        fileHtml = `<a class="chat-bubble-file" href="${msg.file.dataUrl||'#'}" download="${msg.file.name}" ${!msg.file.dataUrl?'style="pointer-events:none;opacity:0.5;"':''}>
+          <div class="chat-file-icon">${icon}</div>
+          <div class="chat-file-info"><div class="chat-file-name">${msg.file.name}</div><div class="chat-file-size">${sizeStr}</div></div>
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </a>`;
+      }
+    }
+    // tarefa vinculada
+    let taskHtml = '';
+    if (msg.taskId) {
+      const t = tasks.find(x => x.id === msg.taskId);
+      if (t) taskHtml = `<div class="chat-task-badge">📋 ${t.title}</div>`;
+    }
+    html += `<div class="chat-msg ${isMine?'mine':''}">
+      ${!isMine ? `<div class="chat-msg-avatar" style="background:${color}">${avatar}</div>` : ''}
+      <div class="chat-bubble">
+        ${!isMine ? `<div class="chat-bubble-name">${msg.authorName}</div>` : ''}
+        ${msg.text ? `<div class="chat-bubble-text">${escapeHtml(msg.text)}</div>` : ''}
+        ${fileHtml}
+        ${taskHtml}
+        <div class="chat-bubble-time">${timeStr}</div>
+      </div>
+    </div>`;
+  });
+  el.innerHTML = html;
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendChatMsg() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text && !chatPendingFile) return;
+
+  const msg = {
+    id: 'cm'+Date.now(),
+    authorId: currentUser.id,
+    authorName: currentUser.name,
+    text,
+    file: chatPendingFile ? { name: chatPendingFile.name, size: chatPendingFile.size, dataUrl: chatPendingFile.dataUrl } : null,
+    timestamp: new Date().toISOString(),
+  };
+  chatMessages.push(msg);
+  input.value = '';
+  input.style.height = 'auto';
+  clearChatAttach();
+  lastSeenChatCount = chatMessages.length;
+  saveToFirebase();
+}
+
+function handleChatFileSelect(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { toast('Arquivo muito grande! Máximo 2MB.','error'); return; }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    chatPendingFile = { name: file.name, size: file.size, dataUrl: e.target.result };
+    document.getElementById('chat-attach-name').textContent = file.name;
+    document.getElementById('chat-attach-size').textContent = formatFileSize(file.size);
+    document.getElementById('chat-attach-preview').classList.add('active');
+  };
+  reader.readAsDataURL(file);
+  inputEl.value = '';
+}
+
+function clearChatAttach() {
+  chatPendingFile = null;
+  document.getElementById('chat-attach-preview').classList.remove('active');
+}
+
+// ══════════════════════════════════════════
+// CHAT ADMs
+// ══════════════════════════════════════════
+function renderAdmChatPage() {
+  renderChatMessages('admchat-messages-list', admChatMessages);
+}
+
+function sendAdmChatMsg() {
+  const input = document.getElementById('admchat-input');
+  const text = input.value.trim();
+  if (!text && !admChatPendingFile) return;
+
+  const msg = {
+    id: 'ac'+Date.now(),
+    authorId: currentUser.id,
+    authorName: currentUser.name,
+    text,
+    file: admChatPendingFile ? { name: admChatPendingFile.name, size: admChatPendingFile.size, dataUrl: admChatPendingFile.dataUrl } : null,
+    timestamp: new Date().toISOString(),
+  };
+  admChatMessages.push(msg);
+  input.value = '';
+  input.style.height = 'auto';
+  clearAdmChatAttach();
+  lastSeenAdmChatCount = admChatMessages.length;
+  saveToFirebase();
+}
+
+function handleAdmChatFileSelect(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { toast('Arquivo muito grande! Máximo 2MB.','error'); return; }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    admChatPendingFile = { name: file.name, size: file.size, dataUrl: e.target.result };
+    document.getElementById('admchat-attach-name').textContent = file.name;
+    document.getElementById('admchat-attach-size').textContent = formatFileSize(file.size);
+    document.getElementById('admchat-attach-preview').classList.add('active');
+  };
+  reader.readAsDataURL(file);
+  inputEl.value = '';
+}
+
+function clearAdmChatAttach() {
+  admChatPendingFile = null;
+  document.getElementById('admchat-attach-preview').classList.remove('active');
+}
+
+// ══════════════════════════════════════════
+// ARQUIVOS
+// ══════════════════════════════════════════
+function renderFilesPage() {
+  filterFiles(currentFilesFilter);
+}
+
+function filterFiles(filter, el) {
+  currentFilesFilter = filter;
+  if (el) { document.querySelectorAll('#files-tabs .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+  let filtered = [...projectFiles];
+  if (filter === 'image') filtered = filtered.filter(f => f.type === 'image');
+  else if (filter === 'pdf') filtered = filtered.filter(f => f.type === 'pdf');
+  else if (filter === 'code') filtered = filtered.filter(f => f.type === 'code');
+  else if (filter === 'other') filtered = filtered.filter(f => f.type === 'other');
+
+  const isAdmin = currentUser.isAdmin;
+  if (filtered.length === 0) {
+    document.getElementById('files-grid-container').innerHTML = `<div class="empty-state"><div class="empty-icon">📁</div><div style="color:var(--text-muted);">Nenhum arquivo aqui. Clique em "+ Adicionar Arquivo" para enviar.</div></div>`;
+    return;
+  }
+  document.getElementById('files-grid-container').innerHTML = `<div class="files-grid">` +
+    filtered.map(f => {
+      const icon = getFileIcon(f.name);
+      const sizeStr = formatFileSize(f.size || 0);
+      return `<div class="file-card" onclick="downloadFile('${f.id}')">
+        ${isAdmin ? `<button class="file-del-btn" onclick="event.stopPropagation();deleteFile('${f.id}')">✕</button>` : ''}
+        <div class="file-card-icon">${icon}</div>
+        <div class="file-card-name">${f.name}</div>
+        <div class="file-card-meta">${sizeStr} · ${formatDate(f.date)}</div>
+        <div class="file-card-meta" style="color:var(--text-muted);">por ${f.uploaderName}</div>
+        ${f.tags && f.tags.length ? `<div class="file-card-tags">${f.tags.map(t=>`<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);">${t}</span>`).join('')}</div>` : ''}
+      </div>`;
+    }).join('') + `</div>`;
+}
+
+function handleFilesUpload(inputEl) {
+  const files = Array.from(inputEl.files);
+  if (!files.length) return;
+  let processed = 0;
+  files.forEach(file => {
+    if (file.size > 3 * 1024 * 1024) { toast(`"${file.name}" muito grande! Máximo 3MB por arquivo.`,'error'); processed++; return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const cat = getFileCategory(file.name);
+      const entry = {
+        id: 'f'+Date.now()+Math.random().toString(36).slice(2,6),
+        name: file.name,
+        size: file.size,
+        type: cat,
+        dataUrl: e.target.result,
+        uploaderName: currentUser.name,
+        uploaderId: currentUser.id,
+        date: new Date().toISOString().split('T')[0],
+        tags: [],
+      };
+      projectFiles.push(entry);
+      processed++;
+      if (processed === files.length) {
+        saveToFirebase();
+        toast(`${files.length} arquivo(s) adicionado(s)!`, 'success');
+        renderFilesPage();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  inputEl.value = '';
+}
+
+function downloadFile(id) {
+  const f = projectFiles.find(x => x.id === id);
+  if (!f || !f.dataUrl) { toast('Arquivo não disponível.','error'); return; }
+  const a = document.createElement('a');
+  a.href = f.dataUrl; a.download = f.name; a.click();
+}
+
+function deleteFile(id) {
+  if (!confirm('Remover este arquivo?')) return;
+  projectFiles = projectFiles.filter(f => f.id !== id);
+  saveToFirebase();
+  toast('Arquivo removido.','success');
+  renderFilesPage();
+}
+
+function getFileCategory(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  if (['png','jpg','jpeg','gif','webp','svg'].includes(ext)) return 'image';
+  if (ext === 'pdf') return 'pdf';
+  if (['py','cpp','c','h','js','ts','yaml','yml','json','launch','sh','bash','html','css','txt','md','ros'].includes(ext)) return 'code';
+  return 'other';
+}
+
+// ══════════════════════════════════════════
+// MAPA DE CÓDIGO
+// ══════════════════════════════════════════
+function renderCodemapPage() {
+  filterCodemap(currentCodemapFilter);
+}
+
+function filterCodemap(filter, el) {
+  currentCodemapFilter = filter;
+  if (el) { document.querySelectorAll('#codemap-tabs .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+  let filtered = [...codemapModules];
+  if (filter === 'eletroquad') filtered = filtered.filter(m => m.team === 'eletroquad' || m.team === 'both');
+  else if (filter === 'robotica') filtered = filtered.filter(m => m.team === 'robotica' || m.team === 'both');
+
+  if (filtered.length === 0) {
+    document.getElementById('codemap-list').innerHTML = `<div class="empty-state"><div class="empty-icon">💻</div><div style="color:var(--text-muted);">Nenhum módulo cadastrado. Clique em "+ Novo Módulo" para começar.</div></div>`;
+    return;
+  }
+  const langLabels = { py:'Python', cpp:'C++', ros:'ROS', js:'JS/TS', other:'Outro' };
+  const langClasses = { py:'lang-py', cpp:'lang-cpp', ros:'lang-ros', js:'lang-js', other:'lang-other' };
+  document.getElementById('codemap-list').innerHTML = filtered.map(mod => `
+    <div class="codemap-item">
+      <div class="codemap-header" onclick="toggleCodemap('${mod.id}')">
+        <span class="codemap-lang-badge ${langClasses[mod.lang]||'lang-other'}">${langLabels[mod.lang]||'?'}</span>
+        <div style="flex:1;">
+          <div class="codemap-name">${mod.name}</div>
+          ${mod.path ? `<div class="codemap-path">${mod.path}</div>` : ''}
+        </div>
+        <span class="tag ${mod.team==='eletroquad'?'tag-eq':mod.team==='robotica'?'tag-rob':'tag-both'}" style="flex-shrink:0;">${mod.team==='eletroquad'?'EletroQuad':mod.team==='robotica'?'Robótica':'Ambas'}</span>
+        ${currentUser.isAdmin ? `<button onclick="event.stopPropagation();deleteCodemapModule('${mod.id}')" style="background:none;border:none;color:var(--accent-red);cursor:pointer;opacity:0.5;margin-left:8px;font-size:14px;">🗑</button>` : ''}
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="opacity:0.4;margin-left:4px;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="codemap-body" id="codemap-body-${mod.id}">
+        <label style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);display:block;margin-bottom:8px;">Documentação</label>
+        <textarea class="codemap-desc-area" id="codemap-desc-${mod.id}" placeholder="Descreva funções, dependências, como usar este módulo...">${mod.desc || ''}</textarea>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn-success" style="padding:8px 18px;font-size:12px;" onclick="saveCodemapDesc('${mod.id}')">Salvar Documentação</button>
+          <span class="codemap-author">Criado por ${mod.createdBy} · ${formatDate(mod.date)}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleCodemap(id) {
+  const body = document.getElementById('codemap-body-'+id);
+  if (body) body.classList.toggle('open');
+}
+
+function saveCodemapModule() {
+  const name = document.getElementById('cm-name').value.trim();
+  if (!name) { toast('Informe o nome do arquivo/módulo!','error'); return; }
+  const mod = {
+    id: 'mod'+Date.now(),
+    name,
+    lang: document.getElementById('cm-lang').value,
+    path: document.getElementById('cm-path').value.trim(),
+    team: document.getElementById('cm-team').value,
+    desc: document.getElementById('cm-desc').value.trim(),
+    createdBy: currentUser.name,
+    createdById: currentUser.id,
+    date: new Date().toISOString().split('T')[0],
+  };
+  codemapModules.push(mod);
+  ['cm-name','cm-path','cm-desc'].forEach(id => document.getElementById(id).value='');
+  closeModal('modal-codemap-new');
+  saveToFirebase();
+  toast('Módulo adicionado ao mapa!','success');
+}
+
+function saveCodemapDesc(id) {
+  const mod = codemapModules.find(x => x.id === id);
+  if (!mod) return;
+  mod.desc = document.getElementById('codemap-desc-'+id).value;
+  mod.lastEditedBy = currentUser.name;
+  mod.lastEditedDate = new Date().toISOString().split('T')[0];
+  saveToFirebase();
+  toast('Documentação salva!','success');
+}
+
+function deleteCodemapModule(id) {
+  if (!confirm('Remover este módulo do mapa?')) return;
+  codemapModules = codemapModules.filter(m => m.id !== id);
+  saveToFirebase();
+  toast('Módulo removido.','success');
+  renderCodemapPage();
+}
+
+// ══════════════════════════════════════════
+// UTILITÁRIOS DE ARQUIVO
+// ══════════════════════════════════════════
+function getFileIcon(name) {
+  const ext = (name || '').split('.').pop().toLowerCase();
+  const icons = {
+    pdf:'📄', py:'🐍', cpp:'⚙️', c:'⚙️', h:'⚙️',
+    js:'📜', ts:'📜', json:'📋', yaml:'📋', yml:'📋',
+    launch:'🚀', sh:'💻', bash:'💻', md:'📝', txt:'📝',
+    png:'🖼', jpg:'🖼', jpeg:'🖼', gif:'🖼', svg:'🎨', webp:'🖼',
+    zip:'📦', rar:'📦', '7z':'📦',
+    xlsx:'📊', csv:'📊', xls:'📊',
+    mp4:'🎬', mp3:'🎵',
+  };
+  return icons[ext] || '📁';
+}
+
+function formatFileSize(bytes) {
+  if (!bytes) return '—';
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+  return (bytes/(1024*1024)).toFixed(1) + ' MB';
+}
+
+function escapeHtml(str) {
+  return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
 // Init EmailJS se já configurado
 setTimeout(() => {
   if (emailConfig && emailConfig.publicKey && emailConfig.configured) {
@@ -2528,4 +3183,5 @@ setTimeout(() => {
 </script>
 </body>
 </html>
+
 
