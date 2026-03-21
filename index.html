@@ -1664,7 +1664,7 @@ function createTask() {
 function filterRanking(f, tabEl) {
   rankFilter=f;
   if(tabEl){document.querySelectorAll('#pg-ranking .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f);
+  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral');
   list.sort((a,b)=>(MP[b.id]||b.pts)-(MP[a.id]||a.pts));
   const pc=['g','s','b'];
   el('ranking-list').innerHTML=list.map((m,i)=>`
@@ -2067,16 +2067,16 @@ function renderMyMetrics(){
 function filterMembers(f, tabEl) {
   memberFilter=f;
   if(tabEl){document.querySelectorAll('#pg-members .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f);
+  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral');
   el('members-list').innerHTML=list.map(m=>`
-    <div class="mc ${m.team==='eletroquad'?'eq':'rob'}" onclick="openMemberModal('${m.id}')">
+    <div class="mc ${m.team==='eletroquad'?'eq':m.team==='geral'?'eq rob':'rob'}" onclick="openMemberModal('${m.id}')">
       <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
         <div class="av" style="width:42px;height:42px">${avImg(m.name,m.color,42,!!onlineUsers[m.id])}</div>
         <div style="flex:1">
           <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">${m.name}${m.isAdmin?' 👑':''}</div>
           <div style="font-size:11px;color:var(--dim);margin-top:2px">${m.role}</div>
         </div>
-        <span class="tag ${m.team==='eletroquad'?'tag-eq':'tag-rob'}">${m.team==='eletroquad'?'EletroQuad':'Robótica'}</span>
+        <span class="tag ${m.team==='eletroquad'?'tag-eq':m.team==='geral'?'tag-both':'tag-rob'}">${m.team==='eletroquad'?'EletroQuad':m.team==='geral'?'Ambas':'Robótica'}</span>
       </div>
       <div style="display:flex;gap:8px">
         <span class="tag tag-pts">${MP[m.id]||m.pts} pts</span>
@@ -2138,16 +2138,14 @@ function openMemberModal(uid){
   const skills=m.skills&&m.skills.length?m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,.04);border-color:var(--border)">${s}</span>`).join(''):`<span style="font-size:12px;color:var(--dim)">—</span>`;
   el('mm-av').innerHTML=avImg(m.name,m.color,40);
   el('mm-name').innerHTML=m.name+(m.isAdmin?' 👑':'');
-  el('mm-badge').innerHTML=`<span class="tag ${isEQ?'tag-eq':'tag-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>`;
+  el('mm-badge').innerHTML=`<span class="tag ${m.team==='geral'?'tag-both':isEQ?'tag-eq':'tag-rob'}">${m.team==='geral'?'Ambas':isEQ?'EletroQuad':'Robótica'}</span>`;
   const avg=Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
   el('mm-content').innerHTML=`
-    <div style="display:flex;flex-wrap:wrap;gap:11px;margin-bottom:16px">
-      <div class="card card-sm" style="flex:1;min-width:120px;text-align:center"><div class="cl">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:${avg>=90?'var(--green)':avg>=75?'var(--accent)':'var(--orange)'}">${avg}%</div></div>
-      <div class="card card-sm" style="flex:1;min-width:120px;text-align:center"><div class="cl">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--accent)">${pts}</div></div>
-      <div class="card card-sm" style="flex:1;min-width:120px;text-align:center"><div class="cl">Horas</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#bb86fc">${m.hours||0}h</div></div>
-      <div class="card card-sm" style="flex:1;min-width:120px;text-align:center"><div class="cl">Hoje online</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--green)">${onlineUsers[uid]?'🟢 ':' '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
-    </div>
-        ${Object.entries(m.metrics).map(([k,v],i)=>`<div class="prog-item"><div class="prog-hd"><span class="prog-lbl">${labels[k]}</span><span class="prog-val">${v}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v}%;background:${colors[i]}"></div></div></div>`).join('')}
+    <div style="display:flex;gap:11px;margin-bottom:16px">
+      <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:${avg>=90?'var(--green)':avg>=75?'var(--accent)':'var(--orange)'}">${avg}%</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--accent)">${pts}</div></div>
+      <<div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Hoje online</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--green)">${onlineUsers[uid]?'🟢 ':' '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
+    ${Object.entries(m.metrics).map(([k,v],i)=>`<div class="prog-item"><div class="prog-hd"><span class="prog-lbl">${labels[k]}</span><span class="prog-val">${v}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v}%;background:${colors[i]}"></div></div></div>`).join('')}
     <hr><div class="cl" style="margin-bottom:6px">Cargo: ${m.role}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">${skills}</div>`;
   const ft=el('mm-ft');
