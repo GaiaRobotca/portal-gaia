@@ -398,18 +398,23 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
     <div class="logo"><span style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#fff">G</span></div>
     <div class="login-title">Portal Gaia</div>
     <div class="login-sub">UFTM · Projeto de Extensão</div>
-    <div class="fg">
-      <label class="lbl">Usuário</label>
-      <input id="li-user" type="text" placeholder="Seu nome" onkeydown="if(event.key==='Enter')document.getElementById('li-pass').focus()">
-    </div>
-    <div class="fg">
-      <label class="lbl">Senha</label>
-      <input id="li-pass" type="password" placeholder="Senha (padrão: 123)" onkeydown="if(event.key==='Enter')doLogin()">
-    </div>
-    <button class="btn btn-primary" onclick="doLogin()">Entrar</button>
+    
+    <form onsubmit="event.preventDefault(); doLogin();">
+      <div class="fg">
+        <label class="lbl">Usuário</label>
+        <input id="li-user" name="username" type="text" autocomplete="username" placeholder="Ex: Pedro Henrique" required>
+        <div style="font-size:10px; color:var(--dim); margin-top:4px; margin-bottom:12px;">Digite seu nome exatamente como está cadastrado.</div>
+      </div>
+      <div class="fg">
+        <label class="lbl">Senha</label>
+        <input id="li-pass" name="password" type="password" autocomplete="current-password" placeholder="Senha (padrão: 123)" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
+    
   </div>
 </div>
-
+  
 <!-- ════ DASHBOARD ════ -->
 <div id="dash-screen" class="screen">
 
