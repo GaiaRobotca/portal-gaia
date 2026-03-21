@@ -1946,14 +1946,46 @@ function renderSubmissions(){
 }
 function reviewSub(id, action){
   const s=S.find(x=>x.id===id);if(!s)return;
-  const fb=el('fb-'+id)?el('fb-'+id).value.trim():'';
+  const fb=el('fb-'+id)?el('fb-'+id).value.trim():''; // Pega o que você digitou no Feedback
   s.status=action; s.adminFeedback=fb; s.reviewedBy=CU.name; s.reviewDate=new Date().toISOString().split('T')[0];
+  
+  const m=M.find(x=>x.id===s.memberId);
+
   if(action==='approved'){
     MP[s.memberId]=(MP[s.memberId]||0)+s.pts;
-    const m=M.find(x=>x.id===s.memberId);
-    if(m){m.hours=(m.hours||0)+(s.hours||0);HL.push({memberId:s.memberId,memberName:m.name,op:'add',delta:s.hours||0,reason:`Tarefa aprovada: ${s.taskTitle}`,date:s.reviewDate,by:CU.name});}
+    if(m){
+      m.hours=(m.hours||0)+(s.hours||0);
+      HL.push({memberId:s.memberId,memberName:m.name,op:'add',delta:s.hours||0,reason:`Tarefa aprovada: ${s.taskTitle}`,date:s.reviewDate,by:CU.name});
+      
+      // E-MAIL DE APROVAÇÃO
+      if(ECFG.configured && m.email) {
+        const params = {
+          to_email: m.email,
+          to_name: m.name.split(' ')[0],
+          notice_title: `Tarefa Aprovada! 🎉`,
+          notice_body: `Sua entrega da tarefa "${s.taskTitle}" foi aprovada! Você ganhou +${s.pts} pontos e +${s.hours||0}h. ${fb ? '\n\nObs do ADM: '+fb : ''}`,
+          notice_type: 'PONTUAÇÃO',
+          portal_name: 'Portal Gaia · UFTM'
+        };
+        emailjs.send(ECFG.serviceId, ECFG.templateId, params, ECFG.publicKey).catch(()=>{});
+      }
+    }
     toast(`Aprovado! +${s.pts}pts para ${s.memberName}`);
-  } else { toast('Reprovado.'); }
+  } else { 
+    // E-MAIL DE REPROVAÇÃO
+    if(m && ECFG.configured && m.email) {
+        const params = {
+          to_email: m.email,
+          to_name: m.name.split(' ')[0],
+          notice_title: `Tarefa Recusada ⚠️`,
+          notice_body: `Sua entrega da tarefa "${s.taskTitle}" precisou ser devolvida. ${fb ? '\n\nMotivo/Feedback: '+fb : 'Acesse o portal para mais detalhes.'}`,
+          notice_type: 'REVISÃO',
+          portal_name: 'Portal Gaia · UFTM'
+        };
+        emailjs.send(ECFG.serviceId, ECFG.templateId, params, ECFG.publicKey).catch(()=>{});
+    }
+    toast('Reprovado.'); 
+  }
   save();
 }
 
