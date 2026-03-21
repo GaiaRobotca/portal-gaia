@@ -675,7 +675,10 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
     <div class="sb-footer">
       <div class="sb-user">
        <div class="av-wrap" id="sb-av-wrap">
-        <div class="av" id="sb-av" style="width:30px;height:30px;font-size:11px;background:var(--blue)"></div>
+<div style="position:relative;flex-shrink:0">
+  <div class="av" id="sb-av" style="width:30px;height:30px;font-size:11px;background:var(--blue)"></div>
+  <div id="sb-online-dot" style="display:none;position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;background:var(--green);border-radius:50%;border:2px solid var(--bg2);box-shadow:0 0 6px rgba(0,229,160,.5)"></div>
+</div>
       </div>
         <div style="flex:1;min-width:0">
           <div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="sb-name">—</div>
