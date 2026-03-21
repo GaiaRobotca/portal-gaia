@@ -564,14 +564,10 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
         Ranking
       </div>
-      <div class="nav-it" id="nav-chat" onclick="goPage('chat',this)">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Chat Geral
-        <span class="badge badge-green" id="bdg-chat" style="display:none"></span>
-      </div>
-      <div class="nav-it" id="nav-files" onclick="goPage('files',this)">
+
+      <div class="nav-it" id="nav-files" onclick="openDrive()">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        Arquivos
+        Google Drive
       </div>
       <div class="nav-it" id="nav-codemap" onclick="goPage('codemap',this)">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
@@ -623,11 +619,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Config. E-mail
       </div>
-      <div class="nav-it" id="nav-admchat" onclick="goPage('admchat',this)">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1"/><path d="M15 2H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2v4l4-4h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
-        Chat ADMs
-        <span class="badge badge-gold" id="bdg-admchat" style="display:none"></span>
-      </div>
+
     </div>
 
     <div class="sb-footer">
@@ -715,51 +707,24 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="ranking-list"></div>
     </div>
 
-    <div id="pg-chat" class="pg">
-      <div class="ph"><div class="pt">💬 Chat Geral</div><div class="ps">Canal aberto para toda a equipe</div></div>
-      <div class="chat-wrap">
-        <div class="chat-msgs" id="chat-msgs"></div>
-        <div class="chat-input-area">
-          <div class="chat-attach-preview" id="chat-prev">
-            <span id="chat-prev-name"></span>
-            <span id="chat-prev-size" style="color:var(--muted);font-size:10px;margin-left:4px"></span>
-            <span style="margin-left:auto;cursor:pointer;color:var(--red);font-weight:bold" onclick="clearAttach('chat')">✕</span>
-          </div>
-          <div class="chat-row">
-            <button class="chat-attach-btn" onclick="document.getElementById('chat-file-in').click()">
-              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-            </button>
-            <input type="file" id="chat-file-in" style="display:none" onchange="handleFile(this,'chat')">
-            <textarea class="chat-ta" id="chat-in" placeholder="Mensagem... (Enter envia, Shift+Enter nova linha)" rows="1"
-              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg('chat')}"
-              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,110)+'px'"></textarea>
-            <button class="chat-send" onclick="sendMsg('chat')">
-              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div id="pg-files" class="pg">
       <div class="ph">
-        <div class="ph-top">
-          <div class="pt">📁 Arquivos</div>
-          <button class="btn btn-blue btn-sm" onclick="document.getElementById('files-in').click()">+ Adicionar</button>
-          <input type="file" id="files-in" style="display:none" multiple onchange="handleFilesUpload(this)">
-        </div>
-        <div class="ps">Repositório central do projeto</div>
+        <div class="ph-top"><div class="pt">&#128196; Google Drive</div></div>
+        <div class="ps">Repositório central de arquivos do projeto Gaia</div>
       </div>
-      <div class="tabs">
-        <div class="tab on" onclick="filterFiles('all',this)">Todos</div>
-        <div class="tab" onclick="filterFiles('image',this)">🖼 Imagens</div>
-        <div class="tab" onclick="filterFiles('pdf',this)">📄 PDFs</div>
-        <div class="tab" onclick="filterFiles('code',this)">💻 Código</div>
-        <div class="tab" onclick="filterFiles('other',this)">📦 Outros</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:36px;text-align:center;max-width:480px;margin:0 auto">
+        <div style="font-size:52px;margin-bottom:16px">&#128194;</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">Drive do Projeto Gaia</div>
+        <div style="font-size:13px;color:var(--dim);margin-bottom:24px;line-height:1.6">Todos os arquivos do projeto estão organizados no Google Drive da equipe. Clique abaixo para acessar.</div>
+        <a href="https://drive.google.com/drive/u/1/folders/1_noLzqhxAmdPNGzCcYRXO5ctYvkPZi-K"
+           target="_blank" rel="noopener"
+           style="display:inline-flex;align-items:center;gap:9px;padding:13px 26px;background:linear-gradient(135deg,#1a8fff,#0d6bff);border-radius:var(--r);color:#fff;text-decoration:none;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;box-shadow:0 6px 20px rgba(26,143,255,.3)">
+          <svg width="20" height="20" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L27.5 53H0c0 1.55.4 3.1 1.2 4.5z" fill="#fff"/><path d="M43.65 25L29.9 1.2c-1.35.8-2.5 1.9-3.3 3.3L1.2 48.5A9 9 0 000 53h27.5z" fill="#fff"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75L86.1 57.5c.8-1.4 1.2-2.95 1.2-4.5H59.8z" fill="#fff"/><path d="M43.65 25L57.4 1.2A9.06 9.06 0 0053 0H34.3c-1.55 0-3.1.45-4.4 1.2z" fill="#fff"/><path d="M59.8 53H27.5L13.75 76.8c1.3.75 2.85 1.2 4.4 1.2h50.5c1.55 0 3.1-.45 4.4-1.2z" fill="#fff"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h26.3c0-1.55-.4-3.1-1.2-4.5z" fill="#fff"/></svg>
+          Abrir no Google Drive
+        </a>
+        <div style="margin-top:18px;font-size:11px;color:var(--muted)">Abre em nova aba</div>
       </div>
-      <div id="files-container"></div>
     </div>
-
     <div id="pg-codemap" class="pg">
       <div class="ph">
         <div class="ph-top">
@@ -863,33 +828,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="emailcfg-content"></div>
     </div>
 
-    <div id="pg-admchat" class="pg">
-      <div class="ph"><div class="pt">🔐 Chat dos ADMs</div><div class="ps">Canal privado para administradores</div></div>
-      <div class="chat-wrap">
-        <div class="chat-msgs" id="admchat-msgs"></div>
-        <div class="chat-input-area">
-          <div class="chat-attach-preview" id="admchat-prev">
-            <span id="admchat-prev-name"></span>
-            <span id="admchat-prev-size" style="color:var(--muted);font-size:10px;margin-left:4px"></span>
-            <span style="margin-left:auto;cursor:pointer;color:var(--red);font-weight:bold" onclick="clearAttach('admchat')">✕</span>
-          </div>
-          <div class="chat-row">
-            <button class="chat-attach-btn" onclick="document.getElementById('admchat-file-in').click()">
-              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-            </button>
-            <input type="file" id="admchat-file-in" style="display:none" onchange="handleFile(this,'admchat')">
-            <textarea class="chat-ta" id="admchat-in" placeholder="Mensagem privada... (Enter envia)" rows="1"
-              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg('admchat')}"
-              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,110)+'px'"></textarea>
-            <button class="chat-send" onclick="sendMsg('admchat')">
-              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- MODALS -->
 <div id="modal-member" class="modal-ov">
@@ -1308,6 +1246,10 @@ function doLogin() {
   toast(`Bem-vindo(a), ${mem.name.split(' ')[0]}!`);
 }
 
+function openDrive() {
+  window.open('https://drive.google.com/drive/u/1/folders/1_noLzqhxAmdPNGzCcYRXO5ctYvkPZi-K', '_blank');
+}
+
 function doLogout() {
   CU = null;
   const dot = el('sb-online-dot');
@@ -1330,8 +1272,6 @@ function goPage(page, navEl) {
   pg.classList.add('on');
   if(navEl) navEl.classList.add('on');
   currentPage = page;
-  if(page==='chat'){ seenChat=CHAT.length; updateBadges(); }
-  if(page==='admchat'){ seenAdmChat=ACHAT.length; updateBadges(); }
   renderPage(page);
 }
 
@@ -1344,8 +1284,7 @@ function renderPage(page) {
     calendar:   renderCalendar,
     tasks:      ()=>filterTasks(taskFilter),
     ranking:    ()=>filterRanking(rankFilter),
-    chat:       ()=>renderChat('chat'),
-    files:      ()=>filterFiles(filesFilter),
+    files:      ()=>{},  // redireciona para Drive
     codemap:    ()=>filterCodemap(codemapFilter),
     myprofile:  renderMyProfile,
     mymetrics:  renderMyMetrics,
@@ -1356,7 +1295,6 @@ function renderPage(page) {
     newtask:    ()=>{},
     rewards:    renderRewards,
     emailcfg:   renderEmailCfg,
-    admchat:    ()=>renderChat('admchat'),
   };
   if(map[page]) try{ map[page](); }catch(e){ console.error('render error',page,e); }
 }
@@ -1371,9 +1309,6 @@ function updateBadges() {
     const nb=el('bdg-notices'); if(nb){nb.textContent=urg>0?urg:'';nb.style.display=urg>0?'inline':'none';}
     const below=M.filter(m=>(m.hours||0)<HG*.5).length;
     const hb=el('bdg-hours'); if(hb){hb.textContent=below>0?below:'';hb.style.display=below>0?'inline':'none';}
-    const nc=CHAT.length-seenChat;
-    const cb=el('bdg-chat'); if(cb){cb.textContent=nc>0?nc:'';cb.style.display=nc>0?'inline':'none';}
-    if(CU&&CU.isAdmin){const na=ACHAT.length-seenAdmChat;const ab=el('bdg-admchat');if(ab){ab.textContent=na>0?na:'';ab.style.display=na>0?'inline':'none';}}
   } catch(e){}
 }
 
