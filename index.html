@@ -2214,6 +2214,11 @@ setTimeout(()=>{if(ECFG&&ECFG.publicKey&&ECFG.configured)emailjs.init(ECFG.publi
 
   if (theme === 'light') document.body.classList.add('light');
 
+  // Atualiza botão mobile
+  const mobBtn = document.getElementById('mob-theme-btn');
+  if (mobBtn) mobBtn.innerHTML = theme === 'light' ? '🌙' : '☀️';
+
+  // Botão desktop (escondido no mobile via CSS)
   const btn = document.createElement('button');
   btn.id = 'theme-toggle';
   btn.title = 'Alternar tema';
@@ -2224,12 +2229,16 @@ setTimeout(()=>{if(ECFG&&ECFG.publicKey&&ECFG.configured)emailjs.init(ECFG.publi
     const isLight = document.body.classList.toggle('light');
     localStorage.setItem('gaia_theme', isLight ? 'light' : 'dark');
     btn.innerHTML = isLight ? '🌙' : '☀️';
+    const mb = document.getElementById('mob-theme-btn');
+    if (mb) mb.innerHTML = isLight ? '🌙' : '☀️';
   });
 
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
     if (!localStorage.getItem('gaia_theme')) {
       document.body.classList.toggle('light', !e.matches);
       btn.innerHTML = e.matches ? '☀️' : '🌙';
+      const mb = document.getElementById('mob-theme-btn');
+      if (mb) mb.innerHTML = e.matches ? '☀️' : '🌙';
     }
   });
 })();
