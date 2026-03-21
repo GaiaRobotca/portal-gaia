@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal Gaia · UFTM</title>
 
-<!-- Open Graph / WhatsApp / redes sociais -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gaiarobotca.github.io/portal-gaia/">
 <meta property="og:title" content="Portal Gaia · UFTM">
@@ -15,7 +14,6 @@
 <meta property="og:image:height" content="630">
 <meta name="theme-color" content="#070d18">
 
-<!-- Twitter/X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Portal Gaia · UFTM">
 <meta name="twitter:description" content="Portal de gestão do projeto de extensão Gaia — EletroQuad & Robótica · UFTM">
@@ -47,11 +45,9 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh}
 
-/* ── SCREENS ── */
 .screen{display:none;min-height:100vh}
 .screen.on{display:flex}
 
-/* ── LOGIN ── */
 #login-screen{align-items:center;justify-content:center;
   background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(26,143,255,.13) 0%,transparent 70%),var(--bg)}
 .login-box{width:100%;max-width:380px;background:var(--bg2);border:1px solid var(--border);
@@ -63,7 +59,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .login-title{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;text-align:center;margin-bottom:4px}
 .login-sub{font-size:11px;color:var(--dim);text-align:center;text-transform:uppercase;letter-spacing:.1em;margin-bottom:32px}
 
-/* ── FORMS ── */
 label.lbl{display:block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
 input,select,textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);
   padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:.2s}
@@ -75,7 +70,6 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .chk{display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:14px;font-size:13px}
 .chk input{width:15px;height:15px;cursor:pointer}
 
-/* ── BUTTONS ── */
 .btn{padding:10px 20px;border-radius:var(--r);border:none;font-family:'Syne',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:.2s;letter-spacing:.02em}
 .btn-primary{background:linear-gradient(135deg,var(--blue),#0d6bff);color:#fff;width:100%;padding:13px}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(26,143,255,.35)}
@@ -86,7 +80,6 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--dim)}
 .btn-ghost:hover{border-color:rgba(255,255,255,.15);color:var(--text)}
 
-/* ── DASHBOARD ── */
 #dash-screen{flex-direction:row}
 .sidebar{width:236px;min-width:236px;background:var(--bg2);border-right:1px solid var(--border);
   display:flex;flex-direction:column;padding:20px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
@@ -123,7 +116,6 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .pt{font-family:'Syne',sans-serif;font-weight:800;font-size:24px}
 .ps{color:var(--dim);font-size:12px}
 
-/* ── GRID / CARDS ── */
 .grid{display:grid;gap:14px}
 .g2{grid-template-columns:repeat(2,1fr)}
 .g3{grid-template-columns:repeat(3,1fr)}
@@ -136,13 +128,11 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .cv-sm{font-size:18px}
 hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 
-/* ── TABS ── */
 .tabs{display:flex;gap:3px;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);
   border-radius:var(--r);padding:3px;width:fit-content;flex-wrap:wrap}
 .tab{padding:7px 15px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;color:var(--dim);transition:.15s}
 .tab.on{background:var(--bg3);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.2)}
 
-/* ── TAGS ── */
 .tag{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;letter-spacing:.03em;border:1px solid transparent}
 .tag-eq{background:rgba(26,143,255,.1);color:var(--blue);border-color:rgba(26,143,255,.2)}
 .tag-rob{background:rgba(0,229,160,.08);color:var(--green);border-color:rgba(0,229,160,.15)}
@@ -153,13 +143,11 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .tag-med{background:rgba(255,179,71,.07);color:var(--orange)}
 .tag-hard{background:rgba(255,92,92,.07);color:var(--red)}
 
-/* ── STATUS BADGES ── */
 .st{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600}
 .st-pending{background:rgba(255,179,71,.1);color:var(--orange)}
 .st-approved{background:rgba(0,229,160,.1);color:var(--green)}
 .st-rejected{background:rgba(255,92,92,.08);color:var(--red)}
 
-/* ── RANKING ── */
 .rank-row{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--bg2);
   border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;transition:.2s;cursor:pointer}
 .rank-row:hover{border-color:rgba(255,255,255,.12)}
@@ -170,7 +158,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .rank-sub{font-size:10px;color:var(--dim);margin-top:1px}
 .rank-score{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--accent)}
 
-/* ── MEMBER CARDS ── */
 .mc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px;
   cursor:pointer;transition:.2s;position:relative;overflow:hidden}
 .mc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
@@ -178,7 +165,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .mc.rob::before{background:linear-gradient(90deg,var(--green),#7fff6e)}
 .mc:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.3);border-color:rgba(255,255,255,.11)}
 
-/* ── TASKS ── */
 .task-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:10px}
 .task-title{font-size:13px;font-weight:500;margin-bottom:3px}
 .task-title.done{text-decoration:line-through;color:var(--dim)}
@@ -192,7 +178,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   font-size:10px;font-weight:500;background:rgba(26,143,255,.08);border:1px solid rgba(26,143,255,.18);color:var(--blue);margin-top:7px}
 .assignee-chip.rob{background:rgba(0,229,160,.07);border-color:rgba(0,229,160,.15);color:var(--green)}
 
-/* ── PROGRESS ── */
 .prog-item{margin-bottom:11px}
 .prog-hd{display:flex;justify-content:space-between;margin-bottom:5px}
 .prog-lbl{font-size:12px;color:var(--dim)}
@@ -200,7 +185,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .prog-bar{height:5px;background:var(--bg3);border-radius:100px;overflow:hidden}
 .prog-fill{height:100%;border-radius:100px;transition:width .8s cubic-bezier(.4,0,.2,1)}
 
-/* ── NOTICES ── */
 .notice{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:10px;position:relative;overflow:hidden}
 .notice::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
 .notice.urgente::before{background:var(--red)}
@@ -217,7 +201,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .notice-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
 .notice-meta{font-size:10px;color:var(--muted)}
 
-/* ── CALENDAR ── */
 .cal-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:18px}
 .cal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .cal-month{font-family:'Syne',sans-serif;font-weight:700;font-size:16px}
@@ -239,7 +222,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .cal-leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
 .cal-leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-/* ── HOURS ── */
 .hrs-row{display:flex;align-items:center;gap:11px;padding:11px;background:var(--bg3);
   border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px}
 .hrs-bar-wrap{flex:1}
@@ -254,7 +236,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   color:var(--dim);font-size:10px;cursor:pointer;transition:.15s}
 .hrs-adj:hover{border-color:rgba(255,255,255,.14);color:var(--text)}
 
-/* ── CHAT ── */
 .chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 170px);min-height:400px;
   background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
 .chat-msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
@@ -289,7 +270,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .chat-date-div::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:var(--border)}
 .chat-date-div span{background:var(--bg2);padding:0 9px;position:relative}
 
-/* ── FILES ── */
 .files-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
 .file-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;
   display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:.2s;position:relative}
@@ -302,13 +282,11 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   cursor:pointer;display:none;align-items:center;justify-content:center;font-size:10px}
 .file-card:hover .file-del{display:flex}
 
-/* ── CHAT DELETE ── */
 .bubble-foot{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
 .msg-del{font-size:10px;color:var(--red);cursor:pointer;opacity:0;transition:.15s;padding:2px 6px;border-radius:5px}
 .chat-msg:hover .msg-del{opacity:.6}
 .msg-del:hover{opacity:1!important;background:rgba(255,92,92,.08)}
 
-/* ── CODEMAP TREE ── */
 .tree-wrap{font-family:'DM Mono',monospace;font-size:12px}
 .tree-node{margin:0;padding:0}
 .tree-folder{display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:8px;cursor:pointer;transition:.15s;color:var(--gold)}
@@ -330,7 +308,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .doc-file-card{display:flex;align-items:center;gap:9px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;cursor:pointer;transition:.15s}
 .doc-file-card:hover{border-color:rgba(255,255,255,.14);transform:translateX(2px)}
 
-/* ── CODE MAP ── */
 .cm-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden}
 .cm-hd{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;transition:.15s}
 .cm-hd:hover{background:rgba(255,255,255,.025)}
@@ -349,7 +326,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   line-height:1.5;outline:none;margin-bottom:10px}
 .cm-ta:focus{border-color:rgba(99,210,255,.35)}
 
-/* ── MODALS ── */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
   z-index:1000;align-items:center;justify-content:center;padding:18px}
 .modal-ov.on{display:flex;animation:fade .2s}
@@ -361,7 +337,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .modal-x:hover{color:var(--text)}
 .modal-ft{display:flex;gap:9px;justify-content:flex-end;margin-top:20px}
 
-/* ── TOAST ── */
 #toast-c{position:fixed;bottom:22px;right:22px;display:flex;flex-direction:column;gap:7px;z-index:9999}
 .toast{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:11px 15px;
   display:flex;align-items:center;gap:9px;font-size:12px;min-width:220px;animation:slide .3s ease;
@@ -369,11 +344,9 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .toast.ok{border-color:rgba(0,229,160,.28)}
 .toast.err{border-color:rgba(255,92,92,.28)}
 
-/* ── EMPTY ── */
 .empty{text-align:center;padding:44px 18px;color:var(--muted)}
 .empty-ico{font-size:38px;margin-bottom:10px}
 
-/* ── PROFILE ── */
 .profile-hero{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);
   padding:24px;margin-bottom:18px;position:relative;overflow:hidden}
 .profile-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
@@ -385,12 +358,10 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .sec-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px}
 
-/* ── ADMIN REVIEW ── */
 .review-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:9px}
 .btn-approve{padding:6px 13px;background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.22);border-radius:7px;color:var(--green);font-size:11px;font-weight:600;cursor:pointer}
 .btn-reject{padding:6px 13px;background:rgba(255,92,92,.08);border:1px solid rgba(255,92,92,.18);border-radius:7px;color:var(--red);font-size:11px;font-weight:600;cursor:pointer}
 
- /* ── STATUS ONLINE ── */
 .av-wrap { position: relative; }
 .av-wrap.online::after {
   content: '';
@@ -407,10 +378,7 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   box-shadow: 0 0 4px rgba(0,0,0,0.3);
   z-index: 2;
 }
-body.light .av-wrap.online::after {
-  border-color: #fff;
-} 
-/* ── ANIMATIONS ── */
+
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slide{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
@@ -420,7 +388,6 @@ body.light .av-wrap.online::after {
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:100px}
 
-/* ── MOBILE MENU ── */
 .mob-bar {
   display: none;
   position: fixed;
@@ -468,8 +435,6 @@ body.light .av-wrap.online::after {
   position: fixed;
   top: 16px;
   right: 22px;
-  bottom: auto;
-  left: auto;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -490,9 +455,6 @@ body.light .av-wrap.online::after {
   border-color: rgba(255,255,255,.18);
   color: var(--text);
   transform: translateY(-1px);
-}
-body.light #theme-toggle:hover {
-  border-color: rgba(0,0,0,.18);
 }
 
 body.light {
@@ -527,8 +489,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
 </style>
 </head>
 <body>
-  
-<!-- BARRA MOBILE -->
+
 <div class="mob-bar" id="mob-bar">
   <div class="mob-logo">
     <div class="mob-logo-icon">G</div>
@@ -546,13 +507,12 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
 </div>
 <div class="mob-overlay" id="mob-overlay" onclick="closeMobMenu()"></div>
 
-<!-- ════ LOGIN ════ -->
+<!-- LOGIN -->
 <div id="login-screen" class="screen on">
   <div class="login-box">
     <div class="logo"><span style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#fff">G</span></div>
     <div class="login-title">Portal Gaia</div>
     <div class="login-sub">UFTM · Projeto de Extensão</div>
-    
     <form onsubmit="event.preventDefault(); doLogin();">
       <div class="fg">
         <label class="lbl">Usuário</label>
@@ -565,14 +525,12 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       </div>
       <button type="submit" class="btn btn-primary">Entrar</button>
     </form>
-    
   </div>
 </div>
-  
-<!-- ════ DASHBOARD ════ -->
+
+<!-- DASHBOARD -->
 <div id="dash-screen" class="screen">
 
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sb-logo">
       <div class="sb-logo-icon">G</div>
@@ -674,12 +632,12 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
 
     <div class="sb-footer">
       <div class="sb-user">
-       <div class="av-wrap" id="sb-av-wrap">
-<div style="position:relative;flex-shrink:0">
-  <div class="av" id="sb-av" style="width:30px;height:30px;font-size:11px;background:var(--blue)"></div>
-  <div id="sb-online-dot" style="display:none;position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;background:var(--green);border-radius:50%;border:2px solid var(--bg2);box-shadow:0 0 6px rgba(0,229,160,.5)"></div>
-</div>
-      </div>
+        <div class="av-wrap" id="sb-av-wrap">
+          <div style="position:relative;flex-shrink:0">
+            <div class="av" id="sb-av" style="width:30px;height:30px;font-size:11px;background:var(--blue)"></div>
+            <div id="sb-online-dot" style="display:none;position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;background:var(--green);border-radius:50%;border:2px solid var(--bg2);box-shadow:0 0 6px rgba(0,229,160,.5)"></div>
+          </div>
+        </div>
         <div style="flex:1;min-width:0">
           <div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="sb-name">—</div>
           <div style="font-size:10px;color:var(--dim)" id="sb-role">—</div>
@@ -691,10 +649,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
   <div class="main">
-
-    <!-- HOME -->
     <div id="pg-home" class="pg">
       <div class="ph"><div class="pt">Visão Geral</div><div class="ps">Acompanhe o projeto Gaia</div></div>
       <div class="grid g4" style="margin-bottom:18px" id="home-stats"></div>
@@ -712,13 +667,11 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="home-activity"></div>
     </div>
 
-    <!-- MURAL -->
     <div id="pg-notices" class="pg">
       <div class="ph"><div class="ph-top"><div class="pt">📢 Mural de Avisos</div><div id="notices-btn"></div></div><div class="ps">Comunicados da equipe</div></div>
       <div id="notices-list"></div>
     </div>
 
-    <!-- CALENDÁRIO -->
     <div id="pg-calendar" class="pg">
       <div class="ph"><div class="ph-top"><div class="pt">📅 Calendário</div><div id="cal-btn"></div></div></div>
       <div class="cal-wrap">
@@ -741,7 +694,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="upcoming-events"></div>
     </div>
 
-    <!-- TAREFAS -->
     <div id="pg-tasks" class="pg">
       <div class="ph"><div class="pt">Tarefas</div><div class="ps">Assuma tarefas e acumule pontos</div></div>
       <div class="tabs">
@@ -753,7 +705,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="tasks-list"></div>
     </div>
 
-    <!-- RANKING -->
     <div id="pg-ranking" class="pg">
       <div class="ph"><div class="pt">Ranking</div><div class="ps">Pontuação acumulada</div></div>
       <div class="tabs">
@@ -764,9 +715,8 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="ranking-list"></div>
     </div>
 
-    <!-- CHAT GERAL -->
     <div id="pg-chat" class="pg">
-      <div class="ph"><div class="pt">💬 Chat Geral</div><div class="ps">Canal aberto para toda a equipe — suporta anexos</div></div>
+      <div class="ph"><div class="pt">💬 Chat Geral</div><div class="ps">Canal aberto para toda a equipe</div></div>
       <div class="chat-wrap">
         <div class="chat-msgs" id="chat-msgs"></div>
         <div class="chat-input-area">
@@ -791,7 +741,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       </div>
     </div>
 
-    <!-- ARQUIVOS -->
     <div id="pg-files" class="pg">
       <div class="ph">
         <div class="ph-top">
@@ -811,7 +760,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="files-container"></div>
     </div>
 
-    <!-- MAPA DE CÓDIGO -->
     <div id="pg-codemap" class="pg">
       <div class="ph">
         <div class="ph-top">
@@ -821,7 +769,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
             <button class="btn btn-blue btn-sm" onclick="openModal('modal-newmod')">+ Novo Arquivo</button>
           </div>
         </div>
-        <div class="ps">Estrutura de arquivos do projeto — clique num arquivo para ver e editar a documentação</div>
+        <div class="ps">Estrutura de arquivos do projeto</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:18px;align-items:start">
         <div>
@@ -834,19 +782,16 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       </div>
     </div>
 
-    <!-- MEU PERFIL -->
     <div id="pg-myprofile" class="pg">
       <div class="ph"><div class="ph-top"><div class="pt">Meu Perfil</div><button class="btn btn-ghost btn-sm" onclick="openEditUser(CU.id)">⚙ Editar</button></div></div>
       <div id="myprofile-content"></div>
     </div>
 
-    <!-- MINHAS MÉTRICAS -->
     <div id="pg-mymetrics" class="pg">
       <div class="ph"><div class="pt">Minhas Métricas</div><div class="ps">Seu desempenho individual</div></div>
       <div id="mymetrics-content"></div>
     </div>
 
-    <!-- ADMIN: MEMBROS -->
     <div id="pg-members" class="pg">
       <div class="ph"><div class="ph-top"><div class="pt">Membros</div><button class="btn btn-blue btn-sm" onclick="openAddUser()">+ Adicionar</button></div></div>
       <div class="tabs">
@@ -857,7 +802,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="members-list"></div>
     </div>
 
-    <!-- ADMIN: PRESENÇA -->
     <div id="pg-attendance" class="pg">
       <div class="ph"><div class="pt">Lista de Presença</div><div class="ps">Horas adicionadas automaticamente</div></div>
       <div class="card" style="margin-bottom:18px">
@@ -873,7 +817,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="att-history"></div>
     </div>
 
-    <!-- ADMIN: HORAS -->
     <div id="pg-hours" class="pg">
       <div class="ph">
         <div class="ph-top">
@@ -887,13 +830,11 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="hours-content"></div>
     </div>
 
-    <!-- ADMIN: ENTREGAS -->
     <div id="pg-submissions" class="pg">
       <div class="ph"><div class="pt">Entregas para Revisão</div></div>
       <div id="submissions-list"></div>
     </div>
 
-    <!-- ADMIN: NOVA TAREFA -->
     <div id="pg-newtask" class="pg">
       <div class="ph"><div class="pt">Nova Tarefa</div></div>
       <div class="card" style="max-width:560px">
@@ -912,19 +853,16 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       </div>
     </div>
 
-    <!-- ADMIN: RECOMPENSAS -->
     <div id="pg-rewards" class="pg">
       <div class="ph"><div class="ph-top"><div class="pt">Recompensas</div><button class="btn btn-blue btn-sm" onclick="openModal('modal-reward')">+ Nova</button></div></div>
       <div id="rewards-list"></div>
     </div>
 
-    <!-- ADMIN: EMAIL -->
     <div id="pg-emailcfg" class="pg">
       <div class="ph"><div class="pt">⚙ Config. E-mail</div><div class="ps">Configure o EmailJS para notificações</div></div>
       <div id="emailcfg-content"></div>
     </div>
 
-    <!-- ADMIN: CHAT ADMs -->
     <div id="pg-admchat" class="pg">
       <div class="ph"><div class="pt">🔐 Chat dos ADMs</div><div class="ps">Canal privado para administradores</div></div>
       <div class="chat-wrap">
@@ -950,13 +888,10 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-  </div><!-- /main -->
-</div><!-- /dash-screen -->
-
-<!-- ════ MODALS ════ -->
-
-<!-- Member modal -->
+<!-- MODALS -->
 <div id="modal-member" class="modal-ov">
   <div class="modal">
     <div class="modal-hd">
@@ -969,7 +904,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- User form -->
 <div id="modal-user" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title" id="mu-title">Editar Usuário</div><div class="modal-x" onclick="closeModal('modal-user')">✕</div></div>
@@ -993,7 +927,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- Skills -->
 <div id="modal-skills" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">Habilidades</div><div class="modal-x" onclick="closeModal('modal-skills')">✕</div></div>
@@ -1009,7 +942,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- Metrics -->
 <div id="modal-metrics" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">Editar Métricas</div><div class="modal-x" onclick="closeModal('modal-metrics')">✕</div></div>
@@ -1021,7 +953,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- Task submit -->
 <div id="modal-submit" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div><div class="modal-title">Entregar Tarefa</div><div style="font-size:11px;color:var(--dim);margin-top:2px" id="submit-task-name"></div></div><div class="modal-x" onclick="closeModal('modal-submit')">✕</div></div>
@@ -1031,7 +962,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- Notice -->
 <div id="modal-notice" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">📢 Publicar Aviso</div><div class="modal-x" onclick="closeModal('modal-notice')">✕</div></div>
@@ -1046,7 +976,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- Cal event -->
 <div id="modal-cal" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">📅 Novo Evento</div><div class="modal-x" onclick="closeModal('modal-cal')">✕</div></div>
@@ -1061,7 +990,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- Hours adjust -->
 <div id="modal-hrs-adj" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">⏱ Ajustar Horas</div><div class="modal-x" onclick="closeModal('modal-hrs-adj')">✕</div></div>
@@ -1076,7 +1004,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- Hours goal -->
 <div id="modal-hrs-goal" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">🎯 Meta de Horas</div><div class="modal-x" onclick="closeModal('modal-hrs-goal')">✕</div></div>
@@ -1085,7 +1012,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- Reward -->
 <div id="modal-reward" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">🏆 Recompensa</div><div class="modal-x" onclick="closeModal('modal-reward')">✕</div></div>
@@ -1096,7 +1022,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- New folder -->
 <div id="modal-newfolder" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">📁 Nova Pasta</div><div class="modal-x" onclick="closeModal('modal-newfolder')">✕</div></div>
@@ -1109,7 +1034,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<!-- New code file -->
 <div id="modal-newmod" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">📄 Novo Arquivo</div><div class="modal-x" onclick="closeModal('modal-newmod')">✕</div></div>
@@ -1121,7 +1045,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div class="fg"><label class="lbl">Pasta</label><select id="mod-folder"><option value="">— raiz —</option></select></div>
       <div class="fg"><label class="lbl">Equipe</label><select id="mod-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="both">Ambas</option></select></div>
     </div>
-    <div class="fg"><label class="lbl">Conectado a... (outros arquivos que se comunicam com este)</label><input type="text" id="mod-connections" placeholder="Ex: camera_driver.py, main_controller.cpp (separados por vírgula)"></div>
+    <div class="fg"><label class="lbl">Conectado a...</label><input type="text" id="mod-connections" placeholder="Ex: camera_driver.py, main_controller.cpp"></div>
     <div class="fg"><label class="lbl">Descrição rápida</label><textarea id="mod-desc" style="min-height:60px" placeholder="O que este arquivo faz?"></textarea></div>
     <div class="modal-ft"><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-newmod')">Cancelar</button><button class="btn btn-blue btn-sm" onclick="saveModule()">Adicionar</button></div>
   </div>
@@ -1142,11 +1066,7 @@ const FB = firebase.initializeApp({
   appId:"1:228822751950:web:8aeacdd4c599f07eec8e9f",
   databaseURL:"https://portal-gaia-f5c93-default-rtdb.firebaseio.com"
 });
-const DB = firebase.database().ref('gaia_v7');
-setTimeout(() => {
-  const btn = document.getElementById('login-btn');
-  if(btn && !dbReady) { btn.disabled = true; btn.textContent = 'Conectando...'; }
-}, 100);
+const DB = firebase.database().ref('gaia_v8'); // versão nova para dados limpos
 
 // ── PRESENÇA ONLINE & SESSÃO ──
 let sessionStart = null;
@@ -1157,18 +1077,13 @@ function setOnline(uid) {
   if (!uid) return;
   const today = new Date().toISOString().split('T')[0];
   sessionStart = Date.now();
-
-  // Carrega tempo acumulado hoje do Firebase
   DB.child('sessions/' + uid).once('value', snap => {
     const d = snap.val() || {};
     sessionTodaySeconds = (d.date === today ? d.todaySeconds : 0) || 0;
   });
-
-  const ref = firebase.database().ref('gaia_v7/online/' + uid);
+  const ref = firebase.database().ref('gaia_v8/online/' + uid);
   ref.set({ uid, ts: Date.now(), lastLogin: new Date().toISOString() });
   ref.onDisconnect().update({ ts: Date.now() - 999999 });
-
-  // Flush a cada 60s
   clearInterval(sessionFlushInterval);
   sessionFlushInterval = setInterval(() => flushSession(uid), 60000);
 }
@@ -1184,35 +1099,33 @@ function flushSession(uid) {
     todaySeconds: sessionTodaySeconds,
     lastSeen: new Date().toISOString()
   });
-  firebase.database().ref('gaia_v7/online/' + uid).update({ ts: Date.now() });
+  firebase.database().ref('gaia_v8/online/' + uid).update({ ts: Date.now() });
 }
 
-// Flush ao fechar/minimizar aba
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && CU) flushSession(CU.id);
   else if (!document.hidden && CU) { sessionStart = Date.now(); setOnline(CU.id); }
 });
 window.addEventListener('beforeunload', () => { if (CU) flushSession(CU.id); });
 
-// Heartbeat a cada 30s
 setInterval(() => {
   if (CU) {
     flushSession(CU.id);
-    firebase.database().ref('gaia_v7/online/' + CU.id).update({ ts: Date.now() });
+    firebase.database().ref('gaia_v8/online/' + CU.id).update({ ts: Date.now() });
   }
 }, 30000);
 
 let onlineUsers = {};
 let sessionData = {};
-firebase.database().ref('gaia_v7/online').on('value', snap => {
+firebase.database().ref('gaia_v8/online').on('value', snap => {
   onlineUsers = {};
   const now = Date.now();
   (snap.val() ? Object.values(snap.val()) : []).forEach(u => {
-    if (now - u.ts < 120000) onlineUsers[u.uid] = u; // 2 min
+    if (now - u.ts < 120000) onlineUsers[u.uid] = u;
   });
   if (CU) renderCurrentPage();
 });
-firebase.database().ref('gaia_v7/sessions').on('value', snap => {
+firebase.database().ref('gaia_v8/sessions').on('value', snap => {
   sessionData = snap.val() || {};
   if (CU) renderCurrentPage();
 });
@@ -1221,7 +1134,6 @@ function fmtSession(uid) {
   const today = new Date().toISOString().split('T')[0];
   const d = sessionData[uid];
   let todaySec = (d && d.date === today ? d.todaySeconds : 0) || 0;
-  // Adiciona tempo da sessão atual se for o próprio usuário online agora
   if (uid === (CU && CU.id) && sessionStart) {
     todaySec += Math.floor((Date.now() - sessionStart) / 1000);
   }
@@ -1239,38 +1151,12 @@ function fmtLastSeen(uid) {
   return dt.toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
 }
 
-// ── SEGURANÇA: HASH DE SENHAS ──
-async function hashSenha(senha) {
-  const enc = new TextEncoder();
-  const data = enc.encode(senha + 'gaia_uftm_salt_2026');
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-async function migrarSenhas() {
-  let precisaMigrar = M.some(m => m.password && !m.password.startsWith('sha256:'));
-  if (!precisaMigrar) return;
-  for (const m of M) {
-    if (m.password && !m.password.startsWith('sha256:')) {
-      m.password = 'sha256:' + await hashSenha(m.password);
-    }
-  }
-  save();
-}
-
-async function resetarTodasSenhas() {
-  if(!confirm('Isso vai redefinir a senha de TODOS os membros para 123. Confirmar?')) return;
-  const hash = 'sha256:' + await hashSenha('123');
-  M.forEach(m => m.password = hash);
-  save();
-  toast('Senhas redefinidas para 123!');
-}
-
 // ══════════════════════════════════════════════════════
 // DADOS INICIAIS
 // ══════════════════════════════════════════════════════
 const INIT_MEMBERS = [
-  {id:'m1',username:'Pedro Henrique',password:'123',name:'Pedro Henrique',email:'',team:'eletroquad',role:'Coordenador ADM',isAdmin:true,avatar:'PH',color:'#1a8fff',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Gestão','Eng. Mecânica'],pts:0,hours:0},
-  {id:'m2',username:'Laura Capanema',password:'123',name:'Laura Capanema',email:'',team:'robotica',role:'Coordenadora ADM',isAdmin:true,avatar:'LC',color:'#00c984',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Gestão','Projetos'],pts:0,hours:0},
+  {id:'m1',username:'Pedro Henrique',password:'123',name:'Pedro Henrique',email:'d202410484@uftm.edu.br',team:'adm',role:'Coordenador ADM',isAdmin:true,avatar:'PH',color:'#1a8fff',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Gestão','Eng. Mecânica'],pts:0,hours:0},
+  {id:'m2',username:'Laura Capanema',password:'123',name:'Laura Capanema',email:'d202510615@uftm.edu.br',team:'adm',role:'Coordenadora ADM',isAdmin:true,avatar:'LC',color:'#00c984',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Gestão','Projetos'],pts:0,hours:0},
   {id:'m3',username:'Júlia Origuela',password:'123',name:'Júlia Origuela',email:'',team:'eletroquad',role:'Administradora',isAdmin:true,avatar:'JO',color:'#5b8cff',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Liderança','Mecânica'],pts:0,hours:0},
   {id:'m4',username:'Wanessa Karoline',password:'123',name:'Wanessa Karoline',email:'',team:'robotica',role:'Administradora',isAdmin:true,avatar:'WK',color:'#00e5a0',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Liderança','Programação'],pts:0,hours:0},
   {id:'m5',username:'Carlos Gabriel',password:'123',name:'Carlos Gabriel',email:'',team:'eletroquad',role:'Membro EletroQuad',isAdmin:false,avatar:'CG',color:'#00b4d8',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Eletrônica'],pts:0,hours:0},
@@ -1282,13 +1168,13 @@ const INIT_MEMBERS = [
   {id:'m11',username:'Eloiza Lopes',password:'123',name:'Eloiza Lopes',email:'',team:'robotica',role:'Membro Robótica',isAdmin:false,avatar:'EL',color:'#00c984',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Controle','Programação'],pts:0,hours:0},
 ];
 const INIT_TASKS = [
-  {id:'t1',title:'Explorar o Portal v7',desc:'Teste todas as funcionalidades: chat, arquivos, mapa de código e tarefas.',team:'both',diff:'easy',pts:50,hours:2,deadline:'2026-04-30',status:'available',claimedBy:null,submittedBy:[]}
+  {id:'t1',title:'Explorar o Portal v8',desc:'Teste todas as funcionalidades: chat, arquivos, mapa de código e tarefas.',team:'both',diff:'easy',pts:50,hours:2,deadline:'2026-04-30',status:'available',claimedBy:null,submittedBy:[]}
 ];
 
 // ══════════════════════════════════════════════════════
 // ESTADO GLOBAL
 // ══════════════════════════════════════════════════════
-let CU = null; // current user
+let CU = null;
 let M=[], T=[], S=[], R=[], MP={}, ATT=[], NOT=[], CAL=[], ECFG={serviceId:'',templateId:'',publicKey:'',configured:false}, HG=20, HL=[], CHAT=[], ACHAT=[], FILES=[], CMAP=[];
 let taskFilter='all', rankFilter='all', memberFilter='all', filesFilter='all', codemapFilter='all';
 let pendingTaskId=null, editSkillsUid=null, tempSkills=[], calY=new Date().getFullYear(), calMo=new Date().getMonth();
@@ -1377,45 +1263,44 @@ function closeModal(id) { el(id)&&el(id).classList.remove('on'); }
 document.querySelectorAll('.modal-ov').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o)o.classList.remove('on'); }));
 
 // ══════════════════════════════════════════════════════
-// AUTH
+// AUTH — SEM CRIPTOGRAFIA
 // ══════════════════════════════════════════════════════
-async function doLogin() {
-  const u=el('li-user').value.trim(), p=el('li-pass').value.trim();
-  if(!u||!p){ toast('Preencha usuário e senha','err'); return; }
-  if(!dbReady){ toast('Aguardando conexão... tente novamente','err'); return; }
-  if(!M.length){ M=JSON.parse(JSON.stringify(INIT_MEMBERS)); M.forEach(m=>MP[m.id]=m.pts); }
-  const mem=M.find(m=>m.username.toLowerCase()===u.toLowerCase());
-  if(!mem){ toast('Usuário ou senha incorretos!','err'); return; }
-  let senhaOk=false;
-  if(mem.password.startsWith('sha256:')){
-    const hash='sha256:'+await hashSenha(p);
-    senhaOk=hash===mem.password;
-  } else {
-    senhaOk=mem.password===p;
-  }
-  if(!senhaOk){ toast('Usuário ou senha incorretos!','err'); return; }
-  CU={id:mem.id,name:mem.name,isAdmin:mem.isAdmin};
-  el('li-user').value=''; el('li-pass').value='';
+function doLogin() {
+  const u = el('li-user').value.trim();
+  const p = el('li-pass').value.trim();
+  if(!u || !p) { toast('Preencha usuário e senha', 'err'); return; }
+  if(!dbReady) { toast('Aguardando conexão... tente novamente', 'err'); return; }
+  if(!M.length) { M = JSON.parse(JSON.stringify(INIT_MEMBERS)); M.forEach(m=>MP[m.id]=m.pts); }
+
+  const mem = M.find(m => m.username.toLowerCase() === u.toLowerCase());
+  if(!mem) { toast('Usuário ou senha incorretos!', 'err'); return; }
+
+  // Comparação direta — sem hash
+  if(mem.password !== p) { toast('Usuário ou senha incorretos!', 'err'); return; }
+
+  CU = {id: mem.id, name: mem.name, isAdmin: mem.isAdmin};
+  el('li-user').value = '';
+  el('li-pass').value = '';
   el('login-screen').classList.remove('on');
   el('dash-screen').classList.add('on');
-  el('sb-name').textContent=CU.name;
-  el('sb-role').textContent=CU.isAdmin?'Administrador':(mem.team==='eletroquad'?'EletroQuad':'Robótica');
-  const av=el('sb-av'); av.innerHTML=avImg(mem.name,mem.color,30);
-  el('nav-admin-sec').style.display=CU.isAdmin?'block':'none';
+  el('sb-name').textContent = CU.name;
+  el('sb-role').textContent = CU.isAdmin ? 'Administrador' : (mem.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
+  const av = el('sb-av');
+  av.innerHTML = avImg(mem.name, mem.color, 30);
+  el('nav-admin-sec').style.display = CU.isAdmin ? 'block' : 'none';
   setOnline(CU.id);
-// Mostra dot online na sidebar
-const dot = el('sb-online-dot');
-if (dot) dot.style.display = 'block';
-updateBadges();
+  const dot = el('sb-online-dot');
+  if(dot) dot.style.display = 'block';
+  updateBadges();
   goPage('home', el('nav-home'));
   toast(`Bem-vindo(a), ${mem.name.split(' ')[0]}!`);
-  await migrarSenhas();
 }
+
 function doLogout() {
-  CU=null;
+  CU = null;
   const dot = el('sb-online-dot');
-if (dot) dot.style.display = 'none';
-clearInterval(sessionFlushInterval);
+  if(dot) dot.style.display = 'none';
+  clearInterval(sessionFlushInterval);
   el('dash-screen').classList.remove('on');
   el('login-screen').classList.add('on');
 }
@@ -1426,11 +1311,8 @@ clearInterval(sessionFlushInterval);
 let currentPage = 'home';
 
 function goPage(page, navEl) {
-  // hide all pages
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
-  // remove active from all nav items
   document.querySelectorAll('.nav-it').forEach(n=>n.classList.remove('on'));
-  // show target page
   const pg = el('pg-'+page);
   if(!pg){ toast('Página não encontrada: '+page,'err'); return; }
   pg.classList.add('on');
@@ -1529,15 +1411,10 @@ function renderHome() {
   }
 
   const acts=[];
-  // Tarefas aprovadas
   [...S].reverse().slice(0,3).filter(s=>s.status==='approved').forEach(s=>acts.push({i:'✅',t:`<b>${s.memberName}</b> concluiu "${s.taskTitle}"`,d:fmtDate(s.date)}));
-  // Tarefas assumidas (claimed)
-  [...T].filter(t=>t.status==='claimed'&&t.claimedBy).slice(0,2).forEach(t=>{const mem=M.find(m=>m.id===t.claimedBy);if(mem)acts.push({i:'⚡',t:`<b>${mem.name}</b> assumiu "${t.title}"`,d:fmtDate(t.deadline||new Date().toISOString().split('T')[0])});});
-  // Avisos recentes
+  [...T].filter(t=>t.status==='claimed'&&t.claimedBy).slice(0,2).forEach(t=>{const mem=M.find(m=>m.id===t.claimedBy);if(mem)acts.push({i:'⚡',t:`<b>${mem.name}</b> assumiu "${t.title}"`,d:''});});
   [...NOT].reverse().slice(0,2).forEach(n=>acts.push({i:'📢',t:`<b>Aviso:</b> ${n.title}`,d:fmtDate(n.date)}));
-  // Novos membros
   if(M.length>0) acts.push({i:'👥',t:`Equipe com <b>${M.length} membros</b> ativos`,d:'hoje'});
-  acts.sort(()=>Math.random()-.5); // shuffle pra não ficar estático
   const finalActs=acts.slice(0,6);
   if(!finalActs.length) finalActs.push({i:'🌟',t:'<b>Portal Gaia online!</b> Assuma tarefas e comece a pontuar.',d:'agora'});
   el('home-activity').innerHTML=finalActs.map(a=>`<div style="display:flex;align-items:center;gap:11px;padding:11px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px"><div style="font-size:16px">${a.i}</div><div style="flex:1;font-size:12px;line-height:1.5">${a.t}</div><div style="font-size:10px;color:var(--muted);white-space:nowrap">${a.d}</div></div>`).join('');
@@ -1628,40 +1505,23 @@ function renderUpcoming() {
     </div>`).join(''):`<div class="empty"><div class="empty-ico">📅</div>Nenhum evento futuro.</div>`;
 }
 function saveCalEvent() {
-  const title = el('cal-title').value.trim();
-  const date = el('cal-date').value;
-  const desc = el('cal-desc').value.trim(); // Pega o que você digitou na Descrição!
-  
+  const title=el('cal-title').value.trim(), date=el('cal-date').value, desc=el('cal-desc').value.trim();
   if(!title||!date){toast('Preencha título e data','err');return;}
-  
-  const ev = {id:'e'+Date.now(),title,date,type:el('cal-type').value,desc,createdBy:CU.name};
-  
-  // Envio de E-mail para toda a equipe
-  if(el('cal-email').checked && ECFG.configured) {
-    M.filter(m => m.email && m.email.trim() !== '').forEach(m => {
-      const params = {
-        to_email: m.email,
-        to_name: m.name.split(' ')[0],
-        notice_title: `📅 Novo Evento: ${title}`,
-        // 👇 A MENSAGEM PERSONALIZADA VAI AQUI
-        notice_body: desc ? desc : `Temos um novo evento marcado para o dia ${fmtDate(date)}. Acesse o portal para mais detalhes!`,
-        notice_type: 'CALENDÁRIO',
-        portal_name: 'Portal Gaia · UFTM'
-      };
-      emailjs.send(ECFG.serviceId, ECFG.templateId, params, ECFG.publicKey).catch(()=>{});
+  const ev={id:'e'+Date.now(),title,date,type:el('cal-type').value,desc,createdBy:CU.name};
+  if(el('cal-email').checked&&ECFG.configured){
+    M.filter(m=>m.email&&m.email.trim()!=='').forEach(m=>{
+      emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`📅 Novo Evento: ${title}`,notice_body:desc?desc:`Novo evento marcado para ${fmtDate(date)}.`,notice_type:'CALENDÁRIO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
     });
   }
-  
   CAL.push(ev);
   ['cal-title','cal-desc'].forEach(i=>el(i).value='');
-  closeModal('modal-cal'); save(); toast('Evento adicionado e e-mails enviados!');
+  closeModal('modal-cal'); save(); toast('Evento adicionado!');
 }
 function deleteCalEvent(id){ if(!confirm('Remover evento?'))return; CAL=CAL.filter(e=>e.id!==id); save(); }
 
 // ══════════════════════════════════════════════════════
 // TASKS
 // ══════════════════════════════════════════════════════
-  
 function filterTasks(f, tabEl) {
   taskFilter=f;
   if(tabEl){document.querySelectorAll('#pg-tasks .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
@@ -1716,7 +1576,7 @@ function filterRanking(f, tabEl) {
     <div class="rank-row" onclick="openMemberModal('${m.id}')">
       <div class="rank-pos ${pc[i]||''}">${i+1}</div>
       <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
-      <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role} · ${m.team==='eletroquad'?'EletroQuad':'Robótica'}</div></div>
+      <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role}</div></div>
       <div class="rank-score">${MP[m.id]||m.pts} pts</div>
     </div>`).join('');
 }
@@ -1745,9 +1605,9 @@ function renderChat(which) {
         fileH=`<a class="chat-file-card" href="${msg.file.dataUrl||'#'}" download="${msg.file.name}"><div style="font-size:20px">${icon}</div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${msg.file.name}</div><div style="font-size:10px;color:var(--dim)">${size}</div></div></a>`;
     }
     const canDel = CU.isAdmin || isMine;
-    const delBtn = which==='chat'&&canDel ? `<span class="msg-del" onclick="deleteMsg('${msg.id}','${which}')">🗑</span>` : (which==='admchat'&&canDel ? `<span class="msg-del" onclick="deleteMsg('${msg.id}','${which}')">🗑</span>` : '');
+    const delBtn = canDel ? `<span class="msg-del" onclick="deleteMsg('${msg.id}','${which}')">🗑</span>` : '';
     h+=`<div class="chat-msg ${isMine?'me':''}">
-      ${!isMine?`<div class="chat-av" style="background:${color};display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:10px;color:#fff">${m?(m.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()):'?'}</div>`:''}
+      ${!isMine?`<div class="chat-av" style="background:${color}">${m?(m.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()):'?'}</div>`:''}
       <div class="bubble">
         ${!isMine?`<div class="bubble-name">${msg.authorName}</div>`:''}
         ${msg.text?`<div class="bubble-text">${esc(msg.text)}</div>`:''}
@@ -1841,14 +1701,10 @@ function downloadFile(id){const f=FILES.find(x=>x.id===id);if(!f||!f.dataUrl)ret
 function deleteFile(id){if(!confirm('Remover arquivo?'))return;FILES=FILES.filter(f=>f.id!==id);save();toast('Removido.');}
 
 // ══════════════════════════════════════════════════════
-// CODE MAP — TREE STRUCTURE
+// CODE MAP
 // ══════════════════════════════════════════════════════
-// CMAP structure: items can be {type:'folder', id, name, parentId, team, date, createdBy}
-//                           or {type:'file', id, name, lang, folderId, team, desc, connections:[], docFiles:[], date, createdBy}
-
 let selectedModId = null;
 
-function renderCodemapPage() { renderCodemapTree(); }
 function filterCodemap(f, tabEl) { codemapFilter=f; renderCodemapTree(); }
 
 function renderCodemapTree() {
@@ -1856,9 +1712,8 @@ function renderCodemapTree() {
   const folders = CMAP.filter(x=>x.type==='folder');
   const files = CMAP.filter(x=>x.type==='file');
 
-  function buildTree(parentId, depth=0) {
+  function buildTree(parentId) {
     let h = '';
-    // sub-folders
     folders.filter(f=>f.parentId===(parentId||null)).forEach(folder=>{
       const childFiles = files.filter(f=>f.folderId===folder.id);
       const childFolders = folders.filter(f=>f.parentId===folder.id);
@@ -1871,10 +1726,9 @@ function renderCodemapTree() {
           <span style="font-size:9px;color:var(--muted);margin-left:4px">${childFiles.length+childFolders.length} itens</span>
           ${CU.isAdmin?`<button onclick="event.stopPropagation();deleteFolder('${folder.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;opacity:.4;margin-left:auto;font-size:11px">🗑</button>`:''}
         </div>
-        <div class="tree-children" id="tc-${folder.id}">${buildTree(folder.id, depth+1)}</div>
+        <div class="tree-children" id="tc-${folder.id}">${buildTree(folder.id)}</div>
       </div>`;
     });
-    // files in this folder
     files.filter(f=>f.folderId===(parentId||null)).forEach(file=>{
       if(search && !file.name.toLowerCase().includes(search)) return;
       const ll={py:'lang-py',cpp:'lang-cpp',ros:'lang-ros',js:'lang-js',other:'lang-other'};
@@ -1891,11 +1745,8 @@ function renderCodemapTree() {
     return h;
   }
 
-  // root items (no folder)
   const treeH = buildTree(null);
   el('codemap-tree').innerHTML = treeH || `<div class="empty" style="padding:20px 0"><div class="empty-ico">💻</div><div style="font-size:12px">${search?'Nada encontrado.':'Adicione pastas e arquivos com os botões acima.'}</div></div>`;
-
-  // restore open state
   folders.forEach(f=>{ if(localStorage.getItem('tf_open_'+f.id)==='1') { const tc=el('tc-'+f.id), tf=el('tf-'+f.id); if(tc)tc.classList.add('open'); if(tf)tf.classList.add('open'); } });
 }
 
@@ -1907,11 +1758,7 @@ function toggleFolder(id) {
   localStorage.setItem('tf_open_'+id, open?'1':'0');
 }
 
-function selectFile(id) {
-  selectedModId=id;
-  renderCodemapTree();
-  renderModDetail(id);
-}
+function selectFile(id) { selectedModId=id; renderCodemapTree(); renderModDetail(id); }
 
 function renderModDetail(id) {
   const mod=CMAP.find(x=>x.id===id);
@@ -1921,8 +1768,6 @@ function renderModDetail(id) {
   const conns=(mod.connections||[]);
   const docFiles=(mod.docFiles||[]);
   const folder=CMAP.find(x=>x.id===mod.folderId);
-
-  // find files that connect TO this file
   const inbound=CMAP.filter(x=>x.type==='file'&&x.id!==id&&(x.connections||[]).some(c=>c.toLowerCase().includes(mod.name.toLowerCase())));
 
   el('codemap-detail').innerHTML=`
@@ -1934,47 +1779,24 @@ function renderModDetail(id) {
       </div>
       ${CU.isAdmin?`<button class="btn btn-red btn-sm" style="padding:5px 10px;font-size:10px" onclick="deleteModule('${id}')">🗑</button>`:''}
     </div>
-
-    ${conns.length||inbound.length?`
-    <div style="margin-bottom:14px">
-      <div class="sec-title" style="font-size:12px;margin-bottom:8px">⇄ Conexões</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px">
-        ${conns.map(c=>{const cf=CMAP.find(x=>x.type==='file'&&x.name.toLowerCase()===c.toLowerCase());return `<span class="conn-badge out" onclick="${cf?`selectFile('${cf.id}')`:''}">→ ${c}</span>`;}).join('')}
-        ${inbound.map(f=>`<span class="conn-badge" onclick="selectFile('${f.id}')">← ${f.name}</span>`).join('')}
-      </div>
-    </div>`:''}
-
+    ${conns.length||inbound.length?`<div style="margin-bottom:14px"><div class="sec-title" style="font-size:12px;margin-bottom:8px">⇄ Conexões</div><div style="display:flex;flex-wrap:wrap;gap:6px">${conns.map(c=>{const cf=CMAP.find(x=>x.type==='file'&&x.name.toLowerCase()===c.toLowerCase());return `<span class="conn-badge out" onclick="${cf?`selectFile('${cf.id}')`:''}">→ ${c}</span>`;}).join('')}${inbound.map(f=>`<span class="conn-badge" onclick="selectFile('${f.id}')">← ${f.name}</span>`).join('')}</div></div>`:''}
     <div style="margin-bottom:14px">
       <div class="sec-title" style="font-size:12px;margin-bottom:8px">📝 Documentação</div>
-      <textarea class="cm-ta" id="detail-desc-${id}" placeholder="Descreva funções, parâmetros, dependências, como usar...">${mod.desc||''}</textarea>
+      <textarea class="cm-ta" id="detail-desc-${id}" placeholder="Descreva funções, parâmetros, dependências...">${mod.desc||''}</textarea>
       <div style="display:flex;gap:8px;margin-top:7px;flex-wrap:wrap">
         <button class="btn btn-green btn-sm" onclick="saveModDesc('${id}')">Salvar texto</button>
         <button class="btn btn-ghost btn-sm" onclick="document.getElementById('doc-upload-${id}').click()">📎 Anexar .pdf / .docx</button>
         <input type="file" id="doc-upload-${id}" style="display:none" accept=".pdf,.doc,.docx" onchange="handleDocUpload(this,'${id}')">
       </div>
     </div>
-
-    ${docFiles.length?`
-    <div style="margin-bottom:14px">
-      <div class="sec-title" style="font-size:12px;margin-bottom:8px">📎 Arquivos Anexados</div>
-      ${docFiles.map(df=>`
-        <div class="doc-file-card" onclick="downloadDocFile('${id}','${df.id}')">
-          <span style="font-size:18px">${df.name.endsWith('.pdf')?'📄':'📝'}</span>
-          <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${df.name}</div><div style="font-size:10px;color:var(--dim)">${fmtSize(df.size)} · ${df.uploadedBy}</div></div>
-          ${CU.isAdmin?`<button onclick="event.stopPropagation();deleteDocFile('${id}','${df.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;opacity:.5;font-size:12px">✕</button>`:''}
-        </div>`).join('')}
-    </div>`:''}
-
-    <div style="font-size:10px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
-      Criado por ${mod.createdBy} · ${fmtDate(mod.date)}${mod.lastEditedBy?` · Editado por ${mod.lastEditedBy}`:''}
-    </div>`;
+    ${docFiles.length?`<div style="margin-bottom:14px"><div class="sec-title" style="font-size:12px;margin-bottom:8px">📎 Arquivos Anexados</div>${docFiles.map(df=>`<div class="doc-file-card" onclick="downloadDocFile('${id}','${df.id}')"><span style="font-size:18px">${df.name.endsWith('.pdf')?'📄':'📝'}</span><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${df.name}</div><div style="font-size:10px;color:var(--dim)">${fmtSize(df.size)} · ${df.uploadedBy}</div></div>${CU.isAdmin?`<button onclick="event.stopPropagation();deleteDocFile('${id}','${df.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;opacity:.5;font-size:12px">✕</button>`:''}</div>`).join('')}</div>`:''}
+    <div style="font-size:10px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">Criado por ${mod.createdBy} · ${fmtDate(mod.date)}${mod.lastEditedBy?' · Editado por '+mod.lastEditedBy:''}</div>`;
 }
 
 function saveModDesc(id) {
   const mod=CMAP.find(x=>x.id===id);if(!mod)return;
   const ta=el('detail-desc-'+id);if(ta)mod.desc=ta.value;
-  mod.lastEditedBy=CU.name;
-  save();toast('Documentação salva!');
+  mod.lastEditedBy=CU.name; save();toast('Documentação salva!');
 }
 
 function handleDocUpload(input, modId) {
@@ -2022,7 +1844,6 @@ function saveModule() {
 
 function deleteFolder(id) {
   if(!confirm('Remover esta pasta e TODO seu conteúdo?'))return;
-  // collect all descendants
   function collectIds(fid){const ids=[fid];CMAP.filter(x=>x.type==='folder'&&x.parentId===fid).forEach(f=>collectIds(f.id).forEach(i=>ids.push(i)));return ids;}
   const folderIds=collectIds(id);
   CMAP=CMAP.filter(x=>!(x.type==='folder'&&folderIds.includes(x.id))&&!(x.type==='file'&&folderIds.includes(x.folderId)));
@@ -2113,7 +1934,7 @@ function filterMembers(f, tabEl) {
   memberFilter=f;
   if(tabEl){document.querySelectorAll('#pg-members .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
   let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral'||m.team==='marketing'||m.team==='gestao'||m.team==='adm');
-  el('members-list').innerHTML=list.map(m=>`
+  el('members-list').innerHTML=`<div class="grid ga">${list.map(m=>`
     <div class="mc ${m.team==='eletroquad'?'eq':'rob'}" onclick="openMemberModal('${m.id}')">
       <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
         <div class="av" style="width:42px;height:42px">${avImg(m.name,m.color,42,!!onlineUsers[m.id])}</div>
@@ -2128,25 +1949,24 @@ function filterMembers(f, tabEl) {
         <span class="tag tag-hrs">${m.hours||0}h</span>
         ${m.email?`<span style="font-size:10px;color:var(--green)">✉</span>`:`<span style="font-size:10px;color:var(--red)">✕ sem email</span>`}
       </div>
-    </div>`).join('');
-  // wrap in grid
-  el('members-list').innerHTML=`<div class="grid ga">${el('members-list').innerHTML}</div>`;
+    </div>`).join('')}</div>`;
 }
 
 function openAddUser(){el('mu-title').textContent='Novo Membro';el('mu-id').value='';['mu-name','mu-username','mu-pass','mu-email','mu-role'].forEach(i=>el(i).value='');el('mu-isadmin').checked=false;el('mu-del-btn').style.display='none';el('mu-admin-fields').style.display='flex';el('mu-admin-chk').style.display='flex';openModal('modal-user');}
 function openEditUser(uid){const m=M.find(x=>x.id===uid);if(!m)return;el('mu-title').textContent='Editar Usuário';el('mu-id').value=uid;el('mu-name').value=m.name;el('mu-username').value=m.username;el('mu-pass').value=m.password;el('mu-email').value=m.email||'';el('mu-role').value=m.role;el('mu-team').value=m.team;el('mu-isadmin').checked=m.isAdmin;el('mu-del-btn').style.display=uid!==CU.id?'inline-flex':'none';el('mu-admin-fields').style.display=CU.isAdmin?'flex':'none';el('mu-admin-chk').style.display=CU.isAdmin?'flex':'none';openModal('modal-user');}
-async function saveUser(){
+
+function saveUser(){
   const uid=el('mu-id').value, name=el('mu-name').value.trim();
   const username=el('mu-username').value.trim(), pass=el('mu-pass').value.trim();
   if(!name||!username||!pass){toast('Preencha nome, usuário e senha','err');return;}
-  const hashedPass='sha256:'+await hashSenha(pass);
+  // Salva senha diretamente, sem hash
   if(uid){
     const m=M.find(x=>x.id===uid);if(!m)return;
-    m.name=name;m.username=username;m.password=hashedPass;
+    m.name=name;m.username=username;m.password=pass;
     m.email=el('mu-email').value.trim();
     if(CU.isAdmin){m.team=el('mu-team').value;m.role=el('mu-role').value.trim();m.isAdmin=el('mu-isadmin').checked;}
   } else {
-    M.push({id:'m'+Date.now(),username,password:hashedPass,name,
+    M.push({id:'m'+Date.now(),username,password:pass,name,
       email:el('mu-email').value.trim(),team:el('mu-team').value,
       role:el('mu-role').value.trim(),isAdmin:el('mu-isadmin').checked,
       avatar:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),
@@ -2192,7 +2012,7 @@ function openMemberModal(uid){
       <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Horas</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#bb86fc">${m.hours||0}h</div></div>
       <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Hoje online</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--green)">${onlineUsers[uid]?'🟢 ':' '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
     </div>
-        ${Object.entries(m.metrics).map(([k,v],i)=>`<div class="prog-item"><div class="prog-hd"><span class="prog-lbl">${labels[k]}</span><span class="prog-val">${v}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v}%;background:${colors[i]}"></div></div></div>`).join('')}
+    ${Object.entries(m.metrics).map(([k,v],i)=>`<div class="prog-item"><div class="prog-hd"><span class="prog-lbl">${labels[k]}</span><span class="prog-val">${v}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v}%;background:${colors[i]}"></div></div></div>`).join('')}
     <hr><div class="cl" style="margin-bottom:6px">Cargo: ${m.role}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">${skills}</div>`;
   const ft=el('mm-ft');
@@ -2245,7 +2065,7 @@ function renderHours(){
     </div>
     <div class="card">
       ${sorted.map(m=>{const h=m.hours||0,pct=Math.min(100,Math.round(h/HG*100));let bc,bl;if(h>=HG){bc='hrs-ok';bl='✓ Meta';}else if(pct>=50){bc='hrs-warn';bl=pct+'%';}else{bc='hrs-low';bl=pct+'%';}
-      return `<div class="hrs-row"><div class="av" style="width:32px;height:32px">${avImg(m.name,m.color,32,!!onlineUsers[m.id])}</div><div class="hrs-bar-wrap"><div class="hrs-bar-lbl"><span style="font-size:12px;font-weight:500\">${m.name} <span style=\"font-size:10px;color:${onlineUsers[m.id]?'var(--green)':'var(--muted)'};font-weight:400\">${onlineUsers[m.id]?'🟢':''} ${fmtSession(m.id)} · ${fmtLastSeen(m.id)}</span></span>font-weight:500">${m.name}</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#bb86fc">${h}h/${HG}h</span></div><div class="hrs-bar"><div class="hrs-bar-fill" style="width:${pct}%"></div></div></div><span class="hrs-badge ${bc}">${bl}</span><button class="hrs-adj" onclick="openHrsAdj('${m.id}')">Ajustar ✎</button></div>`;}).join('')}
+      return `<div class="hrs-row"><div class="av" style="width:32px;height:32px">${avImg(m.name,m.color,32,!!onlineUsers[m.id])}</div><div class="hrs-bar-wrap"><div class="hrs-bar-lbl"><span style="font-size:12px;font-weight:500">${m.name}</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#bb86fc">${h}h/${HG}h</span></div><div class="hrs-bar"><div class="hrs-bar-fill" style="width:${pct}%"></div></div></div><span class="hrs-badge ${bc}">${bl}</span><button class="hrs-adj" onclick="openHrsAdj('${m.id}')">Ajustar ✎</button></div>`;}).join('')}
     </div>
     ${HL.length?`<div class="sec-hd" style="margin-top:18px"><div class="sec-title">📋 Histórico</div></div><div class="card">${[...HL].reverse().slice(0,20).map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><div><span style="font-size:13px;font-weight:500">${l.memberName}</span><span style="font-size:11px;color:var(--dim);margin-left:8px">${l.reason||'—'}</span></div><div style="text-align:right"><span style="font-family:'DM Mono',monospace;font-size:13px;color:${l.delta>0?'var(--green)':l.delta<0?'var(--red)':'var(--dim)'}">${l.delta>0?'+':''}${l.delta}h</span><div style="font-size:10px;color:var(--muted)">${fmtDate(l.date)} · ${l.by}</div></div></div>`).join('')}</div>`:''}`;
 }
@@ -2292,45 +2112,24 @@ function renderSubmissions(){
 }
 function reviewSub(id, action){
   const s=S.find(x=>x.id===id);if(!s)return;
-  const fb=el('fb-'+id)?el('fb-'+id).value.trim():''; // Pega o que você digitou no Feedback
+  const fb=el('fb-'+id)?el('fb-'+id).value.trim():'';
   s.status=action; s.adminFeedback=fb; s.reviewedBy=CU.name; s.reviewDate=new Date().toISOString().split('T')[0];
-  
   const m=M.find(x=>x.id===s.memberId);
-
   if(action==='approved'){
     MP[s.memberId]=(MP[s.memberId]||0)+s.pts;
     if(m){
       m.hours=(m.hours||0)+(s.hours||0);
       HL.push({memberId:s.memberId,memberName:m.name,op:'add',delta:s.hours||0,reason:`Tarefa aprovada: ${s.taskTitle}`,date:s.reviewDate,by:CU.name});
-      
-      // E-MAIL DE APROVAÇÃO
-      if(ECFG.configured && m.email) {
-        const params = {
-          to_email: m.email,
-          to_name: m.name.split(' ')[0],
-          notice_title: `Tarefa Aprovada! 🎉`,
-          notice_body: `Sua entrega da tarefa "${s.taskTitle}" foi aprovada! Você ganhou +${s.pts} pontos e +${s.hours||0}h. ${fb ? '\n\nObs do ADM: '+fb : ''}`,
-          notice_type: 'PONTUAÇÃO',
-          portal_name: 'Portal Gaia · UFTM'
-        };
-        emailjs.send(ECFG.serviceId, ECFG.templateId, params, ECFG.publicKey).catch(()=>{});
+      if(ECFG.configured&&m.email){
+        emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Aprovada! 🎉`,notice_body:`Sua entrega da tarefa "${s.taskTitle}" foi aprovada! Você ganhou +${s.pts} pontos e +${s.hours||0}h. ${fb?'\n\nObs do ADM: '+fb:''}`,notice_type:'PONTUAÇÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
       }
     }
     toast(`Aprovado! +${s.pts}pts para ${s.memberName}`);
-  } else { 
-    // E-MAIL DE REPROVAÇÃO
-    if(m && ECFG.configured && m.email) {
-        const params = {
-          to_email: m.email,
-          to_name: m.name.split(' ')[0],
-          notice_title: `Tarefa Recusada ⚠️`,
-          notice_body: `Sua entrega da tarefa "${s.taskTitle}" precisou ser devolvida. ${fb ? '\n\nMotivo/Feedback: '+fb : 'Acesse o portal para mais detalhes.'}`,
-          notice_type: 'REVISÃO',
-          portal_name: 'Portal Gaia · UFTM'
-        };
-        emailjs.send(ECFG.serviceId, ECFG.templateId, params, ECFG.publicKey).catch(()=>{});
+  } else {
+    if(m&&ECFG.configured&&m.email){
+      emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Recusada ⚠️`,notice_body:`Sua entrega da tarefa "${s.taskTitle}" precisou ser devolvida. ${fb?'\n\nMotivo: '+fb:'Acesse o portal para mais detalhes.'}`,notice_type:'REVISÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
     }
-    toast('Reprovado.'); 
+    toast('Reprovado.');
   }
   save();
 }
@@ -2369,7 +2168,6 @@ function renderEmailCfg(){
       <div style="display:flex;gap:9px;flex-wrap:wrap">
         <button class="btn btn-blue btn-sm" onclick="saveEmailCfg()">Salvar</button>
         <button class="btn btn-ghost btn-sm" onclick="testEmail()">Testar envio</button>
-        <button class="btn btn-red btn-sm" onclick="resetarTodasSenhas()">🔑 Resetar senhas → 123</button>
         ${ECFG.configured?`<span style="font-size:12px;color:var(--green);padding:7px 0">✓ Configurado</span>`:''}
       </div>
     </div>
@@ -2380,26 +2178,23 @@ function renderEmailCfg(){
 function saveEmailCfg(){ECFG.serviceId=el('cfg-svc').value.trim();ECFG.templateId=el('cfg-tpl').value.trim();ECFG.publicKey=el('cfg-key').value.trim();ECFG.configured=!!(ECFG.serviceId&&ECFG.templateId&&ECFG.publicKey);if(ECFG.configured)emailjs.init(ECFG.publicKey);save();toast(ECFG.configured?'E-mail configurado! ✓':'Preencha todos os campos','err'.slice(0,ECFG.configured?-3:0)||'ok');}
 function testEmail(){const m=M.find(x=>x.id===CU.id);if(!m||!m.email){toast('Cadastre seu e-mail primeiro','err');return;}if(!ECFG.configured){toast('Configure o EmailJS primeiro','err');return;}emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name,notice_title:'🧪 Teste — Portal Gaia',notice_body:'Se recebeu este e-mail, o EmailJS está funcionando!',notice_type:'Teste',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).then(()=>toast('E-mail enviado!')).catch(()=>toast('Erro ao enviar','err'));}
 
-// Init emailjs
 setTimeout(()=>{if(ECFG&&ECFG.publicKey&&ECFG.configured)emailjs.init(ECFG.publicKey);},1500);
+
+// ══════════════════════════════════════════════════════
+// TEMA
+// ══════════════════════════════════════════════════════
 (function initTheme() {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const saved = localStorage.getItem('gaia_theme');
   const theme = saved || (prefersDark ? 'dark' : 'light');
-
   if (theme === 'light') document.body.classList.add('light');
-
-  // Atualiza botão mobile
   const mobBtn = document.getElementById('mob-theme-btn');
   if (mobBtn) mobBtn.innerHTML = theme === 'light' ? '🌙' : '☀️';
-
-  // Botão desktop (escondido no mobile via CSS)
   const btn = document.createElement('button');
   btn.id = 'theme-toggle';
   btn.title = 'Alternar tema';
   btn.innerHTML = theme === 'light' ? '🌙' : '☀️';
   document.body.appendChild(btn);
-
   btn.addEventListener('click', () => {
     const isLight = document.body.classList.toggle('light');
     localStorage.setItem('gaia_theme', isLight ? 'light' : 'dark');
@@ -2407,17 +2202,11 @@ setTimeout(()=>{if(ECFG&&ECFG.publicKey&&ECFG.configured)emailjs.init(ECFG.publi
     const mb = document.getElementById('mob-theme-btn');
     if (mb) mb.innerHTML = isLight ? '🌙' : '☀️';
   });
-
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-    if (!localStorage.getItem('gaia_theme')) {
-      document.body.classList.toggle('light', !e.matches);
-      btn.innerHTML = e.matches ? '☀️' : '🌙';
-      const mb = document.getElementById('mob-theme-btn');
-      if (mb) mb.innerHTML = e.matches ? '☀️' : '🌙';
-    }
-  });
 })();
-// ── MOBILE MENU ──
+
+// ══════════════════════════════════════════════════════
+// MOBILE MENU
+// ══════════════════════════════════════════════════════
 function toggleMobMenu() {
   const sb = document.querySelector('.sidebar');
   const ov = el('mob-overlay');
@@ -2428,13 +2217,11 @@ function closeMobMenu() {
   document.querySelector('.sidebar').classList.remove('mob-open');
   el('mob-overlay').classList.remove('on');
 }
-// Fecha menu ao navegar no mobile
 const origGoPage = goPage;
 window.goPage = function(page, navEl) {
   origGoPage(page, navEl);
   closeMobMenu();
 };
-// Mostra/esconde barra mobile baseado na tela
 function checkMobBar() {
   const bar = el('mob-bar');
   if (!bar) return;
@@ -2445,31 +2232,7 @@ function checkMobBar() {
 }
 window.addEventListener('resize', checkMobBar);
 checkMobBar();
-// ── PROTEÇÃO DE CONSOLE ──
-(function protegerConsole() {
-  const noop = () => {};
-  const _log=console.log, _warn=console.warn, _error=console.error,
-        _table=console.table, _dir=console.dir;
-  setInterval(() => {
-    if (CU && !CU.isAdmin) {
-      console.log=noop; console.warn=noop; console.error=noop;
-      console.table=noop; console.dir=noop;
-    } else {
-      console.log=_log; console.warn=_warn; console.error=_error;
-      console.table=_table; console.dir=_dir;
-    }
-  }, 500);
-  setInterval(() => {
-    if (!CU || CU.isAdmin) return;
-    const w=window.outerWidth-window.innerWidth;
-    const h=window.outerHeight-window.innerHeight;
-    if(w>160||h>160){
-      toast('⚠️ Acesso não autorizado detectado.','err');
-      M=M.map(m=>({...m,password:'***'}));
-    }
-  }, 1000);
-})();
-  
+
 function toggleThemeMob() {
   const isLight = document.body.classList.toggle('light');
   localStorage.setItem('gaia_theme', isLight ? 'light' : 'dark');
