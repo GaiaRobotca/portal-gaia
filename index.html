@@ -410,6 +410,16 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 body.light .av-wrap.online::after {
   border-color: #fff;
 } 
+
+/* ── TEAM COLOR STRIPES ── */
+.team-stripe { width: 4px; border-radius: 4px; flex-shrink: 0; align-self: stretch; min-height: 36px; }
+.stripe-eq      { background: #00e5a0; }
+.stripe-rob     { background: #1a8fff; }
+.stripe-geral   { background: #ffffff; }
+.stripe-marketing { background: #a855f7; }
+.stripe-gestao  { background: #ef4444; }
+.stripe-adm     { background: #ffd166; }
+
 /* ── ANIMATIONS ── */
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
@@ -698,9 +708,19 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
     <div id="pg-home" class="pg">
       <div class="ph"><div class="pt">Visão Geral</div><div class="ps">Acompanhe o projeto Gaia</div></div>
       <div class="grid g4" style="margin-bottom:18px" id="home-stats"></div>
-      <div class="grid g2" style="margin-bottom:18px">
-        <div><div class="sec-hd"><div class="sec-title">🚁 EletroQuad</div></div><div id="eq-list"></div></div>
-        <div><div class="sec-hd"><div class="sec-title">🤖 Robótica</div></div><div id="rob-list"></div></div>
+      <div style="display:flex;gap:18px;margin-bottom:18px;flex-wrap:wrap">
+        <div style="min-width:180px;flex:1"><div class="sec-hd"><div class="sec-title" style="color:var(--green)">🚁 EletroQuad</div></div><div id="eq-list"></div></div>
+        <div style="min-width:180px;flex:1"><div class="sec-hd"><div class="sec-title" style="color:var(--blue)">🤖 Robótica</div></div><div id="rob-list"></div></div>
+        <div style="min-width:180px;flex:1" id="geral-sec"><div class="sec-hd"><div class="sec-title" style="color:#e2e8f0">⚡ Ambas</div></div><div id="geral-list"></div></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
+        <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-right:4px">Legenda:</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#ffd166"></div>ADM</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#00e5a0"></div>EletroQuad</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#1a8fff"></div>Robótica</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#e2e8f0"></div>Ambas</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#a855f7"></div>Marketing</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#ef4444"></div>Gestão</div>
       </div>
       <div class="sec-hd"><div class="sec-title">⚡ Atividade Recente</div></div>
       <div id="home-activity"></div>
@@ -975,7 +995,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
     </div>
     <div class="fg"><label class="lbl">E-mail</label><input type="email" id="mu-email" placeholder="para notificações"></div>
     <div class="frow" id="mu-admin-fields">
-      <div class="fg"><label class="lbl">Equipe</label><select id="mu-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="geral">Geral (ambas)</option></select></div>
+      <div class="fg"><label class="lbl">Equipe</label><select id="mu-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="geral">Geral (ambas)</option><option value="marketing">Marketing</option><option value="gestao">Gestão</option></select></div>
       <div class="fg"><label class="lbl">Cargo</label><input type="text" id="mu-role"></div>
     </div>
     <label class="chk" id="mu-admin-chk"><input type="checkbox" id="mu-isadmin"> Conceder acesso de Administrador</label>
@@ -1473,15 +1493,34 @@ function renderHome() {
     <div class="card card-sm"><div class="cl">Tarefas Concluídas</div><div class="cv cv-sm" style="color:var(--green)">${done}</div><div style="font-size:11px;color:var(--dim)">de ${T.length}</div></div>
     <div class="card card-sm"><div class="cl">Horas Certificado</div><div class="cv cv-sm" style="color:#bb86fc">${totalH}h</div></div>`;
 
+  function getStripe(m) {
+    if(m.isAdmin) return 'stripe-adm';
+    if(m.team==='geral') return 'stripe-geral';
+    if(m.team==='marketing') return 'stripe-marketing';
+    if(m.team==='gestao') return 'stripe-gestao';
+    if(m.team==='eletroquad') return 'stripe-eq';
+    if(m.team==='robotica') return 'stripe-rob';
+    return 'stripe-rob';
+  }
+  function memberRow(m) {
+    return `<div class="rank-row" onclick="openMemberModal('${m.id}')" style="padding-left:10px">
+      <div class="team-stripe ${getStripe(m)}"></div>
+      <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
+      <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role}</div></div>
+      <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent)">${MP[m.id]||m.pts} pts</div><div style="font-size:10px;color:var(--muted)">⏱ ${m.hours||0}h</div></div>
+    </div>`;
+  }
   ['eletroquad','robotica'].forEach((team,i)=>{
-    const members=M.filter(m=>m.team===team);
-    el(i===0?'eq-list':'rob-list').innerHTML=members.map(m=>`
-      <div class="rank-row" onclick="openMemberModal('${m.id}')">
-        <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
-        <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role}</div></div>
-        <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent)">${MP[m.id]||m.pts} pts</div><div style="font-size:10px;color:var(--muted)">⏱ ${m.hours||0}h</div></div>
-      </div>`).join('');
+    const members=M.filter(m=>m.team===team&&!m.isAdmin);
+    const admins=M.filter(m=>m.team===team&&m.isAdmin);
+    el(i===0?'eq-list':'rob-list').innerHTML=[...admins,...members].map(memberRow).join('');
   });
+  const geralSec=el('geral-sec');
+  if(geralSec){
+    const geralMembers=M.filter(m=>m.team==='geral');
+    geralSec.style.display=geralMembers.length?'block':'none';
+    el('geral-list').innerHTML=geralMembers.map(memberRow).join('');
+  }
 
   const acts=[];
   // Tarefas aprovadas
@@ -1664,7 +1703,7 @@ function createTask() {
 function filterRanking(f, tabEl) {
   rankFilter=f;
   if(tabEl){document.querySelectorAll('#pg-ranking .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral');
+  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f);
   list.sort((a,b)=>(MP[b.id]||b.pts)-(MP[a.id]||a.pts));
   const pc=['g','s','b'];
   el('ranking-list').innerHTML=list.map((m,i)=>`
@@ -2067,16 +2106,16 @@ function renderMyMetrics(){
 function filterMembers(f, tabEl) {
   memberFilter=f;
   if(tabEl){document.querySelectorAll('#pg-members .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral');
+  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f);
   el('members-list').innerHTML=list.map(m=>`
-    <div class="mc ${m.team==='eletroquad'?'eq':m.team==='geral'?'eq rob':'rob'}" onclick="openMemberModal('${m.id}')">
+    <div class="mc ${m.team==='eletroquad'?'eq':'rob'}" onclick="openMemberModal('${m.id}')">
       <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
         <div class="av" style="width:42px;height:42px">${avImg(m.name,m.color,42,!!onlineUsers[m.id])}</div>
         <div style="flex:1">
           <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">${m.name}${m.isAdmin?' 👑':''}</div>
           <div style="font-size:11px;color:var(--dim);margin-top:2px">${m.role}</div>
         </div>
-        <span class="tag ${m.team==='eletroquad'?'tag-eq':m.team==='geral'?'tag-both':'tag-rob'}">${m.team==='eletroquad'?'EletroQuad':m.team==='geral'?'Ambas':'Robótica'}</span>
+        <span class="tag ${m.team==='eletroquad'?'tag-eq':'tag-rob'}">${m.team==='eletroquad'?'EletroQuad':'Robótica'}</span>
       </div>
       <div style="display:flex;gap:8px">
         <span class="tag tag-pts">${MP[m.id]||m.pts} pts</span>
@@ -2138,7 +2177,7 @@ function openMemberModal(uid){
   const skills=m.skills&&m.skills.length?m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,.04);border-color:var(--border)">${s}</span>`).join(''):`<span style="font-size:12px;color:var(--dim)">—</span>`;
   el('mm-av').innerHTML=avImg(m.name,m.color,40);
   el('mm-name').innerHTML=m.name+(m.isAdmin?' 👑':'');
-  el('mm-badge').innerHTML=`<span class="tag ${m.team==='geral'?'tag-both':isEQ?'tag-eq':'tag-rob'}">${m.team==='geral'?'Ambas':isEQ?'EletroQuad':'Robótica'}</span>`;
+  el('mm-badge').innerHTML=`<span class="tag ${isEQ?'tag-eq':'tag-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>`;
   const avg=Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
   el('mm-content').innerHTML=`
     <div style="display:flex;gap:11px;margin-bottom:16px">
