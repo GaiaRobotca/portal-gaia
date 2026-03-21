@@ -45,6 +45,2517 @@
     opacity:0.4; pointer-events:none; z-index:0;
   }
 
+  .screen { display:none; min-height:100vh; }
+  .screen.active { display:flex; }
+
+  /* ──── LOGIN ──── */
+  #screen-login {
+    align-items:center; justify-content:center; flex-direction:column; gap:0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,143,255,0.12) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 80% 100%, rgba(0,229,160,0.08) 0%, transparent 60%),
+                var(--bg);
+  }
+  .login-card {
+    width:100%; max-width:420px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 24px; padding: 48px 40px; position:relative; overflow:hidden;
+    animation: fadeUp 0.6s ease both;
+  }
+  .login-card::before { content:''; position:absolute; top:-1px; left:20%; right:20%; height:1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+  .logo-area { text-align:center; margin-bottom:36px; }
+  .logo-glyph {
+    width:64px; height:64px; margin:0 auto 16px; border-radius:16px;
+    background: linear-gradient(135deg, var(--gaia-blue), var(--gaia-green));
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:24px; color:#fff;
+    box-shadow: 0 0 40px rgba(26,143,255,0.3); position:relative;
+  }
+  .logo-title { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:var(--text); }
+  .logo-sub { color:var(--text-dim); font-size:12px; letter-spacing:0.1em; text-transform:uppercase; margin-top:4px; }
+
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width:100%; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 16px; color: var(--text); font-family:'DM Sans',sans-serif; font-size:14px; outline:none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .form-group textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--border-active); box-shadow: 0 0 0 3px rgba(99,210,255,0.08); }
+  
+  .checkbox-group { display:flex; align-items:center; gap:10px; margin-bottom:16px; cursor:pointer; }
+  .checkbox-group input { width:16px; height:16px; cursor:pointer; }
+
+  .btn-primary { width:100%; padding:14px; background: linear-gradient(135deg, var(--gaia-blue), #0d6fff); border:none; border-radius: var(--radius); color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:14px; letter-spacing:0.04em; cursor:pointer; transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s; margin-top:8px; }
+  .btn-primary:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(26,143,255,0.35); }
+  .btn-primary:active { transform:translateY(0); }
+
+  .login-divider { text-align:center; color:var(--text-muted); font-size:11px; margin:20px 0; letter-spacing:0.06em; }
+
+  /* ──── DASHBOARD ──── */
+  #screen-dashboard { flex-direction:row; animation: fadeIn 0.4s ease; }
+  .sidebar { width:240px; min-width:240px; background: var(--bg2); border-right: 1px solid var(--border); display:flex; flex-direction:column; padding:24px 16px; position:sticky; top:0; height:100vh; overflow-y:auto; }
+  .sidebar-logo { display:flex; align-items:center; gap:12px; padding:0 8px; margin-bottom:32px; }
+  .sidebar-logo-icon { width:36px; height:36px; background: linear-gradient(135deg, var(--gaia-blue), var(--gaia-green)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:14px; color:#fff; flex-shrink:0; }
+  .sidebar-logo-text { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; }
+  .sidebar-logo-sub { font-size:10px; color:var(--text-dim); letter-spacing:0.06em; text-transform:uppercase; }
+
+  .nav-section { margin-bottom:24px; }
+  .nav-section-label { font-size:10px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); padding:0 8px; margin-bottom:8px; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:10px; color:var(--text-dim); font-size:13px; font-weight:400; cursor:pointer; transition: all 0.15s; margin-bottom:2px; user-select:none; }
+  .nav-item:hover { background:var(--card); color:var(--text); }
+  .nav-item.active { background: rgba(26,143,255,0.12); color:var(--accent); font-weight:500; }
+  .nav-item svg { opacity:0.7; flex-shrink:0; }
+  .nav-item.active svg { opacity:1; }
+
+  .sidebar-footer { margin-top:auto; padding:12px; background: var(--bg3); border:1px solid var(--border); border-radius:var(--radius); }
+  .sidebar-user { display:flex; align-items:center; gap:10px; }
+  .sidebar-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
+  .sidebar-user-info { flex:1; min-width:0; }
+  .sidebar-user-name { font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sidebar-user-role { font-size:10px; color:var(--text-dim); }
+  .sidebar-logout { cursor:pointer; color:var(--text-muted); transition:color 0.2s; flex-shrink:0; }
+  .sidebar-logout:hover { color:var(--accent-red); }
+
+  .main { flex:1; padding:32px; overflow-y:auto; }
+  .page { display:none; }
+  .page.active { display:block; animation: fadeIn 0.3s ease; }
+  .page-header { margin-bottom:28px; }
+  .page-title { font-family:'Syne',sans-serif; font-weight:800; font-size:26px; }
+  .page-subtitle { color:var(--text-dim); font-size:13px; margin-top:4px; }
+  .page-actions { display:flex; align-items:center; justify-content:space-between; }
+
+  .grid { display:grid; gap:16px; }
+  .grid-2 { grid-template-columns: repeat(2,1fr); }
+  .grid-3 { grid-template-columns: repeat(3,1fr); }
+  .grid-4 { grid-template-columns: repeat(4,1fr); }
+  .grid-auto { grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); }
+
+  .card { background: var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; transition: border-color 0.2s, background 0.2s; }
+  .card-sm { padding:16px; border-radius:var(--radius); }
+  .card-label { font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px; }
+  .card-value { font-family:'Syne',sans-serif; font-weight:700; font-size:28px; }
+  .card-value.sm { font-size:20px; }
+
+  .member-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
+  .member-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+  .member-card.eletroquad::before { background:linear-gradient(90deg, var(--gaia-blue), var(--accent)); }
+  .member-card.robotica::before { background:linear-gradient(90deg, var(--gaia-green), var(--accent2)); }
+  .member-card:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(0,0,0,0.3); border-color:rgba(255,255,255,0.12); }
+  .member-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .member-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:#fff; flex-shrink:0; }
+  .member-name { font-family:'Syne',sans-serif; font-weight:700; font-size:14px; }
+  .member-role { font-size:11px; color:var(--text-dim); margin-top:2px; }
+  .member-team-badge { margin-left:auto; padding:3px 10px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; }
+  .badge-eq { background:rgba(26,143,255,0.15); color:var(--gaia-blue); border:1px solid rgba(26,143,255,0.25); }
+  .badge-rob { background:rgba(0,229,160,0.12); color:var(--gaia-green); border:1px solid rgba(0,229,160,0.2); }
+  .badge-adm { background:rgba(255,209,102,0.15); color:var(--gaia-gold); border:1px solid rgba(255,209,102,0.25); }
+
+  .progress-item { margin-bottom:12px; }
+  .progress-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .progress-label { font-size:12px; color:var(--text-dim); }
+  .progress-val { font-family:'DM Mono',monospace; font-size:12px; color:var(--text); }
+  .progress-bar { height:5px; background:var(--bg3); border-radius:100px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:100px; transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
+
+  .task-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:10px; }
+  .task-header { display:flex; align-items:flex-start; gap:12px; }
+  .task-content { flex:1; }
+  .task-title { font-size:13px; font-weight:500; margin-bottom:4px; }
+  .task-title.done { text-decoration:line-through; color:var(--text-dim); }
+  .task-desc { font-size:11px; color:var(--text-dim); line-height:1.5; }
+  .task-meta { display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+  .tag { padding:2px 8px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:0.04em; border:1px solid transparent; }
+  .tag-eq { background:rgba(26,143,255,0.1); color:var(--gaia-blue); border-color:rgba(26,143,255,0.2); }
+  .tag-rob { background:rgba(0,229,160,0.08); color:var(--gaia-green); border-color:rgba(0,229,160,0.15); }
+  .tag-both { background:rgba(255,209,102,0.1); color:var(--gaia-gold); border-color:rgba(255,209,102,0.2); }
+  .tag-pts { background:rgba(255,184,106,0.1); color:var(--accent3); border-color:rgba(255,184,106,0.2); }
+  .tag-hours { background:rgba(187, 134, 252, 0.1); color:#bb86fc; border-color:rgba(187, 134, 252, 0.2); }
+  .tag-diff-easy { background:rgba(127,255,110,0.08); color:var(--accent2); }
+  .tag-diff-med { background:rgba(255,184,106,0.08); color:var(--accent3); }
+  .tag-diff-hard { background:rgba(255,110,110,0.08); color:var(--accent-red); }
+
+  .btn-claim { padding:6px 14px; background: rgba(26,143,255,0.12); border:1px solid rgba(26,143,255,0.25); border-radius:8px; color:var(--gaia-blue); font-size:11px; font-weight:600; cursor:pointer; margin-left:auto; }
+  .btn-claim.claimed { background:rgba(0,229,160,0.08); border-color:rgba(0,229,160,0.2); color:var(--gaia-green); cursor:default; }
+
+  /* ──── MODALS ──── */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { display:flex; animation:fadeIn 0.2s; }
+  .modal { background:var(--bg2); border:1px solid var(--border); border-radius:20px; padding:28px; width:100%; max-width:520px; max-height:85vh; overflow-y:auto; position:relative; }
+  .modal-header { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+  .modal-title { font-family:'Syne',sans-serif; font-weight:700; font-size:18px; }
+  .modal-close { margin-left:auto; cursor:pointer; color:var(--text-dim); transition:color 0.2s; }
+  .modal-close:hover { color:var(--text); }
+  .modal-footer { display:flex; gap:10px; justify-content:flex-end; margin-top:24px; }
+
+  .form-row { display:flex; gap:12px; }
+  .form-row .form-group { flex:1; }
+
+  .btn-success { padding:10px 20px; background:rgba(0,229,160,0.12); border:1px solid rgba(0,229,160,0.25); border-radius:var(--radius); color:var(--gaia-green); font-family:'Syne',sans-serif; font-weight:600; font-size:13px; cursor:pointer; transition:all 0.2s; }
+  .btn-danger { padding:10px 20px; background:rgba(255,110,110,0.08); border:1px solid rgba(255,110,110,0.2); border-radius:var(--radius); color:var(--accent-red); font-family:'Syne',sans-serif; font-weight:600; font-size:13px; cursor:pointer; transition:all 0.2s; }
+  .btn-ghost { padding:10px 20px; background:transparent; border:1px solid var(--border); border-radius:var(--radius); color:var(--text-dim); font-size:13px; cursor:pointer; transition:all 0.2s; }
+  .btn-ghost:hover { border-color:rgba(255,255,255,0.15); color:var(--text); }
+
+  #toast-container { position:fixed; bottom:24px; right:24px; display:flex; flex-direction:column; gap:8px; z-index:9999; }
+  .toast { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:10px; font-size:13px; min-width:240px; animation: slideIn 0.3s ease; box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+  .toast.success { border-color:rgba(0,229,160,0.3); }
+  .toast.error { border-color:rgba(255,110,110,0.3); }
+
+  .tabs { display:flex; gap:4px; margin-bottom:20px; background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:4px; width:fit-content; flex-wrap:wrap;}
+  .tab { padding:8px 16px; border-radius:9px; font-size:12px; font-weight:500; cursor:pointer; color:var(--text-dim); transition:all 0.2s; }
+  .tab.active { background:var(--bg3); color:var(--text); box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+
+  .rank-item { display:flex; align-items:center; gap:14px; padding:14px 16px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px; transition:all 0.2s; }
+  .rank-pos { font-family:'Syne',sans-serif; font-weight:800; font-size:18px; color:var(--text-muted); width:24px; text-align:center; flex-shrink:0; }
+  .rank-pos.gold { color:var(--gaia-gold); } .rank-pos.silver { color:#a0aec0; } .rank-pos.bronze { color:#c67b3c; }
+  .rank-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff; flex-shrink:0; }
+  .rank-info { flex:1; }
+  .rank-name { font-size:13px; font-weight:500; }
+  .rank-detail { font-size:11px; color:var(--text-dim); margin-top:1px; }
+  .rank-score { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:var(--accent); }
+
+  .submission-item { padding:12px; background:var(--bg3); border-radius:var(--radius); margin-bottom:8px; border:1px solid var(--border); }
+  .status-badge { padding:2px 8px; border-radius:100px; font-size:10px; font-weight:600; }
+  .status-pending { background:rgba(255,184,106,0.1); color:var(--accent3); }
+  .status-approved { background:rgba(0,229,160,0.1); color:var(--gaia-green); }
+  .status-rejected { background:rgba(255,110,110,0.08); color:var(--accent-red); }
+
+  .admin-review-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:10px; }
+  .admin-review-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .admin-review-actions { display:flex; gap:8px; margin-top:8px; }
+  .btn-approve { padding:7px 14px; background:rgba(0,229,160,0.1); border:1px solid rgba(0,229,160,0.25); border-radius:8px; color:var(--gaia-green); font-size:11px; font-weight:600; cursor:pointer; }
+  .btn-reject { padding:7px 14px; background:rgba(255,110,110,0.08); border:1px solid rgba(255,110,110,0.2); border-radius:8px; color:var(--accent-red); font-size:11px; font-weight:600; cursor:pointer; }
+
+  .empty-state { text-align:center; padding:48px 20px; color:var(--text-muted); }
+  .empty-icon { font-size:40px; margin-bottom:12px; }
+
+  .profile-hero { background: var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; margin-bottom:20px; position:relative; overflow:hidden; }
+  .profile-hero::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; }
+  .profile-hero.eletroquad::before { background:linear-gradient(90deg, var(--gaia-blue), var(--accent)); }
+  .profile-hero.robotica::before { background:linear-gradient(90deg, var(--gaia-green), var(--accent2)); }
+  .profile-hero-inner { display:flex; align-items:center; gap:20px; }
+  .profile-avatar-lg { width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:26px; color:#fff; flex-shrink:0; }
+  .profile-name { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; }
+
+  .skill-chip { display:flex; align-items:center; gap:6px; padding:4px 10px; background:var(--bg3); border:1px solid var(--border); border-radius:100px; color:var(--text); font-size:12px; }
+  .skill-chip-remove { color:var(--accent-red); cursor:pointer; font-weight:bold; font-size:14px; }
+
+  hr { border:none; border-top:1px solid var(--border); margin:16px 0; }
+  .pts-big { font-family:'Syne',sans-serif; font-weight:800; font-size:36px; color:var(--accent); }
+  .pts-label { font-size:11px; color:var(--text-dim); letter-spacing:0.08em; text-transform:uppercase; }
+  .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .section-title { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; }
+
+  /* ──── MURAL DE AVISOS ──── */
+  .notice-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .notice-card::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  }
+  .notice-card.urgente::before { background: var(--accent-red); }
+  .notice-card.info::before { background: var(--gaia-blue); }
+  .notice-card.evento::before { background: var(--gaia-green); }
+  .notice-card.geral::before { background: var(--accent3); }
+  .notice-card:hover { border-color: rgba(255,255,255,0.12); }
+  .notice-type-badge {
+    display:inline-flex; align-items:center; gap:4px;
+    padding:3px 10px; border-radius:100px; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .notice-type-urgente { background:rgba(255,110,110,0.12); color:var(--accent-red); border:1px solid rgba(255,110,110,0.25); }
+  .notice-type-info    { background:rgba(26,143,255,0.12); color:var(--gaia-blue); border:1px solid rgba(26,143,255,0.25); }
+  .notice-type-evento  { background:rgba(0,229,160,0.1); color:var(--gaia-green); border:1px solid rgba(0,229,160,0.2); }
+  .notice-type-geral   { background:rgba(255,184,106,0.1); color:var(--accent3); border:1px solid rgba(255,184,106,0.2); }
+  .notice-title { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; margin-bottom:6px; }
+  .notice-body  { font-size:13px; color:var(--text-dim); line-height:1.6; white-space:pre-wrap; }
+  .notice-footer{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+  .notice-meta  { font-size:11px; color:var(--text-muted); }
+  .notice-delete{ font-size:11px; color:var(--accent-red); cursor:pointer; opacity:0.7; transition:opacity 0.2s; }
+  .notice-delete:hover { opacity:1; }
+  .notice-email-indicator { font-size:10px; color:var(--gaia-green); display:flex; align-items:center; gap:4px; }
+
+  /* ──── CALENDÁRIO ──── */
+  .calendar-wrapper {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px;
+    margin-bottom: 20px;
+  }
+  .calendar-header {
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;
+  }
+  .cal-month-label { font-family:'Syne',sans-serif; font-weight:700; font-size:18px; }
+  .cal-nav { display:flex; gap:8px; }
+  .cal-nav-btn {
+    width:32px; height:32px; border-radius:8px; background:var(--bg3); border:1px solid var(--border);
+    color:var(--text-dim); cursor:pointer; display:flex; align-items:center; justify-content:center;
+    font-size:14px; transition:all 0.2s;
+  }
+  .cal-nav-btn:hover { border-color:rgba(255,255,255,0.15); color:var(--text); }
+  .calendar-grid { display:grid; grid-template-columns: repeat(7,1fr); gap:2px; }
+  .cal-day-header {
+    text-align:center; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--text-muted); padding:8px 0;
+  }
+  .cal-day {
+    min-height:60px; padding:6px; border-radius:8px; border:1px solid transparent;
+    position:relative; cursor:pointer; transition:all 0.15s; background:transparent;
+  }
+  .cal-day:hover { background:var(--bg3); border-color:var(--border); }
+  .cal-day.other-month { opacity:0.3; pointer-events:none; }
+  .cal-day.today { border-color:rgba(26,143,255,0.4); background:rgba(26,143,255,0.06); }
+  .cal-day.has-events { border-color:rgba(99,210,255,0.25); }
+  .cal-day-num { font-size:12px; font-weight:500; color:var(--text-dim); margin-bottom:4px; }
+  .cal-day.today .cal-day-num { color:var(--gaia-blue); font-weight:700; }
+  .cal-event-dot { font-size:10px; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:2px; }
+  .cal-event-dot.reuniao    { color:var(--gaia-blue); }
+  .cal-event-dot.entrega    { color:var(--accent3); }
+  .cal-event-dot.evento     { color:var(--gaia-green); }
+  .cal-event-dot.outro      { color:var(--text-dim); }
+  .cal-add-btn {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:8px 18px; background:rgba(26,143,255,0.12); border:1px solid rgba(26,143,255,0.25);
+    border-radius:var(--radius); color:var(--gaia-blue); font-size:12px; font-weight:600; cursor:pointer;
+  }
+
+  /* Legenda calendário */
+  .cal-legend { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; }
+  .cal-legend-item { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-dim); }
+  .cal-legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+  /* ──── HORAS / CONTABILIZAÇÃO ──── */
+  .hours-summary-card {
+    background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg);
+    padding:20px; margin-bottom:16px;
+  }
+  .hours-member-row {
+    display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg3);
+    border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px;
+    transition:all 0.2s;
+  }
+  .hours-member-row:hover { border-color:rgba(255,255,255,0.12); }
+  .hours-bar-wrapper { flex:1; }
+  .hours-bar-label { display:flex; justify-content:space-between; margin-bottom:4px; }
+  .hours-bar-name  { font-size:12px; font-weight:500; }
+  .hours-bar-val   { font-family:'DM Mono',monospace; font-size:12px; color:#bb86fc; }
+  .hours-bar       { height:6px; background:var(--bg); border-radius:100px; overflow:hidden; }
+  .hours-bar-fill  { height:100%; border-radius:100px; background:linear-gradient(90deg, #7b5ea7, #bb86fc); transition:width 0.8s; }
+  .hours-goal-badge { font-size:10px; padding:2px 8px; border-radius:100px; font-weight:600; }
+  .hours-ok   { background:rgba(0,229,160,0.1); color:var(--gaia-green); border:1px solid rgba(0,229,160,0.2); }
+  .hours-warn { background:rgba(255,184,106,0.1); color:var(--accent3); border:1px solid rgba(255,184,106,0.2); }
+  .hours-low  { background:rgba(255,110,110,0.08); color:var(--accent-red); border:1px solid rgba(255,110,110,0.2); }
+  .hours-adj-btn { padding:5px 10px; border-radius:6px; background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; }
+  .hours-adj-btn:hover { border-color:rgba(255,255,255,0.15); color:var(--text); }
+
+  /* Config EmailJS card */
+  .config-card {
+    background:rgba(26,143,255,0.04); border:1px solid rgba(26,143,255,0.15); border-radius:var(--radius);
+    padding:16px; margin-bottom:20px; font-size:12px; color:var(--text-dim); line-height:1.6;
+  }
+  .config-card b { color:var(--accent); }
+
+  /* ──── CHAT ──── */
+  .chat-wrapper { display:flex; flex-direction:column; height:calc(100vh - 180px); min-height:400px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; }
+  .chat-messages { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:12px; }
+  .chat-msg { display:flex; gap:10px; max-width:80%; }
+  .chat-msg.mine { flex-direction:row-reverse; align-self:flex-end; }
+  .chat-msg-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; }
+  .chat-bubble { background:var(--bg3); border:1px solid var(--border); border-radius:14px 14px 14px 4px; padding:10px 14px; max-width:100%; }
+  .chat-msg.mine .chat-bubble { background:rgba(26,143,255,0.12); border-color:rgba(26,143,255,0.25); border-radius:14px 14px 4px 14px; }
+  .chat-bubble-name { font-size:10px; font-weight:600; color:var(--accent); margin-bottom:4px; }
+  .chat-msg.mine .chat-bubble-name { text-align:right; color:var(--gaia-blue); }
+  .chat-bubble-text { font-size:13px; line-height:1.5; word-break:break-word; }
+  .chat-bubble-time { font-size:10px; color:var(--text-muted); margin-top:4px; }
+  .chat-msg.mine .chat-bubble-time { text-align:right; }
+  .chat-bubble-file { display:flex; align-items:center; gap:8px; margin-top:6px; padding:8px 10px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; cursor:pointer; text-decoration:none; }
+  .chat-bubble-file:hover { border-color:rgba(255,255,255,0.15); }
+  .chat-file-icon { font-size:18px; flex-shrink:0; }
+  .chat-file-info { flex:1; min-width:0; }
+  .chat-file-name { font-size:12px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .chat-file-size { font-size:10px; color:var(--text-dim); }
+  .chat-input-area { border-top:1px solid var(--border); padding:16px; display:flex; flex-direction:column; gap:10px; background:var(--bg2); }
+  .chat-input-row { display:flex; gap:10px; align-items:flex-end; }
+  .chat-textarea { flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; outline:none; resize:none; min-height:40px; max-height:120px; line-height:1.5; transition:border-color 0.2s; }
+  .chat-textarea:focus { border-color:var(--border-active); }
+  .chat-send-btn { width:40px; height:40px; border-radius:10px; background:linear-gradient(135deg,var(--gaia-blue),#0d6fff); border:none; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
+  .chat-send-btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(26,143,255,0.4); }
+  .chat-attach-btn { width:40px; height:40px; border-radius:10px; background:var(--bg3); border:1px solid var(--border); color:var(--text-dim); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
+  .chat-attach-btn:hover { border-color:rgba(255,255,255,0.2); color:var(--text); }
+  .chat-attach-preview { display:none; align-items:center; gap:8px; padding:8px 12px; background:rgba(99,210,255,0.06); border:1px dashed rgba(99,210,255,0.25); border-radius:8px; font-size:12px; color:var(--text-dim); }
+  .chat-attach-preview.active { display:flex; }
+  .chat-attach-remove { cursor:pointer; color:var(--accent-red); font-weight:bold; margin-left:auto; }
+  .chat-date-divider { text-align:center; font-size:10px; color:var(--text-muted); position:relative; margin:8px 0; }
+  .chat-date-divider::before { content:''; position:absolute; left:0; right:0; top:50%; height:1px; background:var(--border); z-index:0; }
+  .chat-date-divider span { background:var(--bg2); padding:0 10px; position:relative; z-index:1; }
+  .chat-task-badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; background:rgba(255,209,102,0.1); border:1px solid rgba(255,209,102,0.2); border-radius:100px; font-size:10px; color:var(--gaia-gold); margin-top:4px; }
+
+  /* ──── TAREFAS - chip de responsável ──── */
+  .task-assignees { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .task-assignee-chip { display:flex; align-items:center; gap:6px; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:500; background:rgba(26,143,255,0.08); border:1px solid rgba(26,143,255,0.2); color:var(--gaia-blue); }
+  .task-assignee-chip.rob { background:rgba(0,229,160,0.07); border-color:rgba(0,229,160,0.18); color:var(--gaia-green); }
+
+  /* ──── ARQUIVOS ──── */
+  .files-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; }
+  .file-card { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; gap:10px; transition:all 0.2s; cursor:pointer; position:relative; }
+  .file-card:hover { border-color:rgba(255,255,255,0.12); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.25); }
+  .file-card-icon { font-size:28px; line-height:1; }
+  .file-card-name { font-size:13px; font-weight:600; word-break:break-word; }
+  .file-card-meta { font-size:10px; color:var(--text-dim); }
+  .file-card-tags { display:flex; gap:4px; flex-wrap:wrap; }
+  .file-del-btn { position:absolute; top:8px; right:8px; width:22px; height:22px; border-radius:50%; background:rgba(255,110,110,0.1); border:1px solid rgba(255,110,110,0.2); color:var(--accent-red); cursor:pointer; display:none; align-items:center; justify-content:center; font-size:11px; }
+  .file-card:hover .file-del-btn { display:flex; }
+
+  /* ──── MAPA DE CÓDIGO ──── */
+  .codemap-item { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); margin-bottom:12px; overflow:hidden; }
+  .codemap-header { display:flex; align-items:center; gap:12px; padding:14px 18px; cursor:pointer; transition:background 0.15s; }
+  .codemap-header:hover { background:var(--card-hover); }
+  .codemap-lang-badge { padding:3px 10px; border-radius:6px; font-family:'DM Mono',monospace; font-size:10px; font-weight:600; }
+  .codemap-name { font-family:'DM Mono',monospace; font-size:13px; font-weight:500; }
+  .codemap-path { font-size:11px; color:var(--text-muted); }
+  .codemap-body { border-top:1px solid var(--border); padding:16px 18px; display:none; }
+  .codemap-body.open { display:block; }
+  .codemap-desc-area { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:10px 14px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; resize:vertical; min-height:80px; line-height:1.5; outline:none; margin-bottom:12px; }
+  .codemap-desc-area:focus { border-color:var(--border-active); }
+  .codemap-author { font-size:11px; color:var(--text-dim); margin-top:8px; }
+  .lang-py { background:rgba(255,214,0,0.12); color:#ffd600; }
+  .lang-cpp { background:rgba(0,174,255,0.1); color:#00aeff; }
+  .lang-ros { background:rgba(0,229,160,0.1); color:var(--gaia-green); }
+  .lang-js { background:rgba(255,184,0,0.1); color:#ffb800; }
+  .lang-other { background:rgba(255,255,255,0.06); color:var(--text-dim); }
+
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+
+  ::-webkit-scrollbar { width:5px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:100px; }
+
+  @media(max-width:768px) {
+    .sidebar { display:none; }
+    .main { padding:16px; }
+    .grid-4,.grid-3,.grid-2 { grid-template-columns:1fr; }
+    .grid-auto { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ══ LOGIN ══ -->
+<div id="screen-login" class="screen active">
+  <div class="login-card">
+    <div class="logo-area">
+      <div class="logo-glyph">G</div>
+      <div class="logo-title">Portal Gaia</div>
+      <div class="logo-sub">UFTM · Projeto de Extensão</div>
+    </div>
+    <div class="form-group">
+      <label>Usuário de Acesso</label>
+      <input type="text" id="login-username" placeholder="Seu nome (ex: Pedro Henrique)" onkeypress="if(event.key==='Enter') document.getElementById('login-password').focus()" />
+    </div>
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" id="login-password" placeholder="Sua senha (padrão inicial: 123)" onkeypress="if(event.key==='Enter') doLogin()" />
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Entrar no Portal</button>
+    <div class="login-divider">Use seu Nome (Maiúsculas ou Minúsculas) e senha para entrar.</div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div id="screen-dashboard" class="screen">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">G</div>
+      <div>
+        <div class="sidebar-logo-text">Portal Gaia</div>
+        <div class="sidebar-logo-sub">UFTM</div>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Principal</div>
+      <div class="nav-item active" onclick="showPage('home',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Visão Geral
+      </div>
+      <div class="nav-item" onclick="showPage('notices',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Mural de Avisos
+        <span id="notices-badge" style="margin-left:auto;background:rgba(255,110,110,0.2);color:var(--accent-red);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;display:none;"></span>
+      </div>
+      <div class="nav-item" onclick="showPage('calendar',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Calendário
+      </div>
+      <div class="nav-item" onclick="showPage('tasks',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M5 7h14M5 12h14M5 17h8"/></svg>
+        Tarefas
+        <span id="tasks-badge" style="margin-left:auto;background:rgba(26,143,255,0.2);color:var(--gaia-blue);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;"></span>
+      </div>
+      <div class="nav-item" onclick="showPage('ranking',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        Ranking
+      </div>
+      <div class="nav-item" onclick="showPage('chat',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat Geral
+        <span id="chat-badge" style="margin-left:auto;background:rgba(0,229,160,0.2);color:var(--gaia-green);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;display:none;"></span>
+      </div>
+      <div class="nav-item" onclick="showPage('files',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Arquivos
+      </div>
+      <div class="nav-item" onclick="showPage('codemap',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Mapa de Código
+      </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Meu Espaço</div>
+      <div class="nav-item" onclick="showPage('myprofile',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Meu Perfil
+      </div>
+      <div class="nav-item" onclick="showPage('mymetrics',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="12" width="4" height="10" rx="1"/><rect x="10" y="7" width="4" height="15" rx="1"/><rect x="18" y="3" width="4" height="19" rx="1"/></svg>
+        Minhas Métricas
+      </div>
+    </div>
+
+    <div class="nav-section" id="nav-admin" style="display:none;">
+      <div class="nav-section-label">Administração</div>
+      <div class="nav-item" onclick="showPage('admin-members',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Membros
+      </div>
+      <div class="nav-item" onclick="showPage('admin-attendance',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Lista de Presença
+      </div>
+      <div class="nav-item" onclick="showPage('admin-hours',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Contabilização de Horas
+        <span id="hours-badge" style="margin-left:auto;background:rgba(187,134,252,0.2);color:#bb86fc;border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;display:none;"></span>
+      </div>
+      <div class="nav-item" onclick="showPage('admin-submissions',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Entregas
+        <span id="submissions-badge" style="margin-left:auto;background:rgba(255,184,106,0.2);color:var(--accent3);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;"></span>
+      </div>
+      <div class="nav-item" onclick="showPage('admin-tasks',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nova Tarefa
+      </div>
+      <div class="nav-item" onclick="showPage('admin-rewards',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        Recompensas
+      </div>
+      <div class="nav-item" onclick="showPage('admin-emailconfig',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Config. E-mail
+      </div>
+      <div class="nav-item" onclick="showPage('admin-chat',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1"/><path d="M15 2H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2v4l4-4h4a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+        Chat dos ADMs
+        <span id="admchat-badge" style="margin-left:auto;background:rgba(255,209,102,0.2);color:var(--gaia-gold);border-radius:100px;padding:1px 7px;font-size:10px;font-weight:600;display:none;"></span>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebar-avatar" style="background:var(--gaia-blue)"></div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebar-name">—</div>
+          <div class="sidebar-user-role" id="sidebar-role">—</div>
+        </div>
+        <div class="sidebar-logout" onclick="doLogout()" title="Sair">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- HOME -->
+    <div id="page-home" class="page active">
+      <div class="page-header">
+        <div class="page-title" id="home-title">Visão Geral</div>
+        <div class="page-subtitle">Acompanhe o desempenho do projeto Gaia</div>
+      </div>
+      <div class="grid grid-4" style="margin-bottom:20px;" id="home-stats"></div>
+      <div class="grid grid-2" style="margin-bottom:20px;">
+        <div>
+          <div class="section-header"><div class="section-title">🚁 Gaia EletroQuad</div></div>
+          <div id="eq-members-overview"></div>
+        </div>
+        <div>
+          <div class="section-header"><div class="section-title">🤖 Gaia Robótica</div></div>
+          <div id="rob-members-overview"></div>
+        </div>
+      </div>
+      <div class="section-header"><div class="section-title">⚡ Atividade Recente</div></div>
+      <div id="recent-activity"></div>
+    </div>
+
+    <!-- MURAL DE AVISOS -->
+    <div id="page-notices" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">📢 Mural de Avisos</div>
+          <div class="page-subtitle">Comunicados do projeto — novos avisos enviam e-mail automaticamente para os membros</div>
+        </div>
+        <div id="notice-admin-btn"></div>
+      </div>
+      <div id="notices-list"></div>
+    </div>
+
+    <!-- CALENDÁRIO -->
+    <div id="page-calendar" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">📅 Calendário do Projeto</div>
+          <div class="page-subtitle">Reuniões, prazos e eventos da equipe</div>
+        </div>
+        <div id="cal-admin-btn"></div>
+      </div>
+      <div class="calendar-wrapper">
+        <div class="calendar-header">
+          <div class="cal-month-label" id="cal-month-label"></div>
+          <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="calNav(-1)">‹</button>
+            <button class="cal-nav-btn" onclick="calNav(1)">›</button>
+          </div>
+        </div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+        <div class="cal-legend">
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--gaia-blue)"></div>Reunião</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--accent3)"></div>Entrega</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--gaia-green)"></div>Evento</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--text-muted)"></div>Outro</div>
+        </div>
+      </div>
+      <div class="section-header" style="margin-top:8px;">
+        <div class="section-title">📋 Próximos Eventos</div>
+      </div>
+      <div id="upcoming-events"></div>
+    </div>
+
+    <!-- TAREFAS -->
+    <div id="page-tasks" class="page">
+      <div class="page-header">
+        <div class="page-title">Tarefas do Projeto</div>
+        <div class="page-subtitle">Contribua com o projeto, acumule pontos e horas de certificado</div>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="filterTasks('all',this)">Todas</div>
+        <div class="tab" onclick="filterTasks('available',this)">Disponíveis</div>
+        <div class="tab" onclick="filterTasks('claimed',this)">Assumidas</div>
+        <div class="tab" onclick="filterTasks('done',this)">Concluídas</div>
+      </div>
+      <div id="tasks-list"></div>
+    </div>
+
+    <!-- RANKING -->
+    <div id="page-ranking" class="page">
+      <div class="page-header">
+        <div class="page-title">Ranking Geral</div>
+        <div class="page-subtitle">Baseado em pontos por tarefas e contribuições</div>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="filterRanking('all',this)">Geral</div>
+        <div class="tab" onclick="filterRanking('eletroquad',this)">EletroQuad</div>
+        <div class="tab" onclick="filterRanking('robotica',this)">Robótica</div>
+      </div>
+      <div id="ranking-list"></div>
+    </div>
+
+    <!-- MEU PERFIL -->
+    <div id="page-myprofile" class="page">
+      <div class="page-header page-actions">
+        <div><div class="page-title">Meu Perfil</div></div>
+        <button class="btn-ghost" onclick="openEditUserModal(currentUser.id)">⚙️ Editar Conta</button>
+      </div>
+      <div id="my-profile-content"></div>
+    </div>
+
+    <!-- MINHAS MÉTRICAS -->
+    <div id="page-mymetrics" class="page">
+      <div class="page-header">
+        <div class="page-title">Minhas Métricas</div>
+        <div class="page-subtitle">Seu desempenho individual</div>
+      </div>
+      <div id="my-metrics-content"></div>
+    </div>
+
+    <!-- ADMIN: MEMBROS -->
+    <div id="page-admin-members" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">Gestão de Membros</div>
+          <div class="page-subtitle">Gerencie usuários, senhas, horas e equipes</div>
+        </div>
+        <button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="openAddUserModal()">+ Adicionar</button>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="filterAdminMembers('all',this)">Todos</div>
+        <div class="tab" onclick="filterAdminMembers('eletroquad',this)">EletroQuad</div>
+        <div class="tab" onclick="filterAdminMembers('robotica',this)">Robótica</div>
+      </div>
+      <div id="admin-members-list"></div>
+    </div>
+
+    <!-- ADMIN: PRESENÇA -->
+    <div id="page-admin-attendance" class="page">
+      <div class="page-header">
+        <div class="page-title">Lista de Presença</div>
+        <div class="page-subtitle">Registre reuniões — horas são adicionadas automaticamente</div>
+      </div>
+      <div class="card" style="margin-bottom:20px;">
+        <div class="form-row">
+          <div class="form-group" style="flex:1;">
+            <label>Data</label>
+            <input type="date" id="att-date" />
+          </div>
+          <div class="form-group" style="flex:2;">
+            <label>Descrição</label>
+            <input type="text" id="att-desc" placeholder="Ex: Reunião Geral de Sábado" />
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label>Horas Validadas</label>
+            <input type="number" id="att-hours" value="2" min="1" max="20" />
+          </div>
+        </div>
+        <label style="display:block;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin:12px 0 8px;">Membros Presentes</label>
+        <div id="attendance-members-list" class="grid grid-3" style="background:var(--bg3);padding:16px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;"></div>
+        <button class="btn-primary" onclick="saveAttendance()" style="width:auto;padding:12px 28px;">Registrar Presença e Adicionar Horas</button>
+      </div>
+      <div class="section-header"><div class="section-title">Histórico de Presenças</div></div>
+      <div id="attendance-history"></div>
+    </div>
+
+    <!-- ADMIN: CONTABILIZAÇÃO DE HORAS (NOVO) -->
+    <div id="page-admin-hours" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">⏱ Contabilização de Horas</div>
+          <div class="page-subtitle">Visão completa, metas e ajuste manual de horas de certificado</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn-ghost" style="font-size:12px;" onclick="exportHoursCSV()">📥 Exportar CSV</button>
+          <button class="btn-ghost" style="font-size:12px;" onclick="openModal('modal-hours-goal')">🎯 Meta de Horas</button>
+        </div>
+      </div>
+      <div id="hours-page-content"></div>
+    </div>
+
+    <!-- ADMIN: ENTREGAS -->
+    <div id="page-admin-submissions" class="page">
+      <div class="page-header">
+        <div class="page-title">Entregas para Revisão</div>
+        <div class="page-subtitle">Avalie e aprove tarefas</div>
+      </div>
+      <div id="admin-submissions-list"></div>
+    </div>
+
+    <!-- ADMIN: NOVA TAREFA -->
+    <div id="page-admin-tasks" class="page">
+      <div class="page-header">
+        <div class="page-title">Nova Tarefa</div>
+        <div class="page-subtitle">Crie uma nova tarefa para o projeto</div>
+      </div>
+      <div class="card" style="max-width:580px;">
+        <div class="form-group">
+          <label>Título da Tarefa</label>
+          <input type="text" id="new-task-title" placeholder="Ex: Implementar filtro de Kalman" />
+        </div>
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea id="new-task-desc" placeholder="Detalhe o que precisa ser feito..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Equipe</label>
+            <select id="new-task-team">
+              <option value="both">Ambas</option>
+              <option value="eletroquad">EletroQuad</option>
+              <option value="robotica">Robótica</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Dificuldade</label>
+            <select id="new-task-diff">
+              <option value="easy">Fácil</option>
+              <option value="medium">Médio</option>
+              <option value="hard">Difícil</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pontos</label>
+            <input type="number" id="new-task-pts" value="50" min="5" max="500" />
+          </div>
+          <div class="form-group">
+            <label>Horas (Certificado)</label>
+            <input type="number" id="new-task-hours" value="2" min="1" max="100" />
+          </div>
+          <div class="form-group">
+            <label>Prazo</label>
+            <input type="date" id="new-task-deadline" />
+          </div>
+        </div>
+        <button class="btn-primary" onclick="createTask()" style="width:auto;padding:12px 28px;">Criar Tarefa</button>
+      </div>
+    </div>
+
+    <!-- ADMIN: RECOMPENSAS -->
+    <div id="page-admin-rewards" class="page">
+      <div class="page-header">
+        <div class="page-title">Recompensas</div>
+        <div class="page-subtitle">Defina e gerencie prêmios por ciclo</div>
+      </div>
+      <div id="admin-rewards-content"></div>
+    </div>
+
+    <!-- ADMIN: CONFIG E-MAIL (NOVO) -->
+    <div id="page-admin-emailconfig" class="page">
+      <div class="page-header">
+        <div class="page-title">⚙️ Configuração de E-mail</div>
+        <div class="page-subtitle">Configure o EmailJS para envio de notificações automáticas</div>
+      </div>
+      <div id="email-config-content"></div>
+    </div>
+
+    <!-- CHAT GERAL -->
+    <div id="page-chat" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">💬 Chat Geral</div>
+          <div class="page-subtitle">Canal aberto para toda a equipe — suporta arquivos e imagens</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span id="chat-online-count" style="font-size:11px;color:var(--text-dim);"></span>
+        </div>
+      </div>
+      <div class="chat-wrapper">
+        <div class="chat-messages" id="chat-messages-list">
+          <div class="empty-state"><div class="empty-icon">💬</div><div style="color:var(--text-muted);">Nenhuma mensagem ainda. Seja o primeiro!</div></div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-attach-preview" id="chat-attach-preview">
+            <span id="chat-attach-name">arquivo.pdf</span>
+            <span id="chat-attach-size" style="color:var(--text-muted);font-size:10px;margin-left:4px;"></span>
+            <span class="chat-attach-remove" onclick="clearChatAttach()">✕</span>
+          </div>
+          <div class="chat-input-row">
+            <button class="chat-attach-btn" onclick="document.getElementById('chat-file-input').click()" title="Anexar arquivo">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            </button>
+            <input type="file" id="chat-file-input" style="display:none" onchange="handleChatFileSelect(this)" />
+            <textarea class="chat-textarea" id="chat-input" placeholder="Mensagem para toda a equipe... (Enter para enviar)" rows="1"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"
+              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+            <button class="chat-send-btn" onclick="sendChatMsg()" title="Enviar">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT ADMs -->
+    <div id="page-admin-chat" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">🔐 Chat dos ADMs</div>
+          <div class="page-subtitle">Canal privado exclusivo para administradores</div>
+        </div>
+      </div>
+      <div class="chat-wrapper">
+        <div class="chat-messages" id="admchat-messages-list">
+          <div class="empty-state"><div class="empty-icon">🔐</div><div style="color:var(--text-muted);">Canal privado dos administradores.</div></div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-attach-preview" id="admchat-attach-preview">
+            <span id="admchat-attach-name">arquivo.pdf</span>
+            <span id="admchat-attach-size" style="color:var(--text-muted);font-size:10px;margin-left:4px;"></span>
+            <span class="chat-attach-remove" onclick="clearAdmChatAttach()">✕</span>
+          </div>
+          <div class="chat-input-row">
+            <button class="chat-attach-btn" onclick="document.getElementById('admchat-file-input').click()" title="Anexar arquivo">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            </button>
+            <input type="file" id="admchat-file-input" style="display:none" onchange="handleAdmChatFileSelect(this)" />
+            <textarea class="chat-textarea" id="admchat-input" placeholder="Mensagem privada para os ADMs... (Enter para enviar)" rows="1"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAdmChatMsg();}"
+              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+            <button class="chat-send-btn" onclick="sendAdmChatMsg()" title="Enviar">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARQUIVOS -->
+    <div id="page-files" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">📁 Arquivos do Projeto</div>
+          <div class="page-subtitle">Repositório central de arquivos — imagens, PDFs, planilhas, códigos e mais</div>
+        </div>
+        <button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="document.getElementById('files-upload-input').click()">
+          + Adicionar Arquivo
+        </button>
+        <input type="file" id="files-upload-input" style="display:none" multiple onchange="handleFilesUpload(this)" />
+      </div>
+      <div class="tabs" id="files-tabs">
+        <div class="tab active" onclick="filterFiles('all',this)">Todos</div>
+        <div class="tab" onclick="filterFiles('image',this)">🖼 Imagens</div>
+        <div class="tab" onclick="filterFiles('pdf',this)">📄 PDFs</div>
+        <div class="tab" onclick="filterFiles('code',this)">💻 Código</div>
+        <div class="tab" onclick="filterFiles('other',this)">📦 Outros</div>
+      </div>
+      <div id="files-grid-container"></div>
+    </div>
+
+    <!-- MAPA DE CÓDIGO -->
+    <div id="page-codemap" class="page">
+      <div class="page-header page-actions">
+        <div>
+          <div class="page-title">🗺 Mapa de Código</div>
+          <div class="page-subtitle">Documentação e visão geral de todos os módulos e scripts do projeto</div>
+        </div>
+        <button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="openModal('modal-codemap-new')">+ Novo Módulo</button>
+      </div>
+      <div class="tabs" id="codemap-tabs">
+        <div class="tab active" onclick="filterCodemap('all',this)">Todos</div>
+        <div class="tab" onclick="filterCodemap('eletroquad',this)">EletroQuad</div>
+        <div class="tab" onclick="filterCodemap('robotica',this)">Robótica</div>
+      </div>
+      <div id="codemap-list"></div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /screen-dashboard -->
+</div><!-- /app -->
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- Modal Member -->
+<div id="modal-member" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div id="modal-member-avatar" class="sidebar-avatar" style="width:40px;height:40px;font-size:16px;"></div>
+      <div>
+        <div class="modal-title" id="modal-member-name"></div>
+        <div id="modal-member-badge" style="margin-top:4px;"></div>
+      </div>
+      <div class="modal-close" onclick="closeModal('modal-member')">✕</div>
+    </div>
+    <div id="modal-member-content"></div>
+    <div class="modal-footer" id="modal-member-footer" style="display:none;justify-content:flex-start;flex-wrap:wrap;gap:8px;"></div>
+  </div>
+</div>
+
+<!-- Modal Attendance Details -->
+<div id="modal-attendance-details" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header" style="margin-bottom:16px;">
+      <div class="modal-title">Detalhes da Presença</div>
+      <div class="modal-close" onclick="closeModal('modal-attendance-details')">✕</div>
+    </div>
+    <div id="attendance-details-content"></div>
+  </div>
+</div>
+
+<!-- Modal Task Submit -->
+<div id="modal-task-submit" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Entregar Tarefa</div>
+        <div style="font-size:12px;color:var(--text-dim);margin-top:2px;" id="submit-task-name"></div>
+      </div>
+      <div class="modal-close" onclick="closeModal('modal-task-submit')">✕</div>
+    </div>
+    <div class="form-group">
+      <label>Descrição da Entrega</label>
+      <textarea id="submit-desc" placeholder="Descreva o que foi feito, links de repositório, evidências..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Link (opcional)</label>
+      <input type="text" id="submit-link" placeholder="https://github.com/..." />
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-task-submit')">Cancelar</button>
+      <button class="btn-success" onclick="submitTask()">Entregar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Reward -->
+<div id="modal-reward" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🏆 Definir Recompensa</div>
+      <div class="modal-close" onclick="closeModal('modal-reward')">✕</div>
+    </div>
+    <div class="form-group"><label>Ciclo / Período</label><input type="text" id="reward-period" placeholder="Ex: Março 2026" /></div>
+    <div class="form-group"><label>Descrição</label><textarea id="reward-desc" placeholder="Ex: Certificado de destaque..."></textarea></div>
+    <div class="form-group"><label>Equipe</label><select id="reward-team"><option value="all">Toda a equipe</option><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option></select></div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-reward')">Cancelar</button>
+      <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="saveReward()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal User Form -->
+<div id="modal-user-form" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="user-form-title">Editar Usuário</div>
+      <div class="modal-close" onclick="closeModal('modal-user-form')">✕</div>
+    </div>
+    <input type="hidden" id="user-id" />
+    <div class="form-group"><label>Nome Completo</label><input type="text" id="user-name" placeholder="Ex: João da Silva" /></div>
+    <div class="form-row">
+      <div class="form-group"><label>Usuário de Login</label><input type="text" id="user-username" /></div>
+      <div class="form-group"><label>Senha</label><input type="text" id="user-password" /></div>
+    </div>
+    <div class="form-group"><label>E-mail (para notificações)</label><input type="email" id="user-email" placeholder="membro@email.com" /></div>
+    <div class="form-row" id="admin-only-fields">
+      <div class="form-group"><label>Equipe</label><select id="user-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option></select></div>
+      <div class="form-group"><label>Cargo/Função</label><input type="text" id="user-role" placeholder="Ex: Desenvolvedor ROS" /></div>
+    </div>
+    <label class="checkbox-group" id="admin-only-checkbox">
+      <input type="checkbox" id="user-isadmin" />
+      <span style="font-size:13px;font-weight:500;">Conceder acesso de Administrador</span>
+    </label>
+    <div class="modal-footer" style="margin-top:10px;">
+      <button class="btn-danger" id="btn-delete-user" onclick="deleteUser()" style="margin-right:auto;display:none;">Excluir</button>
+      <button class="btn-ghost" onclick="closeModal('modal-user-form')">Cancelar</button>
+      <button class="btn-success" onclick="saveUser()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Skills -->
+<div id="modal-skills" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Gerenciar Habilidades</div>
+      <div class="modal-close" onclick="closeModal('modal-skills')">✕</div>
+    </div>
+    <div id="skills-container" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;min-height:40px;padding:12px;background:var(--bg3);border-radius:var(--radius);border:1px solid var(--border);"></div>
+    <div class="form-row" style="align-items:flex-end;">
+      <div class="form-group" style="flex:1;margin-bottom:0;">
+        <label>Nova Habilidade</label>
+        <input type="text" id="new-skill-input" placeholder="Ex: Python, ROS2..." onkeypress="if(event.key==='Enter') addSkill()" />
+      </div>
+      <button class="btn-primary" onclick="addSkill()" style="width:auto;padding:12px 20px;">Adicionar</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-skills')">Cancelar</button>
+      <button class="btn-success" onclick="saveSkills()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Metrics -->
+<div id="modal-metrics" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Editar Métricas</div>
+      <div class="modal-close" onclick="closeModal('modal-metrics')">✕</div>
+    </div>
+    <input type="hidden" id="metrics-user-id" />
+    <div class="form-row">
+      <div class="form-group"><label>Presença (%)</label><input type="number" id="metric-presenca" min="0" max="100" /></div>
+      <div class="form-group"><label>Conclusão de Tarefas (%)</label><input type="number" id="metric-tarefas" min="0" max="100" /></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Qualidade de Entrega (%)</label><input type="number" id="metric-qualidade" min="0" max="100" /></div>
+      <div class="form-group"><label>Pontualidade (%)</label><input type="number" id="metric-pontualidade" min="0" max="100" /></div>
+    </div>
+    <div class="form-group"><label>Colaboração (%)</label><input type="number" id="metric-colaboracao" min="0" max="100" /></div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-metrics')">Cancelar</button>
+      <button class="btn-success" onclick="saveMetrics()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo Aviso (NOVO) -->
+<div id="modal-notice" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📢 Publicar Aviso</div>
+      <div class="modal-close" onclick="closeModal('modal-notice')">✕</div>
+    </div>
+    <div class="form-group">
+      <label>Título do Aviso</label>
+      <input type="text" id="notice-title" placeholder="Ex: Reunião confirmada para sábado" />
+    </div>
+    <div class="form-group">
+      <label>Mensagem</label>
+      <textarea id="notice-body" style="min-height:120px;" placeholder="Escreva o aviso completo aqui..."></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="notice-type">
+          <option value="info">ℹ️ Informação</option>
+          <option value="urgente">🚨 Urgente</option>
+          <option value="evento">🗓 Evento</option>
+          <option value="geral">📌 Geral</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Equipe Alvo</label>
+        <select id="notice-team">
+          <option value="all">Toda a equipe</option>
+          <option value="eletroquad">EletroQuad</option>
+          <option value="robotica">Robótica</option>
+        </select>
+      </div>
+    </div>
+    <label class="checkbox-group">
+      <input type="checkbox" id="notice-sendemail" checked />
+      <span style="font-size:13px;font-weight:500;">Enviar notificação por e-mail para os membros</span>
+    </label>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-notice')">Cancelar</button>
+      <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="publishNotice()">Publicar Aviso</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo Evento Calendário (NOVO) -->
+<div id="modal-cal-event" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📅 Novo Evento</div>
+      <div class="modal-close" onclick="closeModal('modal-cal-event')">✕</div>
+    </div>
+    <div class="form-group">
+      <label>Título do Evento</label>
+      <input type="text" id="cal-event-title" placeholder="Ex: Reunião de sábado, Entrega do relatório..." />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date" id="cal-event-date" />
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="cal-event-type">
+          <option value="reuniao">Reunião</option>
+          <option value="entrega">Entrega/Prazo</option>
+          <option value="evento">Evento</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Descrição (opcional)</label>
+      <input type="text" id="cal-event-desc" placeholder="Detalhes adicionais..." />
+    </div>
+    <label class="checkbox-group">
+      <input type="checkbox" id="cal-event-sendemail" />
+      <span style="font-size:13px;font-weight:500;">Notificar membros por e-mail sobre este evento</span>
+    </label>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-cal-event')">Cancelar</button>
+      <button class="btn-success" onclick="saveCalEvent()">Adicionar ao Calendário</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Ajuste Manual de Horas (NOVO) -->
+<div id="modal-hours-adjust" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⏱ Ajustar Horas</div>
+      <div class="modal-close" onclick="closeModal('modal-hours-adjust')">✕</div>
+    </div>
+    <input type="hidden" id="adj-member-id" />
+    <div style="font-size:13px;color:var(--text-dim);margin-bottom:16px;" id="adj-member-name-label"></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Operação</label>
+        <select id="adj-op">
+          <option value="add">➕ Adicionar horas</option>
+          <option value="sub">➖ Remover horas</option>
+          <option value="set">✏️ Definir total exato</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Quantidade de Horas</label>
+        <input type="number" id="adj-hours-val" value="1" min="0" max="999" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Motivo / Observação</label>
+      <input type="text" id="adj-reason" placeholder="Ex: Participação em evento externo..." />
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-hours-adjust')">Cancelar</button>
+      <button class="btn-success" onclick="applyHoursAdjust()">Aplicar Ajuste</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Meta de Horas (NOVO) -->
+<div id="modal-hours-goal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🎯 Meta de Horas do Ciclo</div>
+      <div class="modal-close" onclick="closeModal('modal-hours-goal')">✕</div>
+    </div>
+    <div class="form-group">
+      <label>Meta de Horas por Membro (total do ciclo)</label>
+      <input type="number" id="hours-goal-val" value="20" min="1" max="999" />
+    </div>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">A barra de progresso de cada membro será calculada com base nessa meta.</div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-hours-goal')">Cancelar</button>
+      <button class="btn-success" onclick="saveHoursGoal()">Salvar Meta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo Módulo de Código -->
+<div id="modal-codemap-new" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🗺 Novo Módulo</div>
+      <div class="modal-close" onclick="closeModal('modal-codemap-new')">✕</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nome do Arquivo / Módulo</label>
+        <input type="text" id="cm-name" placeholder="Ex: imu_filter.py, navigation.cpp" />
+      </div>
+      <div class="form-group">
+        <label>Linguagem</label>
+        <select id="cm-lang">
+          <option value="py">Python (.py)</option>
+          <option value="cpp">C++ (.cpp / .h)</option>
+          <option value="ros">ROS / YAML / Launch</option>
+          <option value="js">JavaScript / TypeScript</option>
+          <option value="other">Outro</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Caminho / Repositório</label>
+        <input type="text" id="cm-path" placeholder="Ex: /src/navigation/imu_filter.py" />
+      </div>
+      <div class="form-group">
+        <label>Equipe</label>
+        <select id="cm-team">
+          <option value="eletroquad">EletroQuad</option>
+          <option value="robotica">Robótica</option>
+          <option value="both">Ambas</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Descrição / Documentação Inicial</label>
+      <textarea id="cm-desc" style="min-height:100px;" placeholder="Descreva o que esse módulo faz, suas funções principais, dependências..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal('modal-codemap-new')">Cancelar</button>
+      <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="saveCodemapModule()">Adicionar ao Mapa</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+// Captura erros globais para evitar tela preta silenciosa
+window.onerror = function(msg, src, line, col, err) {
+  console.error('Portal Gaia erro:', msg, 'linha:', line);
+  const body = document.body;
+  if (body && !document.getElementById('error-banner')) {
+    const banner = document.createElement('div');
+    banner.id = 'error-banner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;padding:16px 24px;background:#1a1a2e;border-bottom:2px solid #ff6e6e;color:#ff6e6e;font-family:monospace;font-size:13px;z-index:99999;';
+    banner.innerHTML = `⚠ Erro JS: ${msg} (linha ${line}) — <a href="javascript:location.reload()" style="color:#63d2ff;">recarregar</a>`;
+    body.prepend(banner);
+  }
+};
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<script>
+// ══════════════════════════════════════════
+// FIREBASE CONFIG
+// ══════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyCgbRDXE3Y61m6FLQt6hThebmd_bz21VGY",
+  authDomain: "portal-gaia-f5c93.firebaseapp.com",
+  projectId: "portal-gaia-f5c93",
+  storageBucket: "portal-gaia-f5c93.firebasestorage.app",
+  messagingSenderId: "228822751950",
+  appId: "1:228822751950:web:8aeacdd4c599f07eec8e9f",
+  databaseURL: "https://portal-gaia-f5c93-default-rtdb.firebaseio.com"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const dbRef = db.ref('portal_gaia_data_v6');
+
+// ══════════════════════════════════════════
+// DADOS INICIAIS
+// ══════════════════════════════════════════
+const INITIAL_MEMBERS = [
+  { id:'m1', username:'Pedro Henrique', password:'123', name:'Pedro Henrique', email:'', team:'eletroquad', role:'Coordenador ADM', isAdmin:true, avatar:'PH', color:'#1a8fff', metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100}, skills:['Gestão','Engenharia Mecânica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m2', username:'Laura Capanema', password:'123', name:'Laura Capanema', email:'', team:'robotica', role:'Coordenadora ADM', isAdmin:true, avatar:'LC', color:'#00c984', metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100}, skills:['Gestão','Projetos'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m3', username:'Júlia Origuela', password:'123', name:'Júlia Origuela', email:'', team:'eletroquad', role:'Administradora', isAdmin:true, avatar:'JO', color:'#5b8cff', metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100}, skills:['Liderança','Mecânica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m4', username:'Wanessa Karoline', password:'123', name:'Wanessa Karoline', email:'', team:'robotica', role:'Administradora', isAdmin:true, avatar:'WK', color:'#00e5a0', metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100}, skills:['Liderança','Programação'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m5', username:'Carlos Gabriel', password:'123', name:'Carlos Gabriel', email:'', team:'eletroquad', role:'Membro EletroQuad', isAdmin:false, avatar:'CG', color:'#00b4d8', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Eletrônica'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m6', username:'João Paulo', password:'123', name:'João Paulo', email:'', team:'eletroquad', role:'Membro EletroQuad', isAdmin:false, avatar:'JP', color:'#48cae4', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Hardware'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m7', username:'João Maerbal', password:'123', name:'João Maerbal', email:'', team:'eletroquad', role:'Membro EletroQuad', isAdmin:false, avatar:'JM', color:'#1a8fff', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Autonomia'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m8', username:'Murilo Tristão', password:'123', name:'Murilo Tristão', email:'', team:'robotica', role:'Membro Robótica', isAdmin:false, avatar:'MT', color:'#38cf7f', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Mecânica','CAD'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m9', username:'Felipe (Braia)', password:'123', name:'Felipe (Braia)', email:'', team:'robotica', role:'Membro Robótica', isAdmin:false, avatar:'FB', color:'#0fbf70', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['ROS2','Linux'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m10', username:'Júlia Vitalino', password:'123', name:'Júlia Vitalino', email:'', team:'robotica', role:'Membro Robótica', isAdmin:false, avatar:'JV', color:'#00e5a0', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Visão Computacional'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+  { id:'m11', username:'Eloiza Lopes', password:'123', name:'Eloiza Lopes', email:'', team:'robotica', role:'Membro Robótica', isAdmin:false, avatar:'EL', color:'#00c984', metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85}, skills:['Controle','Programação'], pts:0, hours:0, tasks_done:0, tasks_pending:0 },
+];
+
+const INITIAL_TASKS = [
+  { id:'t1', title:'Configurar o novo Portal (v6)', desc:'Fazer login, testar chat, arquivos, mapa de código e demais funcionalidades.', team:'both', diff:'easy', pts:50, hours:2, deadline:'2026-04-15', status:'available', claimedBy:null, submittedBy:[] }
+];
+
+// ══════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════
+let currentUser = null;
+let currentTaskFilter = 'all';
+let currentRankingFilter = 'all';
+let currentAdminMemberFilter = 'all';
+let pendingTaskId = null;
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let editingSkillsUserId = null;
+let tempSkills = [];
+
+let MEMBERS = [];
+let tasks = [];
+let submissions = [];
+let rewards = [];
+let memberPoints = {};
+let attendance = [];
+let notices = [];
+let calEvents = [];
+let emailConfig = { serviceId:'', templateId:'', publicKey:'', configured:false };
+let hoursGoal = 20;
+let hoursLog = [];
+// NOVO v6
+let chatMessages = [];
+let admChatMessages = [];
+let projectFiles = [];
+let codemapModules = [];
+let currentFilesFilter = 'all';
+let currentCodemapFilter = 'all';
+let chatPendingFile = null;
+let admChatPendingFile = null;
+let lastSeenChatCount = 0;
+let lastSeenAdmChatCount = 0;
+
+// ══════════════════════════════════════════
+// FIREBASE SYNC
+// ══════════════════════════════════════════
+
+// Mostrar login imediatamente sem esperar Firebase
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('screen-login').classList.add('active');
+});
+
+function hideLoading() { /* noop */ }
+
+dbRef.on('value', (snapshot) => {
+  hideLoading();
+  const data = snapshot.val();
+  if (data && data.members) {
+    MEMBERS       = data.members.map(m => ({...m, hours: m.hours || 0, email: m.email || ''}));
+    tasks         = data.tasks || [];
+    submissions   = data.submissions || [];
+    rewards       = data.rewards || [];
+    memberPoints  = data.memberPoints || {};
+    attendance    = data.attendance || [];
+    notices       = data.notices || [];
+    calEvents     = data.calEvents || [];
+    emailConfig   = data.emailConfig || { serviceId:'', templateId:'', publicKey:'', configured:false };
+    hoursGoal     = data.hoursGoal || 20;
+    hoursLog      = data.hoursLog || [];
+    chatMessages  = data.chatMessages || [];
+    admChatMessages = data.admChatMessages || [];
+    projectFiles  = data.projectFiles || [];
+    codemapModules = data.codemapModules || [];
+  } else {
+    MEMBERS = JSON.parse(JSON.stringify(INITIAL_MEMBERS));
+    tasks   = JSON.parse(JSON.stringify(INITIAL_TASKS));
+    submissions = []; rewards = []; attendance = [];
+    notices = []; calEvents = []; hoursLog = [];
+    chatMessages = []; admChatMessages = []; projectFiles = []; codemapModules = [];
+    MEMBERS.forEach(m => { memberPoints[m.id] = m.pts; });
+    saveToFirebase();
+  }
+
+  if (currentUser) {
+    const updatedUser = MEMBERS.find(m => m.id === currentUser.id);
+    if (updatedUser) {
+      currentUser.name    = updatedUser.name;
+      currentUser.isAdmin = updatedUser.isAdmin;
+      document.getElementById('sidebar-name').textContent = currentUser.name;
+      document.getElementById('sidebar-role').textContent = currentUser.isAdmin ? 'Administrador' : (updatedUser.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
+      document.getElementById('nav-admin').style.display = currentUser.isAdmin ? 'block' : 'none';
+    } else { doLogout(); return; }
+
+    updateBadges();
+    // re-render página ativa
+    const pages = ['home','notices','calendar','tasks','ranking','myprofile','mymetrics',
+                   'admin-members','admin-attendance','admin-hours','admin-submissions','admin-rewards','admin-emailconfig',
+                   'chat','admin-chat','files','codemap'];
+    pages.forEach(p => {
+      if (document.getElementById('page-'+p) && document.getElementById('page-'+p).classList.contains('active')) {
+        renderPage(p);
+      }
+    });
+  }
+});
+
+function saveToFirebase() {
+  dbRef.set({ tasks, submissions, rewards, memberPoints, members:MEMBERS, attendance,
+              notices, calEvents, emailConfig, hoursGoal, hoursLog,
+              chatMessages, admChatMessages, projectFiles, codemapModules });
+}
+
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
+function doLogin() {
+  const u = document.getElementById('login-username').value.trim();
+  const p = document.getElementById('login-password').value.trim();
+  if (!u || !p) { toast('Preencha usuário e senha','error'); return; }
+  
+  if (MEMBERS.length === 0) {
+    // Firebase ainda carregando — tenta inicializar com dados locais e tenta novamente
+    toast('Conectando ao servidor... tente novamente em 2s','error');
+    // fallback: inicializa com dados iniciais para permitir login
+    MEMBERS = JSON.parse(JSON.stringify(INITIAL_MEMBERS));
+    tasks   = JSON.parse(JSON.stringify(INITIAL_TASKS));
+    MEMBERS.forEach(m => { memberPoints[m.id] = m.pts; });
+  }
+  
+  const member = MEMBERS.find(m => m.username.toLowerCase() === u.toLowerCase() && m.password === p);
+  if (member) {
+    currentUser = { id:member.id, name:member.name, isAdmin:member.isAdmin };
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+    initDashboard();
+    switchScreen('login','dashboard');
+    toast(`Bem-vindo(a), ${member.name.split(' ')[0]}!`, 'success');
+  } else {
+    toast('Usuário ou senha incorretos!','error');
+  }
+}
+
+function doLogout() {
+  currentUser = null;
+  switchScreen('dashboard','login');
+}
+
+function switchScreen(from, to) {
+  document.getElementById('screen-'+from).classList.remove('active');
+  document.getElementById('screen-'+to).classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// INIT DASHBOARD
+// ══════════════════════════════════════════
+function initDashboard() {
+  const member = MEMBERS.find(m => m.id === currentUser.id);
+  document.getElementById('sidebar-name').textContent = currentUser.name;
+  document.getElementById('sidebar-role').textContent = currentUser.isAdmin ? 'Administrador' : (member?.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
+  const av = document.getElementById('sidebar-avatar');
+  av.textContent = member?.avatar || currentUser.name[0];
+  av.style.background = member?.color || 'var(--gaia-blue)';
+  document.getElementById('nav-admin').style.display = currentUser.isAdmin ? 'block' : 'none';
+  updateBadges();
+  renderPage('home');
+}
+
+function updateBadges() {
+  const avail = tasks.filter(t => t.status === 'available').length;
+  document.getElementById('tasks-badge').textContent = avail;
+  const pendingSubs = submissions.filter(s => s.status === 'pending').length;
+  const sb = document.getElementById('submissions-badge');
+  if (sb) sb.textContent = pendingSubs > 0 ? pendingSubs : '';
+  // notices badge: urgentes não lidas (simplificado: conta urgentes)
+  const urgentes = notices.filter(n => n.type === 'urgente').length;
+  const nb = document.getElementById('notices-badge');
+  if (nb) { nb.textContent = urgentes > 0 ? urgentes : ''; nb.style.display = urgentes > 0 ? 'inline' : 'none'; }
+  // hours badge: membros abaixo de 50% da meta
+  const below = MEMBERS.filter(m => (m.hours||0) < hoursGoal * 0.5).length;
+  const hb = document.getElementById('hours-badge');
+  if (hb) { hb.textContent = below > 0 ? below : ''; hb.style.display = below > 0 ? 'inline' : 'none'; }
+  // chat badge: novas mensagens não vistas
+  const newChat = chatMessages.length - lastSeenChatCount;
+  const cb = document.getElementById('chat-badge');
+  if (cb) { cb.textContent = newChat > 0 ? newChat : ''; cb.style.display = newChat > 0 ? 'inline' : 'none'; }
+  // adm chat badge
+  if (currentUser && currentUser.isAdmin) {
+    const newAdm = admChatMessages.length - lastSeenAdmChatCount;
+    const ab = document.getElementById('admchat-badge');
+    if (ab) { ab.textContent = newAdm > 0 ? newAdm : ''; ab.style.display = newAdm > 0 ? 'inline' : 'none'; }
+  }
+}
+
+function showPage(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('page-'+page).classList.add('active');
+  // mark as seen
+  if (page === 'chat') { lastSeenChatCount = chatMessages.length; updateBadges(); }
+  if (page === 'admin-chat') { lastSeenAdmChatCount = admChatMessages.length; updateBadges(); }
+  renderPage(page);
+}
+
+function renderPage(page) {
+  const map = {
+    'home':               renderHomePage,
+    'notices':            renderNoticesPage,
+    'calendar':           renderCalendarPage,
+    'tasks':              renderTasksPage,
+    'ranking':            renderRankingPage,
+    'myprofile':          renderMyProfile,
+    'mymetrics':          renderMyMetrics,
+    'admin-members':      renderAdminMembers,
+    'admin-attendance':   renderAdminAttendance,
+    'admin-hours':        renderHoursPage,
+    'admin-submissions':  renderAdminSubmissions,
+    'admin-rewards':      renderAdminRewards,
+    'admin-emailconfig':  renderEmailConfig,
+    'admin-tasks':        () => {},
+    'chat':               renderChatPage,
+    'admin-chat':         renderAdmChatPage,
+    'files':              renderFilesPage,
+    'codemap':            renderCodemapPage,
+  };
+  if (map[page]) map[page]();
+}
+
+// ══════════════════════════════════════════
+// HOME PAGE
+// ══════════════════════════════════════════
+function renderHomePage() {
+  const allPts   = MEMBERS.reduce((s,m) => s + (memberPoints[m.id]||m.pts), 0);
+  const tasksDone  = tasks.filter(t => t.status === 'done').length;
+  const tasksAvail = tasks.filter(t => t.status === 'available').length;
+  const totalHours = MEMBERS.reduce((s,m) => s + (m.hours||0), 0);
+
+  document.getElementById('home-stats').innerHTML = `
+    <div class="card card-sm"><div class="card-label">Total de Membros</div><div class="card-value sm">${MEMBERS.length}</div><div style="font-size:11px;color:var(--text-dim);">EQ e Robótica</div></div>
+    <div class="card card-sm"><div class="card-label">Pontos Totais</div><div class="card-value sm" style="color:var(--accent)">${allPts}</div><div style="font-size:11px;color:var(--accent2);">acumulados</div></div>
+    <div class="card card-sm"><div class="card-label">Tarefas Concluídas</div><div class="card-value sm" style="color:var(--accent2)">${tasksDone}</div><div style="font-size:11px;color:var(--text-dim);">de ${tasks.length} totais</div></div>
+    <div class="card card-sm"><div class="card-label">Horas de Certificado</div><div class="card-value sm" style="color:#bb86fc;">${totalHours}h</div><div style="font-size:11px;color:var(--text-dim);">meta: ${hoursGoal}h/membro</div></div>
+  `;
+
+  const renderMiniMembers = (team, containerId) => {
+    const members = MEMBERS.filter(m => m.team === team);
+    document.getElementById(containerId).innerHTML = members.map(m => {
+      const pts   = memberPoints[m.id]||m.pts;
+      const hours = m.hours || 0;
+      const avg   = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
+      return `<div class="rank-item" onclick="openMemberModal('${m.id}')" style="cursor:pointer;">
+        <div class="rank-avatar" style="background:${m.color}">${m.avatar}</div>
+        <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-detail">${m.role}</div></div>
+        <div style="text-align:right;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--accent)">${pts} pts</div>
+          <div style="font-size:10px;color:var(--text-muted);">⏱ ${hours}h • ${avg}%</div>
+        </div>
+      </div>`;
+    }).join('');
+  };
+  renderMiniMembers('eletroquad','eq-members-overview');
+  renderMiniMembers('robotica','rob-members-overview');
+
+  // Atividade recente
+  let activities = [];
+  const recentSubs = submissions.filter(s => s.status === 'approved').slice(-4).reverse();
+  recentSubs.forEach(sub => {
+    activities.push({ icon:'✅', text:`<b>${sub.memberName}</b> concluiu "${sub.taskTitle}" (+${sub.pts} pts / +${sub.hours||0}h)`, time: formatDate(sub.date) });
+  });
+  const recentNotices = [...notices].reverse().slice(0,2);
+  recentNotices.forEach(n => {
+    activities.push({ icon:'📢', text:`<b>Novo aviso:</b> ${n.title}`, time: formatDate(n.date) });
+  });
+  const upcoming = calEvents.filter(e => e.date >= new Date().toISOString().split('T')[0]).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,2);
+  upcoming.forEach(e => {
+    activities.push({ icon:'📅', text:`<b>Próximo evento:</b> ${e.title}`, time: formatDate(e.date) });
+  });
+  if (activities.length === 0) {
+    activities.push({ icon:'🌟', text:'<b>Portal Gaia online!</b> Assuma tarefas e comece a pontuar.', time:'agora' });
+  }
+  document.getElementById('recent-activity').innerHTML = activities.map(a => `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;">
+      <div style="font-size:18px;">${a.icon}</div>
+      <div style="flex:1;font-size:12px;line-height:1.5;">${a.text}</div>
+      <div style="font-size:10px;color:var(--text-muted);white-space:nowrap;">${a.time}</div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════
+// MURAL DE AVISOS
+// ══════════════════════════════════════════
+function renderNoticesPage() {
+  const isAdmin = currentUser.isAdmin;
+  const member  = MEMBERS.find(m => m.id === currentUser.id);
+  
+  document.getElementById('notice-admin-btn').innerHTML = isAdmin
+    ? `<button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="openModal('modal-notice')">+ Publicar Aviso</button>`
+    : '';
+
+  let filtered = [...notices].reverse();
+  if (member && !isAdmin) {
+    filtered = filtered.filter(n => n.team === 'all' || n.team === member.team);
+  }
+
+  if (filtered.length === 0) {
+    document.getElementById('notices-list').innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div style="color:var(--text-muted);">Nenhum aviso publicado ainda.</div></div>`;
+    return;
+  }
+
+  const typeIcons = { urgente:'🚨', info:'ℹ️', evento:'🗓', geral:'📌' };
+  const typeLabels = { urgente:'Urgente', info:'Informação', evento:'Evento', geral:'Geral' };
+
+  document.getElementById('notices-list').innerHTML = filtered.map(n => `
+    <div class="notice-card ${n.type}">
+      <span class="notice-type-badge notice-type-${n.type}">${typeIcons[n.type]} ${typeLabels[n.type]}</span>
+      <div class="notice-title">${n.title}</div>
+      <div class="notice-body">${n.body}</div>
+      <div class="notice-footer">
+        <div>
+          <div class="notice-meta">Por ${n.author} · ${formatDate(n.date)}</div>
+          ${n.emailSent ? `<div class="notice-email-indicator">✉️ E-mail enviado aos membros</div>` : ''}
+        </div>
+        ${isAdmin ? `<span class="notice-delete" onclick="deleteNotice('${n.id}')">🗑 Excluir</span>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function publishNotice() {
+  const title = document.getElementById('notice-title').value.trim();
+  const body  = document.getElementById('notice-body').value.trim();
+  if (!title || !body) { toast('Preencha título e mensagem!','error'); return; }
+
+  const sendEmail = document.getElementById('notice-sendemail').checked;
+  const team      = document.getElementById('notice-team').value;
+
+  const notice = {
+    id:        'n'+Date.now(),
+    title,
+    body,
+    type:      document.getElementById('notice-type').value,
+    team,
+    author:    currentUser.name,
+    date:      new Date().toISOString().split('T')[0],
+    emailSent: false,
+  };
+
+  if (sendEmail && emailConfig.configured) {
+    const targets = MEMBERS.filter(m => (team === 'all' || m.team === team) && m.email);
+    let sentCount = 0;
+    targets.forEach(m => {
+      emailjs.send(emailConfig.serviceId, emailConfig.templateId, {
+        to_email:   m.email,
+        to_name:    m.name,
+        notice_title:  title,
+        notice_body:   body,
+        notice_type:   notice.type,
+        portal_name:   'Portal Gaia · UFTM',
+      }, emailConfig.publicKey).then(() => sentCount++).catch(() => {});
+    });
+    notice.emailSent = true;
+    toast(`Aviso publicado! E-mail enviado para ${targets.length} membros.`, 'success');
+  } else if (sendEmail && !emailConfig.configured) {
+    toast('Aviso publicado! (Configure o EmailJS em Config. E-mail para enviar e-mails)', 'success');
+  } else {
+    toast('Aviso publicado!', 'success');
+  }
+
+  notices.push(notice);
+  ['notice-title','notice-body'].forEach(id => document.getElementById(id).value = '');
+  closeModal('modal-notice');
+  saveToFirebase();
+}
+
+function deleteNotice(id) {
+  if (!confirm('Excluir este aviso?')) return;
+  notices = notices.filter(n => n.id !== id);
+  saveToFirebase();
+  toast('Aviso excluído.','success');
+}
+
+// ══════════════════════════════════════════
+// CALENDÁRIO
+// ══════════════════════════════════════════
+function renderCalendarPage() {
+  const isAdmin = currentUser.isAdmin;
+  document.getElementById('cal-admin-btn').innerHTML = isAdmin
+    ? `<button class="cal-add-btn" onclick="openModal('modal-cal-event')">+ Adicionar Evento</button>`
+    : '';
+  renderCalendar();
+  renderUpcomingEvents();
+}
+
+function calNav(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  renderCalendar();
+  renderUpcomingEvents();
+}
+
+function renderCalendar() {
+  const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('cal-month-label').textContent = `${months[calMonth]} ${calYear}`;
+  const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const today = new Date().toISOString().split('T')[0];
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const daysInPrev  = new Date(calYear, calMonth, 0).getDate();
+
+  let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
+
+  // dias anteriores (cinza)
+  for (let i = firstDay - 1; i >= 0; i--) {
+    html += `<div class="cal-day other-month"><div class="cal-day-num">${daysInPrev - i}</div></div>`;
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayEvents = calEvents.filter(e => e.date === dateStr);
+    const isToday   = dateStr === today;
+    const hasEvs    = dayEvents.length > 0;
+
+    let evHtml = dayEvents.slice(0,2).map(e =>
+      `<div class="cal-event-dot ${e.type}">● ${e.title}</div>`
+    ).join('');
+    if (dayEvents.length > 2) evHtml += `<div style="font-size:9px;color:var(--text-muted);">+${dayEvents.length-2} mais</div>`;
+
+    html += `<div class="cal-day${isToday?' today':''}${hasEvs?' has-events':''}" onclick="${currentUser.isAdmin?`openCalDayModal('${dateStr}')`:''}" style="${currentUser.isAdmin?'cursor:pointer;':''}">
+      <div class="cal-day-num">${d}</div>
+      ${evHtml}
+    </div>`;
+  }
+
+  // dias seguintes
+  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+  let next = 1;
+  for (let i = firstDay + daysInMonth; i < totalCells; i++, next++) {
+    html += `<div class="cal-day other-month"><div class="cal-day-num">${next}</div></div>`;
+  }
+
+  document.getElementById('calendar-grid').innerHTML = html;
+}
+
+function renderUpcomingEvents() {
+  const today = new Date().toISOString().split('T')[0];
+  const upcoming = calEvents.filter(e => e.date >= today).sort((a,b) => a.date.localeCompare(b.date)).slice(0,8);
+
+  if (upcoming.length === 0) {
+    document.getElementById('upcoming-events').innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><div style="color:var(--text-muted);">Nenhum evento futuro cadastrado.</div></div>`;
+    return;
+  }
+
+  const typeColors = { reuniao:'var(--gaia-blue)', entrega:'var(--accent3)', evento:'var(--gaia-green)', outro:'var(--text-muted)' };
+  const typeLabels = { reuniao:'Reunião', entrega:'Entrega/Prazo', evento:'Evento', outro:'Outro' };
+
+  document.getElementById('upcoming-events').innerHTML = upcoming.map(e => `
+    <div style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;">
+      <div style="width:4px;height:40px;border-radius:4px;background:${typeColors[e.type]||'var(--text-muted)'};flex-shrink:0;"></div>
+      <div style="text-align:center;min-width:40px;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;line-height:1;color:${typeColors[e.type]}">${e.date.split('-')[2]}</div>
+        <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;">${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][parseInt(e.date.split('-')[1])-1]}</div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:500;">${e.title}</div>
+        ${e.desc ? `<div style="font-size:11px;color:var(--text-dim);margin-top:2px;">${e.desc}</div>` : ''}
+      </div>
+      <div>
+        <span class="tag" style="border:1px solid ${typeColors[e.type]}33;color:${typeColors[e.type]};background:${typeColors[e.type]}15;">${typeLabels[e.type]}</span>
+      </div>
+      ${currentUser.isAdmin ? `<span style="font-size:11px;color:var(--accent-red);cursor:pointer;opacity:0.6;" onclick="deleteCalEvent('${e.id}')">🗑</span>` : ''}
+    </div>`).join('');
+}
+
+function openCalDayModal(dateStr) {
+  document.getElementById('cal-event-date').value = dateStr;
+  openModal('modal-cal-event');
+}
+
+function saveCalEvent() {
+  const title = document.getElementById('cal-event-title').value.trim();
+  const date  = document.getElementById('cal-event-date').value;
+  if (!title || !date) { toast('Preencha título e data!','error'); return; }
+
+  const sendEmail = document.getElementById('cal-event-sendemail').checked;
+  const ev = {
+    id:    'e'+Date.now(),
+    title,
+    date,
+    type:  document.getElementById('cal-event-type').value,
+    desc:  document.getElementById('cal-event-desc').value.trim(),
+    createdBy: currentUser.name,
+  };
+
+  if (sendEmail && emailConfig.configured) {
+    const targets = MEMBERS.filter(m => m.email);
+    targets.forEach(m => {
+      emailjs.send(emailConfig.serviceId, emailConfig.templateId, {
+        to_email:   m.email,
+        to_name:    m.name,
+        notice_title:  `📅 Novo evento: ${title}`,
+        notice_body:   `Data: ${formatDate(date)}\nTipo: ${ev.type}\n${ev.desc}`,
+        notice_type:   'Evento',
+        portal_name:   'Portal Gaia · UFTM',
+      }, emailConfig.publicKey).catch(() => {});
+    });
+    toast(`Evento adicionado! E-mail enviado.`, 'success');
+  } else {
+    toast('Evento adicionado ao calendário!','success');
+  }
+
+  calEvents.push(ev);
+  closeModal('modal-cal-event');
+  document.getElementById('cal-event-title').value = '';
+  document.getElementById('cal-event-desc').value = '';
+  saveToFirebase();
+  renderCalendar();
+  renderUpcomingEvents();
+}
+
+function deleteCalEvent(id) {
+  if (!confirm('Remover este evento?')) return;
+  calEvents = calEvents.filter(e => e.id !== id);
+  saveToFirebase();
+  renderCalendar();
+  renderUpcomingEvents();
+}
+
+// ══════════════════════════════════════════
+// CONTABILIZAÇÃO DE HORAS (NOVO)
+// ══════════════════════════════════════════
+function renderHoursPage() {
+  const sorted = [...MEMBERS].sort((a,b) => (b.hours||0) - (a.hours||0));
+  const maxHours = Math.max(...sorted.map(m => m.hours||0), hoursGoal);
+  const totalH   = sorted.reduce((s,m) => s + (m.hours||0), 0);
+  const avgH     = MEMBERS.length > 0 ? Math.round(totalH / MEMBERS.length) : 0;
+  const atGoal   = sorted.filter(m => (m.hours||0) >= hoursGoal).length;
+
+  // Estatísticas gerais
+  let html = `
+    <div class="grid grid-4" style="margin-bottom:20px;">
+      <div class="card card-sm"><div class="card-label">Total de Horas</div><div class="card-value sm" style="color:#bb86fc;">${totalH}h</div><div style="font-size:11px;color:var(--text-dim);">toda a equipe</div></div>
+      <div class="card card-sm"><div class="card-label">Média por Membro</div><div class="card-value sm" style="color:var(--accent)">${avgH}h</div><div style="font-size:11px;color:var(--text-dim);">meta: ${hoursGoal}h</div></div>
+      <div class="card card-sm"><div class="card-label">Atingiram a Meta</div><div class="card-value sm" style="color:var(--accent2)">${atGoal}</div><div style="font-size:11px;color:var(--text-dim);">de ${MEMBERS.length} membros</div></div>
+      <div class="card card-sm"><div class="card-label">Meta do Ciclo</div><div class="card-value sm" style="color:var(--accent3)">${hoursGoal}h</div><div style="font-size:11px;color:var(--text-dim);">por membro</div></div>
+    </div>
+    <div class="hours-summary-card">
+      <div class="section-header" style="margin-bottom:16px;">
+        <div class="section-title">Horas por Membro</div>
+        <div style="display:flex;gap:8px;">
+          <div class="cal-legend" style="margin:0;gap:12px;">
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--gaia-green)"></div>Meta atingida (≥${hoursGoal}h)</div>
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--accent3)"></div>Em progresso (≥50%)</div>
+            <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--accent-red)"></div>Abaixo de 50%</div>
+          </div>
+        </div>
+      </div>
+  `;
+
+  sorted.forEach(m => {
+    const h   = m.hours || 0;
+    const pct = Math.min(100, Math.round((h / hoursGoal) * 100));
+    let badgeClass, badgeLabel;
+    if (h >= hoursGoal)      { badgeClass='hours-ok';   badgeLabel=`✓ Meta atingida`; }
+    else if (pct >= 50)      { badgeClass='hours-warn'; badgeLabel=`${pct}% da meta`; }
+    else                     { badgeClass='hours-low';  badgeLabel=`${pct}% da meta`; }
+
+    html += `
+      <div class="hours-member-row">
+        <div class="rank-avatar" style="background:${m.color};width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">${m.avatar}</div>
+        <div class="hours-bar-wrapper">
+          <div class="hours-bar-label">
+            <span class="hours-bar-name">${m.name} <span style="font-size:10px;color:var(--text-muted);">(${m.role})</span></span>
+            <span class="hours-bar-val">${h}h / ${hoursGoal}h</span>
+          </div>
+          <div class="hours-bar"><div class="hours-bar-fill" style="width:${pct}%;"></div></div>
+        </div>
+        <span class="hours-goal-badge ${badgeClass}">${badgeLabel}</span>
+        <button class="hours-adj-btn" onclick="openHoursAdjust('${m.id}')">Ajustar ✎</button>
+      </div>`;
+  });
+  html += `</div>`;
+
+  // Log de ajustes manuais
+  if (hoursLog.length > 0) {
+    html += `
+      <div class="section-header" style="margin-top:20px;"><div class="section-title">📋 Histórico de Ajustes Manuais</div></div>
+      <div class="card card-sm">`;
+    [...hoursLog].reverse().slice(0,20).forEach(log => {
+      html += `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+          <div>
+            <span style="font-size:13px;font-weight:500;">${log.memberName}</span>
+            <span style="font-size:11px;color:var(--text-dim);margin-left:8px;">${log.reason || '—'}</span>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-family:'DM Mono',monospace;font-size:13px;color:${log.delta>0?'var(--gaia-green)':log.delta<0?'var(--accent-red)':'var(--text-dim)'};">${log.delta>0?'+':''}${log.delta}h</span>
+            <div style="font-size:10px;color:var(--text-muted);">${formatDate(log.date)} · por ${log.by}</div>
+          </div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  document.getElementById('hours-page-content').innerHTML = html;
+}
+
+function openHoursAdjust(memberId) {
+  const m = MEMBERS.find(x => x.id === memberId);
+  if (!m) return;
+  document.getElementById('adj-member-id').value = memberId;
+  document.getElementById('adj-member-name-label').textContent = `Membro: ${m.name} · Horas atuais: ${m.hours||0}h`;
+  document.getElementById('adj-hours-val').value = 1;
+  document.getElementById('adj-reason').value = '';
+  openModal('modal-hours-adjust');
+}
+
+function applyHoursAdjust() {
+  const id     = document.getElementById('adj-member-id').value;
+  const op     = document.getElementById('adj-op').value;
+  const val    = parseInt(document.getElementById('adj-hours-val').value) || 0;
+  const reason = document.getElementById('adj-reason').value.trim();
+  const m = MEMBERS.find(x => x.id === id);
+  if (!m) return;
+
+  const before = m.hours || 0;
+  if      (op === 'add') m.hours = before + val;
+  else if (op === 'sub') m.hours = Math.max(0, before - val);
+  else if (op === 'set') m.hours = Math.max(0, val);
+
+  const delta = m.hours - before;
+  hoursLog.push({
+    memberId: id, memberName: m.name,
+    op, delta, reason,
+    date: new Date().toISOString().split('T')[0],
+    by:   currentUser.name,
+  });
+
+  saveToFirebase();
+  closeModal('modal-hours-adjust');
+  toast(`Horas de ${m.name} ajustadas para ${m.hours}h`, 'success');
+}
+
+function saveHoursGoal() {
+  const g = parseInt(document.getElementById('hours-goal-val').value) || 20;
+  hoursGoal = g;
+  saveToFirebase();
+  closeModal('modal-hours-goal');
+  toast(`Meta atualizada para ${g}h por membro!`, 'success');
+}
+
+function exportHoursCSV() {
+  const sorted = [...MEMBERS].sort((a,b) => (b.hours||0) - (a.hours||0));
+  let csv = 'Nome,Equipe,Horas,Meta,% da Meta,Status\n';
+  sorted.forEach(m => {
+    const h   = m.hours || 0;
+    const pct = Math.round((h / hoursGoal) * 100);
+    const status = h >= hoursGoal ? 'Meta atingida' : pct >= 50 ? 'Em progresso' : 'Abaixo da meta';
+    csv += `"${m.name}","${m.team === 'eletroquad'?'EletroQuad':'Robótica'}",${h},${hoursGoal},${pct}%,"${status}"\n`;
+  });
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `horas-gaia-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  toast('CSV exportado!', 'success');
+}
+
+// ══════════════════════════════════════════
+// CONFIG DE E-MAIL (EmailJS)
+// ══════════════════════════════════════════
+function renderEmailConfig() {
+  document.getElementById('email-config-content').innerHTML = `
+    <div class="config-card">
+      <b>Como configurar o envio de e-mails com EmailJS (gratuito)</b><br><br>
+      1. Acesse <b>emailjs.com</b> e crie uma conta gratuita (até 200 e-mails/mês grátis).<br>
+      2. Em <b>Email Services</b>, conecte seu Gmail ou outro serviço e copie o <b>Service ID</b>.<br>
+      3. Em <b>Email Templates</b>, crie um template com as variáveis:<br>
+      &nbsp;&nbsp;&nbsp;<code>{{to_email}}</code>, <code>{{to_name}}</code>, <code>{{notice_title}}</code>, <code>{{notice_body}}</code>, <code>{{portal_name}}</code><br>
+      &nbsp;&nbsp;&nbsp;Copie o <b>Template ID</b>.<br>
+      4. Em <b>Account → API Keys</b>, copie a <b>Public Key</b>.<br>
+      5. Cole os três valores abaixo e clique em Salvar.<br><br>
+      <b>⚠️ Importante:</b> Adicione o e-mail de cada membro no cadastro deles (Gestão de Membros → Editar).
+    </div>
+    <div class="card" style="max-width:520px;">
+      <div class="form-group">
+        <label>Service ID</label>
+        <input type="text" id="cfg-service" value="${emailConfig.serviceId}" placeholder="service_xxxxxxx" />
+      </div>
+      <div class="form-group">
+        <label>Template ID</label>
+        <input type="text" id="cfg-template" value="${emailConfig.templateId}" placeholder="template_xxxxxxx" />
+      </div>
+      <div class="form-group">
+        <label>Public Key</label>
+        <input type="text" id="cfg-pubkey" value="${emailConfig.publicKey}" placeholder="xxxxxxxxxxxxxxxxxxxx" />
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">
+        <button class="btn-primary" style="width:auto;padding:12px 24px;" onclick="saveEmailConfig()">Salvar Configuração</button>
+        <button class="btn-ghost" onclick="testEmail()">Enviar e-mail de teste para mim</button>
+        ${emailConfig.configured ? `<span style="padding:10px 16px;font-size:12px;color:var(--gaia-green);">✓ E-mail configurado</span>` : ''}
+      </div>
+    </div>
+    <div style="margin-top:24px;">
+      <div class="section-title" style="margin-bottom:12px;">E-mails cadastrados dos membros</div>
+      <div class="grid grid-2">
+        ${MEMBERS.map(m => `
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);">
+            <div style="width:28px;height:28px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;">${m.avatar}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:12px;font-weight:500;">${m.name}</div>
+              <div style="font-size:11px;color:${m.email?'var(--gaia-green)':'var(--accent-red)'};">${m.email || '⚠ E-mail não cadastrado'}</div>
+            </div>
+            <button class="hours-adj-btn" style="font-size:10px;" onclick="closeModal(''); openEditUserModal('${m.id}')">Editar</button>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function saveEmailConfig() {
+  emailConfig.serviceId  = document.getElementById('cfg-service').value.trim();
+  emailConfig.templateId = document.getElementById('cfg-template').value.trim();
+  emailConfig.publicKey  = document.getElementById('cfg-pubkey').value.trim();
+  emailConfig.configured = !!(emailConfig.serviceId && emailConfig.templateId && emailConfig.publicKey);
+  if (emailConfig.configured) {
+    emailjs.init(emailConfig.publicKey);
+  }
+  saveToFirebase();
+  toast(emailConfig.configured ? 'Configuração de e-mail salva! ✓' : 'Preencha todos os campos.', emailConfig.configured ? 'success' : 'error');
+  renderEmailConfig();
+}
+
+function testEmail() {
+  const member = MEMBERS.find(m => m.id === currentUser.id);
+  if (!member || !member.email) { toast('Cadastre seu e-mail no perfil primeiro!','error'); return; }
+  if (!emailConfig.configured)  { toast('Configure o EmailJS primeiro!','error'); return; }
+  emailjs.send(emailConfig.serviceId, emailConfig.templateId, {
+    to_email:     member.email,
+    to_name:      member.name,
+    notice_title: '🧪 Teste de Notificação — Portal Gaia',
+    notice_body:  'Se você está vendo este e-mail, a integração com o EmailJS está funcionando corretamente!',
+    notice_type:  'Teste',
+    portal_name:  'Portal Gaia · UFTM',
+  }, emailConfig.publicKey).then(() => {
+    toast('E-mail de teste enviado! Verifique sua caixa de entrada.','success');
+  }).catch(e => {
+    toast('Erro ao enviar e-mail. Verifique as configurações.','error');
+  });
+}
+
+// ══════════════════════════════════════════
+// TASKS
+// ══════════════════════════════════════════
+function renderTasksPage() { filterTasks(currentTaskFilter); }
+
+function filterTasks(filter, el) {
+  currentTaskFilter = filter;
+  if (el) { document.querySelectorAll('#page-tasks .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+  let filtered = [...tasks];
+  if (filter === 'available') filtered = filtered.filter(t => t.status === 'available');
+  else if (filter === 'claimed') filtered = filtered.filter(t => t.status === 'claimed');
+  else if (filter === 'done')    filtered = filtered.filter(t => t.status === 'done');
+  const member = MEMBERS.find(m => m.id === currentUser.id);
+  if (member) filtered = filtered.filter(t => t.team === member.team || t.team === 'both');
+
+  if (filtered.length === 0) {
+    document.getElementById('tasks-list').innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div style="color:var(--text-muted);">Nenhuma tarefa encontrada.</div></div>`;
+    return;
+  }
+  document.getElementById('tasks-list').innerHTML = filtered.map(t => renderTaskItem(t)).join('');
+}
+
+function renderTaskItem(t) {
+  const teamTag  = t.team === 'both' ? `<span class="tag tag-both">Ambas</span>` : t.team === 'eletroquad' ? `<span class="tag tag-eq">EletroQuad</span>` : `<span class="tag tag-rob">Robótica</span>`;
+  const diffTag  = { easy:`<span class="tag tag-diff-easy">Fácil</span>`, medium:`<span class="tag tag-diff-med">Médio</span>`, hard:`<span class="tag tag-diff-hard">Difícil</span>` }[t.diff];
+  const ptsTag   = `<span class="tag tag-pts">+${t.pts} pts</span>`;
+  const hoursTag = `<span class="tag tag-hours">⏱ ${t.hours||0}h</span>`;
+  const deadTag  = `<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);">📅 ${formatDate(t.deadline)}</span>`;
+
+  const isMyClaim  = t.claimedBy === currentUser.id;
+  const isMySubmit = t.submittedBy && t.submittedBy.includes(currentUser.id);
+  let actionHtml = '';
+  if (t.status === 'available') {
+    actionHtml = `<button class="btn-claim" onclick="claimTask('${t.id}')">Assumir</button>`;
+  } else if (t.status === 'claimed' && isMyClaim && !isMySubmit) {
+    actionHtml = `<button class="btn-claim" onclick="openSubmitModal('${t.id}')">Entregar</button>`;
+  } else if (isMySubmit) {
+    actionHtml = `<button class="btn-claim claimed" disabled>Aguardando Revisão ⏳</button>`;
+  }
+
+  // Responsáveis visíveis para todos
+  let assigneeHtml = '';
+  if (t.claimedBy) {
+    const assignee = MEMBERS.find(m => m.id === t.claimedBy);
+    if (assignee) {
+      const isRob = assignee.team === 'robotica';
+      const statusLabel = t.status === 'done' ? '✓ Concluído' : '⚡ Em andamento';
+      assigneeHtml = `<div class="task-assignees">
+        <div class="task-assignee-chip ${isRob?'rob':''}">
+          <div style="width:18px;height:18px;border-radius:50%;background:${assignee.color};display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;">${assignee.avatar}</div>
+          ${assignee.name.split(' ')[0]} · ${statusLabel}
+        </div>
+      </div>`;
+    }
+  }
+
+  return `<div class="task-item">
+    <div class="task-header">
+      <div class="task-content">
+        <div class="task-title ${t.status==='done'?'done':''}">${t.title}</div>
+        <div class="task-desc">${t.desc}</div>
+        <div class="task-meta">${teamTag}${diffTag}${ptsTag}${hoursTag}${deadTag}${actionHtml}</div>
+        ${assigneeHtml}
+      </div>
+    </div>
+  </div>`;
+}
+
+function claimTask(id) {
+  const t = tasks.find(x => x.id === id);
+  if (!t || t.status !== 'available') return;
+  t.status = 'claimed'; t.claimedBy = currentUser.id;
+  const m = MEMBERS.find(x => x.id === currentUser.id);
+  if (m) m.tasks_pending = (m.tasks_pending||0)+1;
+  saveToFirebase();
+  toast(`Tarefa assumida! Boa sorte, ${currentUser.name.split(' ')[0]}!`, 'success');
+}
+
+function openSubmitModal(taskId) {
+  const t = tasks.find(x => x.id === taskId);
+  if (!t) return;
+  pendingTaskId = taskId;
+  document.getElementById('submit-task-name').textContent = t.title;
+  document.getElementById('submit-desc').value = '';
+  document.getElementById('submit-link').value = '';
+  openModal('modal-task-submit');
+}
+
+function submitTask() {
+  const desc = document.getElementById('submit-desc').value.trim();
+  if (!desc) { toast('Adicione uma descrição da entrega','error'); return; }
+  const t = tasks.find(x => x.id === pendingTaskId);
+  if (!t) return;
+  if (!t.submittedBy) t.submittedBy = [];
+  t.submittedBy.push(currentUser.id);
+  t.status = 'done';
+  const sub = {
+    id:'s'+Date.now(), taskId:pendingTaskId, taskTitle:t.title,
+    memberId:currentUser.id, memberName:currentUser.name,
+    desc, link:document.getElementById('submit-link').value,
+    date:new Date().toISOString().split('T')[0],
+    pts:t.pts, hours:t.hours||0, status:'pending',
+  };
+  submissions.push(sub);
+  closeModal('modal-task-submit');
+  saveToFirebase();
+  toast('Entrega registrada! Aguardando aprovação.','success');
+}
+
+// ══════════════════════════════════════════
+// RANKING
+// ══════════════════════════════════════════
+function renderRankingPage() { filterRanking(currentRankingFilter); }
+
+function filterRanking(filter, el) {
+  currentRankingFilter = filter;
+  if (el) { document.querySelectorAll('#page-ranking .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+  let members = [...MEMBERS];
+  if (filter !== 'all') members = members.filter(m => m.team === filter);
+  members.sort((a,b) => (memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
+  const posClass = ['gold','silver','bronze'];
+  document.getElementById('ranking-list').innerHTML = members.map((m,i) => {
+    const pts   = memberPoints[m.id]||m.pts;
+    const hours = m.hours||0;
+    return `<div class="rank-item" onclick="openMemberModal('${m.id}')" style="cursor:pointer;">
+      <div class="rank-pos ${posClass[i]||''}">${i+1}</div>
+      <div class="rank-avatar" style="background:${m.color}">${m.avatar}</div>
+      <div class="rank-info">
+        <div class="rank-name">${m.name}</div>
+        <div class="rank-detail">${m.role} · ${m.team==='eletroquad'?'EletroQuad':'Robótica'}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="rank-score">${pts} pts</div>
+        <div style="font-size:10px;color:var(--text-muted);">⏱ ${hours}h</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// MY PROFILE
+// ══════════════════════════════════════════
+function renderMyProfile() {
+  const m = MEMBERS.find(x => x.id === currentUser.id);
+  if (!m) return;
+  const pts   = memberPoints[m.id]||m.pts;
+  const hours = m.hours||0;
+  const isEQ  = m.team === 'eletroquad';
+  const myTasks = tasks.filter(t => t.claimedBy === m.id);
+  const mySubs  = submissions.filter(s => s.memberId === m.id);
+  const approvedSubs = mySubs.filter(s => s.status === 'approved');
+  const pct   = Math.min(100, Math.round((hours/hoursGoal)*100));
+
+  const skillsList = m.skills && m.skills.length > 0
+    ? m.skills.map(s => `<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);padding:4px 12px;">${s}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--text-dim);">Nenhuma habilidade cadastrada.</span>';
+
+  document.getElementById('my-profile-content').innerHTML = `
+    <div class="profile-hero ${m.team}">
+      <div class="profile-hero-inner">
+        <div class="profile-avatar-lg" style="background:${m.color}">${m.avatar}</div>
+        <div>
+          <div class="profile-name">${m.name}</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+            <span class="member-team-badge ${isEQ?'badge-eq':'badge-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>
+            <span style="color:var(--text-dim);font-size:12px;">${m.role}</span>
+          </div>
+        </div>
+        <div style="margin-left:auto;text-align:right;">
+          <div class="pts-big">${pts}</div>
+          <div class="pts-label">pontos · <span style="color:#bb86fc;">⏱ ${hours}h</span></div>
+          <div style="margin-top:4px;">
+            <div class="progress-bar" style="width:100px;display:inline-block;"><div class="hours-bar-fill" style="width:${pct}%;height:5px;border-radius:100px;background:linear-gradient(90deg,#7b5ea7,#bb86fc);"></div></div>
+            <div style="font-size:9px;color:var(--text-muted);margin-top:2px;">${pct}% da meta de ${hoursGoal}h</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-3" style="margin-bottom:20px;">
+      <div class="card card-sm" style="text-align:center;"><div class="card-label">Tarefas Feitas</div><div class="card-value sm" style="color:var(--accent2)">${approvedSubs.length}</div></div>
+      <div class="card card-sm" style="text-align:center;"><div class="card-label">Em Andamento</div><div class="card-value sm" style="color:var(--accent3)">${myTasks.filter(t=>t.status==='claimed').length}</div></div>
+      <div class="card card-sm" style="text-align:center;"><div class="card-label">Horas Certificado</div><div class="card-value sm" style="color:#bb86fc;">${hours}h</div></div>
+    </div>
+    <div class="section-header">
+      <div class="section-title">🛠 Minhas Habilidades</div>
+      <button class="btn-ghost" style="padding:4px 10px;font-size:11px;" onclick="openEditSkillsModal('${m.id}')">Editar</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">${skillsList}</div>
+    <div class="section-header"><div class="section-title">📋 Histórico de Entregas</div></div>
+    ${mySubs.length === 0
+      ? '<div class="empty-state"><div class="empty-icon">📭</div><div style="color:var(--text-muted);">Nenhuma entrega ainda. Assuma uma tarefa!</div></div>'
+      : mySubs.slice().reverse().map(s => `
+        <div class="submission-item">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <div style="font-size:13px;font-weight:500;">${s.taskTitle}</div>
+            <span class="status-badge status-${s.status}">${{pending:'Aguardando',approved:'Aprovado',rejected:'Reprovado'}[s.status]}</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-dim);">${s.desc.substring(0,100)}${s.desc.length>100?'...':''}</div>
+          ${s.adminFeedback ? `<div style="margin-top:6px;padding:6px;background:rgba(255,209,102,0.05);border-left:2px solid var(--gaia-gold);font-size:10px;color:var(--text-dim);"><b>Obs:</b> ${s.adminFeedback}</div>` : ''}
+          <div style="display:flex;justify-content:space-between;margin-top:8px;">
+            <div style="font-size:10px;color:var(--text-muted);">${formatDate(s.date)}</div>
+            ${s.status==='approved'?`<div style="font-size:11px;color:var(--accent2);">+${s.pts} pts | ⏱ ${s.hours||0}h</div>`:''}
+          </div>
+        </div>`).join('')}
+  `;
+}
+
+// ══════════════════════════════════════════
+// MY METRICS
+// ══════════════════════════════════════════
+function renderMyMetrics() {
+  const m = MEMBERS.find(x => x.id === currentUser.id);
+  if (!m) return;
+  const labels = { presenca:'Presença', tarefas:'Conclusão de Tarefas', qualidade:'Qualidade', pontualidade:'Pontualidade', colaboracao:'Colaboração' };
+  const colors  = ['var(--gaia-blue)','var(--gaia-green)','var(--accent)','var(--accent3)','var(--accent2)'];
+  const entries = Object.entries(m.metrics);
+  const avg     = Math.round(entries.reduce((s,[,v]) => s+v, 0) / entries.length);
+  document.getElementById('my-metrics-content').innerHTML = `
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+        <div style="text-align:center;">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:48px;line-height:1;color:${avg>=90?'var(--accent2)':avg>=75?'var(--accent)':'var(--accent3)'};">${avg}<span style="font-size:24px;">%</span></div>
+          <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;">Desempenho Geral</div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">Baseado em avaliações da coordenação.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span class="tag tag-pts">+${memberPoints[m.id]||m.pts} pts</span>
+            <span class="tag tag-hours">⏱ ${m.hours||0}h</span>
+          </div>
+        </div>
+      </div>
+      ${entries.map(([k,v],i) => `
+        <div class="progress-item">
+          <div class="progress-header"><span class="progress-label">${labels[k]}</span><span class="progress-val">${v}%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${v}%;background:${colors[i]};"></div></div>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px;">💡 Análise Individual</div>
+      ${generateAnalysis(m)}
+    </div>`;
+}
+
+function generateAnalysis(m) {
+  const sorted = Object.entries(m.metrics).sort((a,b) => b[1]-a[1]);
+  const best   = sorted[0]; const worst = sorted[sorted.length-1];
+  const labels = { presenca:'Presença', tarefas:'Conclusão de Tarefas', qualidade:'Qualidade de Entrega', pontualidade:'Pontualidade', colaboracao:'Colaboração' };
+  return `
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;padding:12px;background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.15);border-radius:var(--radius);">
+        <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--gaia-green);margin-bottom:4px;">⬆ Ponto Forte</div>
+        <div style="font-size:13px;font-weight:500;">${labels[best[0]]}</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--gaia-green);">${best[1]}%</div>
+      </div>
+      <div style="flex:1;min-width:200px;padding:12px;background:rgba(255,184,106,0.05);border:1px solid rgba(255,184,106,0.15);border-radius:var(--radius);">
+        <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent3);margin-bottom:4px;">📈 Área para Melhorar</div>
+        <div style="font-size:13px;font-weight:500;">${labels[worst[0]]}</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--accent3);">${worst[1]}%</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════
+// ADMIN: MEMBROS
+// ══════════════════════════════════════════
+function renderAdminMembers() { filterAdminMembers(currentAdminMemberFilter); }
+
+function filterAdminMembers(filter, el) {
+  currentAdminMemberFilter = filter;
+  if (el) { document.querySelectorAll('#page-admin-members .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+  let members = [...MEMBERS];
+  if (filter !== 'all') members = members.filter(m => m.team === filter);
+  members.sort((a,b) => (memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
+
+  document.getElementById('admin-members-list').innerHTML = `<div class="grid grid-auto">${members.map(m => {
+    const pts   = memberPoints[m.id]||m.pts;
+    const hours = m.hours||0;
+    const avg   = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
+    const isEQ  = m.team === 'eletroquad';
+    return `<div class="member-card ${m.team}" onclick="openMemberModal('${m.id}')">
+      <div class="member-header">
+        <div class="member-avatar" style="background:${m.color}">${m.avatar}</div>
+        <div>
+          <div class="member-name">${m.name} ${m.isAdmin?'<span style="color:var(--gaia-gold);">👑</span>':''}</div>
+          <div class="member-role">${m.role}</div>
+        </div>
+        <span class="member-team-badge ${isEQ?'badge-eq':'badge-rob'}">${isEQ?'EQ':'Rob'}</span>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">Desempenho</span><span class="progress-val">${avg}%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${avg}%;background:${m.color};"></div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;color:var(--accent)">${pts} <span style="font-size:12px;color:var(--text-muted);font-weight:normal;">pts</span></div>
+          <div style="font-size:12px;color:#bb86fc;">⏱ ${hours}h</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:13px;font-weight:500;">${m.tasks_done} feitas</div>
+          <div style="font-size:10px;color:var(--text-dim);">${m.tasks_pending} andamento</div>
+          ${m.email ? `<div style="font-size:9px;color:var(--gaia-green);margin-top:2px;">✉ e-mail cadastrado</div>` : `<div style="font-size:9px;color:var(--accent-red);margin-top:2px;">⚠ sem e-mail</div>`}
+        </div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ══════════════════════════════════════════
+// ADMIN: PRESENÇA
+// ══════════════════════════════════════════
+function renderAdminAttendance() {
+  document.getElementById('attendance-members-list').innerHTML = MEMBERS.map(m => `
+    <label class="checkbox-group" style="padding:8px;background:var(--bg2);border-radius:8px;border:1px solid var(--border);">
+      <input type="checkbox" class="att-member-check" value="${m.id}" />
+      <span style="font-size:13px;font-weight:500;margin-left:6px;">${m.name}</span>
+    </label>`).join('');
+
+  if (attendance.length === 0) {
+    document.getElementById('attendance-history').innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><div style="color:var(--text-muted);">Nenhuma reunião registrada.</div></div>`;
+    return;
+  }
+  document.getElementById('attendance-history').innerHTML = [...attendance].reverse().map(a => `
+    <div class="card card-sm" style="margin-bottom:12px;cursor:pointer;" onclick="openAttendanceDetails('${a.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">${a.desc}</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">📅 ${formatDate(a.date)}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="tag tag-hours" style="font-size:12px;padding:4px 10px;">⏱ +${a.hours}h</div>
+          <div style="font-size:10px;color:var(--accent);margin-top:6px;font-weight:600;">Ver lista (${a.attendees.length})</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function saveAttendance() {
+  const date  = document.getElementById('att-date').value;
+  const desc  = document.getElementById('att-desc').value.trim();
+  const hours = parseInt(document.getElementById('att-hours').value);
+  if (!date || !desc || isNaN(hours)) { toast('Preencha Data, Descrição e Horas!','error'); return; }
+  const checkboxes = document.querySelectorAll('.att-member-check');
+  const presentIds = [];
+  checkboxes.forEach(cb => { if (cb.checked) presentIds.push(cb.value); });
+  if (presentIds.length === 0) { toast('Marque pelo menos um membro!','error'); return; }
+
+  attendance.push({ id:'a'+Date.now(), date, desc, hours, attendees:presentIds });
+  presentIds.forEach(id => {
+    const m = MEMBERS.find(x => x.id === id);
+    if (m) m.hours = (m.hours||0) + hours;
+  });
+
+  // Registra no log
+  presentIds.forEach(id => {
+    const m = MEMBERS.find(x => x.id === id);
+    if (m) hoursLog.push({ memberId:id, memberName:m.name, op:'add', delta:hours, reason:`Presença: ${desc}`, date, by:currentUser.name });
+  });
+
+  document.getElementById('att-date').value = '';
+  document.getElementById('att-desc').value = '';
+  document.getElementById('att-hours').value = '2';
+  checkboxes.forEach(cb => cb.checked = false);
+
+  saveToFirebase();
+  toast(`Presença registrada! +${hours}h para ${presentIds.length} membros.`, 'success');
+}
+
+function openAttendanceDetails(attId) {
+  const att = attendance.find(a => a.id === attId);
+  if (!att) return;
+  const presentMembers = MEMBERS.filter(m => att.attendees.includes(m.id));
+  let html = `
+    <div style="margin-bottom:20px;">
+      <div style="font-size:16px;font-weight:bold;margin-bottom:4px;">${att.desc}</div>
+      <div style="font-size:12px;color:var(--text-dim);">📅 ${formatDate(att.date)} · ⏱ ${att.hours} horas</div>
+    </div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Presentes (${presentMembers.length})</div>
+    <div class="grid grid-auto" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr));">`;
+  presentMembers.forEach(m => {
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;color:#fff;">${m.avatar}</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;">${m.name}</div>
+        <div style="font-size:10px;color:var(--text-dim);">${m.team==='eletroquad'?'EletroQuad':'Robótica'}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  document.getElementById('attendance-details-content').innerHTML = html;
+  openModal('modal-attendance-details');
+}
+
+// ══════════════════════════════════════════
+// ADMIN: ENTREGAS
+// ══════════════════════════════════════════
+function renderAdminSubmissions() {
+  const pending  = submissions.filter(s => s.status === 'pending');
+  const reviewed = submissions.filter(s => s.status !== 'pending');
+  let html = '';
+  if (pending.length === 0) {
+    html += `<div class="empty-state" style="margin-bottom:20px;"><div class="empty-icon">🎉</div><div style="color:var(--text-muted);">Nenhuma entrega pendente!</div></div>`;
+  } else {
+    html += `<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--accent3);">⏳ Aguardando (${pending.length})</div>`;
+    html += pending.map(s => renderSubmissionReview(s, false)).join('');
+  }
+  if (reviewed.length > 0) {
+    html += `<hr><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;color:var(--text-dim);">Histórico</div>`;
+    html += [...reviewed].reverse().map(s => renderSubmissionReview(s, true)).join('');
+  }
+  document.getElementById('admin-submissions-list').innerHTML = html;
+}
+
+function renderSubmissionReview(s, readonly=false) {
+  const m = MEMBERS.find(x => x.id === s.memberId);
+  const feedbackHtml = s.adminFeedback ? `<div style="margin-top:8px;padding:8px;background:rgba(255,209,102,0.05);border:1px solid rgba(255,209,102,0.15);border-radius:6px;font-size:11px;border-left:3px solid var(--gaia-gold);"><b>Feedback:</b> <span style="color:var(--text-dim);">${s.adminFeedback}</span></div>` : '';
+  return `<div class="admin-review-item">
+    <div class="admin-review-header">
+      <div style="width:32px;height:32px;border-radius:50%;background:${m?.color||'#888'};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;">${m?.avatar||'?'}</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:500;">${s.memberName}</div><div style="font-size:11px;color:var(--text-dim);">${s.taskTitle}</div></div>
+      <span class="status-badge status-${s.status}">${{pending:'Pendente',approved:'Aprovado',rejected:'Reprovado'}[s.status]}</span>
+      <span class="tag tag-pts">+${s.pts} pts</span>
+      <span class="tag tag-hours">⏱ ${s.hours||0}h</span>
+    </div>
+    <div style="font-size:12px;color:var(--text-dim);padding:8px;background:var(--bg3);border-radius:8px;margin:8px 0;">${s.desc}</div>
+    ${s.link ? `<a href="${s.link<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Gaia · UFTM</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c14;
+    --bg2: #0d1420;
+    --bg3: #111926;
+    --border: rgba(255,255,255,0.07);
+    --border-active: rgba(99,210,255,0.35);
+    --text: #e8edf5;
+    --text-dim: #6b7a8f;
+    --text-muted: #3d4a5c;
+    --accent: #63d2ff;
+    --accent2: #7fff6e;
+    --accent3: #ffb86a;
+    --accent-red: #ff6e6e;
+    --gaia-blue: #1a8fff;
+    --gaia-green: #00e5a0;
+    --gaia-gold: #ffd166;
+    --card: rgba(255,255,255,0.03);
+    --card-hover: rgba(255,255,255,0.06);
+    --radius: 12px;
+    --radius-lg: 18px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity:0.4; pointer-events:none; z-index:0;
+  }
+
   #app { position:relative; z-index:1; }
   .screen { display:none; min-height:100vh; }
   .screen.active { display:flex; }
@@ -3182,6 +5693,709 @@ setTimeout(() => {
 }, 2000);
 </script>
 </body>
+</html>}" target="_blank" style="font-size:11px;color:var(--accent);text-decoration:none;">🔗 ${s.link}</a>` : ''}
+    ${feedbackHtml}
+    <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${formatDate(s.date)}</div>
+    ${!readonly ? `
+      <input type="text" id="feedback-${s.id}" placeholder="Observação/Feedback (opcional)..." style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-size:11px;outline:none;margin:8px 0;">
+      <div class="admin-review-actions">
+        <button class="btn-approve" onclick="reviewSubmission('${s.id}','approved')">✓ Aprovar (+${s.pts}pts / +${s.hours||0}h)</button>
+        <button class="btn-reject"  onclick="reviewSubmission('${s.id}','rejected')">✕ Reprovar</button>
+      </div>` : ''}
+  </div>`;
+}
+
+function reviewSubmission(id, verdict) {
+  const sub = submissions.find(s => s.id === id);
+  if (!sub) return;
+  const feedbackInput = document.getElementById(`feedback-${id}`);
+  if (feedbackInput && feedbackInput.value.trim()) sub.adminFeedback = feedbackInput.value.trim();
+  sub.status = verdict;
+  if (verdict === 'approved') {
+    memberPoints[sub.memberId] = (memberPoints[sub.memberId]||0) + sub.pts;
+    const m = MEMBERS.find(x => x.id === sub.memberId);
+    if (m) {
+      m.tasks_done++; m.tasks_pending = Math.max(0,(m.tasks_pending||0)-1);
+      m.hours = (m.hours||0) + (sub.hours||0);
+      hoursLog.push({ memberId:m.id, memberName:m.name, op:'add', delta:sub.hours||0, reason:`Tarefa aprovada: ${sub.taskTitle}`, date:new Date().toISOString().split('T')[0], by:currentUser.name });
+    }
+    toast(`Aprovado! +${sub.pts} pts / +${sub.hours||0}h para ${sub.memberName}`, 'success');
+  } else {
+    toast(`Entrega de ${sub.memberName} reprovada.`, 'error');
+  }
+  saveToFirebase();
+}
+
+// ══════════════════════════════════════════
+// ADMIN: CRIAR TAREFA
+// ══════════════════════════════════════════
+function createTask() {
+  const title = document.getElementById('new-task-title').value.trim();
+  const desc  = document.getElementById('new-task-desc').value.trim();
+  if (!title || !desc) { toast('Preencha título e descrição','error'); return; }
+  const task = {
+    id:'t'+Date.now(), title, desc,
+    team:     document.getElementById('new-task-team').value,
+    diff:     document.getElementById('new-task-diff').value,
+    pts:      parseInt(document.getElementById('new-task-pts').value)||50,
+    hours:    parseInt(document.getElementById('new-task-hours').value)||2,
+    deadline: document.getElementById('new-task-deadline').value || '2026-12-31',
+    status:'available', claimedBy:null, submittedBy:[],
+  };
+  tasks.unshift(task);
+  ['new-task-title','new-task-desc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('new-task-hours').value = 2;
+  saveToFirebase();
+  toast('Tarefa criada e publicada!','success');
+}
+
+// ══════════════════════════════════════════
+// ADMIN: RECOMPENSAS
+// ══════════════════════════════════════════
+function renderAdminRewards() {
+  const sorted = [...MEMBERS].sort((a,b) => (memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
+  const leader = sorted[0];
+  document.getElementById('admin-rewards-content').innerHTML = `
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="font-size:32px;">👑</div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;">Líder Atual</div>
+          <div style="color:var(--text-dim);font-size:13px;">${leader.name} · ${memberPoints[leader.id]||leader.pts} pontos</div>
+        </div>
+        <div style="margin-left:auto;">
+          <button class="btn-primary" style="width:auto;padding:10px 20px;" onclick="openModal('modal-reward')">Definir Recompensa</button>
+        </div>
+      </div>
+    </div>
+    <div class="section-header"><div class="section-title">Recompensas Anteriores</div></div>
+    ${rewards.length === 0 ? '<div class="empty-state"><div class="empty-icon">🏆</div><div style="color:var(--text-muted);">Nenhuma recompensa definida ainda.</div></div>' : rewards.map(r => `
+      <div class="card card-sm" style="margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:13px;font-weight:500;">${r.period}</div><div style="font-size:11px;color:var(--text-dim);">${r.desc}</div></div>
+          ${r.winner ? `<div class="tag" style="background:rgba(255,209,102,0.1);color:var(--gaia-gold);border:1px solid rgba(255,209,102,0.2);">🏆 ${r.winner}</div>` : ''}
+        </div>
+      </div>`).join('')}
+  `;
+}
+
+function saveReward() {
+  const period = document.getElementById('reward-period').value.trim();
+  const desc   = document.getElementById('reward-desc').value.trim();
+  if (!period || !desc) { toast('Preencha todos os campos','error'); return; }
+  const sorted = [...MEMBERS].sort((a,b) => (memberPoints[b.id]||b.pts)-(memberPoints[a.id]||a.pts));
+  rewards.unshift({ id:'r'+Date.now(), period, desc, team:document.getElementById('reward-team').value, winner:sorted[0].name, date:new Date().toISOString().split('T')[0] });
+  closeModal('modal-reward');
+  saveToFirebase();
+  toast('Recompensa registrada!','success');
+}
+
+// ══════════════════════════════════════════
+// CRUD USUÁRIOS
+// ══════════════════════════════════════════
+function openAddUserModal() {
+  document.getElementById('user-form-title').textContent = 'Adicionar Novo Membro';
+  document.getElementById('user-id').value = '';
+  ['user-name','user-username','user-email','user-role'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('user-password').value = '123';
+  document.getElementById('user-team').value = 'eletroquad';
+  document.getElementById('user-isadmin').checked = false;
+  document.getElementById('admin-only-fields').style.display = 'flex';
+  document.getElementById('admin-only-checkbox').style.display = 'flex';
+  document.getElementById('btn-delete-user').style.display = 'none';
+  openModal('modal-user-form');
+}
+
+function openEditUserModal(id) {
+  const m = MEMBERS.find(x => x.id === id);
+  if (!m) return;
+  document.getElementById('user-form-title').textContent = id === currentUser.id ? 'Minha Conta' : 'Editar Usuário';
+  document.getElementById('user-id').value       = m.id;
+  document.getElementById('user-name').value     = m.name;
+  document.getElementById('user-username').value = m.username;
+  document.getElementById('user-password').value = m.password;
+  document.getElementById('user-email').value    = m.email || '';
+  if (currentUser.isAdmin) {
+    document.getElementById('user-team').value   = m.team;
+    document.getElementById('user-role').value   = m.role;
+    document.getElementById('user-isadmin').checked = m.isAdmin;
+    document.getElementById('admin-only-fields').style.display = 'flex';
+    document.getElementById('admin-only-checkbox').style.display = 'flex';
+    document.getElementById('btn-delete-user').style.display = id === currentUser.id ? 'none' : 'block';
+  } else {
+    document.getElementById('admin-only-fields').style.display = 'none';
+    document.getElementById('admin-only-checkbox').style.display = 'none';
+    document.getElementById('btn-delete-user').style.display = 'none';
+  }
+  openModal('modal-user-form');
+}
+
+function saveUser() {
+  const id       = document.getElementById('user-id').value;
+  const name     = document.getElementById('user-name').value.trim();
+  const username = document.getElementById('user-username').value.trim();
+  const password = document.getElementById('user-password').value.trim();
+  const email    = document.getElementById('user-email').value.trim();
+  if (!name || !username || !password) { toast('Preencha os dados básicos!','error'); return; }
+  const exists = MEMBERS.find(m => m.username.toLowerCase() === username.toLowerCase() && m.id !== id);
+  if (exists) { toast('Usuário já existe!','error'); return; }
+
+  if (id) {
+    const m = MEMBERS.find(x => x.id === id);
+    m.name = name; m.username = username; m.password = password; m.email = email;
+    if (currentUser.isAdmin) {
+      m.team    = document.getElementById('user-team').value;
+      m.role    = document.getElementById('user-role').value.trim() || 'Membro';
+      m.isAdmin = document.getElementById('user-isadmin').checked;
+      m.color   = m.team === 'eletroquad' ? '#1a8fff' : '#00e5a0';
+    }
+    toast('Dados salvos!','success');
+  } else {
+    const team = document.getElementById('user-team').value;
+    const newM = {
+      id:'m'+Date.now(), name, username, password, email,
+      team, role:document.getElementById('user-role').value.trim()||'Membro',
+      isAdmin:document.getElementById('user-isadmin').checked,
+      avatar:name.substring(0,2).toUpperCase(), color:team==='eletroquad'?'#1a8fff':'#00e5a0',
+      metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},
+      skills:['Gaia'], pts:0, hours:0, tasks_done:0, tasks_pending:0,
+    };
+    MEMBERS.push(newM); memberPoints[newM.id] = 0;
+    toast('Usuário criado!','success');
+  }
+  saveToFirebase();
+  closeModal('modal-user-form');
+}
+
+function deleteUser() {
+  const id = document.getElementById('user-id').value;
+  if (id === currentUser.id) { toast('Você não pode excluir sua própria conta.','error'); return; }
+  if (confirm('Excluir este usuário?')) {
+    MEMBERS = MEMBERS.filter(m => m.id !== id);
+    saveToFirebase();
+    closeModal('modal-user-form'); closeModal('modal-member');
+    toast('Usuário excluído!','success');
+  }
+}
+
+// ══════════════════════════════════════════
+// HABILIDADES
+// ══════════════════════════════════════════
+function openEditSkillsModal(userId) {
+  editingSkillsUserId = userId;
+  const m = MEMBERS.find(x => x.id === userId);
+  if (!m) return;
+  tempSkills = [...(m.skills||[])];
+  renderTempSkills();
+  openModal('modal-skills');
+}
+
+function renderTempSkills() {
+  const c = document.getElementById('skills-container');
+  c.innerHTML = tempSkills.length === 0
+    ? `<div style="color:var(--text-muted);font-size:12px;">Nenhuma habilidade cadastrada.</div>`
+    : tempSkills.map((s,i) => `<div class="skill-chip">${s} <span class="skill-chip-remove" onclick="removeSkill(${i})">✕</span></div>`).join('');
+}
+
+function addSkill() {
+  const input = document.getElementById('new-skill-input');
+  const val   = input.value.trim();
+  if (!val) return;
+  if (tempSkills.includes(val)) { toast('Habilidade já listada!','error'); return; }
+  tempSkills.push(val); input.value = ''; renderTempSkills();
+}
+
+function removeSkill(i) { tempSkills.splice(i,1); renderTempSkills(); }
+
+function saveSkills() {
+  const m = MEMBERS.find(x => x.id === editingSkillsUserId);
+  if (m) { m.skills = [...tempSkills]; saveToFirebase(); toast('Habilidades salvas!','success'); }
+  closeModal('modal-skills');
+}
+
+// ══════════════════════════════════════════
+// MÉTRICAS
+// ══════════════════════════════════════════
+function openEditMetricsModal(userId) {
+  const m = MEMBERS.find(x => x.id === userId);
+  if (!m) return;
+  document.getElementById('metrics-user-id').value = userId;
+  ['presenca','tarefas','qualidade','pontualidade','colaboracao'].forEach(k => {
+    document.getElementById('metric-'+k).value = m.metrics[k]||0;
+  });
+  openModal('modal-metrics');
+}
+
+function saveMetrics() {
+  const id = document.getElementById('metrics-user-id').value;
+  const m  = MEMBERS.find(x => x.id === id);
+  if (!m) return;
+  ['presenca','tarefas','qualidade','pontualidade','colaboracao'].forEach(k => {
+    m.metrics[k] = parseInt(document.getElementById('metric-'+k).value)||0;
+  });
+  saveToFirebase();
+  toast('Métricas atualizadas!','success');
+  closeModal('modal-metrics');
+  if (document.getElementById('modal-member').classList.contains('open')) openMemberModal(id);
+}
+
+// ══════════════════════════════════════════
+// MEMBER MODAL
+// ══════════════════════════════════════════
+function openMemberModal(id) {
+  const m = MEMBERS.find(x => x.id === id);
+  if (!m) return;
+  const isEQ  = m.team === 'eletroquad';
+  const pts   = memberPoints[m.id]||m.pts;
+  const hours = m.hours||0;
+  const avg   = Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
+  const labels = { presenca:'Presença', tarefas:'Tarefas', qualidade:'Qualidade', pontualidade:'Pontualidade', colaboracao:'Colaboração' };
+  const colors  = ['var(--gaia-blue)','var(--gaia-green)','var(--accent)','var(--accent3)','var(--accent2)'];
+  const entries = Object.entries(m.metrics);
+  const mySubs  = submissions.filter(s => s.memberId === id);
+  const skillsList = m.skills && m.skills.length > 0
+    ? m.skills.map(s => `<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-dim);">${s}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--text-dim);">Sem habilidades cadastradas.</span>';
+
+  document.getElementById('modal-member-avatar').textContent = m.avatar;
+  document.getElementById('modal-member-avatar').style.background = m.color;
+  document.getElementById('modal-member-name').innerHTML = `${m.name} ${m.isAdmin?'<span style="font-size:14px;color:var(--gaia-gold);">👑</span>':''}`;
+  document.getElementById('modal-member-badge').innerHTML = `<span class="member-team-badge ${isEQ?'badge-eq':'badge-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>`;
+
+  document.getElementById('modal-member-content').innerHTML = `
+    <div style="display:flex;gap:16px;margin-bottom:20px;">
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:${avg>=90?'var(--accent2)':avg>=75?'var(--accent)':'var(--accent3)'};">${avg}%</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--accent)">${pts}</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center;"><div class="card-label">Horas</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:#bb86fc;">${hours}h</div></div>
+    </div>
+    ${entries.map(([k,v],i) => `
+      <div class="progress-item">
+        <div class="progress-header"><span class="progress-label">${labels[k]}</span><span class="progress-val">${v}%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${v}%;background:${colors[i]};"></div></div>
+      </div>`).join('')}
+    <hr>
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Cargo: ${m.role}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;">${skillsList}</div>
+    ${mySubs.length > 0 ? `<hr>
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Entregas Recentes</div>
+      ${mySubs.slice().reverse().slice(0,3).map(s => `
+        <div class="submission-item">
+          <div style="display:flex;justify-content:space-between;"><div style="font-size:12px;font-weight:500;">${s.taskTitle}</div><span class="status-badge status-${s.status}">${{pending:'Pend.',approved:'OK',rejected:'Repr.'}[s.status]}</span></div>
+          ${s.adminFeedback ? `<div style="margin-top:4px;padding:4px 6px;background:rgba(255,209,102,0.05);border-left:2px solid var(--gaia-gold);font-size:10px;color:var(--text-dim);"><b>Obs:</b> ${s.adminFeedback}</div>` : ''}
+          <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${formatDate(s.date)}</div>
+        </div>`).join('')}` : ''}
+  `;
+
+  const footer = document.getElementById('modal-member-footer');
+  if (currentUser.isAdmin) {
+    footer.style.display = 'flex';
+    footer.innerHTML = `
+      <button class="btn-ghost" onclick="closeModal('modal-member');openEditUserModal('${id}')">⚙️ Conta</button>
+      <button class="btn-ghost" onclick="openEditSkillsModal('${id}')">🛠 Habilidades</button>
+      <button class="btn-ghost" style="color:var(--accent);" onclick="openEditMetricsModal('${id}')">📊 Métricas</button>
+      <button class="btn-ghost" style="color:#bb86fc;" onclick="closeModal('modal-member');openHoursAdjust('${id}')">⏱ Horas</button>`;
+  } else if (currentUser.id === id) {
+    footer.style.display = 'flex';
+    footer.innerHTML = `
+      <button class="btn-ghost" onclick="closeModal('modal-member');openEditUserModal('${id}')">⚙️ Minha Conta</button>
+      <button class="btn-ghost" onclick="openEditSkillsModal('${id}')">🛠 Habilidades</button>`;
+  } else { footer.style.display = 'none'; }
+
+  openModal('modal-member');
+}
+
+// ══════════════════════════════════════════
+// UTILITIES
+// ══════════════════════════════════════════
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { if (id) document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+});
+
+function toast(msg, type='success') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${type==='success'?'✓':'✕'}</span><span>${msg}</span>`;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  return `${day} ${months[parseInt(m)-1]} ${y}`;
+}
+
+// ══════════════════════════════════════════
+// CHAT GERAL
+// ══════════════════════════════════════════
+function renderChatPage() {
+  renderChatMessages('chat-messages-list', chatMessages);
+}
+
+function renderChatMessages(containerId, msgs) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (msgs.length === 0) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">💬</div><div style="color:var(--text-muted);">Nenhuma mensagem ainda. Seja o primeiro!</div></div>`;
+    return;
+  }
+  let html = '';
+  let lastDate = '';
+  msgs.forEach(msg => {
+    const isMine = msg.authorId === currentUser.id;
+    const m = MEMBERS.find(x => x.id === msg.authorId);
+    const color = m ? m.color : '#888';
+    const avatar = m ? m.avatar : '?';
+    const msgDate = msg.timestamp ? msg.timestamp.split('T')[0] : '';
+    if (msgDate && msgDate !== lastDate) {
+      html += `<div class="chat-date-divider"><span>${formatDate(msgDate)}</span></div>`;
+      lastDate = msgDate;
+    }
+    const timeStr = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : '';
+    let fileHtml = '';
+    if (msg.file) {
+      const icon = getFileIcon(msg.file.name);
+      const sizeStr = formatFileSize(msg.file.size);
+      if (msg.file.dataUrl && msg.file.name.match(/\.(png|jpg|jpeg|gif|webp)$/i)) {
+        fileHtml = `<div style="margin-top:8px;"><img src="${msg.file.dataUrl}" style="max-width:240px;max-height:180px;border-radius:8px;cursor:pointer;" onclick="window.open('${msg.file.dataUrl}','_blank')" /></div>`;
+      } else {
+        fileHtml = `<a class="chat-bubble-file" href="${msg.file.dataUrl||'#'}" download="${msg.file.name}" ${!msg.file.dataUrl?'style="pointer-events:none;opacity:0.5;"':''}>
+          <div class="chat-file-icon">${icon}</div>
+          <div class="chat-file-info"><div class="chat-file-name">${msg.file.name}</div><div class="chat-file-size">${sizeStr}</div></div>
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </a>`;
+      }
+    }
+    // tarefa vinculada
+    let taskHtml = '';
+    if (msg.taskId) {
+      const t = tasks.find(x => x.id === msg.taskId);
+      if (t) taskHtml = `<div class="chat-task-badge">📋 ${t.title}</div>`;
+    }
+    html += `<div class="chat-msg ${isMine?'mine':''}">
+      ${!isMine ? `<div class="chat-msg-avatar" style="background:${color}">${avatar}</div>` : ''}
+      <div class="chat-bubble">
+        ${!isMine ? `<div class="chat-bubble-name">${msg.authorName}</div>` : ''}
+        ${msg.text ? `<div class="chat-bubble-text">${escapeHtml(msg.text)}</div>` : ''}
+        ${fileHtml}
+        ${taskHtml}
+        <div class="chat-bubble-time">${timeStr}</div>
+      </div>
+    </div>`;
+  });
+  el.innerHTML = html;
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendChatMsg() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text && !chatPendingFile) return;
+
+  const msg = {
+    id: 'cm'+Date.now(),
+    authorId: currentUser.id,
+    authorName: currentUser.name,
+    text,
+    file: chatPendingFile ? { name: chatPendingFile.name, size: chatPendingFile.size, dataUrl: chatPendingFile.dataUrl } : null,
+    timestamp: new Date().toISOString(),
+  };
+  chatMessages.push(msg);
+  input.value = '';
+  input.style.height = 'auto';
+  clearChatAttach();
+  lastSeenChatCount = chatMessages.length;
+  saveToFirebase();
+}
+
+function handleChatFileSelect(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { toast('Arquivo muito grande! Máximo 2MB.','error'); return; }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    chatPendingFile = { name: file.name, size: file.size, dataUrl: e.target.result };
+    document.getElementById('chat-attach-name').textContent = file.name;
+    document.getElementById('chat-attach-size').textContent = formatFileSize(file.size);
+    document.getElementById('chat-attach-preview').classList.add('active');
+  };
+  reader.readAsDataURL(file);
+  inputEl.value = '';
+}
+
+function clearChatAttach() {
+  chatPendingFile = null;
+  document.getElementById('chat-attach-preview').classList.remove('active');
+}
+
+// ══════════════════════════════════════════
+// CHAT ADMs
+// ══════════════════════════════════════════
+function renderAdmChatPage() {
+  renderChatMessages('admchat-messages-list', admChatMessages);
+}
+
+function sendAdmChatMsg() {
+  const input = document.getElementById('admchat-input');
+  const text = input.value.trim();
+  if (!text && !admChatPendingFile) return;
+
+  const msg = {
+    id: 'ac'+Date.now(),
+    authorId: currentUser.id,
+    authorName: currentUser.name,
+    text,
+    file: admChatPendingFile ? { name: admChatPendingFile.name, size: admChatPendingFile.size, dataUrl: admChatPendingFile.dataUrl } : null,
+    timestamp: new Date().toISOString(),
+  };
+  admChatMessages.push(msg);
+  input.value = '';
+  input.style.height = 'auto';
+  clearAdmChatAttach();
+  lastSeenAdmChatCount = admChatMessages.length;
+  saveToFirebase();
+}
+
+function handleAdmChatFileSelect(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { toast('Arquivo muito grande! Máximo 2MB.','error'); return; }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    admChatPendingFile = { name: file.name, size: file.size, dataUrl: e.target.result };
+    document.getElementById('admchat-attach-name').textContent = file.name;
+    document.getElementById('admchat-attach-size').textContent = formatFileSize(file.size);
+    document.getElementById('admchat-attach-preview').classList.add('active');
+  };
+  reader.readAsDataURL(file);
+  inputEl.value = '';
+}
+
+function clearAdmChatAttach() {
+  admChatPendingFile = null;
+  document.getElementById('admchat-attach-preview').classList.remove('active');
+}
+
+// ══════════════════════════════════════════
+// ARQUIVOS
+// ══════════════════════════════════════════
+function renderFilesPage() {
+  filterFiles(currentFilesFilter);
+}
+
+function filterFiles(filter, el) {
+  currentFilesFilter = filter;
+  if (el) { document.querySelectorAll('#files-tabs .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+  let filtered = [...projectFiles];
+  if (filter === 'image') filtered = filtered.filter(f => f.type === 'image');
+  else if (filter === 'pdf') filtered = filtered.filter(f => f.type === 'pdf');
+  else if (filter === 'code') filtered = filtered.filter(f => f.type === 'code');
+  else if (filter === 'other') filtered = filtered.filter(f => f.type === 'other');
+
+  const isAdmin = currentUser.isAdmin;
+  if (filtered.length === 0) {
+    document.getElementById('files-grid-container').innerHTML = `<div class="empty-state"><div class="empty-icon">📁</div><div style="color:var(--text-muted);">Nenhum arquivo aqui. Clique em "+ Adicionar Arquivo" para enviar.</div></div>`;
+    return;
+  }
+  document.getElementById('files-grid-container').innerHTML = `<div class="files-grid">` +
+    filtered.map(f => {
+      const icon = getFileIcon(f.name);
+      const sizeStr = formatFileSize(f.size || 0);
+      return `<div class="file-card" onclick="downloadFile('${f.id}')">
+        ${isAdmin ? `<button class="file-del-btn" onclick="event.stopPropagation();deleteFile('${f.id}')">✕</button>` : ''}
+        <div class="file-card-icon">${icon}</div>
+        <div class="file-card-name">${f.name}</div>
+        <div class="file-card-meta">${sizeStr} · ${formatDate(f.date)}</div>
+        <div class="file-card-meta" style="color:var(--text-muted);">por ${f.uploaderName}</div>
+        ${f.tags && f.tags.length ? `<div class="file-card-tags">${f.tags.map(t=>`<span class="tag" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);">${t}</span>`).join('')}</div>` : ''}
+      </div>`;
+    }).join('') + `</div>`;
+}
+
+function handleFilesUpload(inputEl) {
+  const files = Array.from(inputEl.files);
+  if (!files.length) return;
+  let processed = 0;
+  files.forEach(file => {
+    if (file.size > 3 * 1024 * 1024) { toast(`"${file.name}" muito grande! Máximo 3MB por arquivo.`,'error'); processed++; return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const cat = getFileCategory(file.name);
+      const entry = {
+        id: 'f'+Date.now()+Math.random().toString(36).slice(2,6),
+        name: file.name,
+        size: file.size,
+        type: cat,
+        dataUrl: e.target.result,
+        uploaderName: currentUser.name,
+        uploaderId: currentUser.id,
+        date: new Date().toISOString().split('T')[0],
+        tags: [],
+      };
+      projectFiles.push(entry);
+      processed++;
+      if (processed === files.length) {
+        saveToFirebase();
+        toast(`${files.length} arquivo(s) adicionado(s)!`, 'success');
+        renderFilesPage();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  inputEl.value = '';
+}
+
+function downloadFile(id) {
+  const f = projectFiles.find(x => x.id === id);
+  if (!f || !f.dataUrl) { toast('Arquivo não disponível.','error'); return; }
+  const a = document.createElement('a');
+  a.href = f.dataUrl; a.download = f.name; a.click();
+}
+
+function deleteFile(id) {
+  if (!confirm('Remover este arquivo?')) return;
+  projectFiles = projectFiles.filter(f => f.id !== id);
+  saveToFirebase();
+  toast('Arquivo removido.','success');
+  renderFilesPage();
+}
+
+function getFileCategory(name) {
+  const ext = name.split('.').pop().toLowerCase();
+  if (['png','jpg','jpeg','gif','webp','svg'].includes(ext)) return 'image';
+  if (ext === 'pdf') return 'pdf';
+  if (['py','cpp','c','h','js','ts','yaml','yml','json','launch','sh','bash','html','css','txt','md','ros'].includes(ext)) return 'code';
+  return 'other';
+}
+
+// ══════════════════════════════════════════
+// MAPA DE CÓDIGO
+// ══════════════════════════════════════════
+function renderCodemapPage() {
+  filterCodemap(currentCodemapFilter);
+}
+
+function filterCodemap(filter, el) {
+  currentCodemapFilter = filter;
+  if (el) { document.querySelectorAll('#codemap-tabs .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); }
+  let filtered = [...codemapModules];
+  if (filter === 'eletroquad') filtered = filtered.filter(m => m.team === 'eletroquad' || m.team === 'both');
+  else if (filter === 'robotica') filtered = filtered.filter(m => m.team === 'robotica' || m.team === 'both');
+
+  if (filtered.length === 0) {
+    document.getElementById('codemap-list').innerHTML = `<div class="empty-state"><div class="empty-icon">💻</div><div style="color:var(--text-muted);">Nenhum módulo cadastrado. Clique em "+ Novo Módulo" para começar.</div></div>`;
+    return;
+  }
+  const langLabels = { py:'Python', cpp:'C++', ros:'ROS', js:'JS/TS', other:'Outro' };
+  const langClasses = { py:'lang-py', cpp:'lang-cpp', ros:'lang-ros', js:'lang-js', other:'lang-other' };
+  document.getElementById('codemap-list').innerHTML = filtered.map(mod => `
+    <div class="codemap-item">
+      <div class="codemap-header" onclick="toggleCodemap('${mod.id}')">
+        <span class="codemap-lang-badge ${langClasses[mod.lang]||'lang-other'}">${langLabels[mod.lang]||'?'}</span>
+        <div style="flex:1;">
+          <div class="codemap-name">${mod.name}</div>
+          ${mod.path ? `<div class="codemap-path">${mod.path}</div>` : ''}
+        </div>
+        <span class="tag ${mod.team==='eletroquad'?'tag-eq':mod.team==='robotica'?'tag-rob':'tag-both'}" style="flex-shrink:0;">${mod.team==='eletroquad'?'EletroQuad':mod.team==='robotica'?'Robótica':'Ambas'}</span>
+        ${currentUser.isAdmin ? `<button onclick="event.stopPropagation();deleteCodemapModule('${mod.id}')" style="background:none;border:none;color:var(--accent-red);cursor:pointer;opacity:0.5;margin-left:8px;font-size:14px;">🗑</button>` : ''}
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="opacity:0.4;margin-left:4px;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="codemap-body" id="codemap-body-${mod.id}">
+        <label style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);display:block;margin-bottom:8px;">Documentação</label>
+        <textarea class="codemap-desc-area" id="codemap-desc-${mod.id}" placeholder="Descreva funções, dependências, como usar este módulo...">${mod.desc || ''}</textarea>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn-success" style="padding:8px 18px;font-size:12px;" onclick="saveCodemapDesc('${mod.id}')">Salvar Documentação</button>
+          <span class="codemap-author">Criado por ${mod.createdBy} · ${formatDate(mod.date)}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleCodemap(id) {
+  const body = document.getElementById('codemap-body-'+id);
+  if (body) body.classList.toggle('open');
+}
+
+function saveCodemapModule() {
+  const name = document.getElementById('cm-name').value.trim();
+  if (!name) { toast('Informe o nome do arquivo/módulo!','error'); return; }
+  const mod = {
+    id: 'mod'+Date.now(),
+    name,
+    lang: document.getElementById('cm-lang').value,
+    path: document.getElementById('cm-path').value.trim(),
+    team: document.getElementById('cm-team').value,
+    desc: document.getElementById('cm-desc').value.trim(),
+    createdBy: currentUser.name,
+    createdById: currentUser.id,
+    date: new Date().toISOString().split('T')[0],
+  };
+  codemapModules.push(mod);
+  ['cm-name','cm-path','cm-desc'].forEach(id => document.getElementById(id).value='');
+  closeModal('modal-codemap-new');
+  saveToFirebase();
+  toast('Módulo adicionado ao mapa!','success');
+}
+
+function saveCodemapDesc(id) {
+  const mod = codemapModules.find(x => x.id === id);
+  if (!mod) return;
+  mod.desc = document.getElementById('codemap-desc-'+id).value;
+  mod.lastEditedBy = currentUser.name;
+  mod.lastEditedDate = new Date().toISOString().split('T')[0];
+  saveToFirebase();
+  toast('Documentação salva!','success');
+}
+
+function deleteCodemapModule(id) {
+  if (!confirm('Remover este módulo do mapa?')) return;
+  codemapModules = codemapModules.filter(m => m.id !== id);
+  saveToFirebase();
+  toast('Módulo removido.','success');
+  renderCodemapPage();
+}
+
+// ══════════════════════════════════════════
+// UTILITÁRIOS DE ARQUIVO
+// ══════════════════════════════════════════
+function getFileIcon(name) {
+  const ext = (name || '').split('.').pop().toLowerCase();
+  const icons = {
+    pdf:'📄', py:'🐍', cpp:'⚙️', c:'⚙️', h:'⚙️',
+    js:'📜', ts:'📜', json:'📋', yaml:'📋', yml:'📋',
+    launch:'🚀', sh:'💻', bash:'💻', md:'📝', txt:'📝',
+    png:'🖼', jpg:'🖼', jpeg:'🖼', gif:'🖼', svg:'🎨', webp:'🖼',
+    zip:'📦', rar:'📦', '7z':'📦',
+    xlsx:'📊', csv:'📊', xls:'📊',
+    mp4:'🎬', mp3:'🎵',
+  };
+  return icons[ext] || '📁';
+}
+
+function formatFileSize(bytes) {
+  if (!bytes) return '—';
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+  return (bytes/(1024*1024)).toFixed(1) + ' MB';
+}
+
+function escapeHtml(str) {
+  return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+// Init EmailJS se já configurado
+setTimeout(() => {
+  if (emailConfig && emailConfig.publicKey && emailConfig.configured) {
+    emailjs.init(emailConfig.publicKey);
+  }
+}, 2000);
+</script>
+</body>
 </html>
+
 
 
