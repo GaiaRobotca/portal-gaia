@@ -1100,6 +1100,24 @@ const FB = firebase.initializeApp({
 });
 const DB = firebase.database().ref('gaia_v7');
 
+// ── SEGURANÇA: HASH DE SENHAS ──
+async function hashSenha(senha) {
+  const enc = new TextEncoder();
+  const data = enc.encode(senha + 'gaia_uftm_salt_2026');
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+async function migrarSenhas() {
+  let precisaMigrar = M.some(m => m.password && !m.password.startsWith('sha256:'));
+  if (!precisaMigrar) return;
+  for (const m of M) {
+    if (m.password && !m.password.startsWith('sha256:')) {
+      m.password = 'sha256:' + await hashSenha(m.password);
+    }
+  }
+  save();
+}
+
 // ══════════════════════════════════════════════════════
 // DADOS INICIAIS
 // ══════════════════════════════════════════════════════
