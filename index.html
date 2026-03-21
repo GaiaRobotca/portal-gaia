@@ -384,10 +384,54 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:100px}
 
-@media(max-width:768px){
-  .sidebar{display:none}
-  .main{padding:14px}
-  .g4,.g3,.g2{grid-template-columns:1fr}
+/* ── MOBILE MENU ── */
+.mob-bar {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 52px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  z-index: 900;
+}
+.mob-logo { display: flex; align-items: center; gap: 9px; }
+.mob-logo-icon { width: 28px; height: 28px; border-radius: 7px; background: linear-gradient(135deg, var(--blue), var(--green)); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 12px; color: #fff; }
+.mob-hamburger { width: 34px; height: 34px; border-radius: 8px; background: var(--bg3); border: 1px solid var(--border); color: var(--dim); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; padding: 8px; }
+.mob-hamburger span { display: block; width: 16px; height: 1.5px; background: currentColor; border-radius: 2px; transition: .2s; }
+.mob-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 950; backdrop-filter: blur(2px); }
+.mob-overlay.on { display: block; }
+.sidebar.mob-open { transform: translateX(0) !important; }
+
+@media(max-width: 768px) {
+  .mob-bar { display: flex; }
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    z-index: 960;
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+    padding-top: 14px;
+  }
+  .main {
+    padding: 68px 14px 14px;
+    min-height: 100vh;
+  }
+  .g4 { grid-template-columns: repeat(2, 1fr); }
+  .g3 { grid-template-columns: repeat(2, 1fr); }
+  .g2 { grid-template-columns: 1fr; }
+  #theme-toggle {
+    top: 10px;
+    right: 56px;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  .chat-wrap { height: calc(100vh - 220px); }
+  #pg-codemap > div > div[style*="grid"] { grid-template-columns: 1fr !important; }
+  .frow { flex-direction: column; gap: 0; }
 }
 #theme-toggle {
   position: fixed;
