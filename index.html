@@ -428,7 +428,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   .g2 { grid-template-columns: 1fr; }
   #theme-toggle { display: none; }
   .chat-wrap { height: calc(100vh - 220px); }
-  #pg-codemap > div > div[style*="grid"] { grid-template-columns: 1fr !important; }
   .frow { flex-direction: column; gap: 0; }
 }
 #theme-toggle {
@@ -569,10 +568,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         Google Drive
       </div>
-      <div class="nav-it" id="nav-codemap" onclick="goPage('codemap',this)">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        Mapa de Código
-      </div>
+
     </div>
 
     <div class="nav-sec">
@@ -725,28 +721,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
         <div style="margin-top:18px;font-size:11px;color:var(--muted)">Abre em nova aba</div>
       </div>
     </div>
-    <div id="pg-codemap" class="pg">
-      <div class="ph">
-        <div class="ph-top">
-          <div class="pt">🗺 Mapa de Código</div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-ghost btn-sm" onclick="openModal('modal-newfolder')">📁 Nova Pasta</button>
-            <button class="btn btn-blue btn-sm" onclick="openModal('modal-newmod')">+ Novo Arquivo</button>
-          </div>
-        </div>
-        <div class="ps">Estrutura de arquivos do projeto</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:18px;align-items:start">
-        <div>
-          <input class="tree-search" id="tree-search" placeholder="🔍 Buscar arquivo..." oninput="renderCodemapTree()">
-          <div id="codemap-tree" class="tree-wrap"></div>
-        </div>
-        <div id="codemap-detail" class="detail-panel">
-          <div class="empty" style="padding:28px 0"><div class="empty-ico">👈</div><div style="font-size:12px">Selecione um arquivo na árvore</div></div>
-        </div>
-      </div>
-    </div>
-
     <div id="pg-myprofile" class="pg">
       <div class="ph"><div class="ph-top"><div class="pt">Meu Perfil</div><button class="btn btn-ghost btn-sm" onclick="openEditUser(CU.id)">⚙ Editar</button></div></div>
       <div id="myprofile-content"></div>
@@ -960,35 +934,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
   </div>
 </div>
 
-<div id="modal-newfolder" class="modal-ov">
-  <div class="modal">
-    <div class="modal-hd"><div class="modal-title">📁 Nova Pasta</div><div class="modal-x" onclick="closeModal('modal-newfolder')">✕</div></div>
-    <div class="fg"><label class="lbl">Nome da Pasta</label><input type="text" id="folder-name" placeholder="Ex: src, navigation, perception..."></div>
-    <div class="frow">
-      <div class="fg"><label class="lbl">Pasta Pai (opcional)</label><select id="folder-parent"><option value="">— raiz —</option></select></div>
-      <div class="fg"><label class="lbl">Equipe</label><select id="folder-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="both">Ambas</option></select></div>
-    </div>
-    <div class="modal-ft"><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-newfolder')">Cancelar</button><button class="btn btn-blue btn-sm" onclick="saveFolder()">Criar Pasta</button></div>
-  </div>
-</div>
-
-<div id="modal-newmod" class="modal-ov">
-  <div class="modal">
-    <div class="modal-hd"><div class="modal-title">📄 Novo Arquivo</div><div class="modal-x" onclick="closeModal('modal-newmod')">✕</div></div>
-    <div class="frow">
-      <div class="fg"><label class="lbl">Nome do Arquivo</label><input type="text" id="mod-name" placeholder="Ex: imu_filter.py"></div>
-      <div class="fg"><label class="lbl">Linguagem</label><select id="mod-lang"><option value="py">Python</option><option value="cpp">C++</option><option value="ros">ROS/YAML</option><option value="js">JavaScript</option><option value="other">Outro</option></select></div>
-    </div>
-    <div class="frow">
-      <div class="fg"><label class="lbl">Pasta</label><select id="mod-folder"><option value="">— raiz —</option></select></div>
-      <div class="fg"><label class="lbl">Equipe</label><select id="mod-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="both">Ambas</option></select></div>
-    </div>
-    <div class="fg"><label class="lbl">Conectado a...</label><input type="text" id="mod-connections" placeholder="Ex: camera_driver.py, main_controller.cpp"></div>
-    <div class="fg"><label class="lbl">Descrição rápida</label><textarea id="mod-desc" style="min-height:60px" placeholder="O que este arquivo faz?"></textarea></div>
-    <div class="modal-ft"><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-newmod')">Cancelar</button><button class="btn btn-blue btn-sm" onclick="saveModule()">Adicionar</button></div>
-  </div>
-</div>
-
 <div id="toast-c"></div>
 
 <script>
@@ -1113,7 +1058,7 @@ const INIT_TASKS = [
 // ESTADO GLOBAL
 // ══════════════════════════════════════════════════════
 let CU = null;
-let M=[], T=[], S=[], R=[], MP={}, ATT=[], NOT=[], CAL=[], ECFG={serviceId:'',templateId:'',publicKey:'',configured:false}, HG=20, HL=[], CHAT=[], ACHAT=[], FILES=[], CMAP=[];
+let M=[], T=[], S=[], R=[], MP={}, ATT=[], NOT=[], CAL=[], ECFG={serviceId:'',templateId:'',publicKey:'',configured:false}, HG=20, HL=[], CHAT=[], ACHAT=[], FILES=[];
 let taskFilter='all', rankFilter='all', memberFilter='all', filesFilter='all', codemapFilter='all';
 let pendingTaskId=null, editSkillsUid=null, tempSkills=[], calY=new Date().getFullYear(), calMo=new Date().getMonth();
 let chatPendingFile=null, admChatPendingFile=null, seenChat=0, seenAdmChat=0;
@@ -1139,7 +1084,6 @@ DB.on('value', snap => {
     CHAT = d.chatMessages||[];
     ACHAT= d.admChatMessages||[];
     FILES= d.projectFiles||[];
-    CMAP = d.codemapModules||[];
   } else {
     // Banco vazio ou novo: inicializa com dados padrão
     M  = JSON.parse(JSON.stringify(INIT_MEMBERS));
@@ -1171,7 +1115,7 @@ DB.on('value', snap => {
 function save() {
   DB.set({members:M,tasks:T,submissions:S,rewards:R,memberPoints:MP,attendance:ATT,
     notices:NOT,calEvents:CAL,emailConfig:ECFG,hoursGoal:HG,hoursLog:HL,
-    chatMessages:CHAT,admChatMessages:ACHAT,projectFiles:FILES,codemapModules:CMAP});
+    chatMessages:CHAT,admChatMessages:ACHAT,projectFiles:FILES});
 }
 
 // ══════════════════════════════════════════════════════
@@ -1202,7 +1146,7 @@ function toast(msg, type='ok') {
   el('toast-c').appendChild(t);
   setTimeout(()=>t.remove(),3200);
 }
-function openModal(id) { el(id).classList.add('on'); if(id==='modal-newfolder'||id==='modal-newmod') populateFolderSelects(); }
+function openModal(id) { el(id).classList.add('on'); }
 function closeModal(id) { el(id)&&el(id).classList.remove('on'); }
 document.querySelectorAll('.modal-ov').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o)o.classList.remove('on'); }));
 
@@ -1285,7 +1229,6 @@ function renderPage(page) {
     tasks:      ()=>filterTasks(taskFilter),
     ranking:    ()=>filterRanking(rankFilter),
     files:      ()=>{},  // redireciona para Drive
-    codemap:    ()=>filterCodemap(codemapFilter),
     myprofile:  renderMyProfile,
     mymetrics:  renderMyMetrics,
     members:    ()=>filterMembers(memberFilter),
@@ -1646,172 +1589,6 @@ function handleFilesUpload(input) {
 }
 function downloadFile(id){const f=FILES.find(x=>x.id===id);if(!f||!f.dataUrl)return;const a=document.createElement('a');a.href=f.dataUrl;a.download=f.name;a.click();}
 function deleteFile(id){if(!confirm('Remover arquivo?'))return;FILES=FILES.filter(f=>f.id!==id);save();toast('Removido.');}
-
-// ══════════════════════════════════════════════════════
-// CODE MAP
-// ══════════════════════════════════════════════════════
-let selectedModId = null;
-
-function filterCodemap(f, tabEl) { codemapFilter=f; renderCodemapTree(); }
-
-function renderCodemapTree() {
-  const search = (el('tree-search')||{value:''}).value.toLowerCase();
-  const folders = CMAP.filter(x=>x.type==='folder');
-  const files = CMAP.filter(x=>x.type==='file');
-
-  function buildTree(parentId) {
-    let h = '';
-    folders.filter(f=>f.parentId===(parentId||null)).forEach(folder=>{
-      const childFiles = files.filter(f=>f.folderId===folder.id);
-      const childFolders = folders.filter(f=>f.parentId===folder.id);
-      const hasMatch = !search || folder.name.toLowerCase().includes(search) || childFiles.some(f=>f.name.toLowerCase().includes(search));
-      if(!hasMatch) return;
-      h += `<div class="tree-node">
-        <div class="tree-folder" id="tf-${folder.id}" onclick="toggleFolder('${folder.id}')">
-          <svg class="tree-chevron" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-          <span>📁</span><span style="font-weight:600">${folder.name}</span>
-          <span style="font-size:9px;color:var(--muted);margin-left:4px">${childFiles.length+childFolders.length} itens</span>
-          ${CU.isAdmin?`<button onclick="event.stopPropagation();deleteFolder('${folder.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;opacity:.4;margin-left:auto;font-size:11px">🗑</button>`:''}
-        </div>
-        <div class="tree-children" id="tc-${folder.id}">${buildTree(folder.id)}</div>
-      </div>`;
-    });
-    files.filter(f=>f.folderId===(parentId||null)).forEach(file=>{
-      if(search && !file.name.toLowerCase().includes(search)) return;
-      const ll={py:'lang-py',cpp:'lang-cpp',ros:'lang-ros',js:'lang-js',other:'lang-other'};
-      const ln={py:'py',cpp:'cpp',ros:'ros',js:'js',other:'...'};
-      const isActive = selectedModId===file.id;
-      const connCount = (file.connections||[]).length;
-      h += `<div class="tree-file${isActive?' active':''}" onclick="selectFile('${file.id}')">
-        <span style="opacity:.4;font-size:10px">📄</span>
-        <span class="tree-file-lang ${ll[file.lang]||'lang-other'}">${ln[file.lang]||'?'}</span>
-        <span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${file.name}</span>
-        ${connCount?`<span style="font-size:9px;color:var(--accent);opacity:.7">⇄${connCount}</span>`:''}
-      </div>`;
-    });
-    return h;
-  }
-
-  const treeH = buildTree(null);
-  el('codemap-tree').innerHTML = treeH || `<div class="empty" style="padding:20px 0"><div class="empty-ico">💻</div><div style="font-size:12px">${search?'Nada encontrado.':'Adicione pastas e arquivos com os botões acima.'}</div></div>`;
-  folders.forEach(f=>{ if(localStorage.getItem('tf_open_'+f.id)==='1') { const tc=el('tc-'+f.id), tf=el('tf-'+f.id); if(tc)tc.classList.add('open'); if(tf)tf.classList.add('open'); } });
-}
-
-function toggleFolder(id) {
-  const tc=el('tc-'+id), tf=el('tf-'+id);
-  if(!tc)return;
-  const open=tc.classList.toggle('open');
-  if(tf)tf.classList.toggle('open');
-  localStorage.setItem('tf_open_'+id, open?'1':'0');
-}
-
-function selectFile(id) { selectedModId=id; renderCodemapTree(); renderModDetail(id); }
-
-function renderModDetail(id) {
-  const mod=CMAP.find(x=>x.id===id);
-  if(!mod||mod.type!=='file'){el('codemap-detail').innerHTML=`<div class="empty" style="padding:28px 0"><div class="empty-ico">👈</div><div style="font-size:12px">Selecione um arquivo</div></div>`;return;}
-  const ll={py:'lang-py',cpp:'lang-cpp',ros:'lang-ros',js:'lang-js',other:'lang-other'};
-  const ln={py:'Python',cpp:'C++',ros:'ROS/YAML',js:'JavaScript',other:'Outro'};
-  const conns=(mod.connections||[]);
-  const docFiles=(mod.docFiles||[]);
-  const folder=CMAP.find(x=>x.id===mod.folderId);
-  const inbound=CMAP.filter(x=>x.type==='file'&&x.id!==id&&(x.connections||[]).some(c=>c.toLowerCase().includes(mod.name.toLowerCase())));
-
-  el('codemap-detail').innerHTML=`
-    <div style="display:flex;align-items:center;gap:9px;margin-bottom:16px;flex-wrap:wrap">
-      <span class="tree-file-lang ${ll[mod.lang]||'lang-other'}" style="font-size:11px;padding:3px 10px">${ln[mod.lang]||'Outro'}</span>
-      <div style="flex:1">
-        <div style="font-family:'DM Mono',monospace;font-weight:600;font-size:14px">${mod.name}</div>
-        <div style="font-size:10px;color:var(--muted);margin-top:2px">${folder?'📁 '+folder.name+' / ':''}<span style="color:var(--dim)">${mod.team==='eletroquad'?'EletroQuad':mod.team==='robotica'?'Robótica':'Ambas'}</span></div>
-      </div>
-      ${CU.isAdmin?`<button class="btn btn-red btn-sm" style="padding:5px 10px;font-size:10px" onclick="deleteModule('${id}')">🗑</button>`:''}
-    </div>
-    ${conns.length||inbound.length?`<div style="margin-bottom:14px"><div class="sec-title" style="font-size:12px;margin-bottom:8px">⇄ Conexões</div><div style="display:flex;flex-wrap:wrap;gap:6px">${conns.map(c=>{const cf=CMAP.find(x=>x.type==='file'&&x.name.toLowerCase()===c.toLowerCase());return `<span class="conn-badge out" onclick="${cf?`selectFile('${cf.id}')`:''}">→ ${c}</span>`;}).join('')}${inbound.map(f=>`<span class="conn-badge" onclick="selectFile('${f.id}')">← ${f.name}</span>`).join('')}</div></div>`:''}
-    <div style="margin-bottom:14px">
-      <div class="sec-title" style="font-size:12px;margin-bottom:8px">📝 Documentação</div>
-      <textarea class="cm-ta" id="detail-desc-${id}" placeholder="Descreva funções, parâmetros, dependências...">${mod.desc||''}</textarea>
-      <div style="display:flex;gap:8px;margin-top:7px;flex-wrap:wrap">
-        <button class="btn btn-green btn-sm" onclick="saveModDesc('${id}')">Salvar texto</button>
-        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('doc-upload-${id}').click()">📎 Anexar .pdf / .docx</button>
-        <input type="file" id="doc-upload-${id}" style="display:none" accept=".pdf,.doc,.docx" onchange="handleDocUpload(this,'${id}')">
-      </div>
-    </div>
-    ${docFiles.length?`<div style="margin-bottom:14px"><div class="sec-title" style="font-size:12px;margin-bottom:8px">📎 Arquivos Anexados</div>${docFiles.map(df=>`<div class="doc-file-card" onclick="downloadDocFile('${id}','${df.id}')"><span style="font-size:18px">${df.name.endsWith('.pdf')?'📄':'📝'}</span><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${df.name}</div><div style="font-size:10px;color:var(--dim)">${fmtSize(df.size)} · ${df.uploadedBy}</div></div>${CU.isAdmin?`<button onclick="event.stopPropagation();deleteDocFile('${id}','${df.id}')" style="background:none;border:none;color:var(--red);cursor:pointer;opacity:.5;font-size:12px">✕</button>`:''}</div>`).join('')}</div>`:''}
-    <div style="font-size:10px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">Criado por ${mod.createdBy} · ${fmtDate(mod.date)}${mod.lastEditedBy?' · Editado por '+mod.lastEditedBy:''}</div>`;
-}
-
-function saveModDesc(id) {
-  const mod=CMAP.find(x=>x.id===id);if(!mod)return;
-  const ta=el('detail-desc-'+id);if(ta)mod.desc=ta.value;
-  mod.lastEditedBy=CU.name; save();toast('Documentação salva!');
-}
-
-function handleDocUpload(input, modId) {
-  const file=input.files[0];if(!file)return;
-  if(file.size>5*1024*1024){toast('Máx 5MB por documento','err');return;}
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const mod=CMAP.find(x=>x.id===modId);if(!mod)return;
-    if(!mod.docFiles)mod.docFiles=[];
-    mod.docFiles.push({id:'df'+Date.now(),name:file.name,size:file.size,dataUrl:e.target.result,uploadedBy:CU.name,date:new Date().toISOString().split('T')[0]});
-    save();toast('Documento anexado!');renderModDetail(modId);
-  };
-  reader.readAsDataURL(file);
-  input.value='';
-}
-
-function downloadDocFile(modId, dfId) {
-  const mod=CMAP.find(x=>x.id===modId);if(!mod)return;
-  const df=(mod.docFiles||[]).find(x=>x.id===dfId);if(!df)return;
-  const a=document.createElement('a');a.href=df.dataUrl;a.download=df.name;a.click();
-}
-
-function deleteDocFile(modId, dfId) {
-  if(!confirm('Remover documento?'))return;
-  const mod=CMAP.find(x=>x.id===modId);if(!mod)return;
-  mod.docFiles=(mod.docFiles||[]).filter(x=>x.id!==dfId);
-  save();toast('Removido.');renderModDetail(modId);
-}
-
-function saveFolder() {
-  const name=el('folder-name').value.trim();if(!name){toast('Informe o nome','err');return;}
-  CMAP.push({type:'folder',id:'fold'+Date.now(),name,parentId:el('folder-parent').value||null,team:el('folder-team').value,date:new Date().toISOString().split('T')[0],createdBy:CU.name});
-  el('folder-name').value='';
-  closeModal('modal-newfolder');save();toast('Pasta criada!');renderCodemapTree();
-}
-
-function saveModule() {
-  const name=el('mod-name').value.trim();if(!name){toast('Informe o nome','err');return;}
-  const rawConns=el('mod-connections').value.trim();
-  const connections=rawConns?rawConns.split(',').map(s=>s.trim()).filter(Boolean):[];
-  CMAP.push({type:'file',id:'file'+Date.now(),name,lang:el('mod-lang').value,folderId:el('mod-folder').value||null,team:el('mod-team').value,desc:el('mod-desc').value.trim(),connections,docFiles:[],createdBy:CU.name,date:new Date().toISOString().split('T')[0]});
-  ['mod-name','mod-connections','mod-desc'].forEach(i=>el(i).value='');
-  closeModal('modal-newmod');save();toast('Arquivo adicionado!');renderCodemapTree();
-}
-
-function deleteFolder(id) {
-  if(!confirm('Remover esta pasta e TODO seu conteúdo?'))return;
-  function collectIds(fid){const ids=[fid];CMAP.filter(x=>x.type==='folder'&&x.parentId===fid).forEach(f=>collectIds(f.id).forEach(i=>ids.push(i)));return ids;}
-  const folderIds=collectIds(id);
-  CMAP=CMAP.filter(x=>!(x.type==='folder'&&folderIds.includes(x.id))&&!(x.type==='file'&&folderIds.includes(x.folderId)));
-  save();toast('Pasta removida.');renderCodemapTree();
-}
-
-function deleteModule(id) {
-  if(!confirm('Remover este arquivo?'))return;
-  CMAP=CMAP.filter(m=>m.id!==id);
-  selectedModId=null;
-  save();toast('Removido.');renderCodemapTree();
-  el('codemap-detail').innerHTML=`<div class="empty" style="padding:28px 0"><div class="empty-ico">👈</div><div style="font-size:12px">Selecione um arquivo</div></div>`;
-}
-
-function populateFolderSelects() {
-  const folders=CMAP.filter(x=>x.type==='folder');
-  const opts=folders.map(f=>`<option value="${f.id}">${f.name}</option>`).join('');
-  const fp=el('folder-parent'),mf=el('mod-folder');
-  if(fp)fp.innerHTML=`<option value="">— raiz —</option>`+opts;
-  if(mf)mf.innerHTML=`<option value="">— raiz —</option>`+opts;
-}
 
 // ══════════════════════════════════════════════════════
 // MY PROFILE
