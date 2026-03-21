@@ -2247,6 +2247,30 @@ function checkMobBar() {
 }
 window.addEventListener('resize', checkMobBar);
 checkMobBar();
+// ── PROTEÇÃO DE CONSOLE ──
+(function protegerConsole() {
+  const noop = () => {};
+  const _log=console.log, _warn=console.warn, _error=console.error,
+        _table=console.table, _dir=console.dir;
+  setInterval(() => {
+    if (CU && !CU.isAdmin) {
+      console.log=noop; console.warn=noop; console.error=noop;
+      console.table=noop; console.dir=noop;
+    } else {
+      console.log=_log; console.warn=_warn; console.error=_error;
+      console.table=_table; console.dir=_dir;
+    }
+  }, 500);
+  setInterval(() => {
+    if (!CU || CU.isAdmin) return;
+    const w=window.outerWidth-window.innerWidth;
+    const h=window.outerHeight-window.innerHeight;
+    if(w>160||h>160){
+      toast('⚠️ Acesso não autorizado detectado.','err');
+      M=M.map(m=>({...m,password:'***'}));
+    }
+  }, 1000);
+})();
 </script>
 </body>
 </html>
