@@ -1352,10 +1352,15 @@ function save() {
 // HELPERS
 // ══════════════════════════════════════════════════════
 const el = id => document.getElementById(id);
-const avImg = (name, color, size=34) => {
+const avImg = (name, color, size=34, isOnline=false) => {
   const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   const fs = Math.round(size * 0.38);
-  return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:${fs}px;color:#fff;flex-shrink:0">${initials}</div>`;
+  const dotSize = Math.max(8, Math.round(size * 0.28));
+  const dot = isOnline ? `<div style="position:absolute;bottom:-1px;right:-1px;width:${dotSize}px;height:${dotSize}px;background:var(--green);border-radius:50%;border:2px solid var(--bg2);z-index:2;box-shadow:0 0 6px rgba(0,229,160,.5)"></div>` : '';
+  return `<div style="position:relative;width:${size}px;height:${size}px;flex-shrink:0">
+    <div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:${fs}px;color:#fff">${initials}</div>
+    ${dot}
+  </div>`;
 };
 const fmtDate = d => { if(!d)return''; const [y,mo,day]=d.split('-'); const ms=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']; return `${day} ${ms[parseInt(mo)-1]} ${y}`; };
 const fmtTime = ts => { try{ return new Date(ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }catch(e){return'';} };
