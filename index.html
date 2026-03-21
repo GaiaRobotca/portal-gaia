@@ -2072,7 +2072,7 @@ function filterMembers(f, tabEl) {
   el('members-list').innerHTML=list.map(m=>`
     <div class="mc ${m.team==='eletroquad'?'eq':'rob'}" onclick="openMemberModal('${m.id}')">
       <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
-        <div class="av" style="width:42px;height:42px">${avImg(m.name,m.color,42)}</div>
+        <div class="av" style="width:42px;height:42px">${avImg(m.name,m.color,42,!!onlineUsers[m.id])}</div>
         <div style="flex:1">
           <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">${m.name}${m.isAdmin?' 👑':''}</div>
           <div style="font-size:11px;color:var(--dim);margin-top:2px">${m.role}</div>
