@@ -513,6 +513,20 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
 </head>
 <body>
 
+<!-- BARRA MOBILE -->
+<div class="mob-bar" id="mob-bar">
+  <div class="mob-logo">
+    <div class="mob-logo-icon">G</div>
+    <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">Portal Gaia</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <button class="mob-hamburger" onclick="toggleMobMenu()" id="mob-btn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+<div class="mob-overlay" id="mob-overlay" onclick="closeMobMenu()"></div>
+
 <!-- ════ LOGIN ════ -->
 <div id="login-screen" class="screen on">
   <div class="login-box">
