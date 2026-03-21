@@ -702,6 +702,10 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
         <div><div class="sec-hd"><div class="sec-title">🚁 EletroQuad</div></div><div id="eq-list"></div></div>
         <div><div class="sec-hd"><div class="sec-title">🤖 Robótica</div></div><div id="rob-list"></div></div>
       </div>
+      <div id="geral-sec" style="display:none;margin-bottom:18px">
+        <div class="sec-hd"><div class="sec-title">⚡ Ambas as Equipes</div></div>
+        <div id="geral-list"></div>
+      </div>
       <div class="sec-hd"><div class="sec-title">⚡ Atividade Recente</div></div>
       <div id="home-activity"></div>
     </div>
@@ -1474,7 +1478,7 @@ function renderHome() {
     <div class="card card-sm"><div class="cl">Horas Certificado</div><div class="cv cv-sm" style="color:#bb86fc">${totalH}h</div></div>`;
 
   ['eletroquad','robotica'].forEach((team,i)=>{
-    const members=M.filter(m=>m.team===team||m.team==='geral');
+    const members=M.filter(m=>m.team===team);
     el(i===0?'eq-list':'rob-list').innerHTML=members.map(m=>`
       <div class="rank-row" onclick="openMemberModal('${m.id}')">
         <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
@@ -1482,6 +1486,17 @@ function renderHome() {
         <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent)">${MP[m.id]||m.pts} pts</div><div style="font-size:10px;color:var(--muted)">⏱ ${m.hours||0}h</div></div>
       </div>`).join('');
   });
+  const geralMembers=M.filter(m=>m.team==='geral');
+  const geralSec=el('geral-sec');
+  if(geralSec){
+    geralSec.style.display=geralMembers.length?'block':'none';
+    el('geral-list').innerHTML=geralMembers.map(m=>`
+      <div class="rank-row" onclick="openMemberModal('${m.id}')">
+        <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
+        <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role} <span class="tag tag-both" style="margin-left:4px">EQ + Rob</span></div></div>
+        <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent)">${MP[m.id]||m.pts} pts</div><div style="font-size:10px;color:var(--muted)">⏱ ${m.hours||0}h</div></div>
+      </div>`).join('');
+  }
 
   const acts=[];
   // Tarefas aprovadas
@@ -2144,9 +2159,7 @@ function openMemberModal(uid){
     <div style="display:flex;gap:11px;margin-bottom:16px">
       <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:${avg>=90?'var(--green)':avg>=75?'var(--accent)':'var(--orange)'}">${avg}%</div></div>
       <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--accent)">${pts}</div></div>
-      <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Horas</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#bb86fc">${m.hours||0}h</div></div>
-      <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Hoje online</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--green)">${onlineUsers[uid]?'🟢 ':'  '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
-    </div>
+      <<div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Hoje online</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--green)">${onlineUsers[uid]?'🟢 ':' '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
     ${Object.entries(m.metrics).map(([k,v],i)=>`<div class="prog-item"><div class="prog-hd"><span class="prog-lbl">${labels[k]}</span><span class="prog-val">${v}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v}%;background:${colors[i]}"></div></div></div>`).join('')}
     <hr><div class="cl" style="margin-bottom:6px">Cargo: ${m.role}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">${skills}</div>`;
@@ -2200,7 +2213,7 @@ function renderHours(){
     </div>
     <div class="card">
       ${sorted.map(m=>{const h=m.hours||0,pct=Math.min(100,Math.round(h/HG*100));let bc,bl;if(h>=HG){bc='hrs-ok';bl='✓ Meta';}else if(pct>=50){bc='hrs-warn';bl=pct+'%';}else{bc='hrs-low';bl=pct+'%';}
-      return `<div class="hrs-row"><div class="av" style="width:32px;height:32px">${avImg(m.name,m.color,32,!!onlineUsers[m.id])}</div><div class="hrs-bar-wrap"><div class="hrs-bar-lbl"><span style="font-size:12px;font-weight:500">${m.name} <span style="font-size:10px;color:${onlineUsers[m.id]?'var(--green)':'var(--muted)'};font-weight:400">${onlineUsers[m.id]?'🟢':''} ${fmtSession(m.id)} · ${fmtLastSeen(m.id)}</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#bb86fc">${h}h/${HG}h</span></div><div class="hrs-bar"><div class="hrs-bar-fill" style="width:${pct}%"></div></div></div><span class="hrs-badge ${bc}">${bl}</span><button class="hrs-adj" onclick="openHrsAdj('${m.id}')">Ajustar ✎</button></div>`;}).join('')}
+      return `<div class="hrs-row"><div class="av" style="width:32px;height:32px">${avImg(m.name,m.color,32,!!onlineUsers[m.id])}</div><div class="hrs-bar-wrap"><div class="hrs-bar-lbl"><span style="font-size:12px;font-weight:500\">${m.name} <span style=\"font-size:10px;color:${onlineUsers[m.id]?'var(--green)':'var(--muted)'};font-weight:400\">${onlineUsers[m.id]?'🟢':''} ${fmtSession(m.id)} · ${fmtLastSeen(m.id)}</span></span>font-weight:500">${m.name}</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#bb86fc">${h}h/${HG}h</span></div><div class="hrs-bar"><div class="hrs-bar-fill" style="width:${pct}%"></div></div></div><span class="hrs-badge ${bc}">${bl}</span><button class="hrs-adj" onclick="openHrsAdj('${m.id}')">Ajustar ✎</button></div>`;}).join('')}
     </div>
     ${HL.length?`<div class="sec-hd" style="margin-top:18px"><div class="sec-title">📋 Histórico</div></div><div class="card">${[...HL].reverse().slice(0,20).map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><div><span style="font-size:13px;font-weight:500">${l.memberName}</span><span style="font-size:11px;color:var(--dim);margin-left:8px">${l.reason||'—'}</span></div><div style="text-align:right"><span style="font-family:'DM Mono',monospace;font-size:13px;color:${l.delta>0?'var(--green)':l.delta<0?'var(--red)':'var(--dim)'}">${l.delta>0?'+':''}${l.delta}h</span><div style="font-size:10px;color:var(--muted)">${fmtDate(l.date)} · ${l.by}</div></div></div>`).join('')}</div>`:''}`;
 }
