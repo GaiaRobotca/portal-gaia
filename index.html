@@ -1223,28 +1223,33 @@ document.querySelectorAll('.modal-ov').forEach(o=>o.addEventListener('click',e=>
 // ══════════════════════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════════════════════
-function doLogin() {
+async function doLogin() {
   const u=el('li-user').value.trim(), p=el('li-pass').value.trim();
   if(!u||!p){ toast('Preencha usuário e senha','err'); return; }
   if(!M.length){ M=JSON.parse(JSON.stringify(INIT_MEMBERS)); M.forEach(m=>MP[m.id]=m.pts); }
-  const mem=M.find(m=>m.username.toLowerCase()===u.toLowerCase()&&m.password===p);
+  const mem=M.find(m=>m.username.toLowerCase()===u.toLowerCase());
   if(!mem){ toast('Usuário ou senha incorretos!','err'); return; }
+  let senhaOk=false;
+  if(mem.password.startsWith('sha256:')){
+    const hash='sha256:'+await hashSenha(p);
+    senhaOk=hash===mem.password;
+  } else {
+    senhaOk=mem.password===p;
+  }
+  if(!senhaOk){ toast('Usuário ou senha incorretos!','err'); return; }
   CU={id:mem.id,name:mem.name,isAdmin:mem.isAdmin};
   el('li-user').value=''; el('li-pass').value='';
-  // switch screens
   el('login-screen').classList.remove('on');
   el('dash-screen').classList.add('on');
-  // setup sidebar
   el('sb-name').textContent=CU.name;
   el('sb-role').textContent=CU.isAdmin?'Administrador':(mem.team==='eletroquad'?'EletroQuad':'Robótica');
   const av=el('sb-av'); av.innerHTML=avImg(mem.name,mem.color,30);
   el('nav-admin-sec').style.display=CU.isAdmin?'block':'none';
   updateBadges();
-  // show home
   goPage('home', el('nav-home'));
   toast(`Bem-vindo(a), ${mem.name.split(' ')[0]}!`);
+  await migrarSenhas();
 }
-
 function doLogout() {
   CU=null;
   el('dash-screen').classList.remove('on');
