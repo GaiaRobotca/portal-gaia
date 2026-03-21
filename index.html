@@ -1135,6 +1135,97 @@ const FB = firebase.initializeApp({
 });
 const DB = firebase.database().ref('gaia_v7');
 
+// ── PRESENÇA ONLINE & SESSÃO ──
+let sessionStart = null;
+let sessionTodaySeconds = 0;
+let sessionFlushInterval = null;
+
+function setOnline(uid) {
+  if (!uid) return;
+  const today = new Date().toISOString().split('T')[0];
+  sessionStart = Date.now();
+
+  // Carrega tempo acumulado hoje do Firebase
+  DB.child('sessions/' + uid).once('value', snap => {
+    const d = snap.val() || {};
+    sessionTodaySeconds = (d.date === today ? d.todaySeconds : 0) || 0;
+  });
+
+  const ref = firebase.database().ref('gaia_v7/online/' + uid);
+  ref.set({ uid, ts: Date.now(), lastLogin: new Date().toISOString() });
+  ref.onDisconnect().update({ ts: Date.now() - 999999 });
+
+  // Flush a cada 60s
+  clearInterval(sessionFlushInterval);
+  sessionFlushInterval = setInterval(() => flushSession(uid), 60000);
+}
+
+function flushSession(uid) {
+  if (!uid || !sessionStart) return;
+  const today = new Date().toISOString().split('T')[0];
+  const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
+  sessionStart = Date.now();
+  sessionTodaySeconds += elapsed;
+  DB.child('sessions/' + uid).set({
+    date: today,
+    todaySeconds: sessionTodaySeconds,
+    lastSeen: new Date().toISOString()
+  });
+  firebase.database().ref('gaia_v7/online/' + uid).update({ ts: Date.now() });
+}
+
+// Flush ao fechar/minimizar aba
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && CU) flushSession(CU.id);
+  else if (!document.hidden && CU) { sessionStart = Date.now(); setOnline(CU.id); }
+});
+window.addEventListener('beforeunload', () => { if (CU) flushSession(CU.id); });
+
+// Heartbeat a cada 30s
+setInterval(() => {
+  if (CU) {
+    flushSession(CU.id);
+    firebase.database().ref('gaia_v7/online/' + CU.id).update({ ts: Date.now() });
+  }
+}, 30000);
+
+let onlineUsers = {};
+let sessionData = {};
+firebase.database().ref('gaia_v7/online').on('value', snap => {
+  onlineUsers = {};
+  const now = Date.now();
+  (snap.val() ? Object.values(snap.val()) : []).forEach(u => {
+    if (now - u.ts < 120000) onlineUsers[u.uid] = u; // 2 min
+  });
+  if (CU) renderCurrentPage();
+});
+firebase.database().ref('gaia_v7/sessions').on('value', snap => {
+  sessionData = snap.val() || {};
+  if (CU) renderCurrentPage();
+});
+
+function fmtSession(uid) {
+  const today = new Date().toISOString().split('T')[0];
+  const d = sessionData[uid];
+  let todaySec = (d && d.date === today ? d.todaySeconds : 0) || 0;
+  // Adiciona tempo da sessão atual se for o próprio usuário online agora
+  if (uid === (CU && CU.id) && sessionStart) {
+    todaySec += Math.floor((Date.now() - sessionStart) / 1000);
+  }
+  const h = Math.floor(todaySec / 3600);
+  const m = Math.floor((todaySec % 3600) / 60);
+  if (h > 0) return `${h}h ${m}min`;
+  if (m > 0) return `${m}min`;
+  return '< 1min';
+}
+
+function fmtLastSeen(uid) {
+  const d = sessionData[uid];
+  if (!d || !d.lastSeen) return '—';
+  const dt = new Date(d.lastSeen);
+  return dt.toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+}
+
 // ── PRESENÇA ONLINE ──
 function setOnline(uid) {
   if (!uid) return;
