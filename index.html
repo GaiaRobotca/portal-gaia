@@ -2087,6 +2087,32 @@ function testEmail(){const m=M.find(x=>x.id===CU.id);if(!m||!m.email){toast('Cad
 
 // Init emailjs
 setTimeout(()=>{if(ECFG&&ECFG.publicKey&&ECFG.configured)emailjs.init(ECFG.publicKey);},1500);
+(function initTheme() {
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const saved = localStorage.getItem('gaia_theme');
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+
+  if (theme === 'light') document.body.classList.add('light');
+
+  const btn = document.createElement('button');
+  btn.id = 'theme-toggle';
+  btn.title = 'Alternar tema';
+  btn.innerHTML = theme === 'light' ? '🌙' : '☀️';
+  document.body.appendChild(btn);
+
+  btn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    localStorage.setItem('gaia_theme', isLight ? 'light' : 'dark');
+    btn.innerHTML = isLight ? '🌙' : '☀️';
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (!localStorage.getItem('gaia_theme')) {
+      document.body.classList.toggle('light', !e.matches);
+      btn.innerHTML = e.matches ? '☀️' : '🌙';
+    }
+  });
+})();
 </script>
 </body>
 </html>
