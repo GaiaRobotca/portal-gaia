@@ -2280,6 +2280,15 @@ checkMobBar();
     }
   }, 1000);
 })();
+  
+function toggleThemeMob() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('gaia_theme', isLight ? 'light' : 'dark');
+  const btn = document.getElementById('mob-theme-btn');
+  if (btn) btn.innerHTML = isLight ? '🌙' : '☀️';
+  const mainBtn = document.getElementById('theme-toggle');
+  if (mainBtn) mainBtn.innerHTML = isLight ? '🌙' : '☀️';
+}
 </script>
 </body>
 </html>
