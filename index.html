@@ -1949,11 +1949,25 @@ function filterMembers(f, tabEl) {
 
 function openAddUser(){el('mu-title').textContent='Novo Membro';el('mu-id').value='';['mu-name','mu-username','mu-pass','mu-email','mu-role'].forEach(i=>el(i).value='');el('mu-isadmin').checked=false;el('mu-del-btn').style.display='none';el('mu-admin-fields').style.display='flex';el('mu-admin-chk').style.display='flex';openModal('modal-user');}
 function openEditUser(uid){const m=M.find(x=>x.id===uid);if(!m)return;el('mu-title').textContent='Editar Usuário';el('mu-id').value=uid;el('mu-name').value=m.name;el('mu-username').value=m.username;el('mu-pass').value=m.password;el('mu-email').value=m.email||'';el('mu-role').value=m.role;el('mu-team').value=m.team;el('mu-isadmin').checked=m.isAdmin;el('mu-del-btn').style.display=uid!==CU.id?'inline-flex':'none';el('mu-admin-fields').style.display=CU.isAdmin?'flex':'none';el('mu-admin-chk').style.display=CU.isAdmin?'flex':'none';openModal('modal-user');}
-function saveUser(){
-  const uid=el('mu-id').value, name=el('mu-name').value.trim(), username=el('mu-username').value.trim(), pass=el('mu-pass').value.trim();
+async function saveUser(){
+  const uid=el('mu-id').value, name=el('mu-name').value.trim();
+  const username=el('mu-username').value.trim(), pass=el('mu-pass').value.trim();
   if(!name||!username||!pass){toast('Preencha nome, usuário e senha','err');return;}
-  if(uid){const m=M.find(x=>x.id===uid);if(!m)return;m.name=name;m.username=username;m.password=pass;m.email=el('mu-email').value.trim();if(CU.isAdmin){m.team=el('mu-team').value;m.role=el('mu-role').value.trim();m.isAdmin=el('mu-isadmin').checked;}}
-  else{M.push({id:'m'+Date.now(),username,password:pass,name,email:el('mu-email').value.trim(),team:el('mu-team').value,role:el('mu-role').value.trim(),isAdmin:el('mu-isadmin').checked,avatar:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),color:'#'+Math.floor(Math.random()*0xffffff).toString(16).padStart(6,'0'),metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:[],pts:0,hours:0});}
+  const hashedPass='sha256:'+await hashSenha(pass);
+  if(uid){
+    const m=M.find(x=>x.id===uid);if(!m)return;
+    m.name=name;m.username=username;m.password=hashedPass;
+    m.email=el('mu-email').value.trim();
+    if(CU.isAdmin){m.team=el('mu-team').value;m.role=el('mu-role').value.trim();m.isAdmin=el('mu-isadmin').checked;}
+  } else {
+    M.push({id:'m'+Date.now(),username,password:hashedPass,name,
+      email:el('mu-email').value.trim(),team:el('mu-team').value,
+      role:el('mu-role').value.trim(),isAdmin:el('mu-isadmin').checked,
+      avatar:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),
+      color:'#'+Math.floor(Math.random()*0xffffff).toString(16).padStart(6,'0'),
+      metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},
+      skills:[],pts:0,hours:0});
+  }
   closeModal('modal-user'); save(); toast('Salvo!');
 }
 function deleteUser(){const uid=el('mu-id').value;if(uid===CU.id){toast('Não pode excluir sua própria conta','err');return;}if(!confirm('Excluir usuário?'))return;M=M.filter(m=>m.id!==uid);closeModal('modal-user');closeModal('modal-member');save();toast('Excluído.');}
