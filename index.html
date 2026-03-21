@@ -1229,35 +1229,6 @@ function fmtLastSeen(uid) {
   return dt.toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
 }
 
-// ── PRESENÇA ONLINE ──
-function setOnline(uid) {
-  if (!uid) return;
-  const ref = firebase.database().ref('gaia_v7/online/' + uid);
-  ref.set({ uid, ts: Date.now() });
-  ref.onDisconnect().remove();
-}
-
-let onlineUsers = {};
-firebase.database().ref('gaia_v7/online').on('value', snap => {
-  onlineUsers = {};
-  const now = Date.now();
-  (snap.val() ? Object.values(snap.val()) : []).forEach(u => {
-    if (now - u.ts < 90000) onlineUsers[u.uid] = true; // 90s timeout
-  });
-  if (CU) renderCurrentPage();
-  updateOnlineSidebar();
-});
-
-function updateOnlineSidebar() {
-  const sbAvWrap = document.getElementById('sb-av-wrap');
-  if (!sbAvWrap || !CU) return;
-  if (onlineUsers[CU.id]) sbAvWrap.classList.add('online');
-  else sbAvWrap.classList.remove('online');
-}
-
-// Heartbeat a cada 30s
-setInterval(() => { if (CU) setOnline(CU.id); }, 30000);
-
 // ── SEGURANÇA: HASH DE SENHAS ──
 async function hashSenha(senha) {
   const enc = new TextEncoder();
