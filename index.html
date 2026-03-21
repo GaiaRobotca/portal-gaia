@@ -975,7 +975,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
     </div>
     <div class="fg"><label class="lbl">E-mail</label><input type="email" id="mu-email" placeholder="para notificações"></div>
     <div class="frow" id="mu-admin-fields">
-      <div class="fg"><label class="lbl">Equipe</label><select id="mu-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="geral">Geral (ambas)</option><option value="marketing">Marketing</option><option value="gestao">Gestão</option></select></div>
+      <div class="fg"><label class="lbl">Equipe</label><select id="mu-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="geral">Geral (ambas)</option></select></div>
       <div class="fg"><label class="lbl">Cargo</label><input type="text" id="mu-role"></div>
     </div>
     <label class="chk" id="mu-admin-chk"><input type="checkbox" id="mu-isadmin"> Conceder acesso de Administrador</label>
@@ -1247,6 +1247,14 @@ async function migrarSenhas() {
   save();
 }
 
+async function resetarTodasSenhas() {
+  if(!confirm('Isso vai redefinir a senha de TODOS os membros para 123. Confirmar?')) return;
+  const hash = 'sha256:' + await hashSenha('123');
+  M.forEach(m => m.password = hash);
+  save();
+  toast('Senhas redefinidas para 123!');
+}
+
 // ══════════════════════════════════════════════════════
 // DADOS INICIAIS
 // ══════════════════════════════════════════════════════
@@ -1369,6 +1377,11 @@ async function doLogin() {
     senhaOk=hash===mem.password;
   } else {
     senhaOk=mem.password===p;
+  }
+  // Fallback: tenta senha padrão 123 se SHA256 não bater
+  if(!senhaOk && mem.password.startsWith('sha256:')){
+    const hash123='sha256:'+await hashSenha('123');
+    if(hash123===mem.password) senhaOk=(p==='123');
   }
   if(!senhaOk){ toast('Usuário ou senha incorretos!','err'); return; }
   CU={id:mem.id,name:mem.name,isAdmin:mem.isAdmin};
@@ -2141,12 +2154,10 @@ function openMemberModal(uid){
   el('mm-badge').innerHTML=`<span class="tag ${isEQ?'tag-eq':'tag-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>`;
   const avg=Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
   el('mm-content').innerHTML=`
-    <div style="display:flex;flex-wrap:wrap;gap:11px;margin-bottom:16px">
-      <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:${avg>=90?'var(--green)':avg>=75?'var(--accent)':'var(--orange)'}">${avg}%</div></div>
-      <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--accent)">${pts}</div></div>
-      <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Horas</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#bb86fc">${m.hours||0}h</div></div>
-      <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Hoje online</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--green)">${onlineUsers[uid]?'🟢 ':' '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
-    </div>
+    <div style="display:flex;gap:11px;margin-bottom:16px">
+      <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:${avg>=90?'var(--green)':avg>=75?'var(--accent)':'var(--orange)'}">${avg}%</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--accent)">${pts}</div></div>
+      <<div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Hoje online</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--green)">${onlineUsers[uid]?'🟢 ':' '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
     ${Object.entries(m.metrics).map(([k,v],i)=>`<div class="prog-item"><div class="prog-hd"><span class="prog-lbl">${labels[k]}</span><span class="prog-val">${v}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v}%;background:${colors[i]}"></div></div></div>`).join('')}
     <hr><div class="cl" style="margin-bottom:6px">Cargo: ${m.role}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">${skills}</div>`;
@@ -2324,6 +2335,7 @@ function renderEmailCfg(){
       <div style="display:flex;gap:9px;flex-wrap:wrap">
         <button class="btn btn-blue btn-sm" onclick="saveEmailCfg()">Salvar</button>
         <button class="btn btn-ghost btn-sm" onclick="testEmail()">Testar envio</button>
+        <button class="btn btn-red btn-sm" onclick="resetarTodasSenhas()">🔑 Resetar senhas → 123</button>
         ${ECFG.configured?`<span style="font-size:12px;color:var(--green);padding:7px 0">✓ Configurado</span>`:''}
       </div>
     </div>
