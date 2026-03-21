@@ -2266,8 +2266,10 @@ function checkMobBar() {
   const isMob = window.innerWidth <= 768;
   bar.style.display = isMob ? 'flex' : 'none';
   const themeBtn = el('theme-toggle');
-  if (themeBtn) themeBtn.style.display = isMob ? 'none' : 'flex';
+  if (themeBtn) themeBtn.style.setProperty('display', isMob ? 'none' : 'flex', 'important');
 }
+window.addEventListener('resize', checkMobBar);
+checkMobBar();
 // ── PROTEÇÃO DE CONSOLE ──
 (function protegerConsole() {
   const noop = () => {};
