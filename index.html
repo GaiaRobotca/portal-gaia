@@ -1309,6 +1309,7 @@ async function doLogin() {
   el('sb-role').textContent=CU.isAdmin?'Administrador':(mem.team==='eletroquad'?'EletroQuad':'Robótica');
   const av=el('sb-av'); av.innerHTML=avImg(mem.name,mem.color,30);
   el('nav-admin-sec').style.display=CU.isAdmin?'block':'none';
+  setOnline(CU.id);
   updateBadges();
   goPage('home', el('nav-home'));
   toast(`Bem-vindo(a), ${mem.name.split(' ')[0]}!`);
