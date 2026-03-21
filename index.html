@@ -2265,10 +2265,9 @@ function checkMobBar() {
   if (!bar) return;
   const isMob = window.innerWidth <= 768;
   bar.style.display = isMob ? 'flex' : 'none';
-  // No mobile esconde o botão de tema na sidebar, mantém na barra
+  const themeBtn = el('theme-toggle');
+  if (themeBtn) themeBtn.style.display = isMob ? 'none' : 'flex';
 }
-window.addEventListener('resize', checkMobBar);
-checkMobBar();
 // ── PROTEÇÃO DE CONSOLE ──
 (function protegerConsole() {
   const noop = () => {};
