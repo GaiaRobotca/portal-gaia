@@ -1474,7 +1474,7 @@ function renderHome() {
     <div class="card card-sm"><div class="cl">Horas Certificado</div><div class="cv cv-sm" style="color:#bb86fc">${totalH}h</div></div>`;
 
   ['eletroquad','robotica'].forEach((team,i)=>{
-    const members=M.filter(m=>m.team===team);
+    const members=M.filter(m=>m.team===team||m.team==='geral');
     el(i===0?'eq-list':'rob-list').innerHTML=members.map(m=>`
       <div class="rank-row" onclick="openMemberModal('${m.id}')">
         <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
