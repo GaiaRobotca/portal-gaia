@@ -2167,6 +2167,33 @@ setTimeout(()=>{if(ECFG&&ECFG.publicKey&&ECFG.configured)emailjs.init(ECFG.publi
     }
   });
 })();
+// ── MOBILE MENU ──
+function toggleMobMenu() {
+  const sb = document.querySelector('.sidebar');
+  const ov = el('mob-overlay');
+  const isOpen = sb.classList.toggle('mob-open');
+  ov.classList.toggle('on', isOpen);
+}
+function closeMobMenu() {
+  document.querySelector('.sidebar').classList.remove('mob-open');
+  el('mob-overlay').classList.remove('on');
+}
+// Fecha menu ao navegar no mobile
+const origGoPage = goPage;
+window.goPage = function(page, navEl) {
+  origGoPage(page, navEl);
+  closeMobMenu();
+};
+// Mostra/esconde barra mobile baseado na tela
+function checkMobBar() {
+  const bar = el('mob-bar');
+  if (!bar) return;
+  const isMob = window.innerWidth <= 768;
+  bar.style.display = isMob ? 'flex' : 'none';
+  // No mobile esconde o botão de tema na sidebar, mantém na barra
+}
+window.addEventListener('resize', checkMobBar);
+checkMobBar();
 </script>
 </body>
 </html>
