@@ -981,7 +981,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
     </div>
     <div class="fg"><label class="lbl">E-mail</label><input type="email" id="mu-email" placeholder="para notificações"></div>
     <div class="frow" id="mu-admin-fields">
-      <div class="fg"><label class="lbl">Equipe</label><select id="mu-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="geral">Geral (ambas)</option><option value="marketing">Marketing</option><option value="gestao">Gestão</option></select></div>
+      <div class="fg"><label class="lbl">Equipe</label><select id="mu-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="geral">Geral (ambas)</option><option value="marketing">Marketing</option><option value="gestao">Gestão</option><option value="adm">ADM</option></select></div>
       <div class="fg"><label class="lbl">Cargo</label><input type="text" id="mu-role"></div>
     </div>
     <label class="chk" id="mu-admin-chk"><input type="checkbox" id="mu-isadmin"> Conceder acesso de Administrador</label>
@@ -1485,9 +1485,10 @@ function renderHome() {
     {key:'geral',     label:'⚡ Ambas',      color:'#e2e8f0'},
     {key:'marketing', label:'📣 Marketing',  color:'#a855f7'},
     {key:'gestao',    label:'📋 Gestão',     color:'#ef4444'},
+    {key:'adm',       label:'👑 ADM',        color:'#ffd166'},
   ];
   function getStripeColor(m){
-    if(m.isAdmin) return '#ffd166';
+    if(m.isAdmin||m.team==='adm') return '#ffd166';
     const t=TEAMS.find(t=>t.key===m.team);
     return t?t.color:'#5a6a80';
   }
@@ -1691,7 +1692,7 @@ function createTask() {
 function filterRanking(f, tabEl) {
   rankFilter=f;
   if(tabEl){document.querySelectorAll('#pg-ranking .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral'||m.team==='marketing'||m.team==='gestao');
+  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral'||m.team==='marketing'||m.team==='gestao'||m.team==='adm');
   list.sort((a,b)=>(MP[b.id]||b.pts)-(MP[a.id]||a.pts));
   const pc=['g','s','b'];
   el('ranking-list').innerHTML=list.map((m,i)=>`
@@ -2094,7 +2095,7 @@ function renderMyMetrics(){
 function filterMembers(f, tabEl) {
   memberFilter=f;
   if(tabEl){document.querySelectorAll('#pg-members .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral'||m.team==='marketing'||m.team==='gestao');
+  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral'||m.team==='marketing'||m.team==='gestao'||m.team==='adm');
   el('members-list').innerHTML=list.map(m=>`
     <div class="mc ${m.team==='eletroquad'?'eq':'rob'}" onclick="openMemberModal('${m.id}')">
       <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
