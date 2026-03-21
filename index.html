@@ -1478,7 +1478,7 @@ function renderHome() {
     const members=M.filter(m=>m.team===team);
     el(i===0?'eq-list':'rob-list').innerHTML=members.map(m=>`
       <div class="rank-row" onclick="openMemberModal('${m.id}')">
-        <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34)}</div>
+        <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
         <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role}</div></div>
         <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent)">${MP[m.id]||m.pts} pts</div><div style="font-size:10px;color:var(--muted)">⏱ ${m.hours||0}h</div></div>
       </div>`).join('');
@@ -1671,7 +1671,7 @@ function filterRanking(f, tabEl) {
   el('ranking-list').innerHTML=list.map((m,i)=>`
     <div class="rank-row" onclick="openMemberModal('${m.id}')">
       <div class="rank-pos ${pc[i]||''}">${i+1}</div>
-      <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34)}</div>
+      <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
       <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role} · ${m.team==='eletroquad'?'EletroQuad':'Robótica'}</div></div>
       <div class="rank-score">${MP[m.id]||m.pts} pts</div>
     </div>`).join('');
