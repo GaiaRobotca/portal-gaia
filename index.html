@@ -563,7 +563,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
         <label class="lbl">Senha</label>
         <input id="li-pass" name="password" type="password" autocomplete="current-password" placeholder="Senha (padrão: 123)" required>
       </div>
-      <button type="submit" class="btn btn-primary">Entrar</button>
+      <button type="submit" class="btn btn-primary" id="login-btn">Entrar</button>
     </form>
     
   </div>
@@ -698,15 +698,9 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
     <div id="pg-home" class="pg">
       <div class="ph"><div class="pt">Visão Geral</div><div class="ps">Acompanhe o projeto Gaia</div></div>
       <div class="grid g4" style="margin-bottom:18px" id="home-stats"></div>
-      <div id="team-columns" style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;align-items:flex-start"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
-        <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-right:4px">Legenda:</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#ffd166"></div>ADM</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#00e5a0"></div>EletroQuad</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#1a8fff"></div>Robótica</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#e2e8f0"></div>Ambas</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#a855f7"></div>Marketing</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#ef4444"></div>Gestão</div>
+      <div class="grid g2" style="margin-bottom:18px">
+        <div><div class="sec-hd"><div class="sec-title">🚁 EletroQuad</div></div><div id="eq-list"></div></div>
+        <div><div class="sec-hd"><div class="sec-title">🤖 Robótica</div></div><div id="rob-list"></div></div>
       </div>
       <div class="sec-hd"><div class="sec-title">⚡ Atividade Recente</div></div>
       <div id="home-activity"></div>
@@ -981,7 +975,7 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
     </div>
     <div class="fg"><label class="lbl">E-mail</label><input type="email" id="mu-email" placeholder="para notificações"></div>
     <div class="frow" id="mu-admin-fields">
-      <div class="fg"><label class="lbl">Equipe</label><select id="mu-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="geral">Geral (ambas)</option><option value="marketing">Marketing</option><option value="gestao">Gestão</option><option value="adm">ADM</option></select></div>
+      <div class="fg"><label class="lbl">Equipe</label><select id="mu-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="geral">Geral (ambas)</option></select></div>
       <div class="fg"><label class="lbl">Cargo</label><input type="text" id="mu-role"></div>
     </div>
     <label class="chk" id="mu-admin-chk"><input type="checkbox" id="mu-isadmin"> Conceder acesso de Administrador</label>
@@ -1143,6 +1137,11 @@ const FB = firebase.initializeApp({
   databaseURL:"https://portal-gaia-f5c93-default-rtdb.firebaseio.com"
 });
 const DB = firebase.database().ref('gaia_v7');
+// Mostra carregando no botão até o Firebase conectar
+setTimeout(() => {
+  const btn = document.getElementById('login-btn');
+  if(btn && !dbReady) { btn.disabled = true; btn.textContent = 'Conectando...'; }
+}, 100);
 
 // ── PRESENÇA ONLINE & SESSÃO ──
 let sessionStart = null;
@@ -1285,6 +1284,7 @@ let chatPendingFile=null, admChatPendingFile=null, seenChat=0, seenAdmChat=0;
 // ══════════════════════════════════════════════════════
 // FIREBASE SYNC
 // ══════════════════════════════════════════════════════
+let dbReady = false;
 DB.on('value', snap => {
   const d = snap.val();
   if (d && d.members) {
@@ -1310,6 +1310,10 @@ DB.on('value', snap => {
     M.forEach(m=>{ MP[m.id]=m.pts; });
     save();
   }
+  dbReady = true;
+  // Habilita botão de login quando dados carregam
+  const loginBtn = document.querySelector('#login-screen .btn-primary');
+  if(loginBtn) { loginBtn.disabled = false; loginBtn.textContent = 'Entrar'; }
   if (CU) {
     const u = M.find(m=>m.id===CU.id);
     if (!u) { doLogout(); return; }
@@ -1366,6 +1370,10 @@ document.querySelectorAll('.modal-ov').forEach(o=>o.addEventListener('click',e=>
 async function doLogin() {
   const u=el('li-user').value.trim(), p=el('li-pass').value.trim();
   if(!u||!p){ toast('Preencha usuário e senha','err'); return; }
+  if(!dbReady){
+    toast('Aguardando conexão... tente novamente em 1s','err');
+    return;
+  }
   if(!M.length){ M=JSON.parse(JSON.stringify(INIT_MEMBERS)); M.forEach(m=>MP[m.id]=m.pts); }
   const mem=M.find(m=>m.username.toLowerCase()===u.toLowerCase());
   if(!mem){ toast('Usuário ou senha incorretos!','err'); return; }
@@ -1479,37 +1487,15 @@ function renderHome() {
     <div class="card card-sm"><div class="cl">Tarefas Concluídas</div><div class="cv cv-sm" style="color:var(--green)">${done}</div><div style="font-size:11px;color:var(--dim)">de ${T.length}</div></div>
     <div class="card card-sm"><div class="cl">Horas Certificado</div><div class="cv cv-sm" style="color:#bb86fc">${totalH}h</div></div>`;
 
-  const TEAMS=[
-    {key:'eletroquad',label:'🚁 EletroQuad',color:'#00e5a0'},
-    {key:'robotica',  label:'🤖 Robótica',  color:'#1a8fff'},
-    {key:'geral',     label:'⚡ Ambas',      color:'#e2e8f0'},
-    {key:'marketing', label:'📣 Marketing',  color:'#a855f7'},
-    {key:'gestao',    label:'📋 Gestão',     color:'#ef4444'},
-    {key:'adm',       label:'👑 ADM',        color:'#ffd166'},
-  ];
-  function getStripeColor(m){
-    if(m.isAdmin||m.team==='adm') return '#ffd166';
-    const t=TEAMS.find(t=>t.key===m.team);
-    return t?t.color:'#5a6a80';
-  }
-  function memberRow(m){
-    return `<div class="rank-row" onclick="openMemberModal('${m.id}')" style="padding-left:10px;margin-bottom:7px">
-      <div style="width:4px;border-radius:4px;align-self:stretch;min-height:36px;background:${getStripeColor(m)};flex-shrink:0"></div>
-      <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
-      <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role}</div></div>
-      <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent)">${MP[m.id]||m.pts} pts</div><div style="font-size:10px;color:var(--muted)">⏱ ${m.hours||0}h</div></div>
-    </div>`;
-  }
-  const colsEl=el('team-columns');
-  if(colsEl){
-    colsEl.innerHTML=TEAMS.map(team=>{
-      const members=M.filter(m=>m.team===team.key);
-      if(!members.length) return '';
-      const admins=members.filter(m=>m.isAdmin);
-      const rest=members.filter(m=>!m.isAdmin);
-      return `<div style="flex:1;min-width:200px"><div class="sec-hd"><div class="sec-title" style="color:${team.color}">${team.label}</div></div>${[...admins,...rest].map(memberRow).join('')}</div>`;
-    }).join('');
-  }
+  ['eletroquad','robotica'].forEach((team,i)=>{
+    const members=M.filter(m=>m.team===team);
+    el(i===0?'eq-list':'rob-list').innerHTML=members.map(m=>`
+      <div class="rank-row" onclick="openMemberModal('${m.id}')">
+        <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
+        <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role}</div></div>
+        <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent)">${MP[m.id]||m.pts} pts</div><div style="font-size:10px;color:var(--muted)">⏱ ${m.hours||0}h</div></div>
+      </div>`).join('');
+  });
 
   const acts=[];
   // Tarefas aprovadas
@@ -1692,7 +1678,7 @@ function createTask() {
 function filterRanking(f, tabEl) {
   rankFilter=f;
   if(tabEl){document.querySelectorAll('#pg-ranking .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral'||m.team==='marketing'||m.team==='gestao'||m.team==='adm');
+  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f);
   list.sort((a,b)=>(MP[b.id]||b.pts)-(MP[a.id]||a.pts));
   const pc=['g','s','b'];
   el('ranking-list').innerHTML=list.map((m,i)=>`
@@ -2095,7 +2081,7 @@ function renderMyMetrics(){
 function filterMembers(f, tabEl) {
   memberFilter=f;
   if(tabEl){document.querySelectorAll('#pg-members .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral'||m.team==='marketing'||m.team==='gestao'||m.team==='adm');
+  let list=[...M];if(f!=='all')list=list.filter(m=>m.team===f);
   el('members-list').innerHTML=list.map(m=>`
     <div class="mc ${m.team==='eletroquad'?'eq':'rob'}" onclick="openMemberModal('${m.id}')">
       <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
@@ -2169,13 +2155,11 @@ function openMemberModal(uid){
   el('mm-badge').innerHTML=`<span class="tag ${isEQ?'tag-eq':'tag-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>`;
   const avg=Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
   el('mm-content').innerHTML=`
-    <div style="display:flex;flex-wrap:wrap;gap:11px;margin-bottom:16px">
-      <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:${avg>=90?'var(--green)':avg>=75?'var(--accent)':'var(--orange)'}">${avg}%</div></div>
-      <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--accent)">${pts}</div></div>
-      <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Horas</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#bb86fc">${m.hours||0}h</div></div>
-      <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Hoje online</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--green)">${onlineUsers[uid]?'🟢 ':' '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
-    </div>
-        ${Object.entries(m.metrics).map(([k,v],i)=>`<div class="prog-item"><div class="prog-hd"><span class="prog-lbl">${labels[k]}</span><span class="prog-val">${v}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v}%;background:${colors[i]}"></div></div></div>`).join('')}
+    <div style="display:flex;gap:11px;margin-bottom:16px">
+      <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Desempenho</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:${avg>=90?'var(--green)':avg>=75?'var(--accent)':'var(--orange)'}">${avg}%</div></div>
+      <div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Pontos</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--accent)">${pts}</div></div>
+      <<div class="card card-sm" style="flex:1;text-align:center"><div class="cl">Hoje online</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--green)">${onlineUsers[uid]?'🟢 ':' '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
+    ${Object.entries(m.metrics).map(([k,v],i)=>`<div class="prog-item"><div class="prog-hd"><span class="prog-lbl">${labels[k]}</span><span class="prog-val">${v}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v}%;background:${colors[i]}"></div></div></div>`).join('')}
     <hr><div class="cl" style="margin-bottom:6px">Cargo: ${m.role}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">${skills}</div>`;
   const ft=el('mm-ft');
