@@ -1409,6 +1409,10 @@ async function doLogin() {
   const av=el('sb-av'); av.innerHTML=avImg(mem.name,mem.color,30);
   el('nav-admin-sec').style.display=CU.isAdmin?'block':'none';
   setOnline(CU.id);
+// Mostra dot online na sidebar
+const dot = el('sb-online-dot');
+if (dot) dot.style.display = 'block';
+updateBadges();
   updateBadges();
   goPage('home', el('nav-home'));
   toast(`Bem-vindo(a), ${mem.name.split(' ')[0]}!`);
@@ -1416,6 +1420,9 @@ async function doLogin() {
 }
 function doLogout() {
   CU=null;
+  const dot = el('sb-online-dot');
+if (dot) dot.style.display = 'none';
+clearInterval(sessionFlushInterval);
   el('dash-screen').classList.remove('on');
   el('login-screen').classList.add('on');
 }
