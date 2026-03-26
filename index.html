@@ -22,6 +22,8 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%231a8fff'/><stop offset='1' stop-color='%2300e5a0'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><text x='32' y='46' font-family='Arial Black,sans-serif' font-weight='900' font-size='38' fill='white' text-anchor='middle'>G</text></svg>">
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -384,6 +386,68 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 @keyframes slide{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+
+/* ═══ GOOGLE DRIVE INTEGRADO ═══ */
+.drive-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.drive-breadcrumb{display:flex;align-items:center;gap:4px;flex:1;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:7px 12px;font-size:12px}
+.crumb{color:var(--dim);cursor:pointer;transition:.15s}.crumb:hover{color:var(--accent)}.crumb.active{color:var(--text);font-weight:500;cursor:default}.crumb-sep{color:var(--muted);font-size:10px}
+.drive-auth-card{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:380px;gap:16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:48px 24px;text-align:center}
+.drive-auth-icon{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,rgba(26,143,255,.15),rgba(0,229,160,.12));border:1px solid rgba(26,143,255,.2);display:flex;align-items:center;justify-content:center;font-size:34px}
+.drive-auth-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px}
+.drive-auth-sub{font-size:13px;color:var(--dim);max-width:340px;line-height:1.6}
+.btn-google{display:flex;align-items:center;gap:10px;padding:11px 24px;background:#fff;border:1px solid #ddd;border-radius:var(--r);color:#333;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.btn-google:hover{box-shadow:0 4px 14px rgba(0,0,0,.18);transform:translateY(-1px)}
+.google-logo{width:20px;height:20px;flex-shrink:0}
+.drive-stats{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.drive-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px;font-size:11px;color:var(--dim)}
+.drive-stat span{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--text);display:block}
+.view-toggle{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:3px;gap:2px}
+.view-btn{width:30px;height:30px;border-radius:6px;border:none;background:transparent;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.15s}
+.view-btn.on{background:var(--bg3);color:var(--text)}
+.drive-search{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;width:200px;transition:.2s}
+.drive-search:focus{border-color:rgba(99,210,255,.35);width:260px}
+.drive-sort{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:8px 10px;color:var(--dim);font-family:'DM Sans',sans-serif;font-size:11px;outline:none;cursor:pointer}
+.drive-upload-zone{border:1.5px dashed var(--border);border-radius:var(--rl);padding:18px;text-align:center;margin-bottom:14px;transition:.2s;cursor:pointer;background:transparent;display:none}
+.drive-upload-zone.visible{display:block}.drive-upload-zone.dragover{border-color:var(--blue);background:rgba(26,143,255,.04)}.drive-upload-zone:hover{border-color:rgba(99,210,255,.4)}
+.upload-list{margin-bottom:10px;display:flex;flex-direction:column;gap:6px}
+.upload-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r)}
+.upload-prog-bar{flex:1;height:4px;background:var(--bg3);border-radius:100px;overflow:hidden}
+.upload-prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:100px;transition:width .3s}
+.upload-status{font-size:10px;font-weight:600;min-width:42px;text-align:right}
+.drive-files-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.drive-file-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:.2s;position:relative;display:flex;flex-direction:column;gap:8px}
+.drive-file-card:hover{border-color:rgba(255,255,255,.14);transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.drive-file-card.folder{border-color:rgba(255,209,102,.2)}.drive-file-card.folder:hover{border-color:rgba(255,209,102,.4)}
+.drive-file-icon{font-size:28px;line-height:1}
+.drive-file-name{font-size:11px;font-weight:600;word-break:break-word;line-height:1.4}
+.drive-file-meta{font-size:10px;color:var(--dim)}
+.drive-file-actions{position:absolute;top:6px;right:6px;display:none;gap:4px}
+.drive-file-card:hover .drive-file-actions{display:flex}
+.drive-file-action-btn{width:22px;height:22px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:.15s}
+.btn-dld{background:rgba(26,143,255,.15);color:var(--blue)}.btn-dld:hover{background:rgba(26,143,255,.3)}
+.btn-del-f{background:rgba(255,92,92,.1);color:var(--red)}.btn-del-f:hover{background:rgba(255,92,92,.22)}
+.drive-files-list{display:flex;flex-direction:column;gap:4px}
+.drive-list-row{display:flex;align-items:center;gap:11px;padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:.15s}
+.drive-list-row:hover{border-color:rgba(255,255,255,.12);background:var(--bg3)}
+.drive-list-row .drive-file-icon{font-size:18px;flex-shrink:0}
+.drive-list-name{flex:1;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drive-list-size{font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);min-width:60px;text-align:right}
+.drive-list-date{font-size:11px;color:var(--muted);min-width:90px;text-align:right}
+.drive-list-actions{display:flex;gap:5px;opacity:0;transition:.15s}
+.drive-list-row:hover .drive-list-actions{opacity:1}
+.drive-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--muted);padding:40px;text-align:center}
+.drive-empty-icon{font-size:42px}
+.drive-loading{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;color:var(--dim);font-size:13px;padding:60px}
+.drive-preview-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:20px}
+.drive-preview-ov.on{display:flex;animation:fade .2s}
+.drive-preview-box{background:var(--bg2);border:1px solid var(--border);border-radius:18px;max-width:900px;width:100%;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.drive-preview-hd{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.drive-preview-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drive-preview-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:20px;min-height:300px}
+.drive-preview-body iframe{width:100%;height:100%;min-height:500px;border:none;border-radius:var(--r)}
+.drive-preview-body img{max-width:100%;max-height:70vh;border-radius:var(--r);object-fit:contain}
+.drive-user-chip{display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.18);border-radius:100px;font-size:11px;color:var(--green)}
+.drive-user-avatar{width:22px;height:22px;border-radius:50%}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:100px}
@@ -703,24 +767,8 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
       <div id="ranking-list"></div>
     </div>
 
-    <div id="pg-files" class="pg">
-      <div class="ph">
-        <div class="ph-top"><div class="pt">&#128196; Google Drive</div></div>
-        <div class="ps">Repositório central de arquivos do projeto Gaia</div>
-      </div>
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:36px;text-align:center;max-width:480px;margin:0 auto">
-        <div style="font-size:52px;margin-bottom:16px">&#128194;</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:8px">Drive do Projeto Gaia</div>
-        <div style="font-size:13px;color:var(--dim);margin-bottom:24px;line-height:1.6">Todos os arquivos do projeto estão organizados no Google Drive da equipe. Clique abaixo para acessar.</div>
-        <a href="https://drive.google.com/drive/u/1/folders/1_noLzqhxAmdPNGzCcYRXO5ctYvkPZi-K"
-           target="_blank" rel="noopener"
-           style="display:inline-flex;align-items:center;gap:9px;padding:13px 26px;background:linear-gradient(135deg,#1a8fff,#0d6bff);border-radius:var(--r);color:#fff;text-decoration:none;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;box-shadow:0 6px 20px rgba(26,143,255,.3)">
-          <svg width="20" height="20" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L27.5 53H0c0 1.55.4 3.1 1.2 4.5z" fill="#fff"/><path d="M43.65 25L29.9 1.2c-1.35.8-2.5 1.9-3.3 3.3L1.2 48.5A9 9 0 000 53h27.5z" fill="#fff"/><path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75L86.1 57.5c.8-1.4 1.2-2.95 1.2-4.5H59.8z" fill="#fff"/><path d="M43.65 25L57.4 1.2A9.06 9.06 0 0053 0H34.3c-1.55 0-3.1.45-4.4 1.2z" fill="#fff"/><path d="M59.8 53H27.5L13.75 76.8c1.3.75 2.85 1.2 4.4 1.2h50.5c1.55 0 3.1-.45 4.4-1.2z" fill="#fff"/><path d="M73.4 26.5l-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25 59.8 53h26.3c0-1.55-.4-3.1-1.2-4.5z" fill="#fff"/></svg>
-          Abrir no Google Drive
-        </a>
-        <div style="margin-top:18px;font-size:11px;color:var(--muted)">Abre em nova aba</div>
-      </div>
-    </div>
+    <div id="pg-files" class="pg"></div>
+
     <div id="pg-myprofile" class="pg">
       <div class="ph"><div class="ph-top"><div class="pt">Meu Perfil</div><button class="btn btn-ghost btn-sm" onclick="openEditUser(CU.id)">⚙ Editar</button></div></div>
       <div id="myprofile-content"></div>
@@ -1192,7 +1240,7 @@ function doLogin() {
 }
 
 function openDrive() {
-  window.open('https://drive.google.com/drive/u/1/folders/1_noLzqhxAmdPNGzCcYRXO5ctYvkPZi-K', '_blank');
+  goPage('files', el('nav-files'));
 }
 
 function doLogout() {
@@ -1229,7 +1277,7 @@ function renderPage(page) {
     calendar:   renderCalendar,
     tasks:      ()=>filterTasks(taskFilter),
     ranking:    ()=>filterRanking(rankFilter),
-    files:      ()=>{},  // redireciona para Drive
+    files:      ()=>{ renderDrivePage(); setTimeout(driveInit,150); },
     myprofile:  renderMyProfile,
     mymetrics:  renderMyMetrics,
     members:    ()=>filterMembers(memberFilter),
@@ -1981,6 +2029,352 @@ function toggleThemeMob() {
   const mainBtn = document.getElementById('theme-toggle');
   if (mainBtn) mainBtn.innerHTML = isLight ? '🌙' : '☀️';
 }
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GOOGLE DRIVE — OAuth 2.0 + Drive API v3
+// ═══════════════════════════════════════════════════════════════════════════
+const GAPI_CLIENT_ID  = '1038908037700-7tkqfbp74efnjnmrcv2ke8vco4k53bkb.apps.googleusercontent.com';
+const DRIVE_FOLDER_ID = '1_noLzqhxAmdPNGzCcYRXO5ctYvkPZi-K';
+const DRIVE_SCOPES    = 'https://www.googleapis.com/auth/drive';
+
+let driveState = {
+  inited:false, authed:false, tokenClient:null, accessToken:null, userInfo:null,
+  loading:false,
+  folderStack:[{id:DRIVE_FOLDER_ID, name:'Drive do Projeto'}],
+  files:[], allFiles:[], viewMode:'grid', sortBy:'name', query:'',
+  uploads:[], showUpload:false,
+};
+
+function driveInit() {
+  if(driveState.inited) return;
+  driveState.inited = true;
+  function _tryInit(attempts) {
+    if(attempts <= 0) { toast('Erro: recarregue a página.','err'); return; }
+    if(typeof gapi==='undefined'||typeof google==='undefined'||!google.accounts) {
+      setTimeout(()=>_tryInit(attempts-1), 500); return;
+    }
+    gapi.load('client', async () => {
+      try {
+        await gapi.client.init({});
+        await gapi.client.load('drive','v3');
+      } catch(e) {
+        try { await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'); }
+        catch(e2) { toast('Erro ao carregar Drive API.','err'); return; }
+      }
+      driveState.tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: GAPI_CLIENT_ID,
+        scope: DRIVE_SCOPES,
+        callback: async (resp) => {
+          if(resp.error){ toast('Erro na autenticação: '+resp.error,'err'); return; }
+          driveState.accessToken = resp.access_token;
+          driveState.authed = true;
+          gapi.client.setToken({access_token: resp.access_token});
+          await driveLoadUserInfo();
+          await driveLoadFiles();
+        },
+      });
+      renderDrivePage();
+    });
+  }
+  _tryInit(12);
+}
+
+async function driveLoadUserInfo() {
+  try {
+    const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',
+      {headers:{Authorization:'Bearer '+driveState.accessToken}});
+    driveState.userInfo = await r.json();
+  } catch(e){}
+}
+
+function driveSignIn() {
+  if(!driveState.tokenClient){ toast('Aguarde…','err'); return; }
+  driveState.tokenClient.requestAccessToken({prompt:'consent'});
+}
+
+function driveSignOut() {
+  if(driveState.accessToken) google.accounts.oauth2.revoke(driveState.accessToken,()=>{});
+  Object.assign(driveState,{accessToken:null,authed:false,userInfo:null,files:[],allFiles:[],
+    folderStack:[{id:DRIVE_FOLDER_ID,name:'Drive do Projeto'}]});
+  renderDrivePage();
+}
+
+async function driveLoadFiles(folderId) {
+  if(!driveState.authed) return;
+  if(!folderId) folderId = driveState.folderStack[driveState.folderStack.length-1].id;
+  driveState.loading = true;
+  renderDrivePage();
+  try {
+    const resp = await gapi.client.drive.files.list({
+      q:`'${folderId}' in parents and trashed = false`,
+      fields:'files(id,name,mimeType,size,modifiedTime,webViewLink)',
+      orderBy:'folder,name', pageSize:200,
+    });
+    driveState.allFiles = resp.result.files || [];
+    driveState.files    = driveState.allFiles;
+  } catch(e) {
+    toast('Erro: '+(e.result?.error?.message||e.message),'err');
+    driveState.allFiles = driveState.files = [];
+  }
+  driveState.loading = false;
+  renderDrivePage();
+}
+
+function driveOpenFolder(id,name){driveState.folderStack.push({id,name});driveLoadFiles(id);}
+function driveNavTo(idx){driveState.folderStack=driveState.folderStack.slice(0,idx+1);driveLoadFiles(driveState.folderStack[idx].id);}
+
+function driveHandleDrop(e){e.preventDefault();e.currentTarget.classList.remove('dragover');Array.from(e.dataTransfer.files).forEach(driveUploadFile);}
+function driveHandleFileInput(input){Array.from(input.files).forEach(driveUploadFile);input.value='';}
+
+async function driveUploadFile(file) {
+  const folderId = driveState.folderStack[driveState.folderStack.length-1].id;
+  const uid = 'u'+Date.now()+Math.random().toString(36).slice(2,5);
+  driveState.uploads.push({uid,name:file.name,size:file.size,pct:0,done:false,error:false});
+  renderDriveUploads();
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify({name:file.name,parents:[folderId]})],{type:'application/json'}));
+  form.append('file', file);
+  try {
+    await new Promise((res,rej)=>{
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST','https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+      xhr.setRequestHeader('Authorization','Bearer '+driveState.accessToken);
+      xhr.upload.onprogress = e => {
+        if(!e.lengthComputable) return;
+        const item = driveState.uploads.find(u=>u.uid===uid);
+        if(item){item.pct=Math.round(e.loaded/e.total*100);renderDriveUploads();}
+      };
+      xhr.onload = ()=>xhr.status<300?res():rej(new Error('HTTP '+xhr.status));
+      xhr.onerror = ()=>rej(new Error('Erro de rede'));
+      xhr.send(form);
+    });
+    const item=driveState.uploads.find(u=>u.uid===uid);
+    if(item){item.pct=100;item.done=true;renderDriveUploads();}
+    toast('"'+file.name+'" enviado!');
+    setTimeout(()=>{driveState.uploads=driveState.uploads.filter(u=>u.uid!==uid);renderDriveUploads();driveLoadFiles();},2000);
+  } catch(err) {
+    const item=driveState.uploads.find(u=>u.uid===uid);
+    if(item){item.error=true;renderDriveUploads();}
+    toast('Erro ao enviar "'+file.name+'"','err');
+  }
+}
+
+function renderDriveUploads(){
+  const c=el('drive-uploads');if(!c)return;
+  if(!driveState.uploads.length){c.innerHTML='';return;}
+  c.innerHTML='<div class="upload-list">'+driveState.uploads.map(u=>
+    '<div class="upload-item"><span style="font-size:13px">'+driveFileIcon({name:u.name,mimeType:''})+'</span>'+
+    '<div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+u.name+'</div>'+
+    '<div class="upload-prog-bar"><div class="upload-prog-fill" style="width:'+u.pct+'%"></div></div></div>'+
+    '<span class="upload-status" style="color:'+(u.error?'var(--red)':u.done?'var(--green)':'var(--dim)')+'">'+
+    (u.error?'Erro':u.done?'OK':u.pct+'%')+'</span></div>').join('')+'</div>';
+}
+
+async function driveDownload(file) {
+  if(file.mimeType==='application/vnd.google-apps.folder') return;
+  const exportMap={
+    'application/vnd.google-apps.document':'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.google-apps.spreadsheet':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.google-apps.presentation':'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  };
+  const exportMime=exportMap[file.mimeType];
+  const url=exportMime
+    ?'https://www.googleapis.com/drive/v3/files/'+file.id+'/export?mimeType='+encodeURIComponent(exportMime)+'&access_token='+driveState.accessToken
+    :'https://www.googleapis.com/drive/v3/files/'+file.id+'?alt=media&access_token='+driveState.accessToken;
+  const a=document.createElement('a');a.href=url;a.download=file.name;a.target='_blank';a.click();
+}
+
+async function driveDelete(file,e) {
+  e.stopPropagation();
+  if(!confirm('Mover "'+file.name+'" para a lixeira?')) return;
+  try {
+    await gapi.client.drive.files.delete({fileId:file.id});
+    toast('"'+file.name+'" movido para a lixeira.');
+    driveLoadFiles();
+  } catch(err){ toast('Sem permissão para excluir.','err'); }
+}
+
+let _previewFile=null;
+function drivePreview(file) {
+  if(file.mimeType==='application/vnd.google-apps.folder'){driveOpenFolder(file.id,file.name);return;}
+  _previewFile=file;
+  el('drive-preview-title').textContent=file.name;
+  const body=el('drive-preview-body');
+  const imgs=['image/png','image/jpeg','image/gif','image/webp','image/svg+xml'];
+  if(imgs.includes(file.mimeType)){
+    body.innerHTML='<img src="https://www.googleapis.com/drive/v3/files/'+file.id+'?alt=media&access_token='+driveState.accessToken+'" alt="'+file.name+'">';
+  } else if(file.webViewLink){
+    body.innerHTML='<iframe src="'+file.webViewLink.replace('/view','/preview')+'" allowfullscreen></iframe>';
+  } else {
+    body.innerHTML='<div class="drive-empty"><div class="drive-empty-icon">📄</div><div>Visualização indisponível.<br>Use o botão Baixar.</div></div>';
+  }
+  el('drive-preview-ov').classList.add('on');
+}
+function driveClosePreview(){el('drive-preview-ov').classList.remove('on');el('drive-preview-body').innerHTML='';}
+function driveDownloadCurrent(){if(_previewFile)driveDownload(_previewFile);}
+
+function driveSearch(q){driveState.query=q.toLowerCase();driveApplyFilters();}
+function driveSort(by){driveState.sortBy=by;driveApplyFilters();}
+function driveToggleUpload(){
+  driveState.showUpload=!driveState.showUpload;
+  const z=el('drive-upload-zone');if(z)z.classList.toggle('visible',driveState.showUpload);
+}
+
+function driveApplyFilters(){
+  let list=[...driveState.allFiles];
+  if(driveState.query) list=list.filter(f=>f.name.toLowerCase().includes(driveState.query));
+  const folders=list.filter(f=>f.mimeType==='application/vnd.google-apps.folder');
+  const files=list.filter(f=>f.mimeType!=='application/vnd.google-apps.folder');
+  const sf={
+    name:(a,b)=>a.name.localeCompare(b.name),
+    date:(a,b)=>new Date(b.modifiedTime)-new Date(a.modifiedTime),
+    size:(a,b)=>(parseInt(b.size)||0)-(parseInt(a.size)||0)
+  }[driveState.sortBy]||((a,b)=>a.name.localeCompare(b.name));
+  driveState.files=[...folders.sort(sf),...files.sort(sf)];
+  renderDriveFileList();
+}
+
+function driveFileIcon(f){
+  const m=f.mimeType||'',n=(f.name||'').toLowerCase();
+  if(m.includes('folder'))return'📁';
+  if(m.includes('document'))return'📝';
+  if(m.includes('spreadsheet'))return'📊';
+  if(m.includes('presentation'))return'📽';
+  if(m.includes('form'))return'📋';
+  if(m.includes('pdf'))return'📄';
+  if(m.includes('image'))return'🖼';
+  if(m.includes('video'))return'🎬';
+  if(m.includes('audio'))return'🎵';
+  if(m.includes('zip')||m.includes('rar'))return'📦';
+  const ext=n.split('.').pop();
+  return{py:'🐍',cpp:'⚙',c:'⚙',h:'⚙',js:'📜',ts:'📜',json:'📋',yaml:'📋',yml:'📋',md:'📝',sh:'💻',html:'🌐',css:'🎨'}[ext]||'📁';
+}
+function driveFmtSize(b){if(!b)return'—';b=parseInt(b);if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
+function driveFmtDate(iso){if(!iso)return'—';return new Date(iso).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'});}
+function driveIsFolder(f){return f.mimeType==='application/vnd.google-apps.folder';}
+
+function driveSetView(mode){
+  driveState.viewMode=mode;
+  document.querySelectorAll('.view-btn').forEach((b,i)=>b.classList.toggle('on',(mode==='grid'&&i===0)||(mode==='list'&&i===1)));
+  renderDriveFileList();
+}
+
+function renderDrivePage(){
+  const pg=el('pg-files');if(!pg)return;
+  const stack=driveState.folderStack;
+  const breadcrumb=stack.map((c,i)=>i<stack.length-1
+    ?'<span class="crumb" onclick="driveNavTo('+i+')">'+c.name+'</span><span class="crumb-sep">›</span>'
+    :'<span class="crumb active">'+c.name+'</span>').join('');
+  const ui=driveState.userInfo;
+  const userChip=ui?'<div class="drive-user-chip">'+(ui.picture?'<img class="drive-user-avatar" src="'+ui.picture+'" referrerpolicy="no-referrer">':'')+''+(ui.name||ui.email)+'<span style="opacity:.5;margin-left:6px;cursor:pointer" onclick="driveSignOut()" title="Sair">✕</span></div>':'';
+
+  const GOOGLE_SVG='<svg class="google-logo" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>';
+
+  let bodyHtml;
+  if(!driveState.authed && !driveState.loading){
+    bodyHtml='<div class="drive-auth-card">'+
+      '<div class="drive-auth-icon">📂</div>'+
+      '<div class="drive-auth-title">Acesse o Drive do Projeto</div>'+
+      '<div class="drive-auth-sub">Conecte sua conta Google para visualizar, baixar e enviar arquivos diretamente no portal.</div>'+
+      '<button class="btn-google" onclick="driveSignIn()">'+GOOGLE_SVG+' Entrar com Google</button>'+
+      '</div>';
+  } else if(driveState.loading){
+    bodyHtml='<div class="drive-loading"><div style="width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite"></div>Carregando arquivos…</div>';
+  } else {
+    const totF=driveState.allFiles.filter(f=>driveIsFolder(f)).length;
+    const totA=driveState.allFiles.filter(f=>!driveIsFolder(f)).length;
+    bodyHtml=
+      '<div class="drive-toolbar">'+
+        '<div class="drive-breadcrumb">'+breadcrumb+'</div>'+
+        '<input class="drive-search" type="text" placeholder="🔍 Buscar…" value="'+driveState.query+'" oninput="driveSearch(this.value)">'+
+        '<select class="drive-sort" onchange="driveSort(this.value)">'+
+          '<option value="name"'+(driveState.sortBy==='name'?' selected':'')+'>Nome</option>'+
+          '<option value="date"'+(driveState.sortBy==='date'?' selected':'')+'>Data</option>'+
+          '<option value="size"'+(driveState.sortBy==='size'?' selected':'')+'>Tamanho</option>'+
+        '</select>'+
+        '<div class="view-toggle">'+
+          '<button class="view-btn'+(driveState.viewMode==='grid'?' on':'')+'" onclick="driveSetView(\'grid\')" title="Grade">⊞</button>'+
+          '<button class="view-btn'+(driveState.viewMode==='list'?' on':'')+'" onclick="driveSetView(\'list\')" title="Lista">☰</button>'+
+        '</div>'+
+        '<button class="btn btn-green btn-sm" onclick="driveToggleUpload()">'+(driveState.showUpload?'✕ Cancelar':'⬆ Enviar')+'</button>'+
+        '<button class="btn btn-ghost btn-sm" onclick="driveLoadFiles()">↺</button>'+
+      '</div>'+
+      '<div class="drive-stats">'+
+        '<div class="drive-stat"><span>'+totF+'</span>Pastas</div>'+
+        '<div class="drive-stat"><span>'+totA+'</span>Arquivos</div>'+
+        '<div class="drive-stat"><span>'+(stack.length>1?stack[stack.length-1].name:'Raiz')+'</span>Pasta atual</div>'+
+      '</div>'+
+      '<div id="drive-uploads"></div>'+
+      '<div class="drive-upload-zone'+(driveState.showUpload?' visible':'')+'" id="drive-upload-zone"'+
+        ' ondragover="event.preventDefault();this.classList.add(\'dragover\')"'+
+        ' ondragleave="this.classList.remove(\'dragover\')"'+
+        ' ondrop="driveHandleDrop(event)"'+
+        ' onclick="el(\'drive-file-input\').click()">'+
+        '<div style="font-size:26px;margin-bottom:8px">☁</div>'+
+        '<div style="font-size:13px;font-weight:600;margin-bottom:4px">Arraste arquivos aqui</div>'+
+        '<div style="font-size:11px;color:var(--dim)">ou clique para selecionar</div>'+
+        '<input type="file" id="drive-file-input" style="display:none" multiple onchange="driveHandleFileInput(this)">'+
+      '</div>'+
+      '<div id="drive-filelist"></div>';
+  }
+
+  pg.innerHTML=
+    '<div class="ph">'+
+      '<div class="ph-top"><div class="pt">📂 Google Drive</div>'+userChip+'</div>'+
+      '<div class="ps">Repositório central do projeto Gaia</div>'+
+    '</div>'+
+    bodyHtml+
+    '<div class="drive-preview-ov" id="drive-preview-ov" onclick="if(event.target===this)driveClosePreview()">'+
+      '<div class="drive-preview-box" id="drive-preview-box">'+
+        '<div class="drive-preview-hd">'+
+          '<span id="drive-preview-title" class="drive-preview-title">—</span>'+
+          '<button class="btn btn-ghost btn-sm" onclick="driveDownloadCurrent()">⬇ Baixar</button>'+
+          '<span style="cursor:pointer;color:var(--dim);padding:4px;margin-left:4px" onclick="driveClosePreview()">✕</span>'+
+        '</div>'+
+        '<div class="drive-preview-body" id="drive-preview-body"></div>'+
+      '</div>'+
+    '</div>';
+
+  if(driveState.authed && !driveState.loading) driveApplyFilters();
+}
+
+function renderDriveFileList(){
+  const c=el('drive-filelist');if(!c)return;
+  const list=driveState.files;
+  if(!list.length){c.innerHTML='<div class="drive-empty"><div class="drive-empty-icon">📭</div><div>Nenhum arquivo encontrado.</div></div>';return;}
+  function safeF(f){return JSON.stringify(f).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+  if(driveState.viewMode==='grid'){
+    c.innerHTML='<div class="drive-files-grid">'+list.map(f=>{
+      const sf=safeF(f);
+      return '<div class="drive-file-card'+(driveIsFolder(f)?' folder':'')+'" onclick="drivePreview(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'))">'+
+        '<div class="drive-file-actions">'+
+          (!driveIsFolder(f)?'<button class="drive-file-action-btn btn-dld" onclick="event.stopPropagation();driveDownload(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'))" title="Baixar">⬇</button>':'')+
+          (CU&&CU.isAdmin?'<button class="drive-file-action-btn btn-del-f" onclick="driveDelete(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'),event)" title="Excluir">🗑</button>':'')+
+        '</div>'+
+        '<div class="drive-file-icon">'+driveFileIcon(f)+'</div>'+
+        '<div class="drive-file-name">'+f.name+'</div>'+
+        '<div class="drive-file-meta">'+driveFmtSize(f.size)+'</div>'+
+        '<div class="drive-file-meta">'+driveFmtDate(f.modifiedTime)+'</div>'+
+      '</div>';
+    }).join('')+'</div>';
+  } else {
+    c.innerHTML='<div class="drive-files-list">'+list.map(f=>{
+      const sf=safeF(f);
+      return '<div class="drive-list-row" onclick="drivePreview(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'))">'+
+        '<div class="drive-file-icon">'+driveFileIcon(f)+'</div>'+
+        '<div class="drive-list-name">'+f.name+'</div>'+
+        '<div class="drive-list-size">'+driveFmtSize(f.size)+'</div>'+
+        '<div class="drive-list-date">'+driveFmtDate(f.modifiedTime)+'</div>'+
+        '<div class="drive-list-actions">'+
+          (!driveIsFolder(f)?'<button class="drive-file-action-btn btn-dld" onclick="event.stopPropagation();driveDownload(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'))" title="Baixar">⬇</button>':'')+
+          (CU&&CU.isAdmin?'<button class="drive-file-action-btn btn-del-f" onclick="driveDelete(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'),event)" title="Excluir">🗑</button>':'')+
+        '</div>'+
+      '</div>';
+    }).join('')+'</div>';
+  }
+}
+
 </script>
 </body>
 </html>
