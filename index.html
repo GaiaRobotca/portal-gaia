@@ -1112,6 +1112,19 @@ let taskFilter='all', rankFilter='all', memberFilter='all', filesFilter='all', c
 let pendingTaskId=null, editSkillsUid=null, tempSkills=[], calY=new Date().getFullYear(), calMo=new Date().getMonth();
 let chatPendingFile=null, admChatPendingFile=null, seenChat=0, seenAdmChat=0;
 
+// Recupera o usuário salvo no navegador
+const savedUser = localStorage.getItem('gaia_user');
+if(savedUser) {
+  try {
+    CU = JSON.parse(savedUser);
+    // Esconde a tela de login e mostra o painel imediatamente
+    document.getElementById('login-screen').classList.remove('on');
+    document.getElementById('dash-screen').classList.add('on');
+  } catch(e) {
+    localStorage.removeItem('gaia_user');
+  }
+}
+
 // ══════════════════════════════════════════════════════
 // FIREBASE SYNC
 // ══════════════════════════════════════════════════════
@@ -1141,13 +1154,24 @@ DB.on('value', snap => {
     M.forEach(m=>{ MP[m.id]=m.pts; });
     save();
   }
-  if (CU) {
+ if (CU) {
     const u = M.find(m=>m.id===CU.id);
-    if (!u) { doLogout(); return; }
+    if (!u) { doLogout(); return; } // Se o usuário foi excluído, desloga
+    
     CU.name=u.name; CU.isAdmin=u.isAdmin;
+    localStorage.setItem('gaia_user', JSON.stringify(CU)); // Atualiza os dados salvos
+    
     el('sb-name').textContent=CU.name;
     el('sb-role').textContent=CU.isAdmin?'Administrador':(u.team==='eletroquad'?'EletroQuad':'Robótica');
     el('nav-admin-sec').style.display=CU.isAdmin?'block':'none';
+    
+    // Atualiza a foto e o status online na barra lateral
+    const av = el('sb-av');
+    if(av) av.innerHTML = avImg(u.name, u.color, 30);
+    setOnline(CU.id);
+    const dot = el('sb-online-dot');
+    if(dot) dot.style.display = 'block';
+
     updateBadges();
     renderCurrentPage();
   }
@@ -1222,6 +1246,8 @@ function doLogin() {
   if(!senhaOk) { toast('Usuário ou senha incorretos!', 'err'); return; }
 
   CU = {id: mem.id, name: mem.name, isAdmin: mem.isAdmin};
+  localStorage.setItem('gaia_user', JSON.stringify(CU)); // SALVA O USUÁRIO NO NAVEGADOR
+  
   el('li-user').value = '';
   el('li-pass').value = '';
   el('login-screen').classList.remove('on');
@@ -1245,13 +1271,14 @@ function openDrive() {
 
 function doLogout() {
   CU = null;
+  localStorage.removeItem('gaia_user'); // APAGA O USUÁRIO DO NAVEGADOR
+  
   const dot = el('sb-online-dot');
   if(dot) dot.style.display = 'none';
   clearInterval(sessionFlushInterval);
   el('dash-screen').classList.remove('on');
   el('login-screen').classList.add('on');
 }
-
 // ══════════════════════════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════════════════════════
