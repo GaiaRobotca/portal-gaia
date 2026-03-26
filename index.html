@@ -2110,6 +2110,8 @@ async function driveLoadFiles(folderId) {
       q:`'${folderId}' in parents and trashed = false`,
       fields:'files(id,name,mimeType,size,modifiedTime,webViewLink)',
       orderBy:'folder,name', pageSize:200,
+      includeItemsFromAllDrives: true,
+      supportsAllDrives: true
     });
     driveState.allFiles = resp.result.files || [];
     driveState.files    = driveState.allFiles;
@@ -2138,7 +2140,7 @@ async function driveUploadFile(file) {
   try {
     await new Promise((res,rej)=>{
       const xhr = new XMLHttpRequest();
-      xhr.open('POST','https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
+      xhr.open('POST','https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true');
       xhr.setRequestHeader('Authorization','Bearer '+driveState.accessToken);
       xhr.upload.onprogress = e => {
         if(!e.lengthComputable) return;
@@ -2339,18 +2341,34 @@ function renderDrivePage(){
   if(driveState.authed && !driveState.loading) driveApplyFilters();
 }
 
+// ==========================================
+// FUNÇÕES AUXILIARES ADICIONADAS PARA O BUG
+// ==========================================
+function drivePreviewById(id) {
+  const file = driveState.allFiles.find(f => f.id === id);
+  if(file) drivePreview(file);
+}
+function driveDownloadById(id, e) {
+  e.stopPropagation();
+  const file = driveState.allFiles.find(f => f.id === id);
+  if(file) driveDownload(file);
+}
+function driveDeleteById(id, e) {
+  const file = driveState.allFiles.find(f => f.id === id);
+  if(file) driveDelete(file, e);
+}
+
 function renderDriveFileList(){
   const c=el('drive-filelist');if(!c)return;
   const list=driveState.files;
   if(!list.length){c.innerHTML='<div class="drive-empty"><div class="drive-empty-icon">📭</div><div>Nenhum arquivo encontrado.</div></div>';return;}
-  function safeF(f){return JSON.stringify(f).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+  
   if(driveState.viewMode==='grid'){
     c.innerHTML='<div class="drive-files-grid">'+list.map(f=>{
-      const sf=safeF(f);
-      return '<div class="drive-file-card'+(driveIsFolder(f)?' folder':'')+'" onclick="drivePreview(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'))">'+
+      return '<div class="drive-file-card'+(driveIsFolder(f)?' folder':'')+'" onclick="drivePreviewById(\''+f.id+'\')">'+
         '<div class="drive-file-actions">'+
-          (!driveIsFolder(f)?'<button class="drive-file-action-btn btn-dld" onclick="event.stopPropagation();driveDownload(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'))" title="Baixar">⬇</button>':'')+
-          (CU&&CU.isAdmin?'<button class="drive-file-action-btn btn-del-f" onclick="driveDelete(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'),event)" title="Excluir">🗑</button>':'')+
+          (!driveIsFolder(f)?'<button class="drive-file-action-btn btn-dld" onclick="driveDownloadById(\''+f.id+'\', event)" title="Baixar">⬇</button>':'')+
+          (CU&&CU.isAdmin?'<button class="drive-file-action-btn btn-del-f" onclick="driveDeleteById(\''+f.id+'\', event)" title="Excluir">🗑</button>':'')+
         '</div>'+
         '<div class="drive-file-icon">'+driveFileIcon(f)+'</div>'+
         '<div class="drive-file-name">'+f.name+'</div>'+
@@ -2360,21 +2378,19 @@ function renderDriveFileList(){
     }).join('')+'</div>';
   } else {
     c.innerHTML='<div class="drive-files-list">'+list.map(f=>{
-      const sf=safeF(f);
-      return '<div class="drive-list-row" onclick="drivePreview(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'))">'+
+      return '<div class="drive-list-row" onclick="drivePreviewById(\''+f.id+'\')">'+
         '<div class="drive-file-icon">'+driveFileIcon(f)+'</div>'+
         '<div class="drive-list-name">'+f.name+'</div>'+
         '<div class="drive-list-size">'+driveFmtSize(f.size)+'</div>'+
         '<div class="drive-list-date">'+driveFmtDate(f.modifiedTime)+'</div>'+
         '<div class="drive-list-actions">'+
-          (!driveIsFolder(f)?'<button class="drive-file-action-btn btn-dld" onclick="event.stopPropagation();driveDownload(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'))" title="Baixar">⬇</button>':'')+
-          (CU&&CU.isAdmin?'<button class="drive-file-action-btn btn-del-f" onclick="driveDelete(JSON.parse(\''+sf.replace(/"/g,'\\"')+'\'),event)" title="Excluir">🗑</button>':'')+
+          (!driveIsFolder(f)?'<button class="drive-file-action-btn btn-dld" onclick="driveDownloadById(\''+f.id+'\', event)" title="Baixar">⬇</button>':'')+
+          (CU&&CU.isAdmin?'<button class="drive-file-action-btn btn-del-f" onclick="driveDeleteById(\''+f.id+'\', event)" title="Excluir">🗑</button>':'')+
         '</div>'+
       '</div>';
     }).join('')+'</div>';
   }
 }
-
 </script>
 </body>
 </html>
