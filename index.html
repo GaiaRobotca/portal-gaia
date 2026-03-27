@@ -894,7 +894,6 @@ body.light .tree-search   { background: var(--bg3); color: var(--text); }
     <div class="fg"><label class="lbl">Título</label><input type="text" id="cal-title"></div>
     <div class="frow">
       <div class="fg"><label class="lbl">Data</label><input type="date" id="cal-date"></div>
-      <div class="fg"><label class="lbl">Horário</label><input type="time" id="cal-time"></div>
       <div class="fg"><label class="lbl">Tipo</label><select id="cal-type"><option value="reuniao">Reunião</option><option value="entrega">Entrega/Prazo</option><option value="evento">Evento</option><option value="outro">Outro</option></select></div>
     </div>
     <div class="fg"><label class="lbl">Descrição</label><input type="text" id="cal-desc" placeholder="Opcional..."></div>
@@ -1372,7 +1371,7 @@ function renderCalGrid() {
   for(let d=1;d<=dim;d++){
     const ds=`${calY}-${String(calMo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const evs=CAL.filter(e=>e.date===ds);
-    let evH=evs.slice(0,2).map(e=>`<div class="cal-ev ev-${e.type}">● ${e.title}${e.time?' '+e.time:''}</div>`).join('');
+    let evH=evs.slice(0,2).map(e=>`<div class="cal-ev ev-${e.type}">● ${e.title}</div>`).join('');
     if(evs.length>2) evH+=`<div style="font-size:9px;color:var(--muted)">+${evs.length-2}</div>`;
     h+=`<div class="cal-day${ds===today?' today':''}${evs.length?' has-ev':''}" ${CU.isAdmin?`onclick="el('cal-date').value='${ds}';openModal('modal-cal')"`:''} style="${CU.isAdmin?'cursor:pointer':''}">
       <div class="cal-dn">${d}</div>${evH}</div>`;
@@ -1390,37 +1389,22 @@ function renderUpcoming() {
     <div style="display:flex;align-items:center;gap:13px;padding:13px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px">
       <div style="width:3px;height:38px;border-radius:3px;background:${colors[e.type]||'var(--dim)'};flex-shrink:0"></div>
       <div style="text-align:center;min-width:36px"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:${colors[e.type]}">${e.date.split('-')[2]}</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase">${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][parseInt(e.date.split('-')[1])-1]}</div></div>
-      <div style="flex:1">
-        <div style="font-size:13px;font-weight:500">${e.title}</div>
-        ${e.time?`<div style="font-size:11px;color:var(--accent);font-weight:600;margin-top:2px">⏰ ${e.time}</div>`:''}
-        ${e.desc?`<div style="font-size:11px;color:var(--dim);margin-top:2px">${e.desc}</div>`:''}
-      </div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:500">${e.title}</div>${e.desc?`<div style="font-size:11px;color:var(--dim);margin-top:2px">${e.desc}</div>`:''}</div>
       <span class="tag" style="border-color:${colors[e.type]}33;color:${colors[e.type]};background:${colors[e.type]}15">${labels[e.type]}</span>
       ${CU.isAdmin?`<span style="font-size:11px;color:var(--red);cursor:pointer;opacity:.5" onclick="deleteCalEvent('${e.id}')">🗑</span>`:''}
     </div>`).join(''):`<div class="empty"><div class="empty-ico">📅</div>Nenhum evento futuro.</div>`;
 }
 function saveCalEvent() {
   const title=el('cal-title').value.trim(), date=el('cal-date').value, desc=el('cal-desc').value.trim();
-  const time=el('cal-time')?el('cal-time').value:'';
   if(!title||!date){toast('Preencha título e data','err');return;}
-  const ev={id:'e'+Date.now(),title,date,time,type:el('cal-type').value,desc,createdBy:CU.name};
+  const ev={id:'e'+Date.now(),title,date,type:el('cal-type').value,desc,createdBy:CU.name};
   if(el('cal-email').checked&&ECFG.configured){
-    const timeStr=time?` às ${time}`:'';
-    const dateStr=`${fmtDate(date)}${timeStr}`;
-    const bodyEmail=desc?`${desc}
-
-📅 Data: ${dateStr}`:`Novo evento marcado para ${dateStr}.`;
     M.filter(m=>m.email&&m.email.trim()!=='').forEach(m=>{
-      emailjs.send(ECFG.serviceId,ECFG.templateId,{
-        to_email:m.email, to_name:m.name.split(' ')[0],
-        notice_title:`📅 ${title} — ${dateStr}`,
-        notice_body:bodyEmail, notice_type:'CALENDÁRIO', portal_name:'Portal Gaia · UFTM'
-      },ECFG.publicKey).catch(()=>{});
+      emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`📅 Novo Evento: ${title}`,notice_body:desc?desc:`Novo evento marcado para ${fmtDate(date)}.`,notice_type:'CALENDÁRIO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
     });
   }
   CAL.push(ev);
   ['cal-title','cal-desc'].forEach(i=>el(i).value='');
-  if(el('cal-time')) el('cal-time').value='';
   closeModal('modal-cal'); save(); toast('Evento adicionado!');
 }
 function deleteCalEvent(id){ if(!confirm('Remover evento?'))return; CAL=CAL.filter(e=>e.id!==id); save(); }
