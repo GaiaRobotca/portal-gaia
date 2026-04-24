@@ -126,10 +126,20 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .tab{padding:7px 15px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;color:var(--dim);transition:.15s}
 .tab.on{background:var(--bg3);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.2)}
 
+/* ── TAGS ── */
 .tag{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;letter-spacing:.03em;border:1px solid transparent}
+/* Equipe tags (usados em tarefas) */
 .tag-eq{background:rgba(26,143,255,.1);color:var(--blue);border-color:rgba(26,143,255,.2)}
 .tag-rob{background:rgba(0,229,160,.08);color:var(--green);border-color:rgba(0,229,160,.15)}
 .tag-both{background:rgba(255,209,102,.1);color:var(--gold);border-color:rgba(255,209,102,.2)}
+/* Cargo tags */
+.tag-prog{background:rgba(99,210,255,.1);color:var(--accent);border-color:rgba(99,210,255,.2)}
+.tag-elet{background:rgba(255,179,71,.1);color:var(--orange);border-color:rgba(255,179,71,.2)}
+.tag-estru{background:rgba(0,229,160,.08);color:var(--green);border-color:rgba(0,229,160,.15)}
+.tag-mkt{background:rgba(168,85,247,.1);color:#a855f7;border-color:rgba(168,85,247,.2)}
+.tag-gestao{background:rgba(239,68,68,.1);color:#ef4444;border-color:rgba(239,68,68,.2)}
+.tag-adm{background:rgba(255,209,102,.1);color:var(--gold);border-color:rgba(255,209,102,.2)}
+/* Outros */
 .tag-pts{background:rgba(255,179,71,.1);color:var(--orange);border-color:rgba(255,179,71,.2)}
 .tag-hrs{background:rgba(187,134,252,.1);color:#bb86fc;border-color:rgba(187,134,252,.2)}
 .tag-easy{background:rgba(0,229,160,.07);color:var(--green)}
@@ -156,27 +166,54 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .mc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .mc.eq::before{background:linear-gradient(90deg,var(--blue),var(--accent))}
 .mc.rob::before{background:linear-gradient(90deg,var(--green),#7fff6e)}
+.mc.prog::before{background:linear-gradient(90deg,var(--accent),#63d2ff)}
+.mc.elet::before{background:linear-gradient(90deg,var(--orange),#ffd166)}
+.mc.estru::before{background:linear-gradient(90deg,var(--green),#7fff6e)}
+.mc.mkt::before{background:linear-gradient(90deg,#a855f7,#c084fc)}
+.mc.gestao::before{background:linear-gradient(90deg,#ef4444,#f87171)}
+.mc.adm::before{background:linear-gradient(90deg,var(--gold),#fbbf24)}
 .mc:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.3);border-color:rgba(255,255,255,.11)}
 
-/* ── TASK ITEM melhorado (colaborativo) ── */
-.task-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:10px;transition:.2s}
+/* ── TASK ITEM ── */
+.task-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;transition:.2s;position:relative}
 .task-item:hover{border-color:rgba(255,255,255,.1)}
-.task-title{font-size:13px;font-weight:500;margin-bottom:3px}
+.task-item.done-item{opacity:.65}
+.task-item.done-item:hover{opacity:.85}
+.task-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:4px}
+.task-title{font-size:13px;font-weight:500}
 .task-title.done{text-decoration:line-through;color:var(--dim)}
 .task-desc{font-size:11px;color:var(--dim);line-height:1.5;margin-bottom:10px}
 .task-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.task-actions{display:flex;align-items:center;gap:7px;margin-top:11px;flex-wrap:wrap}
+
+/* Admin delete button for tasks */
+.task-del-btn{padding:5px 11px;background:rgba(255,92,92,.07);border:1px solid rgba(255,92,92,.18);
+  border-radius:7px;color:var(--red);font-size:10px;font-weight:600;cursor:pointer;transition:.2s;opacity:.6}
+.task-del-btn:hover{opacity:1;background:rgba(255,92,92,.14)}
+.task-edit-btn{padding:5px 11px;background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:7px;color:var(--dim);font-size:10px;font-weight:600;cursor:pointer;transition:.2s}
+.task-edit-btn:hover{border-color:rgba(255,255,255,.15);color:var(--text)}
+
 .btn-claim{padding:5px 13px;background:rgba(26,143,255,.1);border:1px solid rgba(26,143,255,.22);
-  border-radius:7px;color:var(--blue);font-size:11px;font-weight:600;cursor:pointer;margin-left:auto;transition:.2s}
+  border-radius:7px;color:var(--blue);font-size:11px;font-weight:600;cursor:pointer;transition:.2s}
 .btn-claim:hover{background:rgba(26,143,255,.18)}
 .btn-claim.claimed{background:rgba(0,229,160,.07);border-color:rgba(0,229,160,.18);color:var(--green);cursor:default}
+.btn-deliver{padding:5px 13px;background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.22);
+  border-radius:7px;color:var(--green);font-size:11px;font-weight:600;cursor:pointer;transition:.2s}
+.btn-deliver:hover{background:rgba(0,229,160,.18)}
+
 .assignees-row{display:flex;align-items:center;gap:6px;margin-top:9px;flex-wrap:wrap}
 .assignee-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;
   font-size:10px;font-weight:500;background:rgba(26,143,255,.08);border:1px solid rgba(26,143,255,.18);color:var(--blue)}
 .assignee-chip.rob{background:rgba(0,229,160,.07);border-color:rgba(0,229,160,.15);color:var(--green)}
 .assignee-chip.done-chip{background:rgba(0,229,160,.08);border-color:rgba(0,229,160,.18);color:var(--green)}
-
-/* max-assignees indicator */
 .max-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.2);color:var(--gold)}
+
+/* Deadline badge */
+.deadline-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;border:1px solid}
+.deadline-ok{background:rgba(90,106,128,.08);border-color:var(--border);color:var(--dim)}
+.deadline-soon{background:rgba(255,179,71,.1);border-color:rgba(255,179,71,.25);color:var(--orange)}
+.deadline-overdue{background:rgba(255,92,92,.08);border-color:rgba(255,92,92,.22);color:var(--red)}
 
 .prog-item{margin-bottom:11px}
 .prog-hd{display:flex;justify-content:space-between;margin-bottom:5px}
@@ -203,7 +240,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .notice-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
 .notice-meta{font-size:10px;color:var(--muted)}
 
-/* ── CALENDAR melhorado com alertas ── */
 .cal-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:18px}
 .cal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .cal-month{font-family:'Syne',sans-serif;font-weight:700;font-size:16px}
@@ -226,7 +262,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .cal-leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
 .cal-leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
-/* Alert banner */
 .alert-banner{background:rgba(255,209,102,.06);border:1px solid rgba(255,209,102,.25);border-radius:var(--r);
   padding:12px 16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:10px;animation:up .3s ease}
 .alert-banner-icon{font-size:18px;flex-shrink:0;margin-top:1px}
@@ -236,7 +271,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .alert-dismiss{cursor:pointer;color:var(--muted);font-size:13px;padding:2px 5px;border-radius:5px;transition:.15s;flex-shrink:0}
 .alert-dismiss:hover{color:var(--text);background:rgba(255,255,255,.06)}
 
-/* ── ATTENDANCE melhorado ── */
 .att-session-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;overflow:hidden}
 .att-session-hd{display:flex;align-items:center;gap:11px;padding:12px 14px;cursor:pointer;transition:.15s}
 .att-session-hd:hover{background:rgba(255,255,255,.025)}
@@ -282,13 +316,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .chat-send{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--blue),#0d6bff);
   border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
 .chat-send:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,143,255,.4)}
-.chat-date-div{text-align:center;font-size:10px;color:var(--muted);position:relative;margin:5px 0}
-.chat-date-div::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:var(--border)}
-.chat-date-div span{background:var(--bg2);padding:0 9px;position:relative}
-.bubble-foot{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
-.msg-del{font-size:10px;color:var(--red);cursor:pointer;opacity:0;transition:.15s;padding:2px 6px;border-radius:5px}
-.chat-msg:hover .msg-del{opacity:.6}
-.msg-del:hover{opacity:1!important;background:rgba(255,92,92,.08)}
 
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
   z-index:1000;align-items:center;justify-content:center;padding:18px}
@@ -327,10 +354,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .btn-approve{padding:6px 13px;background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.22);border-radius:7px;color:var(--green);font-size:11px;font-weight:600;cursor:pointer}
 .btn-reject{padding:6px 13px;background:rgba(255,92,92,.08);border:1px solid rgba(255,92,92,.18);border-radius:7px;color:var(--red);font-size:11px;font-weight:600;cursor:pointer}
 
-.av-wrap{position:relative}
-.av-wrap.online::after{content:'';position:absolute;bottom:-2px;right:-2px;width:30%;height:30%;min-width:10px;min-height:10px;background:var(--green);border-radius:50%;border:2px solid var(--bg2);box-shadow:0 0 4px rgba(0,0,0,0.3);z-index:2}
-
-/* Member checkbox grid for tasks */
 .member-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:7px;margin:10px 0}
 .member-check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:.15s;font-size:12px}
 .member-check-item:hover{border-color:rgba(255,255,255,.14)}
@@ -340,7 +363,6 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slide{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -375,11 +397,8 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 body.light{--bg:#f0f4ff;--bg2:#ffffff;--bg3:#e8edf8;--border:rgba(0,0,0,0.09);--text:#0d1a2e;--dim:#5a6a80;--muted:#9aacbf;--blue:#1a6fff;--green:#00b87a;--gold:#c89a00;--red:#e03030;--orange:#d4720a;--accent:#1a6fff}
 body.light .sidebar{box-shadow:2px 0 16px rgba(0,0,0,.06)}
 body.light .login-box{box-shadow:0 8px 32px rgba(0,0,0,.10)}
-body.light .bubble{background:var(--bg3)}
-body.light .chat-msg.me .bubble{background:rgba(26,111,255,.10);border-color:rgba(26,111,255,.22)}
 body.light .toast{box-shadow:0 7px 20px rgba(0,0,0,.12)}
 body.light input,body.light select,body.light textarea{background:#fff;color:var(--text)}
-body.light .chat-ta{background:var(--bg3);color:var(--text)}
 </style>
 </head>
 <body>
@@ -538,9 +557,9 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center">
         <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-right:4px">Legenda:</div>
         <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#ffd166"></div>ADM</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#00e5a0"></div>EletroQuad</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#1a8fff"></div>Robótica</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#e2e8f0"></div>Ambas</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#63d2ff"></div>Programação</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#ffb347"></div>Eletrônica</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#00e5a0"></div>Estrutura</div>
         <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#a855f7"></div>Marketing</div>
         <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim)"><div style="width:10px;height:10px;border-radius:3px;background:#ef4444"></div>Gestão</div>
       </div>
@@ -557,7 +576,6 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
     <!-- CALENDAR -->
     <div id="pg-calendar" class="pg">
       <div class="ph"><div class="ph-top"><div class="pt">📅 Calendário</div><div id="cal-btn"></div></div></div>
-      <!-- Alert banners for upcoming events -->
       <div id="cal-alert-banners"></div>
       <div class="cal-wrap">
         <div class="cal-hd">
@@ -582,12 +600,19 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
 
     <!-- TASKS -->
     <div id="pg-tasks" class="pg">
-      <div class="ph"><div class="pt">Tarefas</div><div class="ps">Assuma tarefas e acumule pontos · Tarefas colaborativas suportadas</div></div>
+      <div class="ph">
+        <div class="ph-top">
+          <div class="pt">Tarefas</div>
+          <div id="tasks-admin-btn"></div>
+        </div>
+        <div class="ps">Assuma tarefas e acumule pontos · Tarefas colaborativas suportadas</div>
+      </div>
       <div class="tabs">
         <div class="tab on" onclick="filterTasks('all',this)">Todas</div>
         <div class="tab" onclick="filterTasks('available',this)">Disponíveis</div>
         <div class="tab" onclick="filterTasks('claimed',this)">Assumidas</div>
         <div class="tab" onclick="filterTasks('done',this)">Concluídas</div>
+        <div class="tab" onclick="filterTasks('overdue',this)">Atrasadas</div>
       </div>
       <div id="tasks-list"></div>
     </div>
@@ -597,8 +622,9 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
       <div class="ph"><div class="pt">Ranking</div><div class="ps">Pontuação acumulada</div></div>
       <div class="tabs">
         <div class="tab on" onclick="filterRanking('all',this)">Geral</div>
-        <div class="tab" onclick="filterRanking('eletroquad',this)">EletroQuad</div>
-        <div class="tab" onclick="filterRanking('robotica',this)">Robótica</div>
+        <div class="tab" onclick="filterRanking('programacao',this)">Programação</div>
+        <div class="tab" onclick="filterRanking('eletronica',this)">Eletrônica</div>
+        <div class="tab" onclick="filterRanking('estrutura',this)">Estrutura</div>
       </div>
       <div id="ranking-list"></div>
     </div>
@@ -634,13 +660,16 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
       <div class="ph"><div class="ph-top"><div class="pt">Membros</div><button class="btn btn-blue btn-sm" onclick="openAddUser()">+ Adicionar</button></div></div>
       <div class="tabs">
         <div class="tab on" onclick="filterMembers('all',this)">Todos</div>
-        <div class="tab" onclick="filterMembers('eletroquad',this)">EletroQuad</div>
-        <div class="tab" onclick="filterMembers('robotica',this)">Robótica</div>
+        <div class="tab" onclick="filterMembers('programacao',this)">Programação</div>
+        <div class="tab" onclick="filterMembers('eletronica',this)">Eletrônica</div>
+        <div class="tab" onclick="filterMembers('estrutura',this)">Estrutura</div>
+        <div class="tab" onclick="filterMembers('marketing',this)">Marketing</div>
+        <div class="tab" onclick="filterMembers('gestao',this)">Gestão</div>
       </div>
       <div id="members-list"></div>
     </div>
 
-    <!-- ATTENDANCE — MELHORADO -->
+    <!-- ATTENDANCE -->
     <div id="pg-attendance" class="pg">
       <div class="ph">
         <div class="ph-top">
@@ -690,14 +719,14 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
       <div id="submissions-list"></div>
     </div>
 
-    <!-- NEW TASK — MELHORADO (colaborativa) -->
+    <!-- NEW TASK -->
     <div id="pg-newtask" class="pg">
       <div class="ph"><div class="pt">Nova Tarefa</div><div class="ps">Crie tarefas individuais ou colaborativas</div></div>
       <div class="card" style="max-width:600px">
         <div class="fg"><label class="lbl">Título</label><input type="text" id="nt-title" placeholder="Ex: Implementar filtro de Kalman"></div>
         <div class="fg"><label class="lbl">Descrição</label><textarea id="nt-desc" placeholder="Detalhe o que precisa ser feito..."></textarea></div>
         <div class="frow">
-          <div class="fg"><label class="lbl">Equipe</label><select id="nt-team"><option value="both">Ambas</option><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option></select></div>
+          <div class="fg"><label class="lbl">Equipe alvo</label><select id="nt-team"><option value="both">Ambas</option><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option></select></div>
           <div class="fg"><label class="lbl">Dificuldade</label><select id="nt-diff"><option value="easy">Fácil</option><option value="medium">Médio</option><option value="hard">Difícil</option></select></div>
         </div>
         <div class="frow">
@@ -705,7 +734,6 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
           <div class="fg"><label class="lbl">Horas</label><input type="number" id="nt-hrs" value="2" min="1" max="100"></div>
           <div class="fg"><label class="lbl">Prazo</label><input type="date" id="nt-deadline"></div>
         </div>
-        <!-- NOVO: colaboração -->
         <div style="background:rgba(99,210,255,.04);border:1px solid rgba(99,210,255,.15);border-radius:var(--r);padding:14px;margin-bottom:14px">
           <div style="font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">👥 Configurações Colaborativas</div>
           <div class="frow" style="align-items:flex-end">
@@ -745,8 +773,8 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
       <div id="emailcfg-content"></div>
     </div>
 
-  </div><!-- /main -->
-</div><!-- /dash-screen -->
+  </div>
+</div>
 
 <!-- ══ MODALS ══ -->
 
@@ -773,14 +801,51 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
     </div>
     <div class="fg"><label class="lbl">E-mail</label><input type="email" id="mu-email" placeholder="para notificações"></div>
     <div class="frow" id="mu-admin-fields">
-      <div class="fg"><label class="lbl">Equipe</label><select id="mu-team"><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option><option value="geral">Geral (ambas)</option><option value="marketing">Marketing</option><option value="gestao">Gestão</option><option value="adm">ADM</option></select></div>
-      <div class="fg"><label class="lbl">Cargo</label><input type="text" id="mu-role"></div>
+      <!-- ALTERADO: Cargo agora tem as novas opções -->
+      <div class="fg"><label class="lbl">Cargo / Área</label><select id="mu-team">
+        <option value="programacao">Programação</option>
+        <option value="eletronica">Eletrônica</option>
+        <option value="estrutura">Estrutura</option>
+        <option value="marketing">Marketing</option>
+        <option value="gestao">Gestão</option>
+        <option value="adm">ADM</option>
+      </select></div>
+      <div class="fg"><label class="lbl">Título do Cargo</label><input type="text" id="mu-role" placeholder="Ex: Desenvolvedor, Técnico..."></div>
     </div>
     <label class="chk" id="mu-admin-chk"><input type="checkbox" id="mu-isadmin"> Conceder acesso de Administrador</label>
     <div class="modal-ft">
       <button class="btn btn-red btn-sm" id="mu-del-btn" onclick="deleteUser()" style="display:none;margin-right:auto">Excluir</button>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-user')">Cancelar</button>
       <button class="btn btn-green btn-sm" onclick="saveUser()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR TAREFA (ADM) -->
+<div id="modal-edit-task" class="modal-ov">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-hd"><div class="modal-title">✏️ Editar Tarefa</div><div class="modal-x" onclick="closeModal('modal-edit-task')">✕</div></div>
+    <input type="hidden" id="et-id">
+    <div class="fg"><label class="lbl">Título</label><input type="text" id="et-title"></div>
+    <div class="fg"><label class="lbl">Descrição</label><textarea id="et-desc"></textarea></div>
+    <div class="frow">
+      <div class="fg"><label class="lbl">Equipe</label><select id="et-team"><option value="both">Ambas</option><option value="eletroquad">EletroQuad</option><option value="robotica">Robótica</option></select></div>
+      <div class="fg"><label class="lbl">Dificuldade</label><select id="et-diff"><option value="easy">Fácil</option><option value="medium">Médio</option><option value="hard">Difícil</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="lbl">Pontos</label><input type="number" id="et-pts" min="5" max="500"></div>
+      <div class="fg"><label class="lbl">Horas</label><input type="number" id="et-hrs" min="1" max="100"></div>
+      <div class="fg"><label class="lbl">Prazo</label><input type="date" id="et-deadline"></div>
+    </div>
+    <div class="fg"><label class="lbl">Status</label><select id="et-status">
+      <option value="available">Disponível</option>
+      <option value="claimed">Em andamento</option>
+      <option value="done">Concluída</option>
+    </select></div>
+    <div class="modal-ft">
+      <button class="btn btn-red btn-sm" style="margin-right:auto" onclick="confirmDeleteTask(el('et-id').value)">🗑 Excluir Tarefa</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-edit-task')">Cancelar</button>
+      <button class="btn btn-green btn-sm" onclick="saveEditTask()">Salvar</button>
     </div>
   </div>
 </div>
@@ -834,7 +899,6 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
   </div>
 </div>
 
-<!-- MODAL CALENDARIO — agora com campo de alerta -->
 <div id="modal-cal" class="modal-ov">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">📅 Novo Evento</div><div class="modal-x" onclick="closeModal('modal-cal')">✕</div></div>
@@ -845,7 +909,6 @@ body.light .chat-ta{background:var(--bg3);color:var(--text)}
       <div class="fg"><label class="lbl">Tipo</label><select id="cal-type"><option value="reuniao">Reunião</option><option value="entrega">Entrega/Prazo</option><option value="evento">Evento</option><option value="outro">Outro</option></select></div>
     </div>
     <div class="fg"><label class="lbl">Descrição</label><input type="text" id="cal-desc" placeholder="Opcional..."></div>
-    <!-- NOVO: configuração de alerta -->
     <div style="background:rgba(255,209,102,.05);border:1px solid rgba(255,209,102,.2);border-radius:var(--r);padding:13px;margin-bottom:14px">
       <div style="font-size:10px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">⏰ Alerta Antecipado</div>
       <div class="frow" style="align-items:flex-end">
@@ -983,18 +1046,19 @@ function fmtLastSeen(uid) {
 // ══════════════════════════════════════════════════════
 // DADOS INICIAIS
 // ══════════════════════════════════════════════════════
+// CARGOS: programacao | eletronica | estrutura | marketing | gestao | adm
 const INIT_MEMBERS = [
   {id:'m1',username:'Pedro Henrique',password:'123',name:'Pedro Henrique',email:'d202410484@uftm.edu.br',team:'adm',role:'Coordenador ADM',isAdmin:true,avatar:'PH',color:'#1a8fff',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Gestão','Eng. Mecânica'],pts:0,hours:0},
   {id:'m2',username:'Laura Capanema',password:'123',name:'Laura Capanema',email:'d202510615@uftm.edu.br',team:'adm',role:'Coordenadora ADM',isAdmin:true,avatar:'LC',color:'#00c984',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Gestão','Projetos'],pts:0,hours:0},
-  {id:'m3',username:'Júlia Origuela',password:'123',name:'Júlia Origuela',email:'',team:'eletroquad',role:'Administradora',isAdmin:true,avatar:'JO',color:'#5b8cff',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Liderança','Mecânica'],pts:0,hours:0},
-  {id:'m4',username:'Wanessa Karoline',password:'123',name:'Wanessa Karoline',email:'',team:'robotica',role:'Administradora',isAdmin:true,avatar:'WK',color:'#00e5a0',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Liderança','Programação'],pts:0,hours:0},
-  {id:'m5',username:'Carlos Gabriel',password:'123',name:'Carlos Gabriel',email:'',team:'eletroquad',role:'Membro EletroQuad',isAdmin:false,avatar:'CG',color:'#00b4d8',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Eletrônica'],pts:0,hours:0},
-  {id:'m6',username:'João Paulo',password:'123',name:'João Paulo',email:'',team:'eletroquad',role:'Membro EletroQuad',isAdmin:false,avatar:'JP',color:'#48cae4',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Hardware'],pts:0,hours:0},
-  {id:'m7',username:'João Maerbal',password:'123',name:'João Maerbal',email:'',team:'eletroquad',role:'Membro EletroQuad',isAdmin:false,avatar:'JM',color:'#1a8fff',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Autonomia'],pts:0,hours:0},
-  {id:'m8',username:'Murilo Tristão',password:'123',name:'Murilo Tristão',email:'',team:'robotica',role:'Membro Robótica',isAdmin:false,avatar:'MT',color:'#38cf7f',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Mecânica','CAD'],pts:0,hours:0},
-  {id:'m9',username:'Felipe (Braia)',password:'123',name:'Felipe (Braia)',email:'',team:'robotica',role:'Membro Robótica',isAdmin:false,avatar:'FB',color:'#0fbf70',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['ROS2','Linux'],pts:0,hours:0},
-  {id:'m10',username:'Júlia Vitalino',password:'123',name:'Júlia Vitalino',email:'',team:'robotica',role:'Membro Robótica',isAdmin:false,avatar:'JV',color:'#00e5a0',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Visão Computacional'],pts:0,hours:0},
-  {id:'m11',username:'Eloiza Lopes',password:'123',name:'Eloiza Lopes',email:'',team:'robotica',role:'Membro Robótica',isAdmin:false,avatar:'EL',color:'#00c984',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Controle','Programação'],pts:0,hours:0},
+  {id:'m3',username:'Júlia Origuela',password:'123',name:'Júlia Origuela',email:'',team:'gestao',role:'Gestão',isAdmin:true,avatar:'JO',color:'#5b8cff',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Liderança','Mecânica'],pts:0,hours:0},
+  {id:'m4',username:'Wanessa Karoline',password:'123',name:'Wanessa Karoline',email:'',team:'gestao',role:'Gestão',isAdmin:true,avatar:'WK',color:'#00e5a0',metrics:{presenca:100,tarefas:100,qualidade:100,pontualidade:100,colaboracao:100},skills:['Liderança','Programação'],pts:0,hours:0},
+  {id:'m5',username:'Carlos Gabriel',password:'123',name:'Carlos Gabriel',email:'',team:'eletronica',role:'Eletrônica',isAdmin:false,avatar:'CG',color:'#00b4d8',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Eletrônica'],pts:0,hours:0},
+  {id:'m6',username:'João Paulo',password:'123',name:'João Paulo',email:'',team:'eletronica',role:'Eletrônica',isAdmin:false,avatar:'JP',color:'#48cae4',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Hardware'],pts:0,hours:0},
+  {id:'m7',username:'João Maerbal',password:'123',name:'João Maerbal',email:'',team:'programacao',role:'Programação',isAdmin:false,avatar:'JM',color:'#1a8fff',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Autonomia'],pts:0,hours:0},
+  {id:'m8',username:'Murilo Tristão',password:'123',name:'Murilo Tristão',email:'',team:'estrutura',role:'Estrutura',isAdmin:false,avatar:'MT',color:'#38cf7f',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Mecânica','CAD'],pts:0,hours:0},
+  {id:'m9',username:'Felipe (Braia)',password:'123',name:'Felipe (Braia)',email:'',team:'programacao',role:'Programação',isAdmin:false,avatar:'FB',color:'#0fbf70',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['ROS2','Linux'],pts:0,hours:0},
+  {id:'m10',username:'Júlia Vitalino',password:'123',name:'Júlia Vitalino',email:'',team:'programacao',role:'Programação',isAdmin:false,avatar:'JV',color:'#00e5a0',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Visão Computacional'],pts:0,hours:0},
+  {id:'m11',username:'Eloiza Lopes',password:'123',name:'Eloiza Lopes',email:'',team:'estrutura',role:'Estrutura',isAdmin:false,avatar:'EL',color:'#00c984',metrics:{presenca:85,tarefas:85,qualidade:85,pontualidade:85,colaboracao:85},skills:['Controle','Programação'],pts:0,hours:0},
 ];
 const INIT_TASKS = [
   {id:'t1',title:'Explorar o Portal v8',desc:'Teste todas as funcionalidades do portal.',team:'both',diff:'easy',pts:50,hours:2,deadline:'2026-04-30',status:'available',claimedBy:null,claimedByList:[],maxClaim:99,submittedBy:[]}
@@ -1008,7 +1072,7 @@ let M=[], T=[], S=[], R=[], MP={}, ATT=[], NOT=[], CAL=[], ECFG={serviceId:'',te
 let taskFilter='all', rankFilter='all', memberFilter='all';
 let pendingTaskId=null, editSkillsUid=null, tempSkills=[];
 let calY=new Date().getFullYear(), calMo=new Date().getMonth();
-let dismissedAlerts = new Set(); // IDs de alertas dispensados nesta sessão
+let dismissedAlerts = new Set();
 
 // ══════════════════════════════════════════════════════
 // FIREBASE SYNC
@@ -1017,7 +1081,7 @@ DB.on('value', snap => {
   const d = snap.val();
   if (d && d.members) {
     M    = d.members.map(m=>({...m, hours:m.hours||0, email:m.email||'', claimedByList:m.claimedByList||[], maxClaim:m.maxClaim||1}));
-    T    = (d.tasks||[]).map(t=>({...t, claimedByList:t.claimedByList||[], maxClaim:t.maxClaim||1}));
+    T    = (d.tasks||[]).map(t=>({...t, claimedByList:t.claimedByList||[], maxClaim:t.maxClaim||1, submittedBy:t.submittedBy||[]}));
     S    = d.submissions||[];
     R    = d.rewards||[];
     MP   = d.memberPoints||{};
@@ -1039,14 +1103,11 @@ DB.on('value', snap => {
     if (!u) { doLogout(); return; }
     CU.name=u.name; CU.isAdmin=u.isAdmin;
     el('sb-name').textContent=CU.name;
-    el('sb-role').textContent=CU.isAdmin?'Administrador':(u.team==='eletroquad'?'EletroQuad':'Robótica');
+    el('sb-role').textContent=CU.isAdmin?'Administrador':cargoLabel(u.team);
     el('nav-admin-sec').style.display=CU.isAdmin?'block':'none';
     updateBadges();
     renderCurrentPage();
   }
-}, err => {
-  console.warn('Firebase error:', err.code);
-  if (!M.length) { M=JSON.parse(JSON.stringify(INIT_MEMBERS)); T=JSON.parse(JSON.stringify(INIT_TASKS)); M.forEach(m=>{MP[m.id]=m.pts;}); }
 });
 
 function save() {
@@ -1069,7 +1130,6 @@ const avImg = (name, color, size=34, isOnline=false) => {
   </div>`;
 };
 const fmtDate = d => { if(!d)return''; const [y,mo,day]=d.split('-'); const ms=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']; return `${day} ${ms[parseInt(mo)-1]} ${y}`; };
-const fmtTime = ts => { try{ return new Date(ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }catch(e){return'';} };
 const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 const dateAddDays = (dateStr, days) => {
   const d = new Date(dateStr + 'T12:00:00');
@@ -1077,6 +1137,37 @@ const dateAddDays = (dateStr, days) => {
   return d.toISOString().split('T')[0];
 };
 const todayStr = () => new Date().toISOString().split('T')[0];
+
+// ── CARGO HELPERS (novo sistema) ──
+const CARGO_MAP = {
+  programacao: { label:'Programação', color:'#63d2ff', tagClass:'tag-prog' },
+  eletronica:  { label:'Eletrônica',  color:'#ffb347', tagClass:'tag-elet' },
+  estrutura:   { label:'Estrutura',   color:'#00e5a0', tagClass:'tag-estru' },
+  marketing:   { label:'Marketing',   color:'#a855f7', tagClass:'tag-mkt' },
+  gestao:      { label:'Gestão',      color:'#ef4444', tagClass:'tag-gestao' },
+  adm:         { label:'ADM',         color:'#ffd166', tagClass:'tag-adm' },
+  // legacy (compatibilidade com registros antigos)
+  eletroquad:  { label:'EletroQuad',  color:'#00e5a0', tagClass:'tag-estru' },
+  robotica:    { label:'Robótica',    color:'#1a8fff', tagClass:'tag-prog' },
+  geral:       { label:'Geral',       color:'#e2e8f0', tagClass:'tag-estru' },
+};
+function cargoLabel(team) { return (CARGO_MAP[team]||{label:team}).label; }
+function cargoColor(team) { return (CARGO_MAP[team]||{color:'#5a6a80'}).color; }
+function cargoTagClass(team) { return (CARGO_MAP[team]||{tagClass:''}).tagClass; }
+function cargoTag(team) {
+  const c = CARGO_MAP[team]||{label:team,tagClass:''};
+  return `<span class="tag ${c.tagClass}">${c.label}</span>`;
+}
+
+// ── DEADLINE HELPER ──
+function deadlineBadge(deadline) {
+  if (!deadline) return '';
+  const today = todayStr();
+  const diff = Math.ceil((new Date(deadline+'T12:00:00') - new Date(today+'T12:00:00')) / 86400000);
+  if (diff < 0) return `<span class="deadline-badge deadline-overdue">📅 Atrasada ${Math.abs(diff)}d</span>`;
+  if (diff <= 3) return `<span class="deadline-badge deadline-soon">📅 ${diff === 0 ? 'Hoje!' : diff + 'd restantes'}</span>`;
+  return `<span class="deadline-badge deadline-ok">📅 ${fmtDate(deadline)}</span>`;
+}
 
 function toast(msg, type='ok') {
   const t=document.createElement('div');
@@ -1092,33 +1183,19 @@ document.querySelectorAll('.modal-ov').forEach(o=>o.addEventListener('click',e=>
 // ══════════════════════════════════════════════════════
 // SISTEMA DE ALERTAS DE EVENTOS
 // ══════════════════════════════════════════════════════
-/**
- * Retorna eventos que devem gerar alertas hoje (N dias antes do evento).
- * alertDays: quantos dias antes avisar (configurável por evento)
- */
 function getAlertEvents() {
   const today = todayStr();
   return CAL.filter(ev => {
     if (!ev.alertDays || ev.alertDays === 0) return false;
-    const alertDate = dateAddDays(ev.date, -ev.alertDays); // data em que o alerta deve aparecer
+    const alertDate = dateAddDays(ev.date, -ev.alertDays);
     return alertDate === today && ev.date > today;
   });
 }
 
-/**
- * Verifica alertas e exibe banners + dispara e-mails se configurado.
- * Chamado no login e ao renderizar Calendar/Home.
- */
 function checkAndFireAlerts() {
   const alerts = getAlertEvents().filter(ev => !dismissedAlerts.has(ev.id));
   if (!alerts.length) return;
-
-  // Exibe toast de alerta
-  alerts.forEach(ev => {
-    toast(`⏰ Amanhã: "${ev.title}"`, 'warn');
-  });
-
-  // Dispara e-mails para todos (se configurado)
+  alerts.forEach(ev => { toast(`⏰ Amanhã: "${ev.title}"`, 'warn'); });
   if (ECFG.configured) {
     alerts.forEach(ev => {
       const targets = M.filter(m => {
@@ -1129,12 +1206,10 @@ function checkAndFireAlerts() {
       targets.forEach(m => {
         const daysLabel = ev.alertDays === 1 ? 'amanhã' : `em ${ev.alertDays} dias`;
         emailjs.send(ECFG.serviceId, ECFG.templateId, {
-          to_email: m.email,
-          to_name: m.name.split(' ')[0],
+          to_email: m.email, to_name: m.name.split(' ')[0],
           notice_title: `⏰ Lembrete: "${ev.title}" — ${daysLabel}`,
-          notice_body: `Este é um lembrete automático do Portal Gaia.\n\n📅 Evento: ${ev.title}\n🗓 Data: ${fmtDate(ev.date)}${ev.time ? ' às ' + ev.time : ''}\n${ev.desc ? '\n📝 ' + ev.desc : ''}`,
-          notice_type: 'ALERTA DE EVENTO',
-          portal_name: 'Portal Gaia · UFTM'
+          notice_body: `Lembrete automático do Portal Gaia.\n\n📅 Evento: ${ev.title}\n🗓 Data: ${fmtDate(ev.date)}${ev.time ? ' às ' + ev.time : ''}\n${ev.desc ? '\n📝 ' + ev.desc : ''}`,
+          notice_type: 'ALERTA DE EVENTO', portal_name: 'Portal Gaia · UFTM'
         }, ECFG.publicKey).catch(() => {});
       });
     });
@@ -1142,22 +1217,17 @@ function checkAndFireAlerts() {
 }
 
 function renderAlertBanners(containerId) {
-  const c = el(containerId);
-  if (!c) return;
+  const c = el(containerId); if (!c) return;
   const today = todayStr();
-  // Alertas: eventos de hoje (mesmo dia) + eventos cujo alertDate é hoje
   const alertsToday = CAL.filter(ev => {
     if (dismissedAlerts.has(ev.id + '_banner')) return false;
     if (!ev.alertDays || ev.alertDays === 0) return false;
-    const alertDate = dateAddDays(ev.date, -ev.alertDays);
-    return alertDate === today;
+    return dateAddDays(ev.date, -ev.alertDays) === today;
   });
-  // Também mostrar eventos que acontecem HOJE
   const eventsToday = CAL.filter(ev => {
     if (dismissedAlerts.has(ev.id + '_today')) return false;
     return ev.date === today;
   });
-
   let h = '';
   alertsToday.forEach(ev => {
     const daysLabel = ev.alertDays === 1 ? 'amanhã' : `em ${ev.alertDays} dias`;
@@ -1189,7 +1259,6 @@ function dismissBanner(key, elemId) {
   if (e) { e.style.opacity='0'; e.style.transition='opacity .2s'; setTimeout(()=>e.remove(), 200); }
 }
 
-// Badge no calendário
 function countAlertsBadge() {
   const today = todayStr();
   return CAL.filter(ev => {
@@ -1216,13 +1285,12 @@ function doLogin() {
   el('login-screen').classList.remove('on');
   el('dash-screen').classList.add('on');
   el('sb-name').textContent = CU.name;
-  el('sb-role').textContent = CU.isAdmin ? 'Administrador' : (mem.team === 'eletroquad' ? 'EletroQuad' : 'Robótica');
+  el('sb-role').textContent = CU.isAdmin ? 'Administrador' : cargoLabel(mem.team);
   el('sb-av').innerHTML = avImg(mem.name, mem.color, 30);
   el('nav-admin-sec').style.display = CU.isAdmin ? 'block' : 'none';
   setOnline(CU.id);
   el('sb-online-dot').style.display = 'block';
   updateBadges();
-  // Verificar alertas ao logar
   setTimeout(() => checkAndFireAlerts(), 1000);
   goPage('home', el('nav-home'));
   toast(`Bem-vindo(a), ${mem.name.split(' ')[0]}!`);
@@ -1268,11 +1336,8 @@ function renderPage(page) {
 function updateBadges() {
   try {
     const avail = T.filter(t=>{
-      // Disponível: não concluída e ainda tem vagas
       if(t.status==='done') return false;
-      const claimed = (t.claimedByList||[]).length;
-      const max = t.maxClaim||1;
-      return claimed < max;
+      return (t.claimedByList||[]).length < (t.maxClaim||1);
     }).length;
     const tb = el('bdg-tasks'); if(tb) tb.textContent = avail;
     const psubs = S.filter(s=>s.status==='pending').length;
@@ -1290,44 +1355,54 @@ function updateBadges() {
 // HOME
 // ══════════════════════════════════════════════════════
 function renderHome() {
-  // Alert banners on home
   renderAlertBanners('home-alert-banner');
-
   const allPts=M.reduce((s,m)=>s+(MP[m.id]||m.pts),0);
   const done=T.filter(t=>t.status==='done').length;
   const totalH=M.reduce((s,m)=>s+(m.hours||0),0);
   el('home-stats').innerHTML=`
-    <div class="card card-sm"><div class="cl">Membros</div><div class="cv cv-sm">${M.length}</div><div style="font-size:11px;color:var(--dim)">EQ + Robótica</div></div>
+    <div class="card card-sm"><div class="cl">Membros</div><div class="cv cv-sm">${M.length}</div></div>
     <div class="card card-sm"><div class="cl">Pontos Totais</div><div class="cv cv-sm" style="color:var(--accent)">${allPts}</div></div>
     <div class="card card-sm"><div class="cl">Tarefas Concluídas</div><div class="cv cv-sm" style="color:var(--green)">${done}</div><div style="font-size:11px;color:var(--dim)">de ${T.length}</div></div>
     <div class="card card-sm"><div class="cl">Horas Certificado</div><div class="cv cv-sm" style="color:#bb86fc">${totalH}h</div></div>`;
 
-  const TEAMS=[
-    {key:'eletroquad',label:'🚁 EletroQuad',color:'#00e5a0'},
-    {key:'robotica',  label:'🤖 Robótica',  color:'#1a8fff'},
-    {key:'geral',     label:'⚡ Ambas',      color:'#e2e8f0'},
-    {key:'marketing', label:'📣 Marketing',  color:'#a855f7'},
-    {key:'gestao',    label:'📋 Gestão',     color:'#ef4444'},
-    {key:'adm',       label:'👑 ADM',        color:'#ffd166'},
-  ];
-  function getStripeColor(m){ if(m.isAdmin||m.team==='adm')return'#ffd166'; const t=TEAMS.find(t=>t.key===m.team); return t?t.color:'#5a6a80'; }
-  function memberRow(m){
+  // Agrupamento por cargo
+  const CARGO_ORDER = ['adm','gestao','programacao','eletronica','estrutura','marketing'];
+  const CARGO_LABELS = {
+    adm:'👑 ADM', gestao:'📋 Gestão', programacao:'💻 Programação',
+    eletronica:'⚡ Eletrônica', estrutura:'🔩 Estrutura', marketing:'📣 Marketing'
+  };
+
+  function memberRow(m) {
+    const color = cargoColor(m.team);
     return `<div class="rank-row" onclick="openMemberModal('${m.id}')" style="padding-left:10px;margin-bottom:7px">
-      <div style="width:4px;border-radius:4px;align-self:stretch;min-height:36px;background:${getStripeColor(m)};flex-shrink:0"></div>
+      <div style="width:4px;border-radius:4px;align-self:stretch;min-height:36px;background:${color};flex-shrink:0"></div>
       <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
       <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role}</div></div>
       <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent)">${MP[m.id]||m.pts} pts</div><div style="font-size:10px;color:var(--muted)">⏱ ${m.hours||0}h</div></div>
     </div>`;
   }
+
   const colsEl=el('team-columns');
-  if(colsEl){ colsEl.innerHTML=TEAMS.map(team=>{ const members=M.filter(m=>m.team===team.key); if(!members.length)return''; const admins=members.filter(m=>m.isAdmin); const rest=members.filter(m=>!m.isAdmin); return `<div style="flex:1;min-width:200px"><div class="sec-hd"><div class="sec-title" style="color:${team.color}">${team.label}</div></div>${[...admins,...rest].map(memberRow).join('')}</div>`; }).join(''); }
+  if(colsEl){
+    colsEl.innerHTML = CARGO_ORDER.map(cargoKey => {
+      const members = M.filter(m => m.team === cargoKey);
+      if (!members.length) return '';
+      const admins = members.filter(m=>m.isAdmin);
+      const rest = members.filter(m=>!m.isAdmin);
+      const label = CARGO_LABELS[cargoKey] || cargoKey;
+      const color = cargoColor(cargoKey);
+      return `<div style="flex:1;min-width:200px">
+        <div class="sec-hd"><div class="sec-title" style="color:${color}">${label}</div></div>
+        ${[...admins,...rest].map(memberRow).join('')}
+      </div>`;
+    }).join('');
+  }
 
   const acts=[];
   [...S].reverse().slice(0,3).filter(s=>s.status==='approved').forEach(s=>acts.push({i:'✅',t:`<b>${s.memberName}</b> concluiu "${s.taskTitle}"`,d:fmtDate(s.date)}));
-  [...T].filter(t=>t.status==='claimed').forEach(t=>{ const list=t.claimedByList||[]; list.slice(0,2).forEach(uid=>{const mem=M.find(m=>m.id===uid);if(mem)acts.push({i:'⚡',t:`<b>${mem.name}</b> assumiu "${t.title}"`,d:''});}); });
+  [...T].filter(t=>t.status==='claimed').forEach(t=>{ (t.claimedByList||[]).slice(0,2).forEach(uid=>{const mem=M.find(m=>m.id===uid);if(mem)acts.push({i:'⚡',t:`<b>${mem.name}</b> assumiu "${t.title}"`,d:''});}); });
   [...NOT].reverse().slice(0,2).forEach(n=>acts.push({i:'📢',t:`<b>Aviso:</b> ${n.title}`,d:fmtDate(n.date)}));
-  const alertEvs = getAlertEvents();
-  alertEvs.forEach(ev=>acts.unshift({i:'⏰',t:`<b>Lembrete:</b> "${ev.title}" ${ev.alertDays===1?'amanhã':'em breve'}`,d:fmtDate(ev.date)}));
+  getAlertEvents().forEach(ev=>acts.unshift({i:'⏰',t:`<b>Lembrete:</b> "${ev.title}" ${ev.alertDays===1?'amanhã':'em breve'}`,d:fmtDate(ev.date)}));
   if(M.length>0)acts.push({i:'👥',t:`Equipe com <b>${M.length} membros</b> ativos`,d:'hoje'});
   const finalActs=acts.slice(0,6);
   if(!finalActs.length)finalActs.push({i:'🌟',t:'<b>Portal Gaia online!</b> Assuma tarefas e comece a pontuar.',d:'agora'});
@@ -1374,7 +1449,7 @@ function publishNotice() {
 function deleteNotice(id){ if(!confirm('Excluir aviso?'))return; NOT=NOT.filter(n=>n.id!==id); save(); toast('Excluído.'); }
 
 // ══════════════════════════════════════════════════════
-// CALENDAR — com alertas
+// CALENDAR
 // ══════════════════════════════════════════════════════
 function renderCalendar() {
   el('cal-btn').innerHTML=CU.isAdmin?`<button class="btn btn-blue btn-sm" onclick="openModal('modal-cal')">+ Evento</button>`:'';
@@ -1394,7 +1469,6 @@ function renderCalGrid() {
   for(let d=1;d<=dim;d++){
     const ds=`${calY}-${String(calMo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const evs=CAL.filter(e=>e.date===ds);
-    // Alertas que caem neste dia
     const alertsOnDay=CAL.filter(ev=>{ if(!ev.alertDays)return false; return dateAddDays(ev.date,-ev.alertDays)===ds; });
     let evH=evs.slice(0,2).map(e=>`<div class="cal-ev ev-${e.type}">● ${e.title}${e.time?' '+e.time:''}</div>`).join('');
     if(alertsOnDay.length) evH+=alertsOnDay.map(ev=>`<div class="cal-ev ev-alerta">⏰ ${ev.title}</div>`).join('');
@@ -1415,7 +1489,7 @@ function renderUpcoming() {
   el('upcoming-events').innerHTML=list.length?list.map(e=>{
     const isToday = e.date === today;
     const alertLabel = e.alertDays ? `<span style="font-size:10px;color:var(--gold);margin-left:6px">⏰ alerta ${e.alertDays}d antes</span>` : '';
-    return `<div style="display:flex;align-items:center;gap:13px;padding:13px;background:var(--bg2);border:1px solid ${isToday?'rgba(26,143,255,.3)':' var(--border)'};border-radius:var(--r);margin-bottom:7px${isToday?';background:rgba(26,143,255,.04)':''}">
+    return `<div style="display:flex;align-items:center;gap:13px;padding:13px;background:var(--bg2);border:1px solid ${isToday?'rgba(26,143,255,.3)':'var(--border)'};border-radius:var(--r);margin-bottom:7px${isToday?';background:rgba(26,143,255,.04)':''}">
       <div style="width:3px;height:38px;border-radius:3px;background:${colors[e.type]||'var(--dim)'};flex-shrink:0"></div>
       <div style="text-align:center;min-width:36px"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:${isToday?'var(--blue)':colors[e.type]}">${e.date.split('-')[2]}</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase">${['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'][parseInt(e.date.split('-')[1])-1]}</div></div>
       <div style="flex:1">
@@ -1429,83 +1503,111 @@ function renderUpcoming() {
     </div>`;
   }).join(''):`<div class="empty"><div class="empty-ico">📅</div>Nenhum evento futuro.</div>`;
 }
-
 function saveCalEvent() {
-  const title=el('cal-title').value.trim(), date=el('cal-date').value, desc=el('cal-desc').value.trim();
+  const title=el('cal-title').value.trim(), date=el('cal-date').value;
+  if(!title||!date){toast('Preencha título e data','err');return;}
   const time=el('cal-time')?el('cal-time').value:'';
   const alertDays=parseInt(el('cal-alert-days').value)||0;
   const alertTeam=el('cal-alert-team').value;
-  if(!title||!date){toast('Preencha título e data','err');return;}
+  const desc=el('cal-desc').value.trim();
   const ev={id:'e'+Date.now(),title,date,time,type:el('cal-type').value,desc,createdBy:CU.name,alertDays,alertTeam};
-  // E-mail ao criar evento (notificação imediata)
   if(el('cal-email').checked&&ECFG.configured){
-    const timeStr=time?` às ${time}`:'';
-    const dateStr=`${fmtDate(date)}${timeStr}`;
-    const alertInfo = alertDays > 0 ? `\n\n⏰ Um lembrete automático será enviado ${alertDays} dia(s) antes.` : '';
-    M.filter(m=>m.email&&m.email.trim()!==''&&(!alertTeam||alertTeam==='all'||m.team===alertTeam)).forEach(m=>{
-      emailjs.send(ECFG.serviceId,ECFG.templateId,{
-        to_email:m.email, to_name:m.name.split(' ')[0],
-        notice_title:`📅 ${title} — ${dateStr}`,
-        notice_body:`${desc||'Novo evento agendado.'}${alertInfo}`,
-        notice_type:'CALENDÁRIO', portal_name:'Portal Gaia · UFTM'
-      },ECFG.publicKey).catch(()=>{});
+    M.filter(m=>m.email&&m.email.trim()&&(!alertTeam||alertTeam==='all'||m.team===alertTeam)).forEach(m=>{
+      emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],
+        notice_title:`📅 ${title}`,notice_body:`${desc||'Novo evento agendado.'}${alertDays?`\n\n⏰ Lembrete ${alertDays}d antes.`:''}`,
+        notice_type:'CALENDÁRIO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
     });
   }
   CAL.push(ev);
   ['cal-title','cal-desc'].forEach(i=>el(i).value='');
   if(el('cal-time'))el('cal-time').value='';
-  closeModal('modal-cal'); save(); toast(`Evento adicionado!${alertDays?` Alerta em ${alertDays}d antes.`:''}`);
+  closeModal('modal-cal'); save(); toast(`Evento adicionado!`);
 }
 function deleteCalEvent(id){ if(!confirm('Remover evento?'))return; CAL=CAL.filter(e=>e.id!==id); save(); }
 
 // ══════════════════════════════════════════════════════
-// TASKS — COLABORATIVAS
+// TASKS — com exclusão e edição para ADM
 // ══════════════════════════════════════════════════════
 function isTaskAvailableForMe(t) {
   if (t.status === 'done') return false;
   const list = t.claimedByList || [];
   const max = t.maxClaim || 1;
-  const alreadyMine = list.includes(CU.id);
-  const hasSpace = list.length < max;
-  return !alreadyMine && hasSpace;
+  return !list.includes(CU.id) && list.length < max;
 }
 
 function filterTasks(f, tabEl) {
-  taskFilter=f;
-  if(tabEl){document.querySelectorAll('#pg-tasks .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  const mem=M.find(m=>m.id===CU.id);
-  let list=[...T].filter(t=>mem?t.team===mem.team||t.team==='both':true);
-  if(f==='available') list=list.filter(t=>isTaskAvailableForMe(t));
-  else if(f==='claimed') list=list.filter(t=>(t.claimedByList||[]).includes(CU.id)&&t.status!=='done');
-  else if(f==='done') list=list.filter(t=>t.status==='done');
-  if(!list.length){el('tasks-list').innerHTML=`<div class="empty"><div class="empty-ico">📭</div>Nenhuma tarefa.</div>`;return;}
+  taskFilter = f;
+  if(tabEl){ document.querySelectorAll('#pg-tasks .tab').forEach(t=>t.classList.remove('on')); tabEl.classList.add('on'); }
 
-  el('tasks-list').innerHTML=list.map(t=>{
-    const teamTag=t.team==='both'?`<span class="tag tag-both">Ambas</span>`:t.team==='eletroquad'?`<span class="tag tag-eq">EletroQuad</span>`:`<span class="tag tag-rob">Robótica</span>`;
-    const diffTag={easy:`<span class="tag tag-easy">Fácil</span>`,medium:`<span class="tag tag-med">Médio</span>`,hard:`<span class="tag tag-hard">Difícil</span>`}[t.diff];
+  // Botão de atalho para nova tarefa (ADM)
+  const adminBtn = el('tasks-admin-btn');
+  if (adminBtn) adminBtn.innerHTML = CU && CU.isAdmin ? `<button class="btn btn-blue btn-sm" onclick="goPage('newtask',el('nav-newtask'))">+ Nova Tarefa</button>` : '';
+
+  const mem = M.find(m=>m.id===CU.id);
+  const today = todayStr();
+  let list = [...T].filter(t => mem ? t.team===mem.team||t.team==='both' : true);
+
+  if (f === 'available') list = list.filter(t => isTaskAvailableForMe(t));
+  else if (f === 'claimed') list = list.filter(t => (t.claimedByList||[]).includes(CU.id) && t.status !== 'done');
+  else if (f === 'done') list = list.filter(t => t.status === 'done');
+  else if (f === 'overdue') list = list.filter(t => t.deadline && t.deadline < today && t.status !== 'done');
+
+  if (!list.length) {
+    el('tasks-list').innerHTML = `<div class="empty"><div class="empty-ico">${f==='overdue'?'✅':'📭'}</div>${f==='overdue'?'Nenhuma tarefa atrasada. Ótimo!':'Nenhuma tarefa.'}</div>`;
+    return;
+  }
+
+  // Ordena: atrasadas primeiro, depois por prazo
+  list.sort((a,b)=>{
+    const aOver = a.deadline && a.deadline < today && a.status !== 'done';
+    const bOver = b.deadline && b.deadline < today && b.status !== 'done';
+    if (aOver && !bOver) return -1;
+    if (!aOver && bOver) return 1;
+    return (a.deadline||'9999') < (b.deadline||'9999') ? -1 : 1;
+  });
+
+  el('tasks-list').innerHTML = list.map(t => {
+    const teamTag = t.team==='both'
+      ? `<span class="tag tag-both">Ambas</span>`
+      : t.team==='eletroquad'
+      ? `<span class="tag tag-eq">EletroQuad</span>`
+      : `<span class="tag tag-rob">Robótica</span>`;
+    const diffTag = {easy:`<span class="tag tag-easy">Fácil</span>`,medium:`<span class="tag tag-med">Médio</span>`,hard:`<span class="tag tag-hard">Difícil</span>`}[t.diff] || '';
     const claimedList = t.claimedByList || [];
     const max = t.maxClaim || 1;
     const isMine = claimedList.includes(CU.id);
     const isSubmit = (t.submittedBy||[]).includes(CU.id);
     const hasSpace = claimedList.length < max;
     const maxLabel = max >= 99 ? '∞' : max;
+    const isDone = t.status === 'done';
 
-    // Ação
-    let action = '';
-    if (t.status !== 'done') {
-      if (!isMine && hasSpace) action = `<button class="btn-claim" onclick="claimTask('${t.id}')">Assumir</button>`;
-      else if (isMine && !isSubmit) action = `<button class="btn-claim" onclick="openSubmit('${t.id}')">Entregar</button>`;
-      else if (isSubmit) action = `<button class="btn-claim claimed" disabled>Aguardando ⏳</button>`;
-      else if (!hasSpace) action = `<span class="tag" style="font-size:10px;color:var(--red);border-color:rgba(255,92,92,.2);background:rgba(255,92,92,.05)">Vagas encerradas</span>`;
-    }
-
-    // Vagas restantes
+    // Vagas
     const vagasLabel = max < 99
       ? `<span class="max-badge">${claimedList.length}/${maxLabel} membros</span>`
       : claimedList.length > 0
         ? `<span class="max-badge">${claimedList.length} membro(s)</span>` : '';
 
-    // Lista de quem assumiu
+    // Deadline badge
+    const dlBadge = t.deadline && !isDone ? deadlineBadge(t.deadline) : (isDone ? '' : '');
+
+    // Ação principal (membro)
+    let action = '';
+    if (!isDone) {
+      if (!isMine && hasSpace) action = `<button class="btn-claim" onclick="claimTask('${t.id}')">Assumir</button>`;
+      else if (isMine && !isSubmit) action = `<button class="btn-deliver" onclick="openSubmit('${t.id}')">📤 Entregar</button>`;
+      else if (isSubmit) action = `<button class="btn-claim claimed" disabled>Aguardando revisão ⏳</button>`;
+      else if (!hasSpace) action = `<span class="tag" style="color:var(--red);border-color:rgba(255,92,92,.2);background:rgba(255,92,92,.05)">Vagas encerradas</span>`;
+    } else {
+      action = `<span class="tag" style="color:var(--green);border-color:rgba(0,229,160,.2);background:rgba(0,229,160,.06)">✓ Concluída</span>`;
+    }
+
+    // Botões ADM
+    const adminBtns = CU.isAdmin ? `
+      <button class="task-edit-btn" onclick="openEditTask('${t.id}')">✏ Editar</button>
+      <button class="task-del-btn" onclick="confirmDeleteTask('${t.id}')">🗑 Excluir</button>
+    ` : '';
+
+    // Assignees
     let assigneesH = '';
     if (claimedList.length > 0) {
       const chips = claimedList.map(uid => {
@@ -1517,13 +1619,73 @@ function filterTasks(f, tabEl) {
       assigneesH = `<div class="assignees-row">${chips}</div>`;
     }
 
-    return `<div class="task-item">
-      <div class="task-title ${t.status==='done'?'done':''}">${t.title}</div>
+    return `<div class="task-item${isDone?' done-item':''}">
+      <div class="task-header">
+        <div class="task-title ${isDone?'done':''}">${t.title}</div>
+        ${adminBtns ? `<div style="display:flex;gap:5px;flex-shrink:0">${adminBtns}</div>` : ''}
+      </div>
       <div class="task-desc">${t.desc}</div>
-      <div class="task-meta">${teamTag}${diffTag}<span class="tag tag-pts">+${t.pts}pts</span><span class="tag tag-hrs">⏱${t.hours||0}h</span><span class="tag" style="background:rgba(255,255,255,.03);border-color:var(--border);color:var(--dim)">📅${fmtDate(t.deadline)}</span>${vagasLabel}${action}</div>
+      <div class="task-meta">
+        ${teamTag}${diffTag}
+        <span class="tag tag-pts">+${t.pts}pts</span>
+        <span class="tag tag-hrs">⏱${t.hours||0}h</span>
+        ${dlBadge}
+        ${vagasLabel}
+      </div>
+      <div class="task-actions">${action}</div>
       ${assigneesH}
     </div>`;
   }).join('');
+}
+
+// ── Excluir tarefa ──
+function confirmDeleteTask(id) {
+  const t = T.find(x=>x.id===id);
+  if (!t) return;
+  if (!confirm(`Excluir a tarefa "${t.title}"?\n\nEsta ação não pode ser desfeita.`)) return;
+  deleteTask(id);
+}
+function deleteTask(id) {
+  T = T.filter(t=>t.id!==id);
+  // Remove submissions relacionadas
+  S = S.filter(s=>s.taskId!==id);
+  closeModal('modal-edit-task');
+  save();
+  toast('Tarefa excluída.');
+}
+
+// ── Editar tarefa ──
+function openEditTask(id) {
+  const t = T.find(x=>x.id===id);
+  if (!t) return;
+  el('et-id').value = id;
+  el('et-title').value = t.title;
+  el('et-desc').value = t.desc || '';
+  el('et-team').value = t.team || 'both';
+  el('et-diff').value = t.diff || 'easy';
+  el('et-pts').value = t.pts || 50;
+  el('et-hrs').value = t.hours || 2;
+  el('et-deadline').value = t.deadline || '';
+  el('et-status').value = t.status || 'available';
+  openModal('modal-edit-task');
+}
+function saveEditTask() {
+  const id = el('et-id').value;
+  const t = T.find(x=>x.id===id);
+  if (!t) return;
+  const title = el('et-title').value.trim();
+  if (!title) { toast('Título obrigatório','err'); return; }
+  t.title = title;
+  t.desc = el('et-desc').value.trim();
+  t.team = el('et-team').value;
+  t.diff = el('et-diff').value;
+  t.pts = parseInt(el('et-pts').value)||50;
+  t.hours = parseInt(el('et-hrs').value)||2;
+  t.deadline = el('et-deadline').value;
+  t.status = el('et-status').value;
+  closeModal('modal-edit-task');
+  save();
+  toast('Tarefa atualizada!');
 }
 
 function claimTask(id) {
@@ -1533,7 +1695,7 @@ function claimTask(id) {
   if (t.claimedByList.includes(CU.id)) { toast('Você já assumiu esta tarefa', 'err'); return; }
   if (t.claimedByList.length >= max) { toast('Vagas encerradas para esta tarefa', 'err'); return; }
   t.claimedByList.push(CU.id);
-  if (!t.claimedBy) t.claimedBy = CU.id; // retrocompatibilidade
+  if (!t.claimedBy) t.claimedBy = CU.id;
   if (t.claimedByList.length > 0) t.status = 'claimed';
   save(); toast('Tarefa assumida! Boa sorte! 🚀');
 }
@@ -1552,14 +1714,13 @@ function submitTask() {
   if(!t.submittedBy)t.submittedBy=[];
   if(t.submittedBy.includes(CU.id)){toast('Você já entregou esta tarefa','err');return;}
   t.submittedBy.push(CU.id);
-  // Só marca como done quando TODOS que assumiram entregaram, ou se foi um individual
   const allDelivered = (t.claimedByList||[]).every(uid=>t.submittedBy.includes(uid));
   if(allDelivered || (t.maxClaim||1)===1) t.status='done';
   S.push({id:'s'+Date.now(),taskId:pendingTaskId,taskTitle:t.title,memberId:CU.id,memberName:CU.name,desc,link:el('submit-link').value,date:new Date().toISOString().split('T')[0],pts:t.pts,hours:t.hours||0,status:'pending'});
-  closeModal('modal-submit'); save(); toast('Entrega registrada!');
+  closeModal('modal-submit'); save(); toast('Entrega registrada! Aguarde a revisão do ADM.');
 }
 
-// ── NOVA TAREFA com colaboração ──
+// ── NOVA TAREFA ──
 let preassignOpen = false;
 function renderNewTask() {
   const grid = el('preassign-grid');
@@ -1584,7 +1745,6 @@ function togglePreassign() {
 function createTask() {
   const title=el('nt-title').value.trim(); if(!title){toast('Informe o título','err');return;}
   const maxClaim = parseInt(el('nt-maxclaim').value)||1;
-  // Pré-atribuídos
   const preassigned = M.filter(m=>el('pa-'+m.id)&&el('pa-'+m.id).checked).map(m=>m.id);
   const claimedByList = preassigned.slice(0, maxClaim===99?999:maxClaim);
   const status = claimedByList.length > 0 ? 'claimed' : 'available';
@@ -1597,7 +1757,6 @@ function createTask() {
     submittedBy:[]
   });
   ['nt-title','nt-desc'].forEach(i=>el(i).value='');
-  // Reset preassign checkboxes
   M.forEach(m=>{const c=el('pa-'+m.id);if(c)c.checked=false;const l=el('pa-label-'+m.id);if(l)l.classList.remove('selected');});
   preassignOpen=false;
   el('preassign-panel').style.display='none';
@@ -1611,14 +1770,18 @@ function createTask() {
 function filterRanking(f, tabEl) {
   rankFilter=f;
   if(tabEl){document.querySelectorAll('#pg-ranking .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M]; if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral'||m.team==='marketing'||m.team==='gestao'||m.team==='adm');
+  let list=[...M];
+  if (f !== 'all') list = list.filter(m => m.team === f);
   list.sort((a,b)=>(MP[b.id]||b.pts)-(MP[a.id]||a.pts));
   const pc=['g','s','b'];
   el('ranking-list').innerHTML=list.map((m,i)=>`
     <div class="rank-row" onclick="openMemberModal('${m.id}')">
       <div class="rank-pos ${pc[i]||''}">${i+1}</div>
       <div class="av" style="width:34px;height:34px">${avImg(m.name,m.color,34,!!onlineUsers[m.id])}</div>
-      <div class="rank-info"><div class="rank-name">${m.name}</div><div class="rank-sub">${m.role}</div></div>
+      <div class="rank-info">
+        <div class="rank-name">${m.name}</div>
+        <div class="rank-sub">${m.role} · ${cargoLabel(m.team)}</div>
+      </div>
       <div class="rank-score">${MP[m.id]||m.pts} pts</div>
     </div>`).join('');
 }
@@ -1628,17 +1791,18 @@ function filterRanking(f, tabEl) {
 // ══════════════════════════════════════════════════════
 function renderMyProfile(){
   const m=M.find(x=>x.id===CU.id);if(!m)return;
-  const pts=MP[m.id]||m.pts, isEQ=m.team==='eletroquad';
+  const pts=MP[m.id]||m.pts;
   const skills=m.skills&&m.skills.length?m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,.04);border-color:var(--border)">${s}</span>`).join(''):`<span style="font-size:12px;color:var(--dim)">Sem habilidades cadastradas.</span>`;
+  const cColor = cargoColor(m.team);
   el('myprofile-content').innerHTML=`
-    <div class="profile-hero ${isEQ?'eq':'rob'}">
+    <div class="profile-hero" style="border-top:3px solid ${cColor}">
       <div style="display:flex;align-items:center;gap:18px">
         <div class="av" style="width:64px;height:64px">${avImg(m.name,m.color,64)}</div>
         <div>
           <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px">${m.name}${m.isAdmin?' 👑':''}</div>
           <div style="font-size:12px;color:var(--dim);margin-top:3px">${m.role}</div>
           <div style="display:flex;gap:8px;margin-top:8px">
-            <span class="tag ${isEQ?'tag-eq':'tag-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>
+            ${cargoTag(m.team)}
             <span class="tag tag-pts">${pts} pts</span>
             <span class="tag tag-hrs">${m.hours||0}h</span>
           </div>
@@ -1682,16 +1846,25 @@ function renderMyMetrics(){
 function filterMembers(f, tabEl) {
   memberFilter=f;
   if(tabEl){document.querySelectorAll('#pg-members .tab').forEach(t=>t.classList.remove('on'));tabEl.classList.add('on');}
-  let list=[...M]; if(f!=='all')list=list.filter(m=>m.team===f||m.team==='geral'||m.team==='marketing'||m.team==='gestao'||m.team==='adm');
-  el('members-list').innerHTML=`<div class="grid ga">${list.map(m=>`
-    <div class="mc ${m.team==='eletroquad'?'eq':'rob'}" onclick="openMemberModal('${m.id}')">
+  let list=[...M];
+  if(f!=='all') list=list.filter(m=>m.team===f);
+
+  el('members-list').innerHTML=`<div class="grid ga">${list.map(m=>{
+    const cKey = m.team;
+    const cColor2 = cargoColor(cKey);
+    return `<div class="mc ${cKey}" onclick="openMemberModal('${m.id}')">
       <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
         <div class="av" style="width:42px;height:42px">${avImg(m.name,m.color,42,!!onlineUsers[m.id])}</div>
         <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">${m.name}${m.isAdmin?' 👑':''}</div><div style="font-size:11px;color:var(--dim);margin-top:2px">${m.role}</div></div>
-        <span class="tag ${m.team==='eletroquad'?'tag-eq':'tag-rob'}">${m.team==='eletroquad'?'EletroQuad':'Robótica'}</span>
+        ${cargoTag(m.team)}
       </div>
-      <div style="display:flex;gap:8px"><span class="tag tag-pts">${MP[m.id]||m.pts} pts</span><span class="tag tag-hrs">${m.hours||0}h</span>${m.email?`<span style="font-size:10px;color:var(--green)">✉</span>`:`<span style="font-size:10px;color:var(--red)">✕ sem email</span>`}</div>
-    </div>`).join('')}</div>`;
+      <div style="display:flex;gap:8px">
+        <span class="tag tag-pts">${MP[m.id]||m.pts} pts</span>
+        <span class="tag tag-hrs">${m.hours||0}h</span>
+        ${m.email?`<span style="font-size:10px;color:var(--green)">✉</span>`:`<span style="font-size:10px;color:var(--muted)">sem e-mail</span>`}
+      </div>
+    </div>`;
+  }).join('')}</div>`;
 }
 
 function openAddUser(){el('mu-title').textContent='Novo Membro';el('mu-id').value='';['mu-name','mu-username','mu-pass','mu-email','mu-role'].forEach(i=>el(i).value='');el('mu-isadmin').checked=false;el('mu-del-btn').style.display='none';el('mu-admin-fields').style.display='flex';el('mu-admin-chk').style.display='flex';openModal('modal-user');}
@@ -1721,13 +1894,13 @@ function saveMetrics(){const uid=el('met-uid').value;const m=M.find(x=>x.id===ui
 
 function openMemberModal(uid){
   const m=M.find(x=>x.id===uid);if(!m)return;
-  const pts=MP[m.id]||m.pts, isEQ=m.team==='eletroquad';
+  const pts=MP[m.id]||m.pts;
   const labels={presenca:'Presença',tarefas:'Tarefas',qualidade:'Qualidade',pontualidade:'Pontualidade',colaboracao:'Colaboração'};
   const colors=['var(--blue)','var(--green)','var(--accent)','var(--orange)','#7fff6e'];
   const skills=m.skills&&m.skills.length?m.skills.map(s=>`<span class="tag" style="background:rgba(255,255,255,.04);border-color:var(--border)">${s}</span>`).join(''):`<span style="font-size:12px;color:var(--dim)">—</span>`;
   el('mm-av').innerHTML=avImg(m.name,m.color,40);
   el('mm-name').innerHTML=m.name+(m.isAdmin?' 👑':'');
-  el('mm-badge').innerHTML=`<span class="tag ${isEQ?'tag-eq':'tag-rob'}">${isEQ?'EletroQuad':'Robótica'}</span>`;
+  el('mm-badge').innerHTML=cargoTag(m.team);
   const avg=Math.round(Object.values(m.metrics).reduce((a,b)=>a+b,0)/5);
   el('mm-content').innerHTML=`
     <div style="display:flex;flex-wrap:wrap;gap:11px;margin-bottom:16px">
@@ -1737,7 +1910,7 @@ function openMemberModal(uid){
       <div class="card card-sm" style="flex:1;min-width:110px;text-align:center"><div class="cl">Online hoje</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--green)">${onlineUsers[uid]?'🟢 ':' '}${fmtSession(uid)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Último: ${fmtLastSeen(uid)}</div></div>
     </div>
     ${Object.entries(m.metrics).map(([k,v],i)=>`<div class="prog-item"><div class="prog-hd"><span class="prog-lbl">${labels[k]}</span><span class="prog-val">${v}%</span></div><div class="prog-bar"><div class="prog-fill" style="width:${v}%;background:${colors[i]}"></div></div></div>`).join('')}
-    <hr><div class="cl" style="margin-bottom:6px">Cargo: ${m.role}</div>
+    <hr><div class="cl" style="margin-bottom:6px">Cargo: ${m.role} · ${cargoLabel(m.team)}</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">${skills}</div>`;
   const ft=el('mm-ft');
   if(CU.isAdmin){ft.style.display='flex';ft.innerHTML=`<button class="btn btn-ghost btn-sm" onclick="closeModal('modal-member');openEditUser('${uid}')">⚙ Conta</button><button class="btn btn-ghost btn-sm" onclick="openEditSkills('${uid}')">🛠 Skills</button><button class="btn btn-ghost btn-sm" onclick="openEditMetrics('${uid}')">📊 Métricas</button><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-member');openHrsAdj('${uid}')">⏱ Horas</button>`;}
@@ -1747,7 +1920,7 @@ function openMemberModal(uid){
 }
 
 // ══════════════════════════════════════════════════════
-// ATTENDANCE — MELHORADO com histórico expansível
+// ATTENDANCE
 // ══════════════════════════════════════════════════════
 let attAllSelected = false;
 function renderAttendance(){
@@ -1760,35 +1933,29 @@ function renderAttendance(){
   updateAttCount();
   renderAttHistory();
 }
-
 function updateAttCount() {
   const sel = M.filter(m=>el('att-'+m.id)&&el('att-'+m.id).checked).length;
   const ct = el('att-count');
   if(ct) ct.textContent = `${sel} selecionado${sel!==1?'s':''}`;
 }
-
 function toggleAllAtt() {
   attAllSelected = !attAllSelected;
   M.forEach(m=>{ const c=el('att-'+m.id); if(c)c.checked=attAllSelected; });
   updateAttCount();
 }
-
 function renderAttHistory() {
   const hist = el('att-history');
   if(!hist)return;
   const list = [...ATT].reverse();
   if(!list.length){ hist.innerHTML=`<div class="empty"><div class="empty-ico">📋</div>Nenhum registro ainda.</div>`; return; }
-
   hist.innerHTML = list.map((a, idx) => {
-    // Busca nomes completos dos participantes
     const participantDetails = (a.members||[]).map(uid => {
       const mem = M.find(m=>m.id===uid);
-      return mem || { name: a.memberNames?.[a.members.indexOf(uid)]||uid, color:'#888', id:uid };
+      return mem || { name: (a.memberNames&&a.memberNames[a.members.indexOf(uid)])||uid, color:'#888', id:uid };
     });
     const chips = participantDetails.map(mem =>
       `<span class="att-participant-chip">${avImg(mem.name,mem.color||'#888',20)} ${mem.name}</span>`
     ).join('');
-
     return `<div class="att-session-card">
       <div class="att-session-hd" onclick="toggleAttSession(${idx})">
         <div style="flex:1">
@@ -1802,22 +1969,19 @@ function renderAttHistory() {
       </div>
       <div class="att-session-body" id="att-body-${idx}">
         <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px">Participantes (${a.members.length})</div>
-        <div style="display:flex;flex-wrap:wrap">${chips || '<span style="font-size:12px;color:var(--dim)">Nenhum participante registrado.</span>'}</div>
+        <div style="display:flex;flex-wrap:wrap">${chips || '<span style="font-size:12px;color:var(--dim)">Nenhum participante.</span>'}</div>
         <div style="margin-top:10px;font-size:10px;color:var(--muted)">Registrado por: ${a.by||'—'}</div>
       </div>
     </div>`;
   }).join('');
 }
-
 function toggleAttSession(idx) {
   const body = el('att-body-'+idx), chev = el('att-chev-'+idx);
   if(!body||!chev)return;
   const open = body.classList.toggle('open');
   chev.classList.toggle('open', open);
 }
-
 function deleteAtt(id){ if(!confirm('Remover este registro?'))return; ATT=ATT.filter(a=>a.id!==id); save(); toast('Registro removido.'); }
-
 function saveAttendance(){
   const date=el('att-date').value, desc=el('att-desc').value.trim(), hours=parseInt(el('att-hrs').value)||2;
   if(!date){toast('Selecione a data','err');return;}
@@ -1826,7 +1990,6 @@ function saveAttendance(){
   const rec={id:'a'+Date.now(),date,desc,hours,members:present.map(m=>m.id),memberNames:present.map(m=>m.name),by:CU.name};
   ATT.push(rec);
   present.forEach(m=>{m.hours=(m.hours||0)+hours;HL.push({memberId:m.id,memberName:m.name,op:'add',delta:hours,reason:`Presença: ${desc||date}`,date,by:CU.name});});
-  // Desmarca todos
   M.forEach(m=>{const c=el('att-'+m.id);if(c)c.checked=false;});
   updateAttCount();
   save(); toast(`Presença registrada! +${hours}h para ${present.length} membro${present.length!==1?'s':''}.`);
@@ -1865,8 +2028,8 @@ function applyHrsAdj(){
 }
 function saveHrsGoal(){HG=parseInt(el('goal-val').value)||20;closeModal('modal-hrs-goal');save();toast('Meta atualizada!');}
 function exportHoursCSV(){
-  let csv='Nome,Equipe,Horas,Meta,%,Status\n';
-  M.forEach(m=>{const h=m.hours||0,pct=Math.round(h/HG*100),st=h>=HG?'Meta atingida':pct>=50?'Em progresso':'Abaixo da meta';csv+=`"${m.name}","${m.team==='eletroquad'?'EletroQuad':'Robótica'}",${h},${HG},${pct}%,"${st}"\n`;});
+  let csv='Nome,Cargo,Horas,Meta,%,Status\n';
+  M.forEach(m=>{const h=m.hours||0,pct=Math.round(h/HG*100),st=h>=HG?'Meta atingida':pct>=50?'Em progresso':'Abaixo da meta';csv+=`"${m.name}","${cargoLabel(m.team)}",${h},${HG},${pct}%,"${st}"\n`;});
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`horas-gaia-${new Date().toISOString().split('T')[0]}.csv`;a.click();toast('CSV exportado!');
 }
 
@@ -1903,13 +2066,13 @@ function reviewSub(id, action){
       m.hours=(m.hours||0)+(s.hours||0);
       HL.push({memberId:s.memberId,memberName:m.name,op:'add',delta:s.hours||0,reason:`Tarefa aprovada: ${s.taskTitle}`,date:s.reviewDate,by:CU.name});
       if(ECFG.configured&&m.email){
-        emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Aprovada! 🎉`,notice_body:`Sua entrega da tarefa "${s.taskTitle}" foi aprovada! Você ganhou +${s.pts} pontos e +${s.hours||0}h. ${fb?'\n\nObs do ADM: '+fb:''}`,notice_type:'PONTUAÇÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
+        emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Aprovada! 🎉`,notice_body:`Sua entrega "${s.taskTitle}" foi aprovada! +${s.pts}pts e +${s.hours||0}h.${fb?'\n\nObs: '+fb:''}`,notice_type:'PONTUAÇÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
       }
     }
     toast(`Aprovado! +${s.pts}pts para ${s.memberName}`);
   } else {
     if(m&&ECFG.configured&&m.email){
-      emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Recusada ⚠️`,notice_body:`Sua entrega da tarefa "${s.taskTitle}" precisou ser devolvida. ${fb?'\n\nMotivo: '+fb:'Acesse o portal para mais detalhes.'}`,notice_type:'REVISÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
+      emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Devolvida ⚠️`,notice_body:`Sua entrega "${s.taskTitle}" foi devolvida.${fb?'\n\nMotivo: '+fb:''}`,notice_type:'REVISÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
     }
     toast('Reprovado.');
   }
@@ -1995,7 +2158,6 @@ window.addEventListener('resize',checkMobBar);
 checkMobBar();
 function toggleThemeMob(){const isLight=document.body.classList.toggle('light');localStorage.setItem('gaia_theme',isLight?'light':'dark');const btn=document.getElementById('mob-theme-btn');if(btn)btn.innerHTML=isLight?'🌙':'☀️';const mainBtn=document.getElementById('theme-toggle');if(mainBtn)mainBtn.innerHTML=isLight?'🌙':'☀️';}
 
-// ── Verificar alertas a cada hora (para quem fica com o portal aberto) ──
 setInterval(()=>{ if(CU){ checkAndFireAlerts(); updateBadges(); } }, 3600000);
 </script>
 </body>
