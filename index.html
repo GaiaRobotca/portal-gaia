@@ -357,8 +357,8 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 .member-check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:7px;margin:10px 0}
 .member-check-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:.15s;font-size:12px}
 .member-check-item:hover{border-color:rgba(255,255,255,.14)}
-.member-check-item.selected{border-color:rgba(26,143,255,.35);background:rgba(26,143,255,.07)}
-.member-check-item input[type=checkbox]{width:13px;height:13px;accent-color:var(--blue);cursor:pointer}
+.member-check-item.selected{border-color:rgba(26,143,255,.4);background:rgba(26,143,255,.09);color:var(--text)}
+.member-check-item input[type=checkbox]{width:13px;height:13px;accent-color:var(--blue);cursor:pointer;flex-shrink:0}
 
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
@@ -823,7 +823,7 @@ body.light input,body.light select,body.light textarea{background:#fff;color:var
 
 <!-- MODAL EDITAR TAREFA (ADM) -->
 <div id="modal-edit-task" class="modal-ov">
-  <div class="modal" style="max-width:560px">
+  <div class="modal" style="max-width:580px">
     <div class="modal-hd"><div class="modal-title">✏️ Editar Tarefa</div><div class="modal-x" onclick="closeModal('modal-edit-task')">✕</div></div>
     <input type="hidden" id="et-id">
     <div class="fg"><label class="lbl">Título</label><input type="text" id="et-title"></div>
@@ -837,13 +837,37 @@ body.light input,body.light select,body.light textarea{background:#fff;color:var
       <div class="fg"><label class="lbl">Horas</label><input type="number" id="et-hrs" min="1" max="100"></div>
       <div class="fg"><label class="lbl">Prazo</label><input type="date" id="et-deadline"></div>
     </div>
-    <div class="fg"><label class="lbl">Status</label><select id="et-status">
-      <option value="available">Disponível</option>
-      <option value="claimed">Em andamento</option>
-      <option value="done">Concluída</option>
-    </select></div>
+    <div class="frow">
+      <div class="fg"><label class="lbl">Status</label><select id="et-status">
+        <option value="available">Disponível</option>
+        <option value="claimed">Em andamento</option>
+        <option value="done">Concluída</option>
+      </select></div>
+      <div class="fg"><label class="lbl">Máx. membros</label><select id="et-maxclaim">
+        <option value="1">1 (individual)</option>
+        <option value="2">2 pessoas</option>
+        <option value="3">3 pessoas</option>
+        <option value="4">4 pessoas</option>
+        <option value="5">5 pessoas</option>
+        <option value="99">Ilimitado</option>
+      </select></div>
+    </div>
+
+    <!-- ATRIBUIÇÃO DE MEMBROS -->
+    <div style="background:rgba(99,210,255,.04);border:1px solid rgba(99,210,255,.18);border-radius:var(--r);padding:14px;margin-bottom:6px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em">👥 Membros Atribuídos</div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm" style="padding:3px 10px;font-size:10px" onclick="etSelectAll()">Todos</button>
+          <button class="btn btn-ghost btn-sm" style="padding:3px 10px;font-size:10px" onclick="etClearAll()">Limpar</button>
+        </div>
+      </div>
+      <div id="et-members-grid" class="member-check-grid" style="max-height:220px;overflow-y:auto"></div>
+      <div style="margin-top:8px;font-size:11px;color:var(--dim)" id="et-assign-count">0 membros selecionados</div>
+    </div>
+
     <div class="modal-ft">
-      <button class="btn btn-red btn-sm" style="margin-right:auto" onclick="confirmDeleteTask(el('et-id').value)">🗑 Excluir Tarefa</button>
+      <button class="btn btn-red btn-sm" style="margin-right:auto" onclick="confirmDeleteTask(el('et-id').value)">🗑 Excluir</button>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-edit-task')">Cancelar</button>
       <button class="btn btn-green btn-sm" onclick="saveEditTask()">Salvar</button>
     </div>
@@ -1667,14 +1691,60 @@ function openEditTask(id) {
   el('et-hrs').value = t.hours || 2;
   el('et-deadline').value = t.deadline || '';
   el('et-status').value = t.status || 'available';
+  el('et-maxclaim').value = String(t.maxClaim||1);
+
+  // Renderiza grid de membros
+  const currentAssigned = t.claimedByList || [];
+  const grid = el('et-members-grid');
+  grid.innerHTML = M.map(m => {
+    const checked = currentAssigned.includes(m.id);
+    return `<label class="member-check-item${checked?' selected':''}" id="et-lbl-${m.id}">
+      <input type="checkbox" id="et-m-${m.id}" value="${m.id}" ${checked?'checked':''}
+        onchange="etUpdateAssignCount();etToggleStyle('${m.id}')">
+      ${avImg(m.name,m.color,22)}
+      <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.name.split(' ')[0]}</span>
+      ${cargoTag(m.team)}
+    </label>`;
+  }).join('');
+  etUpdateAssignCount();
   openModal('modal-edit-task');
 }
+
+function etToggleStyle(uid) {
+  const chk = el('et-m-'+uid), lbl = el('et-lbl-'+uid);
+  if (!chk||!lbl) return;
+  lbl.classList.toggle('selected', chk.checked);
+}
+function etUpdateAssignCount() {
+  const sel = M.filter(m => el('et-m-'+m.id) && el('et-m-'+m.id).checked).length;
+  const ct = el('et-assign-count');
+  if (ct) ct.textContent = `${sel} membro${sel!==1?'s':''} selecionado${sel!==1?'s':''}`;
+}
+function etSelectAll() {
+  M.forEach(m => { const c=el('et-m-'+m.id); if(c){c.checked=true;} etToggleStyle(m.id); });
+  etUpdateAssignCount();
+}
+function etClearAll() {
+  M.forEach(m => { const c=el('et-m-'+m.id); if(c){c.checked=false;} etToggleStyle(m.id); });
+  etUpdateAssignCount();
+}
+
 function saveEditTask() {
   const id = el('et-id').value;
   const t = T.find(x=>x.id===id);
   if (!t) return;
   const title = el('et-title').value.trim();
   if (!title) { toast('Título obrigatório','err'); return; }
+
+  // Membros selecionados
+  const newAssigned = M.filter(m => el('et-m-'+m.id) && el('et-m-'+m.id).checked).map(m=>m.id);
+  const maxClaim = parseInt(el('et-maxclaim').value)||1;
+
+  // Valida limite de vagas
+  if (maxClaim < 99 && newAssigned.length > maxClaim) {
+    toast(`Máximo de ${maxClaim} membro(s) para esta tarefa`, 'err'); return;
+  }
+
   t.title = title;
   t.desc = el('et-desc').value.trim();
   t.team = el('et-team').value;
@@ -1682,10 +1752,26 @@ function saveEditTask() {
   t.pts = parseInt(el('et-pts').value)||50;
   t.hours = parseInt(el('et-hrs').value)||2;
   t.deadline = el('et-deadline').value;
-  t.status = el('et-status').value;
+  t.maxClaim = maxClaim;
+  t.claimedByList = newAssigned;
+  t.claimedBy = newAssigned[0] || null;
+
+  // Atualiza status automaticamente com base na atribuição
+  const chosenStatus = el('et-status').value;
+  if (chosenStatus === 'done') {
+    t.status = 'done';
+  } else if (newAssigned.length > 0) {
+    t.status = 'claimed';
+  } else {
+    t.status = 'available';
+  }
+
+  // Remove submittedBy de quem foi desatribuído
+  t.submittedBy = (t.submittedBy||[]).filter(uid => newAssigned.includes(uid));
+
   closeModal('modal-edit-task');
   save();
-  toast('Tarefa atualizada!');
+  toast(`Tarefa atualizada! ${newAssigned.length > 0 ? newAssigned.length + ' membro(s) atribuído(s).' : 'Sem atribuições.'}`);
 }
 
 function claimTask(id) {
