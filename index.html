@@ -1225,7 +1225,7 @@ function checkAndFireAlerts() {
       const targets = M.filter(m => {
         if (!m.email || !m.email.trim()) return false;
         if (!ev.alertTeam || ev.alertTeam === 'all') return true;
-        return m.team === ev.alertTeam;
+        return GaiaNoticeMail.matches(m,ev.alertTeam);
       });
       targets.forEach(m => {
         const daysLabel = ev.alertDays === 1 ? 'amanhã' : `em ${ev.alertDays} dias`;
@@ -1542,7 +1542,7 @@ function saveCalEvent() {
   const desc=el('cal-desc').value.trim();
   const ev={id:'e'+Date.now(),title,date,time,type:el('cal-type').value,desc,createdBy:CU.name,alertDays,alertTeam};
   if(el('cal-email').checked&&ECFG.configured){
-    M.filter(m=>m.email&&m.email.trim()&&(!alertTeam||alertTeam==='all'||m.team===alertTeam)).forEach(m=>{
+    M.filter(m=>m.email&&m.email.trim()&&(GaiaNoticeMail.matches(m,alertTeam||'all'))).forEach(m=>{
       emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],
         notice_title:`📅 ${title}`,notice_body:`${desc||'Novo evento agendado.'}${alertDays?`\n\n⏰ Lembrete ${alertDays}d antes.`:''}`,
         notice_type:'CALENDÁRIO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
