@@ -1390,10 +1390,10 @@ function renderHome() {
     <div class="card card-sm"><div class="cl">Horas Certificado</div><div class="cv cv-sm" style="color:#bb86fc">${totalH}h</div></div>`;
 
   // Agrupamento por cargo
-  const CARGO_ORDER = ['adm','gestao','programacao','eletronica','estrutura','marketing'];
+  const CARGO_ORDER = ['adm','gestao','programacao','eletronica','estrutura','marketing','trainees','geral'];
   const CARGO_LABELS = {
     adm:'👑 ADM', gestao:'📋 Gestão', programacao:'💻 Programação',
-    eletronica:'⚡ Eletrônica', estrutura:'🔩 Estrutura', marketing:'📣 Marketing'
+    eletronica:'⚡ Eletrônica', estrutura:'🔩 Estrutura', marketing:'📣 Marketing', trainees:'🌱 Trainees — sem setor definido', geral:'👥 Geral — área a definir'
   };
 
   function memberRow(m) {
@@ -1409,13 +1409,19 @@ function renderHome() {
   const colsEl=el('team-columns');
   if(colsEl){
     colsEl.innerHTML = CARGO_ORDER.map(cargoKey => {
-      const members = M.filter(m => m.team === cargoKey);
+      const members = M.filter(m => {
+        if (m.active === false) return false;
+        const sectors = (Array.isArray(m.sectors) ? m.sectors : [m.team]).filter(s => ['estrutura','eletronica','programacao','marketing','gestao'].includes(s));
+        if (sectors.length) return sectors.includes(cargoKey);
+        if (m.isTrainee) return cargoKey === 'trainees';
+        return cargoKey === (m.team === 'adm' ? 'adm' : 'geral');
+      });
       if (!members.length) return '';
       const admins = members.filter(m=>m.isAdmin);
       const rest = members.filter(m=>!m.isAdmin);
       const label = CARGO_LABELS[cargoKey] || cargoKey;
       const color = cargoColor(cargoKey);
-      return `<div style="flex:1;min-width:200px">
+      return `<div data-team-group="${cargoKey}" style="flex:1;min-width:200px">
         <div class="sec-hd"><div class="sec-title" style="color:${color}">${label}</div></div>
         ${[...admins,...rest].map(memberRow).join('')}
       </div>`;
