@@ -17,7 +17,7 @@
           try { return await send(snapshot, payload); }
           catch (error) {
             // Only retry a definite rate-limit refusal, never an ambiguous timeout.
-            if (Number(error.status) !== 429 || attempt >= 2) throw error;
+            if (Number(error?.status) !== 429 || attempt >= 2) throw error;
             await wait(2000 * (attempt + 1));
           }
         }

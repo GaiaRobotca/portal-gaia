@@ -88,7 +88,7 @@
       } catch (e) {
         const status = accepted
           ? "sent"
-          : Number(e.status) >= 400 && Number(e.status) < 500
+          : Number(e?.status) >= 400 && Number(e?.status) < 500
             ? "failed"
             : "unknown";
         await update(notice.id, (n) => ({
@@ -98,7 +98,7 @@
             [m.id]: {
               ...n.emailDelivery[m.id],
               status,
-              error: String(e.text || e.message || "Falha de conexão"),
+              error: String(e?.text || e?.message || "Falha de conexão"),
               updatedAt: now(),
             },
           },
@@ -152,15 +152,7 @@
     if (document.getElementById("notices-list")) renderNotices();
     return result;
   }
-  const queue = GaiaEmail.createQueue({
-    send: (config, params) =>
-      emailjs.send(
-        config.serviceId,
-        config.templateId,
-        params,
-        config.publicKey,
-      ),
-  });
+  const queue = portalEmailQueue;
   let busy = false;
   root.addEventListener("beforeunload", (event) => {
     if (busy) {

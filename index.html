@@ -1229,7 +1229,7 @@ function checkAndFireAlerts() {
       });
       targets.forEach(m => {
         const daysLabel = ev.alertDays === 1 ? 'amanhã' : `em ${ev.alertDays} dias`;
-        emailjs.send(ECFG.serviceId, ECFG.templateId, {
+        queuePortalEmail(ECFG.serviceId, ECFG.templateId, {
           to_email: m.email, to_name: m.name.split(' ')[0],
           notice_title: `⏰ Lembrete: "${ev.title}" — ${daysLabel}`,
           notice_body: `Lembrete automático do Portal Gaia.\n\n📅 Evento: ${ev.title}\n🗓 Data: ${fmtDate(ev.date)}${ev.time ? ' às ' + ev.time : ''}\n${ev.desc ? '\n📝 ' + ev.desc : ''}`,
@@ -1468,7 +1468,7 @@ function publishNotice() {
   const n={id:'n'+Date.now(),title,body,type:el('no-type').value,team,author:CU.name,date:new Date().toISOString().split('T')[0],emailSent:false};
   if(el('no-email').checked&&ECFG.configured){
     M.filter(m=>(team==='all'||m.team===team)&&m.email).forEach(m=>{
-      emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name,notice_title:title,notice_body:body,notice_type:n.type,portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
+      queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name,notice_title:title,notice_body:body,notice_type:n.type,portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
     });
     n.emailSent=true;
   }
@@ -1543,7 +1543,7 @@ function saveCalEvent() {
   const ev={id:'e'+Date.now(),title,date,time,type:el('cal-type').value,desc,createdBy:CU.name,alertDays,alertTeam};
   if(el('cal-email').checked&&ECFG.configured){
     M.filter(m=>m.email&&m.email.trim()&&(GaiaNoticeMail.matches(m,alertTeam||'all'))).forEach(m=>{
-      emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],
+      queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],
         notice_title:`📅 ${title}`,notice_body:`${desc||'Novo evento agendado.'}${alertDays?`\n\n⏰ Lembrete ${alertDays}d antes.`:''}`,
         notice_type:'CALENDÁRIO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
     });
@@ -2158,13 +2158,13 @@ function reviewSub(id, action){
       m.hours=(m.hours||0)+(s.hours||0);
       HL.push({memberId:s.memberId,memberName:m.name,op:'add',delta:s.hours||0,reason:`Tarefa aprovada: ${s.taskTitle}`,date:s.reviewDate,by:CU.name});
       if(ECFG.configured&&m.email){
-        emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Aprovada! 🎉`,notice_body:`Sua entrega "${s.taskTitle}" foi aprovada! +${s.pts}pts e +${s.hours||0}h.${fb?'\n\nObs: '+fb:''}`,notice_type:'PONTUAÇÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
+        queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Aprovada! 🎉`,notice_body:`Sua entrega "${s.taskTitle}" foi aprovada! +${s.pts}pts e +${s.hours||0}h.${fb?'\n\nObs: '+fb:''}`,notice_type:'PONTUAÇÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
       }
     }
     toast(`Aprovado! +${s.pts}pts para ${s.memberName}`);
   } else {
     if(m&&ECFG.configured&&m.email){
-      emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Devolvida ⚠️`,notice_body:`Sua entrega "${s.taskTitle}" foi devolvida.${fb?'\n\nMotivo: '+fb:''}`,notice_type:'REVISÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
+      queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Devolvida ⚠️`,notice_body:`Sua entrega "${s.taskTitle}" foi devolvida.${fb?'\n\nMotivo: '+fb:''}`,notice_type:'REVISÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(()=>{});
     }
     toast('Reprovado.');
   }
@@ -2213,7 +2213,7 @@ function renderEmailCfg(){
     </div>`;
 }
 function saveEmailCfg(){ECFG.serviceId=el('cfg-svc').value.trim();ECFG.templateId=el('cfg-tpl').value.trim();ECFG.publicKey=el('cfg-key').value.trim();ECFG.configured=!!(ECFG.serviceId&&ECFG.templateId&&ECFG.publicKey);if(ECFG.configured)emailjs.init(ECFG.publicKey);save();toast(ECFG.configured?'E-mail configurado! ✓':'Preencha todos os campos','err'.slice(0,ECFG.configured?-3:0)||'ok');}
-function testEmail(){const m=M.find(x=>x.id===CU.id);if(!m||!m.email){toast('Cadastre seu e-mail primeiro','err');return;}if(!ECFG.configured){toast('Configure o EmailJS primeiro','err');return;}emailjs.send(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name,notice_title:'🧪 Teste — Portal Gaia',notice_body:'Se recebeu este e-mail, o EmailJS está funcionando!',notice_type:'Teste',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).then(()=>toast('E-mail enviado!')).catch(()=>toast('Erro ao enviar','err'));}
+function testEmail(){const m=M.find(x=>x.id===CU.id);if(!m||!m.email){toast('Cadastre seu e-mail primeiro','err');return;}if(!ECFG.configured){toast('Configure o EmailJS primeiro','err');return;}queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name,notice_title:'🧪 Teste — Portal Gaia',notice_body:'Se recebeu este e-mail, o EmailJS está funcionando!',notice_type:'Teste',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).then(()=>toast('E-mail enviado!')).catch(()=>toast('Erro ao enviar','err'));}
 
 setTimeout(()=>{ if(ECFG&&ECFG.publicKey&&ECFG.configured)emailjs.init(ECFG.publicKey); },1500);
 
@@ -2253,6 +2253,14 @@ function toggleThemeMob(){const isLight=document.body.classList.toggle('light');
 setInterval(()=>{ if(CU){ checkAndFireAlerts(); updateBadges(); } }, 3600000);
 </script>
 <script src="email-queue.js"></script>
+<script>
+const portalEmailQueue = GaiaEmail.createQueue({
+  send: (config, params) => emailjs.send(config.serviceId, config.templateId, params, config.publicKey)
+});
+function queuePortalEmail(serviceId, templateId, params, publicKey) {
+  return portalEmailQueue.enqueue({serviceId, templateId, publicKey}, params);
+}
+</script>
 <script src="notice-mail.js"></script>
 </body>
 </html>
