@@ -8,3 +8,6 @@ Validar com node --test tests/email.test.cjs. Preservar a limitacao de retry
 a recusas 429; falha ambigua nao autoriza reenviar automaticamente.
 Definition of Done: regressao offline, sintaxe, documentacao e nenhuma
 alegacao de controle de acesso baseada apenas na interface.
+
+Nao disparar email automaticamente em login, sincronizacao ou timers.
+Regressao antispam: node --test tests/*.test.cjs. Ver docs/alert-spam-fix.md.

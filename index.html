@@ -551,6 +551,12 @@ body.light input,body.light select,body.light textarea{background:#fff;color:var
     <!-- HOME -->
     <div id="pg-home" class="pg">
       <div class="ph"><div class="pt">Visão Geral</div><div class="ps">Acompanhe o projeto Gaia</div></div>
+      <aside class="alert-banner" role="status" id="alert-spam-fix-notice">
+        <div class="alert-banner-body">
+          <div class="alert-banner-title">Correção dos alertas repetidos — 12/10/2026</div>
+          <div class="alert-banner-sub">Desculpem pelos e-mails repetidos. Removemos o disparo automático de lembretes por e-mail ao entrar no portal e a cada hora. Os lembretes continuam aqui no portal. E-mails de eventos agora dependem de uma ação explícita do administrador. Feche ou atualize outras abas antigas do portal para aplicar a correção.</div>
+        </div>
+      </aside>
       <div id="home-alert-banner"></div>
       <div class="grid g4" style="margin-bottom:18px" id="home-stats"></div>
       <div id="team-columns" style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;align-items:flex-start"></div>
@@ -955,7 +961,7 @@ body.light input,body.light select,body.light textarea{background:#fff;color:var
           </select>
         </div>
       </div>
-      <label class="chk" style="margin-top:10px;margin-bottom:0"><input type="checkbox" id="cal-email" checked> Enviar e-mail para todos no dia do alerta</label>
+      <label class="chk" style="margin-top:10px;margin-bottom:0"><input type="checkbox" id="cal-email"> Enviar um e-mail agora ao criar o evento (opcional)</label>
     </div>
     <div class="modal-ft"><button class="btn btn-ghost btn-sm" onclick="closeModal('modal-cal')">Cancelar</button><button class="btn btn-green btn-sm" onclick="saveCalEvent()">Adicionar</button></div>
   </div>
@@ -1217,26 +1223,13 @@ function getAlertEvents() {
 }
 
 function checkAndFireAlerts() {
-  const alerts = getAlertEvents().filter(ev => !dismissedAlerts.has(ev.id));
-  if (!alerts.length) return;
-  alerts.forEach(ev => { toast(`⏰ Amanhã: "${ev.title}"`, 'warn'); });
-  if (ECFG.configured) {
-    alerts.forEach(ev => {
-      const targets = M.filter(m => {
-        if (!m.email || !m.email.trim()) return false;
-        if (!ev.alertTeam || ev.alertTeam === 'all') return true;
-        return GaiaNoticeMail.matches(m,ev.alertTeam);
-      });
-      targets.forEach(m => {
-        const daysLabel = ev.alertDays === 1 ? 'amanhã' : `em ${ev.alertDays} dias`;
-        queuePortalEmail(ECFG.serviceId, ECFG.templateId, {
-          to_email: m.email, to_name: m.name.split(' ')[0],
-          notice_title: `⏰ Lembrete: "${ev.title}" — ${daysLabel}`,
-          notice_body: `Lembrete automático do Portal Gaia.\n\n📅 Evento: ${ev.title}\n🗓 Data: ${fmtDate(ev.date)}${ev.time ? ' às ' + ev.time : ''}\n${ev.desc ? '\n📝 ' + ev.desc : ''}`,
-          notice_type: 'ALERTA DE EVENTO', portal_name: 'Portal Gaia · UFTM'
-        }, ECFG.publicKey).catch(() => {});
-      });
-    });
+  // Browser sessions must never broadcast scheduled email. Multiple users,
+  // tabs and hourly timers used to resend the same reminder to everyone.
+  for (const ev of getAlertEvents()) {
+    const key = 'reminder:' + ev.id + ':' + ev.date + ':' + ev.alertDays;
+    if (dismissedAlerts.has(key)) continue;
+    dismissedAlerts.add(key);
+    toast('⏰ ' + ev.title + ' — ' + fmtDate(ev.date), 'warn');
   }
 }
 
@@ -1534,6 +1527,7 @@ function renderUpcoming() {
   }).join(''):`<div class="empty"><div class="empty-ico">📅</div>Nenhum evento futuro.</div>`;
 }
 function saveCalEvent() {
+  if (!CU?.isAdmin) { toast('Apenas administradores podem criar eventos.', 'err'); return; }
   const title=el('cal-title').value.trim(), date=el('cal-date').value;
   if(!title||!date){toast('Preencha título e data','err');return;}
   const time=el('cal-time')?el('cal-time').value:'';
