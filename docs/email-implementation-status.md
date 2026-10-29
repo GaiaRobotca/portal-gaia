@@ -1,5 +1,23 @@
 # Free-backend adaptation
 
+## Live verification and Manus review — 2026-10-29
+
+This section supersedes the earlier account/deployment status below. Reviewed the separate, clean Manus checkout at commit `6687de2` on local branch `feat/email-provider-failover`. Both known GitHub remotes were refreshed; that commit is not on their published branches. Its antispam suite passed 4/4 and complete offline suite passed 45/45 during this review.
+
+The Manus change adds a Resend → Brevo router, persistent circuits, server-side notice loading, recipient reservations, a shared lease, Firebase Auth admin-claim enforcement and App Check. It remains an alternative scaffold: the browser does not invoke its callable, credentials are not provisioned, and it has not been deployed. Its Firebase Functions runtime also conflicts with the selected Spark/free-backend deployment path. No cherry-pick or replacement of concurrent work was performed.
+
+Review limits requiring attention before adopting that alternative:
+
+- `functions/src/index.cjs` stores circuits and idempotency under legacy `gaia_v7`; private integrity is not established by an authenticated callable when the backing tree remains writable through legacy rules.
+- `functions/src/notice-email-handler.cjs:62` identifies delivery by notice/member rather than normalized address. Replacing a member record with a new ID can bypass the previous delivery identity for the same address. The selected implementation uses permanent normalized-address identities.
+- The lease heartbeat swallows renewal failures and does not stop dispatch when ownership is lost (`functions/src/index.cjs:96`). The 45 offline tests do not establish lease-loss behavior against the real database.
+
+Cloudflare account access is now available. D1 `gaia-email` exists with the initial `state` schema and indexes. Worker `gaia-email` exists at `https://gaia-email.gaia-robotica-uftm.workers.dev`, but its active version `77612a84` is still the initial Hello World, not the dispatcher. Bindings, secrets, cron, reviewed rules and frontend cutover remain pending. Do not admit production notices to it.
+
+Mailjet Free was selected and the Gaia account/address activated. A **single authorized real test** was submitted through the existing `MailjetProvider` adapter, outside the queue, to `gaia.robotica.uftm@gmail.com` at 2026-10-29 20:58:04 UTC (17:58 in São Paulo). Subject: `[GAIA] Teste Mailjet 2026-10-29 - 01`. Mailjet accepted it with message ID `288230417721772860`; Gmail receipt `1a18974a7ce61c70` at 20:58:05 UTC confirms arrival **in Spam**. Gmail headers reported SPF pass and Mailjet DKIM pass, but DMARC fail for the `gmail.com` From address. This is observed delivery to Spam, not inbox delivery and not an end-to-end portal/queue test. No member mailing, failover test, automatic retry or production activation occurred.
+
+Credentials are absent from the repository and were retained locally protected with Windows DPAPI. The full local test evidence is ignored under `test-results/`; never commit secrets or raw authentication data.
+
 2026-10-29: Pedro selected Cloudflare Workers + D1 and retaining Firebase Spark. Added worker/ (REST API, Google-validated Firebase identity, D1 CAS store, legacy ETag reservation, cron and deployment files), tests/worker-email.test.mjs, Cloudflare frontend transport/chunking and docs/email-cloudflare-setup.md. Local dry-run build and six D1/auth/HTTP/workerd/frontend-transport tests passed. Cloudflare/Mailjet account access remains pending; Google SSO at Cloudflare showed error 400 in the user browser. No live deployment or real email test has occurred for this adaptation. The prior Functions evidence below remains valid only for that alternative and shared core.
 
 # Multi-provider implementation status

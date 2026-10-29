@@ -5,8 +5,8 @@ Escolha explícita de Pedro em 29/10/2026: manter Firebase Spark e adaptar para 
 ## Estado verificado
 
 - Firebase console: projeto portal-gaia-f5c93 no Spark, sem faturamento por uso habilitado.
-- Cloudflare: acesso ainda pendente. O login Google apresentou erro 400 no navegador do usuário; a causa não foi determinada. A alternativa preparada é cadastrar/entrar por e-mail no próprio site, sem reutilizar URLs temporárias de consentimento Google.
-- Mailjet: acesso/cadastro e verificação do remetente ainda pendentes. Nenhuma conta nova, credencial real ou envio real foi criado por esta adaptação.
+- Cloudflare: acesso confirmado; D1 `gaia-email` criado, schema inicial e índices aplicados. O Worker de mesmo nome existe em `https://gaia-email.gaia-robotica-uftm.workers.dev`, mas a versão ativa `77612a84` ainda é Hello World. Dispatcher, bindings, secrets e cron pendentes: não é backend de envio ativo.
+- Mailjet: conta Gaia ativada no Free. Um teste único pelo adaptador em 29/10/2026 às 17h58 chegou à conta Gaia em **Spam** (Mailjet `288230417721772860`; Gmail `1a18974a7ce61c70`). SPF/DKIM passaram, DMARC do remetente gmail.com falhou. Não foi teste da fila/portal; entrega na caixa de entrada continua não comprovada. Nenhum envio aos membros.
 - Código do Worker compila; D1 local e workerd passam nos testes sintéticos. Isso não comprova entrega real ou consumo de CPU em produção.
 
 ## Arquitetura selecionada
