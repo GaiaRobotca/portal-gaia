@@ -1,3 +1,7 @@
+# Free-backend adaptation
+
+2026-10-29: Pedro selected Cloudflare Workers + D1 and retaining Firebase Spark. Added worker/ (REST API, Google-validated Firebase identity, D1 CAS store, legacy ETag reservation, cron and deployment files), tests/worker-email.test.mjs, Cloudflare frontend transport/chunking and docs/email-cloudflare-setup.md. Local dry-run build and six D1/auth/HTTP/workerd/frontend-transport tests passed. Cloudflare/Mailjet account access remains pending; Google SSO at Cloudflare showed error 400 in the user browser. No live deployment or real email test has occurred for this adaptation. The prior Functions evidence below remains valid only for that alternative and shared core.
+
 # Multi-provider implementation status
 
 2026-10-29. Prepared on fix/email-delivery, extending draft PR #1. No main merge, production Functions deployment, billing upgrade, provider-account creation, credential provisioning or real email send was performed for this reconstruction.

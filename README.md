@@ -1,3 +1,7 @@
+## Implantação selecionada: gratuita
+
+Firebase permanece no Spark. Backend: Cloudflare Workers + D1. [Ativação atual](docs/email-cloudflare-setup.md). A opção Functions/Blaze abaixo é apenas alternativa; não implantar os dois backends. Acesso às contas e teste real ainda pendentes.
+
 
 ## Validacao de engenharia
 

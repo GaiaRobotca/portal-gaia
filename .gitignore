@@ -8,3 +8,6 @@ test-results/
 playwright-report/
 functions/provider-secrets.local.json
 *-debug.log
+.wrangler/
+.dev.vars
+npm-audit.local.json

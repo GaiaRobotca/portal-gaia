@@ -1,3 +1,7 @@
+# Caminho atual: backend gratuito
+
+Pedro escolheu manter o Firebase Spark. Siga [Cloudflare Workers + D1](email-cloudflare-setup.md). As instruções Firebase Functions/Blaze abaixo são uma alternativa anterior, não a implantação autorizada.
+
 # Configurar o novo Sistema de E-mail
 
 Código preparado em 29/10/2026; não implantado nem ativado. Nenhum envio real foi feito durante esta reconstrução. A reserva Gmail anterior é independente e o erro de abertura do aplicativo privado continua sem solução confirmada. Esta implementação não depende dela.

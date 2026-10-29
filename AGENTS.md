@@ -22,3 +22,7 @@ API privada via Firebase Auth; email_system nega acesso direto do browser.
 Nao ativar provedores ou enviar testes reais durante desenvolvimento.
 Preservar unknown como terminal automatico; HTTP 503 generico nao autoriza failover.
 Teste de integracao: somente demo-gaia-email com emuladores e provedores mock.
+
+Worker gratuito selecionado: worker/ e docs/email-cloudflare-setup.md; manter Firebase Spark.
+Nunca implantar Functions e Worker simultaneamente para a mesma audiencia.
+Testes adicionais: npm run build --prefix worker; node --test tests/worker-email.test.mjs.

@@ -16,6 +16,7 @@
       current = await root.GaiaEmailBackend.status();
       const stats = b=>`${b.accepted} aceitos · ${b.delivered} entregas confirmadas · ${b.failed} falhas · ${b.unknown} incertos · ${b.pending} na fila`;
       box.innerHTML = `<p>Horário das estatísticas: UTC. Aceitação pela API não confirma caixa de entrada.</p>
+        ${current.processing ? `<p>Fila gratuita: processamento inicial de até ${esc(current.processing.maxRecipientsPerMinute)} destinatário por minuto. Você pode fechar o navegador após a confirmação de registro de todos os destinatários.</p>` : ''}
         <p>Hoje: ${esc(stats(current.statistics.today))}</p><p>Este mês: ${esc(stats(current.statistics.month))}</p>
         <p>Hoje por provedor: ${esc(JSON.stringify(current.statistics.today.providers))}</p>
         ${current.truncated ? '<p>Relatório parcial: limite de 10.000 registros atingido.</p>' : ''}

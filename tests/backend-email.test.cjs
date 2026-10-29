@@ -130,3 +130,12 @@ test('Mailjet suspension is not an authentication failover; Brevo explicit insuf
   const exhausted=createProviders(c,async()=>new Response(JSON.stringify({code:'not_enough_credits'}),{status:400}));
   assert.equal((await exhausted.brevo.send(normalize(input())[0])).code,'quota_exceeded');
 });
+test('free backend client chunks audiences with stable identities and no calls on load',async()=>{
+  const calls=[];const client=createClient({enabled:true,batchSize:15,requireUser:async()=>({}),
+    call:async(name,payload)=>{calls.push(payload);return {deliveries:payload.recipients.map(r=>({id:r.email,status:'pending'}))};}});
+  assert.equal(calls.length,0);
+  const message={...input(),recipients:Array.from({length:31},(_,i)=>({email:'member'+i+'@example.org'}))};
+  assert.equal((await client.sendNotice(message)).deliveries.length,31);
+  assert.deepEqual(calls.map(c=>c.recipients.length),[15,15,1]);
+  assert.ok(calls.every(c=>c.entityId===message.entityId));
+});

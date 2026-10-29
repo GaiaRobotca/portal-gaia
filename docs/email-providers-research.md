@@ -1,3 +1,7 @@
+# Deployment decision update
+
+2026-10-29: live Firebase console confirmed Spark; Pedro declined Blaze and selected a free backend. Cloudflare Workers + D1 is now selected. Limits, account access and current status are in [the free setup](email-cloudflare-setup.md); the earlier conditional Firebase recommendation below is superseded. Provider ranking remains Mailjet primary without an owned domain.
+
 # Email provider research
 
 Reviewed 2026-10-29. Prices in USD, monthly billing, excluding taxes, DNS/domain registration and compute. UNKNOWN means not established by the cited official material; absence of a published limit is not unlimited capacity. This is an operational comparison, not a measured inbox-placement benchmark.

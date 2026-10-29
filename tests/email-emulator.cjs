@@ -43,6 +43,8 @@ test('rules deny browser queue access, allow legacy owner route and block backen
   const legacy={provider:'emailjs',status:'sending',updatedAt:1};
   assert.equal((await request('gaia_notice_routes/owner','PUT',legacy,owner)).status,200);
   assert.equal((await request('gaia_notice_routes/other','PUT',legacy,other)).status,401);
+  assert.equal((await request('gaia_notice_routes/worker-created','PUT',{provider:'backend',status:'reserved',updatedAt:1},owner)).status,200);
+  assert.equal((await request('gaia_notice_routes/worker-created','PUT',legacy,owner)).status,401);
   await db.ref('gaia_notice_routes/backend').set({provider:'backend',status:'reserved',updatedAt:1});
   assert.equal((await request('gaia_notice_routes/backend','PUT',legacy,owner)).status,401);
   assert.equal((await request('gaia_notice_routes/backend','PUT',{provider:'apps-script',status:'reserved',updatedAt:2},owner)).status,401);

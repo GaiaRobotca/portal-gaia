@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gaia-email",
+  "main": "index.js",
+  "compatibility_date": "2026-10-29",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "triggers": { "crons": ["* * * * *"] },
+  "vars": {
+    "PORTAL_ORIGIN": "https://gaiarobotca.github.io",
+    "FIREBASE_PROJECT_ID": "portal-gaia-f5c93",
+    "FIREBASE_DATABASE_URL": "https://portal-gaia-f5c93-default-rtdb.firebaseio.com",
+    "EMAIL_ADMIN_EMAILS": "gaia.robotica.uftm@gmail.com",
+    "EMAIL_PROVIDER_ORDER": "mailjet,smtp2go,resend,brevo,emailjs"
+  },
+  "d1_databases": [{ "binding": "DB", "database_name": "gaia-email", "database_id": "REPLACE_WITH_CREATED_D1_ID", "migrations_dir": "migrations" }]
+}

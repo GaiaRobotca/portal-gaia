@@ -1,3 +1,7 @@
+# Selected deployment update
+
+Pedro chose the free backend on 2026-10-29. Production target is now Cloudflare Workers + D1 with Firebase Auth/Spark, using the same router/adapters. See [current setup](email-cloudflare-setup.md). The RTDB/Functions architecture below describes the retained alternative, not a deployed service. Do not run both dispatchers against the same audience.
+
 # Persistent email architecture
 
 Implementation date: 2026-10-29. Research and constraints: [provider comparison](email-providers-research.md). Deployment is staged and disabled in the public frontend until the setup checklist is complete.
