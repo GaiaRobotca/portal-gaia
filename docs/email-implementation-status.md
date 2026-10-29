@@ -28,7 +28,7 @@ Mailjet primary for current no-owned-domain constraint, SMTP2GO optional reserve
 
 ## Evidence and limits
 
-- `node --test tests/*.test.cjs`: 50/50 passed locally on Node 24.19.0. Deployment/CI targets Node 22.
+- `node --test tests/*.test.cjs`: 51/51 passed locally on Node 24.19.0. Deployment/CI targets Node 22.
 - `node tests/email-backend-browser.cjs`: passed locally in headless Edge with every network request intercepted; dashboard screenshot at test-results/email-system.png (ignored artifact).
 - `npm audit --omit=dev --prefix functions`: zero reported vulnerabilities at installation/review time.
 - Functions exports loaded without runtime network operations after changing the store to lazy initialization.
