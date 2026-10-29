@@ -9,6 +9,8 @@ Read [architecture](email-architecture.md) before changing retry policy.
 | Resend explicit daily/monthly quota rejection | Same | Manual open; quota known exhausted | Yes |
 | EmailJS explicit monthly quota 403 | Same | Manual open; quota known exhausted | Yes |
 | HTTP 401 invalid credentials | Same | Manual open until administrator fixes | Yes |
+| Mailjet explicit mj-0001 suspended key | failed | Manual open | No |
+| Brevo explicit not_enough_credits rejection | Try next enabled provider | Manual open; quota known exhausted | Yes |
 | Adapter detects missing credentials before submission | Skip without HTTP | Configuration unavailable | Yes |
 | Provider excluded by enable flag or existing open circuit | Skip without HTTP | Existing state retained | Yes |
 | Invalid address/content / HTTP 400, 404 or 422 | Reject input or failed delivery | Manual review for provider failures | No |

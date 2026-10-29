@@ -33,7 +33,9 @@ Mailjet primary for current no-owned-domain constraint, SMTP2GO optional reserve
 - `npm audit --omit=dev --prefix functions`: zero reported vulnerabilities at installation/review time.
 - Functions exports loaded without runtime network operations after changing the store to lazy initialization.
 - `git diff --check`: clean (Windows line-ending warnings do not indicate whitespace failures).
-- Firebase database/Auth emulator integration: configured in CI; not run locally because Java is unavailable. Check the workflow for the exact tested commit before deploying.
+- Firebase database/Auth emulator integration: 2/2 passed in CI (real RTDB transactional concurrency and database security rules), using demo-gaia-email and mocked providers. Java is unavailable locally.
+- Chromium browser integration passed in CI. Both push and PR workflows passed for implementation commit `2522b362615befac7a0ceb996cbcf77408c02198`: [PR workflow](https://github.com/GaiaRobotca/portal-gaia/actions/runs/40863774169), [push workflow](https://github.com/GaiaRobotca/portal-gaia/actions/runs/40863768828).
+- The emulator exposed a real SDK cold-cache issue missed by the in-memory double: a one-shot read could be evicted before a conditional transaction. The store now keeps a temporary value listener attached throughout the transaction; the previously failing concurrency integration passes.
 - f0fdc1608bba280a4bba6747bf12efe57b2e79fe remains in branch history, with the existing antispam regressions passing.
 
 ## Activation prerequisites and remaining work
