@@ -2,6 +2,16 @@
 
 ## Live verification and Manus review — 2026-10-29
 
+### Inbox correction follow-up
+
+At 18:02 São Paulo time, one further authorized self-test was sent through the connected Gaia Gmail account, not Mailjet and not the portal dispatcher. Gmail message `1a189785278088ed` was verified with `INBOX` and `SENT`, without `SPAM`. This is an internal self-message: it establishes placement in this mailbox only and does not establish external recipient placement or a working portal integration. No Authentication-Results header was returned for the internal Gmail message, so no SPF/DKIM/DMARC result is inferred for it.
+
+The Mailjet adapter now fails closed for Gmail/googlemail From addresses before a provider request, with `sender_domain_authentication_required`; validating a mailbox at Mailjet is not authority to sign gmail.com. Brevo now supplies an explicit Reply-To, defaulting to the configured Gaia address, to preserve replies if Brevo rewrites the From domain. 53/53 offline CJS tests passed and the Worker dry-run build passed. These source changes are not active in the production portal yet.
+
+A new owner-only Apps Script deployment (same code and scopes) was created to rule out the old deployment URL as the access cause. The new URL also displayed “Não foi possível abrir o arquivo”; no route was cut over and no access was broadened. Deployment ID: `AKfycbztCPuPjqTpIeK12eCSPU_ChwgyVHSf2wCMSrBycGpvTCEIV9s3OPZEJHgfxRAb_n7R`.
+
+Free-domain alternative reviewed on 2026-10-29: [Brevo officially documents temporary sender rewriting](https://help.brevo.com/hc/en-us/articles/14925263522578-Comply-with-Gmail-Yahoo-and-Microsoft-s-requirements-for-email-senders), including a provider-controlled `t-sender-sib.com` domain for transactional mail. This can address From-domain alignment without claiming ownership of gmail.com. It is a temporary provider facility, not guaranteed inbox placement; no Brevo credentials, approval or real delivery are verified yet. Brevo login is the next account handoff; never silently enable the adapter or sign up for paid service. Mailjet requires an authenticated owned domain before returning to the selected production chain.
+
 This section supersedes the earlier account/deployment status below. Reviewed the separate, clean Manus checkout at commit `6687de2` on local branch `feat/email-provider-failover`. Both known GitHub remotes were refreshed; that commit is not on their published branches. Its antispam suite passed 4/4 and complete offline suite passed 45/45 during this review.
 
 The Manus change adds a Resend → Brevo router, persistent circuits, server-side notice loading, recipient reservations, a shared lease, Firebase Auth admin-claim enforcement and App Check. It remains an alternative scaffold: the browser does not invoke its callable, credentials are not provisioned, and it has not been deployed. Its Firebase Functions runtime also conflicts with the selected Spark/free-backend deployment path. No cherry-pick or replacement of concurrent work was performed.

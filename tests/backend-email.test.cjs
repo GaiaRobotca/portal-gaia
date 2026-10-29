@@ -16,6 +16,19 @@ class Store {
 }
 const input = (id='n1', email='a@example.org') => ({category:'notice', entityId:id, subject:'Synthetic notice', text:'Synthetic body',
   recipients:[{id:'m1', email, name:'Synthetic member'}]});
+
+test('Mailjet refuses Gmail From before submission; Brevo preserves replies when sender is rewritten',async()=>{
+  let calls=0,body;
+  const transport=async(_url,options)=>{calls++;body=JSON.parse(options.body);return new Response(JSON.stringify({messageId:'synthetic-brevo-id'}),{status:201});};
+  const providers=createProviders({mailjet:{apiKey:'synthetic',secretKey:'synthetic',from:' GAIA@gmail.com '},
+    brevo:{apiKey:'synthetic',from:'gaia@gmail.com'}},transport);
+  const message=normalize(input())[0];
+  assert.deepEqual(await providers.mailjet.send(message),{status:'failed',code:'sender_domain_authentication_required'});
+  assert.equal(calls,0);
+  assert.equal((await providers.brevo.send(message)).status,'accepted');
+  assert.equal(body.replyTo.email,'gaia@gmail.com');
+  assert.equal(calls,1);
+});
 async function fixture(outcomes={}, shared) {
   let time = 1000000000;
   const store = shared || new Store(), calls = [];

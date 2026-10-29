@@ -67,6 +67,7 @@ class BrevoProvider extends EmailProvider {
   send(m) {
     return this.request('https://api.brevo.com/v3/smtp/email', {'api-key':this.config.apiKey},
       {sender:{email:this.config.from, name:'GAIA'}, to:[{email:m.to, name:m.toName}], subject:m.subject,
+        replyTo:{email:this.config.replyTo || this.config.from, name:'GAIA'},
         htmlContent:m.html, textContent:m.text, headers:{idempotencyKey:m.id}}, d =>
         typeof d?.messageId === 'string' ? result('accepted', 'accepted', {providerMessageId:d.messageId}) : result('unknown', 'missing_receipt'));
   }
@@ -83,6 +84,9 @@ class SMTP2GOProvider extends EmailProvider {
 class MailjetProvider extends EmailProvider {
   constructor(c, t) { super('mailjet', c, t); }
   send(m) {
+    // Mailjet cannot authenticate Google's From domain. A verified mailbox is not domain authentication.
+    if (/@(?:gmail|googlemail)\.com$/i.test(String(this.config.from || '').trim()))
+      return Promise.resolve(result('failed', 'sender_domain_authentication_required'));
     const auth = Buffer.from(this.config.apiKey + ':' + this.config.secretKey).toString('base64');
     return this.request('https://api.mailjet.com/v3.1/send', {Authorization:'Basic ' + auth},
       {Messages:[{From:{Email:this.config.from, Name:'GAIA'}, To:[{Email:m.to, Name:m.toName}],
