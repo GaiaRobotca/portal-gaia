@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.*
+!.env.example
+gaia-*-backup-*.json
+gaia-portal-snapshot.json
+test-results/
+playwright-report/

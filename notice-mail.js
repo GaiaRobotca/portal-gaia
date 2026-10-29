@@ -1,5 +1,6 @@
 (function (root) {
   "use strict";
+  const emailApi = typeof module === 'object' ? require('./email-queue.js') : root.GaiaEmail;
   const sectors = {
     adm: "ADM",
     gestao: "Gestão",
@@ -37,7 +38,9 @@
     validEmail,
     now = Date.now,
   }) {
-    const seen = new Set();
+    const seen = new Set(Object.values(notice.emailDelivery || {})
+      .filter(d => ["sent", "sending", "unknown"].includes(d.status))
+      .map(d => String(d.address || "").trim().toLowerCase()));
     for (const m of members.filter((m) => matches(m, notice.team))) {
       const address = String(m.email || "")
         .trim()
@@ -81,6 +84,7 @@
             [m.id]: {
               ...n.emailDelivery[m.id],
               status: "sent",
+              provider: "emailjs",
               updatedAt: now(),
             },
           },
@@ -98,7 +102,9 @@
             [m.id]: {
               ...n.emailDelivery[m.id],
               status,
-              error: String(e?.text || e?.message || "Falha de conexão"),
+              error: emailApi.describeError(e).message,
+              errorCode: emailApi.describeError(e).code,
+              provider: "emailjs",
               updatedAt: now(),
             },
           },
@@ -154,6 +160,25 @@
   }
   const queue = portalEmailQueue;
   let busy = false;
+  const routeRef = id => firebase.database().ref('gaia_notice_routes/' + id);
+  root.configureGmailFallback = function () {
+    if (!CU?.isAdmin) return;
+    const value = prompt('URL do aplicativo Apps Script do Gaia (acesso: somente a conta Gaia):', localStorage.getItem('gaiaGmailFallbackUrl') || '');
+    if (value === null) return;
+    if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(value.trim()))
+      return toast('Informe uma URL válida de implantação do Apps Script, terminada em /exec.', 'err');
+    localStorage.setItem('gaiaGmailFallbackUrl', value.trim());
+    toast('Reserva Gmail configurada neste navegador.');
+  };
+  root.openGmailFallback = function (id) {
+    if (!CU?.isAdmin) return;
+    if (!/^[A-Za-z0-9_-]{1,100}$/.test(id)) return toast('ID de aviso inválido.', 'err');
+    const url = localStorage.getItem('gaiaGmailFallbackUrl') || '';
+    if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(url))
+      return toast('Use Configurar reserva Gmail no mural primeiro.', 'warn');
+    // Only the notice ID leaves the portal. Recipients/content are read on the server.
+    window.open(url + '?notice=' + encodeURIComponent(id), '_blank', 'noopener,noreferrer');
+  };
   root.addEventListener("beforeunload", (event) => {
     if (busy) {
       event.preventDefault();
@@ -163,13 +188,22 @@
   root.sendNoticeMail = async function (id) {
     if (busy) throw Error("Aguarde o envio atual");
     if (!CU?.isAdmin) throw Error("Apenas administradores podem enviar avisos");
+    if (!/^[A-Za-z0-9_-]{1,100}$/.test(id)) throw Error("ID de aviso inválido");
     const notice = NOT.find((n) => n.id === id);
     if (!notice) throw Error("Aviso não encontrado");
     const config = { ...ECFG };
     if (!config.serviceId || !config.templateId || !config.publicKey)
       throw Error("Configure o EmailJS antes do envio");
     busy = true;
+    let routeOwned = false;
     try {
+      // A permanent Gmail handoff and a primary batch must never run together.
+      const route = await routeRef(id).transaction(current => {
+        if (current?.provider === 'apps-script' || current?.status === 'sending') return;
+        return {provider:'emailjs', status:'sending', updatedAt:Date.now()};
+      });
+      if (!route.committed) throw Error('Este aviso está em envio ou foi transferido ao Gmail. Confira a reserva Gmail.');
+      routeOwned = true;
       await deliver({
         notice,
         members: M,
@@ -186,13 +220,19 @@
           }),
       });
       const totals = summary(NOT.find((n) => n.id === id)?.emailDelivery);
+      console.info('[email] provider=emailjs sent=' + totals.sent + ' failed=' + totals.failed + ' missing=' + totals.missing + ' unknown=' + (totals.unknown + totals.sending));
       toast(
-        `${totals.sent} aceitos pelo serviço · ${totals.failed} falhas · ${totals.missing} sem e-mail · ${totals.unknown + totals.sending} a conferir`,
-        totals.failed || totals.unknown || totals.sending ? "warn" : "ok",
+        !Object.keys(NOT.find(n => n.id === id)?.emailDelivery || {}).length
+          ? 'Nenhum membro encontrado para o setor.'
+          : !totals.sent && !totals.failed && !totals.unknown && !totals.sending
+            ? 'Nenhum e-mail válido encontrado para envio.'
+            : `${totals.sent} aceitos pelo serviço · ${totals.failed} falhas · ${totals.missing} sem e-mail · ${totals.unknown + totals.sending} a conferir`,
+        !totals.sent || totals.failed || totals.unknown || totals.sending ? "warn" : "ok",
       );
       return totals;
     } finally {
       busy = false;
+      if (routeOwned) await routeRef(id).set({provider:'emailjs', status:'idle', updatedAt:Date.now()});
       renderNotices();
     }
   };
@@ -242,8 +282,9 @@
     }
   };
   root.renderNotices = function () {
+    Object.assign(el("notices-btn").style, {display:'flex', gap:'6px', flexWrap:'wrap', marginRight:'44px'});
     el("notices-btn").innerHTML = CU?.isAdmin
-      ? '<button class="btn btn-blue btn-sm" onclick="openModal(\'modal-notice\')">+ Publicar</button>'
+      ? '<button class="btn btn-blue btn-sm" onclick="openModal(\'modal-notice\')">+ Publicar</button> <button class="btn btn-sm" onclick="configureGmailFallback()">Configurar reserva Gmail</button>'
       : "";
     const member = M.find((m) => m.id === CU?.id);
     const list = NOT.filter(
@@ -269,10 +310,10 @@
                   Object.values(n.emailDelivery)
                     .map(
                       (d) =>
-                        `${escape(d.name)}: ${escape({ sent: "aceito pelo serviço", failed: "falha", missing: "sem e-mail válido", unknown: "resultado incerto", sending: "em envio / conferir resultado", duplicate: "endereço repetido" }[d.status] || d.status)}${d.error ? " — " + escape(d.error) : ""}`,
+                        `${escape(d.name)}: ${escape({ sent: "aceito pelo serviço", failed: "falha", missing: "sem e-mail válido", unknown: "resultado incerto", sending: "em envio / conferir resultado", duplicate: "endereço repetido" }[d.status] || d.status)}${d.provider ? ' (' + escape(d.provider) + ')' : ''}${d.error ? " — " + escape(d.error) : ""}`,
                     )
                     .join("<br>") +
-                  "</details>"
+                  "</details>" + (/^[A-Za-z0-9_-]{1,100}$/.test(n.id) ? `<button class="btn btn-sm" onclick="openGmailFallback('${n.id}')">Reserva Gmail</button>` : '')
                 : "";
             return `<div class="notice ${["info", "evento", "geral", "urgente"].includes(n.type) ? n.type : "info"}"><span class="notice-type">${escape({ info: "Informação", evento: "Evento", geral: "Geral", urgente: "Urgente" }[n.type] || "Informação")} · ${escape(sectors[n.team] || "Todos os setores")}</span><div class="notice-title">${escape(n.title)}</div><div class="notice-body" style="white-space:pre-wrap">${escape(n.body)}</div><div class="notice-meta">Por ${escape(n.author)} · ${escape(fmtDate(n.date))}</div><p>${status}</p>${details}${CU?.isAdmin ? `<button class="btn btn-sm" onclick="retryNoticeMail('${escape(n.id)}')">Enviar pendentes</button> <button class="btn btn-sm" onclick="deleteNotice('${escape(n.id)}')">Excluir</button>` : ""}</div>`;
           })

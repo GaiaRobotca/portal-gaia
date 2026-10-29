@@ -11,3 +11,8 @@ alegacao de controle de acesso baseada apenas na interface.
 
 Nao disparar email automaticamente em login, sincronizacao ou timers.
 Regressao antispam: node --test tests/*.test.cjs. Ver docs/alert-spam-fix.md.
+
+Reserva Gmail: apps-script/ e docs/gmail-fallback.md. Implantacao MYSELF,
+sem envio no GET, sem endpoint publico e sem tokens no navegador. Preservar
+rota permanente por aviso, recibos privados e bloqueio de resultados incertos.
+Auditoria de cotas e escopo: docs/email-delivery-audit.md.
