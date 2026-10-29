@@ -20,7 +20,8 @@ test('real RTDB transactions deduplicate ten concurrent clients and workers',asy
   const router=new EmailRouter({store,config:{order:['mock'],enabled:{mock:true}},providers:{mock:{getStatus:()=>({configured:true}),
     send:async()=>{sends++;return {status:'accepted',code:'accepted',providerMessageId:'mock-1'};}}}});
   await Promise.all(records.map(r=>router.process(r[0].id)));
-  assert.equal(sends,1);assert.equal((await store.get('deliveries/'+records[0][0].id)).status,'accepted');
+  const final=await store.get('deliveries/'+records[0][0].id);
+  assert.equal(sends,1,JSON.stringify({delivery:final,gate:await store.get('providers/mock')}));assert.equal(final.status,'accepted');
 });
 async function token(email) {
   const user=await auth.createUser({email,emailVerified:true});
