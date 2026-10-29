@@ -192,6 +192,15 @@
     if (!/^[A-Za-z0-9_-]{1,100}$/.test(id)) throw Error("ID de aviso inválido");
     const notice = NOT.find((n) => n.id === id);
     if (!notice) throw Error("Aviso não encontrado");
+    if (root.GaiaEmailBackend?.enabled) {
+      const recipients = GaiaEmail.recipients(M.filter(m => matches(m, notice.team)));
+      if (!recipients.length) throw Error('Nenhum e-mail válido encontrado para envio.');
+      const result = await root.GaiaEmailBackend.sendNotice({category:'notice', entityId:id,
+        subject:notice.title, text:notice.body,
+        recipients:recipients.map(m=>({id:m.id, name:m.name, email:m.email}))});
+      toast(`${result.deliveries.length} entregas registradas. Acompanhe em Sistema de E-mail.`);
+      return result;
+    }
     const config = { ...ECFG };
     if (!config.serviceId || !config.templateId || !config.publicKey)
       throw Error("Configure o EmailJS antes do envio");
@@ -202,7 +211,7 @@
     try {
       // A permanent Gmail handoff and a primary batch must never run together.
       const route = await routeRef(id).transaction(current => {
-        if (current?.provider === 'apps-script' || current?.status === 'sending') return;
+        if (current?.provider === 'backend' || current?.provider === 'apps-script' || current?.status === 'sending') return;
         return {provider:'emailjs', status:'sending', updatedAt:Date.now()};
       });
       if (!route.committed) throw Error('Este aviso está em envio ou foi transferido ao Gmail. Confira a reserva Gmail.');

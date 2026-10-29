@@ -14,6 +14,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%231a8fff'/><stop offset='1' stop-color='%2300e5a0'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><text x='32' y='46' font-family='Arial Black,sans-serif' font-weight='900' font-size='38' fill='white' text-anchor='middle'>G</text></svg>">
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-functions-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -522,6 +523,7 @@ body.light input,body.light select,body.light textarea{background:#fff;color:var
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
         Recompensas
       </div>
+      <div class="nav-it" id="nav-emailsystem" onclick="goPage('emailsystem',this)">Sistema de E-mail</div>
       <div class="nav-it" id="nav-emailcfg" onclick="goPage('emailcfg',this)">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Config. E-mail
@@ -774,6 +776,11 @@ body.light input,body.light select,body.light textarea{background:#fff;color:var
       <div id="rewards-list"></div>
     </div>
 
+    <div id="pg-emailsystem" class="pg">
+      <div class="ph"><div class="pt">Sistema de E-mail</div><div class="ps">Fila, provedores e recibos</div></div>
+      <button class="btn btn-sm" onclick="connectMailAccount()">Conectar conta de envio</button>
+      <div id="email-system-content"></div>
+    </div>
     <!-- EMAIL CFG -->
     <div id="pg-emailcfg" class="pg">
       <div class="ph"><div class="pt">⚙ Config. E-mail</div><div class="ps">Configure o EmailJS para notificações</div></div>
@@ -1346,7 +1353,7 @@ function renderPage(page) {
     files: ()=>{}, myprofile: renderMyProfile, mymetrics: renderMyMetrics,
     members: ()=>filterMembers(memberFilter), attendance: renderAttendance,
     hours: renderHours, submissions: renderSubmissions, newtask: renderNewTask,
-    rewards: renderRewards, emailcfg: renderEmailCfg,
+    rewards: renderRewards, emailcfg: renderEmailCfg, emailsystem: ()=>renderEmailSystem(),
   };
   if(map[page]) try{ map[page](); }catch(e){ console.error('render error', page, e); }
 }
@@ -1542,11 +1549,11 @@ function saveCalEvent() {
     Promise.allSettled(targets.map(m=>
       queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],
         notice_title:`📅 ${title}`,notice_body:`${desc||'Novo evento agendado.'}${alertDays?`\n\n⏰ Lembrete ${alertDays}d antes.`:''}`,
-        notice_type:'CALENDÁRIO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey)
+        notice_type:'CALENDÁRIO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey,{category:'event',entityId:ev.id,memberId:m.id})
     )).then(results=>{
       if(!results.length) return;
       const failures=results.filter(r=>r.status==='rejected');
-      toast(`${results.length-failures.length} e-mails aceitos pelo serviço · ${failures.length} falhas`+
+      toast(`${results.length-failures.length} ${typeof GaiaEmailBackend !== 'undefined' && GaiaEmailBackend.enabled ? 'entregas registradas na fila' : 'e-mails aceitos pelo serviço'} · ${failures.length} falhas`+
         (failures.length?' · '+GaiaEmail.describeError(failures[0].reason).message:''),failures.length?'warn':'ok');
     });
   }
@@ -2161,13 +2168,13 @@ function reviewSub(id, action){
       m.hours=(m.hours||0)+(s.hours||0);
       HL.push({memberId:s.memberId,memberName:m.name,op:'add',delta:s.hours||0,reason:`Tarefa aprovada: ${s.taskTitle}`,date:s.reviewDate,by:CU.name});
       if(m.active!==false){
-        queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Aprovada! 🎉`,notice_body:`Sua entrega "${s.taskTitle}" foi aprovada! +${s.pts}pts e +${s.hours||0}h.${fb?'\n\nObs: '+fb:''}`,notice_type:'PONTUAÇÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(reportPortalEmailError);
+        queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Aprovada! 🎉`,notice_body:`Sua entrega "${s.taskTitle}" foi aprovada! +${s.pts}pts e +${s.hours||0}h.${fb?'\n\nObs: '+fb:''}`,notice_type:'PONTUAÇÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey,{category:'review',entityId:s.id+'_approved',memberId:m.id}).catch(reportPortalEmailError);
       }
     }
     toast(`Aprovado! +${s.pts}pts para ${s.memberName}`);
   } else {
     if(m&&m.active!==false){
-      queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Devolvida ⚠️`,notice_body:`Sua entrega "${s.taskTitle}" foi devolvida.${fb?'\n\nMotivo: '+fb:''}`,notice_type:'REVISÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).catch(reportPortalEmailError);
+      queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name.split(' ')[0],notice_title:`Tarefa Devolvida ⚠️`,notice_body:`Sua entrega "${s.taskTitle}" foi devolvida.${fb?'\n\nMotivo: '+fb:''}`,notice_type:'REVISÃO',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey,{category:'review',entityId:s.id+'_rejected',memberId:m.id}).catch(reportPortalEmailError);
     }
     toast('Reprovado.');
   }
@@ -2216,7 +2223,7 @@ function renderEmailCfg(){
     </div>`;
 }
 function saveEmailCfg(){ECFG.serviceId=el('cfg-svc').value.trim();ECFG.templateId=el('cfg-tpl').value.trim();ECFG.publicKey=el('cfg-key').value.trim();ECFG.configured=!!(ECFG.serviceId&&ECFG.templateId&&ECFG.publicKey);if(ECFG.configured)emailjs.init(ECFG.publicKey);save();toast(ECFG.configured?'E-mail configurado! ✓':'Preencha todos os campos','err'.slice(0,ECFG.configured?-3:0)||'ok');}
-function testEmail(){const m=M.find(x=>x.id===CU.id);if(!m||!m.email){toast('Cadastre seu e-mail primeiro','err');return;}if(!ECFG.configured){toast('Configure o EmailJS primeiro','err');return;}queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name,notice_title:'🧪 Teste — Portal Gaia',notice_body:'Se recebeu este e-mail, o EmailJS está funcionando!',notice_type:'Teste',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).then(()=>toast('E-mail enviado!')).catch(reportPortalEmailError);}
+function testEmail(){if(window.GaiaEmailBackend?.enabled){goPage('emailsystem',el('nav-emailsystem'));return;}const m=M.find(x=>x.id===CU.id);if(!m||!m.email){toast('Cadastre seu e-mail primeiro','err');return;}if(!ECFG.configured){toast('Configure o EmailJS primeiro','err');return;}queuePortalEmail(ECFG.serviceId,ECFG.templateId,{to_email:m.email,to_name:m.name,notice_title:'🧪 Teste — Portal Gaia',notice_body:'Se recebeu este e-mail, o EmailJS está funcionando!',notice_type:'Teste',portal_name:'Portal Gaia · UFTM'},ECFG.publicKey).then(()=>toast('E-mail enviado!')).catch(reportPortalEmailError);}
 
 setTimeout(()=>{ if(ECFG&&ECFG.publicKey&&ECFG.configured)emailjs.init(ECFG.publicKey); },1500);
 
@@ -2264,11 +2271,19 @@ function reportPortalEmailError(error) {
   const safe = GaiaEmail.describeError(error);
   toast(safe.message + ' [' + safe.code + ']', 'err');
 }
-function queuePortalEmail(serviceId, templateId, params, publicKey) {
+function queuePortalEmail(serviceId, templateId, params, publicKey, context) {
+  if (window.GaiaEmailBackend?.enabled) {
+    if (!context) return Promise.reject(new Error('Identidade de entrega ausente; envio bloqueado.'));
+    return window.GaiaEmailBackend.sendNotice({...context, subject:params.notice_title, text:params.notice_body,
+      recipients:[{email:params.to_email, name:params.to_name, id:context.memberId || ''}]});
+  }
   return portalEmailQueue.enqueue({serviceId, templateId, publicKey}, params);
 }
 </script>
 <script src="mail-access.js"></script>
+<script src="email-backend-config.js"></script>
+<script src="email-backend.js"></script>
+<script src="email-admin.js"></script>
 <script src="notice-mail.js"></script>
 </body>
 </html>

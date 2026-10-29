@@ -1,0 +1,5 @@
+{
+  "functions": [{ "source": "functions", "codebase": "email", "runtime": "nodejs22", "ignore": ["node_modules", ".env*", "*.log"] }],
+  "database": { "rules": "firebase-email-routes.rules.json" },
+  "emulators": { "functions": { "port": 5001 }, "database": { "port": 9000 }, "auth": { "port": 9099 }, "singleProjectMode": true }
+}

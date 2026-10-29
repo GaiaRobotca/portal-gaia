@@ -4,13 +4,18 @@
     "gaia_notice_routes": {
       "$noticeId": {
         ".read": "auth != null && auth.token.email == 'gaia.robotica.uftm@gmail.com' && auth.token.email_verified == true",
-        ".write": "auth != null && auth.token.email == 'gaia.robotica.uftm@gmail.com' && auth.token.email_verified == true && newData.exists() && (!data.exists() || data.child('provider').val() != 'apps-script' || newData.child('provider').val() == 'apps-script')",
+        ".write": "auth != null && auth.token.email == 'gaia.robotica.uftm@gmail.com' && auth.token.email_verified == true && newData.exists() && data.child('provider').val() != 'backend' && (!data.exists() || data.child('provider').val() != 'apps-script' || newData.child('provider').val() == 'apps-script')",
         ".validate": "newData.hasChildren(['provider', 'status', 'updatedAt']) && ((newData.child('provider').val() == 'emailjs' && (newData.child('status').val() == 'sending' || newData.child('status').val() == 'idle')) || (newData.child('provider').val() == 'apps-script' && newData.child('status').val() == 'reserved'))",
         "provider": { ".validate": "newData.isString()" },
         "status": { ".validate": "newData.isString()" },
         "updatedAt": { ".validate": "newData.isNumber()" },
         "$other": { ".validate": false }
       }
+    },
+    "email_system": {
+      ".read": false,
+      ".write": false,
+      "deliveries": { ".indexOn": ["status", "updatedAt", "nextAttemptAt"] }
     }
   }
 }
