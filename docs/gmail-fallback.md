@@ -1,6 +1,6 @@
 # Reserva Gmail para avisos
 
-Implementação do fork de 2026-10-16, adaptada e revalidada no original em 2026-10-28. **Não ativada em produção.**
+Implementação do fork de 2026-10-16, adaptada e revalidada no original em 2026-10-28. **Gmail privado implantado e teste de recebimento aprovado; frontend e interface privada ainda pendentes.**
 Remetente solicitado: `gaia.robotica.uftm@gmail.com`.
 
 ## Comportamento
@@ -48,6 +48,15 @@ tem armazenamento finito; ao esgotá-lo, a reserva falha antes de enviar.
 
 ## Ativação — conta do Gaia
 
+Consultar primeiro [estado atual de ativação](email-activation-status.md).
+A integração atual exige Google habilitado no Firebase, autenticação da
+conta Gaia para a rota de e-mail e a regra restrita de
+`firebase-email-routes.rules.json`. Configurar `FIREBASE_WEB_API_KEY` nas
+propriedades do script; trata-se do identificador público do projeto existente,
+sem criar chave privada. No mural, usar **Conectar conta de envio** antes do
+EmailJS. Tokens Firebase ficam apenas no servidor e não são registrados.
+
+
 1. Revisar e publicar a versão atualizada de `notice-mail.js` e
    `email-queue.js` junto com o portal. Fechar/recarregar abas antigas antes
    de ativar a reserva. O fork e o site original não são a mesma implantação.
@@ -62,7 +71,7 @@ tem armazenamento finito; ao esgotá-lo, a reserva falha antes de enviar.
    Nenhum projeto Google foi criado automaticamente por este trabalho.
 4. Autorizar os escopos declarados: envio de e-mail (MailApp, sem leitura da
    caixa), chamadas HTTP, identificação do usuário e acesso ao Firebase.
-   O token OAuth fica no servidor, no cabeçalho Authorization. A conta precisa
+   O token OAuth fica no servidor e é trocado por uma identidade Firebase. A conta precisa
    já ter permissão apropriada no projeto Firebase. Em caso de HTTP 401/403,
    parar e revisar a configuração com o responsável pelo projeto; não ampliar
    permissões indiscriminadamente. Compatibilidade OAuth/IAM real: NÃO TESTADA.
@@ -104,7 +113,7 @@ portal atualizado. Isso não corrige as regras Firebase nem clientes antigos.
 ## Validação e estudo
 
 TESTADO AUTOMATICAMENTE: `node --test tests/*.test.cjs` (serviços simulados).
-Resultado local: 29 testes aprovados em 2026-10-28.
+Resultado local: 35 testes aprovados em 2026-10-28.
 Casos: autorização, cota, conflito ETag, lock, prévia alterada, deduplicação,
 falha ambígua, recibo sobrevivendo a snapshot antigo, 30 destinatários em lotes de 20 + 10 e bloqueio
 do EmailJS após transferência. Nenhum teste chama serviços externos reais.

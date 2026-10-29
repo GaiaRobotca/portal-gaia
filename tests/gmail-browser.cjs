@@ -17,12 +17,13 @@ const assert=require('node:assert/strict');
         once:async()=>({val:()=>read(p)}),set:async v=>write(p,v),update:async v=>write(p,{...read(p),...v}),
         onDisconnect:()=>({update:()=>{}}),transaction:async fn=>{const v=fn(read(p));if(v!==undefined)write(p,v);return {committed:v!==undefined,snapshot:{val:()=>read(p)}};}});
       window.firebase={initializeApp:()=>({}),database:()=>({ref})};
+      window.firebase.auth=()=>({currentUser:{email:'gaia.robotica.uftm@gmail.com',emailVerified:true}});
       window.emailCalls=0;window.emailjs={send:async()=>{emailCalls++;throw {status:403,text:'Monthly request quota exceeded'};}};
       window.opened=[];window.open=(...args)=>{opened.push(args);};
     });
     await page.route('**/*',route=>{
       const url=new URL(route.request().url());
-      const allowed={'/':'index.html','/email-queue.js':'email-queue.js','/notice-mail.js':'notice-mail.js'};
+      const allowed={'/':'index.html','/email-queue.js':'email-queue.js','/mail-access.js':'mail-access.js','/notice-mail.js':'notice-mail.js'};
       const file=url.hostname==='gaia.test'?allowed[url.pathname]:undefined;
       return route.fulfill({contentType:file?.endsWith('.html')?'text/html':'application/javascript',body:file?fs.readFileSync(path.join(__dirname,'..',file)) : ''});
     });

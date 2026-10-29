@@ -1,5 +1,11 @@
 # Auditoria de envio de e-mail — 28/10/2026
 
+**Atualização de ativação:** a leitura posterior das regras reais confirmou
+um bloqueio na rota de coordenação do PR. Consultar
+[estado de ativação](email-activation-status.md) antes de publicar. Os campos
+UNKNOWN abaixo registram os limites da auditoria inicial, não substituem
+essa evidência posterior.
+
 ## Diagnóstico e evidências
 
 Base auditada: `GaiaRobotca/portal-gaia`, `main` em

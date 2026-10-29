@@ -160,10 +160,11 @@
   }
   const queue = portalEmailQueue;
   let busy = false;
+  const defaultGmailUrl = 'https://script.google.com/macros/s/AKfycbwB32C6YuL9VazjnPxcDTkhbhgHEcSi_sISrncuGmemBcD6sQbNLzTk5WqYsc2JSUum/exec';
   const routeRef = id => firebase.database().ref('gaia_notice_routes/' + id);
   root.configureGmailFallback = function () {
     if (!CU?.isAdmin) return;
-    const value = prompt('URL do aplicativo Apps Script do Gaia (acesso: somente a conta Gaia):', localStorage.getItem('gaiaGmailFallbackUrl') || '');
+    const value = prompt('URL do aplicativo Apps Script do Gaia (acesso: somente a conta Gaia):', localStorage.getItem('gaiaGmailFallbackUrl') || defaultGmailUrl);
     if (value === null) return;
     if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(value.trim()))
       return toast('Informe uma URL válida de implantação do Apps Script, terminada em /exec.', 'err');
@@ -173,7 +174,7 @@
   root.openGmailFallback = function (id) {
     if (!CU?.isAdmin) return;
     if (!/^[A-Za-z0-9_-]{1,100}$/.test(id)) return toast('ID de aviso inválido.', 'err');
-    const url = localStorage.getItem('gaiaGmailFallbackUrl') || '';
+    const url = localStorage.getItem('gaiaGmailFallbackUrl') || defaultGmailUrl;
     if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(url))
       return toast('Use Configurar reserva Gmail no mural primeiro.', 'warn');
     // Only the notice ID leaves the portal. Recipients/content are read on the server.
@@ -194,6 +195,8 @@
     const config = { ...ECFG };
     if (!config.serviceId || !config.templateId || !config.publicKey)
       throw Error("Configure o EmailJS antes do envio");
+    await root.GaiaMailAccess.requireUser();
+    if (busy) throw Error("Aguarde o envio atual");
     busy = true;
     let routeOwned = false;
     try {
@@ -284,7 +287,7 @@
   root.renderNotices = function () {
     Object.assign(el("notices-btn").style, {display:'flex', gap:'6px', flexWrap:'wrap', marginRight:'44px'});
     el("notices-btn").innerHTML = CU?.isAdmin
-      ? '<button class="btn btn-blue btn-sm" onclick="openModal(\'modal-notice\')">+ Publicar</button> <button class="btn btn-sm" onclick="configureGmailFallback()">Configurar reserva Gmail</button>'
+      ? '<button class="btn btn-blue btn-sm" onclick="openModal(\'modal-notice\')">+ Publicar</button> <button class="btn btn-sm" onclick="connectMailAccount()">Conectar conta de envio</button> <button class="btn btn-sm" onclick="configureGmailFallback()">Configurar reserva Gmail</button>'
       : "";
     const member = M.find((m) => m.id === CU?.id);
     const list = NOT.filter(

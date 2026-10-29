@@ -12,7 +12,7 @@ function fixture(options={}) {
   const notice={id:'notice1',title:'Aviso de teste',body:'Conteúdo de teste',team:'all',emailRequested:true,
     emailDelivery:{m1:{address:member.email,status:'failed',error:'Monthly request quota exceeded',attempts:3}}};
   const database={'gaia_v7/notices':[notice],'gaia_v7/members':[member]};
-  const versions={},properties={ENABLED:'true'},sent=[],requests=[];
+  const versions={},properties={ENABLED:'true',FIREBASE_WEB_API_KEY:'synthetic-public-key'},sent=[],requests=[];
   let quota=options.quota ?? 100, lock=true;
   const context={
     Session:{getActiveUser:()=>({getEmail:()=>options.user ?? 'gaia.robotica.uftm@gmail.com'}),getEffectiveUser:()=>({getEmail:()=> 'gaia.robotica.uftm@gmail.com'})},
@@ -23,7 +23,11 @@ function fixture(options={}) {
     MailApp:{getRemainingDailyQuota:()=>quota,sendEmail:message=>{if(options.sendError)throw Error('Simulated timeout');sent.push(copy(message));quota--; }},
     UrlFetchApp:{fetch:(url,request)=>{
       requests.push({url,request});
-      assert.equal(request.headers.Authorization,'Bearer synthetic-token');
+      if(new URL(url).hostname==='identitytoolkit.googleapis.com') {
+        assert.match(JSON.parse(request.payload).postBody,/access_token=synthetic-token/);
+        return {getResponseCode:()=>options.authHttpError||200,getContentText:()=>JSON.stringify({idToken:'synthetic-firebase-token',email:options.firebaseUser||'gaia.robotica.uftm@gmail.com',emailVerified:options.verified!==false})};
+      }
+      assert.equal(new URL(url).searchParams.get('auth'),'synthetic-firebase-token');
       const p=new URL(url).pathname.slice(1,-5), v=versions[p]||0;
       let code=200;
       if(request.method==='put') {
@@ -46,6 +50,52 @@ test('preview does not send; Gmail accepts once and permanent route prevents ret
   const again=f.context.previewNotice('notice1');
   assert.equal(f.context.sendNotice(again.id,again.fingerprint).sent,0);
   assert.equal(f.sent.length,1);
+});
+
+test('deployment check verifies access without enabling delivery or sending email',()=>{
+  const f=fixture();delete f.properties.ENABLED;
+  const result=f.context.checkDeployment();
+  assert.equal(result.enabled,false);
+  assert.equal(result.remainingRecipients,100);
+  assert.equal(result.privateRouteRead,true);
+  assert.equal(f.sent.length,0);
+  assert.equal(f.properties.ENABLED,undefined);
+  assert.ok(f.requests.filter(r=>!r.url.includes('identitytoolkit')).every(r=>r.request.method==='get'));
+});
+
+test('Firebase identity exchange rejects missing configuration, wrong identity and provider refusal',()=>{
+  const missing=fixture();delete missing.properties.FIREBASE_WEB_API_KEY;
+  assert.throws(()=>missing.context.checkDeployment(),/FIREBASE_WEB_API_KEY/);
+  for(const options of [{authHttpError:400},{firebaseUser:'other@example.com'},{verified:false}]){
+    const f=fixture(options);
+    assert.throws(()=>f.context.checkDeployment(),/Firebase/);
+    assert.equal(f.sent.length,0);
+    assert.equal(f.requests.filter(r=>!r.url.includes('identitytoolkit')).length,0);
+  }
+});
+
+test('network failures never expose credential-bearing URLs or raw exceptions',()=>{
+  const f=fixture();
+  f.context.UrlFetchApp.fetch=()=>{throw Error('https://example.com?token=SECRET_SENTINEL');};
+  assert.throws(()=>f.context.checkDeployment(),error=>{
+    assert.doesNotMatch(error.message,/SECRET_SENTINEL|example.com/);
+    return true;
+  });
+});
+
+test('controlled self-test is owner-only, opt-in, single recipient and cannot repeat',()=>{
+  const f=fixture();
+  assert.throws(()=>f.context.sendSelfTest(),/desativado/);
+  f.properties.SELF_TEST_ENABLED='true';f.context.sendSelfTest();
+  assert.equal(f.sent.length,1);
+  assert.equal(f.sent[0].to,'gaia.robotica.uftm@gmail.com');
+  assert.equal(f.properties.self_test_v1,'sent');
+  f.properties.SELF_TEST_ENABLED='true';
+  assert.throws(()=>f.context.sendSelfTest(),/executado/);
+  const g=fixture({sendError:true});g.properties.SELF_TEST_ENABLED='true';
+  assert.throws(()=>g.context.sendSelfTest(),/incerto/);
+  assert.equal(g.properties.self_test_v1,'unknown');
+  assert.equal(g.properties.SELF_TEST_ENABLED,'false');
 });
 test('private receipt survives a stale portal snapshot restoring the old failure',()=>{
   const f=fixture(),old=copy(f.database['gaia_v7/notices']),p=f.context.previewNotice('notice1');
@@ -124,7 +174,7 @@ test('updated portal refuses a Gmail handoff or an unfinished primary batch befo
     let sends=0;
     const c={CU:{isAdmin:true},ECFG:{serviceId:'test',templateId:'test',publicKey:'test'},
       NOT:[{id:'notice1'}],M:[],Date,
-      GaiaEmail:require('../email-queue.js'),portalEmailQueue:{enqueue:()=>{sends++;}},
+      GaiaEmail:require('../email-queue.js'),portalEmailQueue:{enqueue:()=>{sends++;}},GaiaMailAccess:{requireUser:async()=>({})},
       firebase:{database:()=>({ref:()=>({transaction:async fn=>({committed:fn(route)!==undefined})})})},
       document:{getElementById:()=>null},addEventListener:()=>{}};
     c.window=c;vm.createContext(c);vm.runInContext(code,c);c.renderNotices=()=>{};

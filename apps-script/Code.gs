@@ -3,6 +3,51 @@ const OWNER_ = 'gaia.robotica.uftm@gmail.com';
 const DATABASE_ = 'https://portal-gaia-f5c93-default-rtdb.firebaseio.com';
 const MAX_BATCH_ = 20;
 
+// One controlled message to the owner; never sends to members or retries.
+function sendSelfTest() {
+  const props = PropertiesService.getScriptProperties();
+  if (Session.getActiveUser().getEmail().toLowerCase() !== OWNER_ || Session.getEffectiveUser().getEmail().toLowerCase() !== OWNER_)
+    throw Error('Entre com a conta Google do Gaia.');
+  if (props.getProperty('SELF_TEST_ENABLED') !== 'true' || props.getProperty('self_test_v1'))
+    throw Error('Teste desativado ou já executado.');
+  props.setProperty('self_test_v1', 'sending');
+  props.setProperty('SELF_TEST_ENABLED', 'false');
+  try {
+    MailApp.sendEmail({to:OWNER_, subject:'[GAIA] Verificação da reserva Gmail',
+      body:'Teste técnico controlado da nova reserva de e-mail do Portal Gaia. Destinatário único: a própria conta Gaia. Nenhum aviso foi enviado aos membros.', name:'GAIA Robótica · UFTM'});
+  } catch (error) { props.setProperty('self_test_v1', 'unknown'); throw Error('Resultado do teste incerto. Não repetir automaticamente.'); }
+  props.setProperty('self_test_v1', 'sent');
+  console.info('[email] selfTest=accepted recipients=1');
+}
+
+// Exposes only the public OAuth client identifier, never the access token.
+function checkGoogleClient() {
+  if (Session.getActiveUser().getEmail().toLowerCase() !== OWNER_) throw Error('Entre com a conta Google do Gaia.');
+  let response;
+  try { response = UrlFetchApp.fetch('https://oauth2.googleapis.com/tokeninfo?access_token=' + encodeURIComponent(ScriptApp.getOAuthToken()), {muteHttpExceptions:true}); }
+  catch (error) { throw Error('Não foi possível verificar a identidade OAuth.'); }
+  if (response.getResponseCode() !== 200) throw Error('A identidade OAuth foi recusada.');
+  const info = JSON.parse(response.getContentText());
+  const clientId = info.aud || info.audience || info.issued_to;
+  if (typeof clientId !== 'string' || !/^[0-9]+-[a-z0-9]+\.apps\.googleusercontent\.com$/.test(clientId)) throw Error('Identificador de cliente indisponível.');
+  const result = {clientId, emailScope:String(info.scope || '').includes('userinfo.email'), profileScope:String(info.scope || '').includes('userinfo.profile')};
+  console.info('[email] googleClient=' + JSON.stringify(result));
+  return result;
+}
+
+// Read-only deployment check. Never enables delivery or sends mail.
+function checkDeployment() {
+  const active = Session.getActiveUser().getEmail().toLowerCase();
+  const effective = Session.getEffectiveUser().getEmail().toLowerCase();
+  if (active !== OWNER_ || effective !== OWNER_) throw Error('Entre com a conta Google do Gaia.');
+  const quota = MailApp.getRemainingDailyQuota();
+  db_('gaia_notice_routes/deployment-check');
+  const result = {ownerVerified:true, remainingRecipients:quota, privateRouteRead:true,
+    enabled:PropertiesService.getScriptProperties().getProperty('ENABLED') === 'true'};
+  console.info('[email] deployment=' + JSON.stringify(result));
+  return result;
+}
+
 function authorize_() {
   const active = Session.getActiveUser().getEmail().toLowerCase();
   const effective = Session.getEffectiveUser().getEmail().toLowerCase();
@@ -14,12 +59,42 @@ function id_(id) {
   if (typeof id !== 'string' || !/^[A-Za-z0-9_-]{1,100}$/.test(id)) throw Error('ID de aviso inválido.');
   return id;
 }
+let firebaseSession_;
+function firebaseToken_() {
+  if (firebaseSession_) return firebaseSession_;
+  const key = PropertiesService.getScriptProperties().getProperty('FIREBASE_WEB_API_KEY');
+  if (!key) throw Error('Configure FIREBASE_WEB_API_KEY nas propriedades privadas do script.');
+  let response;
+  try {
+    response = UrlFetchApp.fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=' + encodeURIComponent(key), {
+      method:'post', contentType:'application/json', muteHttpExceptions:true,
+      payload:JSON.stringify({postBody:'access_token=' + encodeURIComponent(ScriptApp.getOAuthToken()) + '&providerId=google.com',
+        requestUri:'https://portal-gaia-f5c93.firebaseapp.com', returnSecureToken:true})
+    });
+  } catch (error) { throw Error('Falha de conexão na autenticação Firebase. Nenhum token foi registrado.'); }
+  if (response.getResponseCode() !== 200) {
+    let reason = 'UNKNOWN';
+    try {
+      const reported = String(JSON.parse(response.getContentText()).error?.message || '').split(' : ')[0];
+      if (['INVALID_IDP_RESPONSE','INVALID_OAUTH_CLIENT_ID','OPERATION_NOT_ALLOWED','CONFIGURATION_NOT_FOUND','API_KEY_INVALID','INVALID_CREDENTIAL','UNAUTHORIZED_DOMAIN','PROJECT_NOT_FOUND'].includes(reported)) reason = reported;
+    } catch (error) { /* Never include a provider body in diagnostic output. */ }
+    throw Error('Autenticação Firebase recusada (HTTP ' + response.getResponseCode() + ', ' + reason + '). Verifique o provedor Google.');
+  }
+  const result = JSON.parse(response.getContentText());
+  if (result.email !== OWNER_ || result.emailVerified !== true || !result.idToken)
+    throw Error('Identidade Firebase não autorizada para envio.');
+  firebaseSession_ = result.idToken;
+  return firebaseSession_;
+}
 function db_(path, method, value, etag) {
-  const headers = {Authorization: 'Bearer ' + ScriptApp.getOAuthToken(), 'X-Firebase-ETag': 'true'};
+  const headers = {'X-Firebase-ETag': 'true'};
   if (etag !== undefined) headers['if-match'] = etag;
   const options = {method: method || 'get', headers: headers, muteHttpExceptions: true};
   if (value !== undefined) { options.contentType = 'application/json'; options.payload = JSON.stringify(value); }
-  const response = UrlFetchApp.fetch(DATABASE_ + '/' + path + '.json', options);
+  const token = firebaseToken_();
+  let response;
+  try { response = UrlFetchApp.fetch(DATABASE_ + '/' + path + '.json?auth=' + encodeURIComponent(token), options); }
+  catch (error) { throw Error('Falha no acesso autenticado ao Firebase. Verifique configuração e conectividade; nenhum token foi registrado.'); }
   const code = response.getResponseCode();
   if (code === 412) return {conflict:true};
   if (code !== 200) {
