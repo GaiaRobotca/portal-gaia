@@ -11,7 +11,7 @@
     "FIREBASE_PROJECT_ID": "portal-gaia-f5c93",
     "FIREBASE_DATABASE_URL": "https://portal-gaia-f5c93-default-rtdb.firebaseio.com",
     "EMAIL_ADMIN_EMAILS": "gaia.robotica.uftm@gmail.com",
-    "EMAIL_PROVIDER_ORDER": "mailjet,smtp2go,resend,brevo,emailjs"
+    "EMAIL_PROVIDER_ORDER": "brevo,mailjet,smtp2go,resend,emailjs"
   },
-  "d1_databases": [{ "binding": "DB", "database_name": "gaia-email", "database_id": "REPLACE_WITH_CREATED_D1_ID", "migrations_dir": "migrations" }]
+  "d1_databases": [{ "binding": "DB", "database_name": "gaia-email", "database_id": "c7d78c2c-948b-4f9d-800d-29426ed31055", "migrations_dir": "migrations" }]
 }

@@ -4,6 +4,10 @@ Escolha explícita de Pedro em 29/10/2026: manter Firebase Spark e adaptar para 
 
 ## Estado verificado
 
+Atualização da ativação Brevo: login da conta Gaia confirmado e plano **Grátis** selecionado; o painel informa 300 envios/dia. A própria Brevo exige verificação de telefone antes do primeiro envio. A verificação foi solicitada ao titular diretamente no site; não há confirmação de conclusão, chave API provisionada ou teste Brevo real. O adaptador já preserva Reply-To da Gaia quando o provedor substitui o domínio remetente. Para esta conta sem domínio próprio, a configuração preparada coloca Brevo primeiro; todos os provedores continuam desabilitados até a validação real.
+
+O ID do D1 existente foi registrado em `worker/wrangler.jsonc`. A tentativa de abrir o formulário de binding no painel Cloudflare terminou em timeout; a conexão do banco ao Worker **não foi confirmada**. As observações do navegador seguintes também falharam. Antes de repetir qualquer mutação, reler o estado real do painel. Nenhuma implantação de dispatcher ou mudança de frontend foi confirmada nesta etapa.
+
 - Firebase console: projeto portal-gaia-f5c93 no Spark, sem faturamento por uso habilitado.
 - Cloudflare: acesso confirmado; D1 `gaia-email` criado, schema inicial e índices aplicados. O Worker de mesmo nome existe em `https://gaia-email.gaia-robotica-uftm.workers.dev`, mas a versão ativa `77612a84` ainda é Hello World. Dispatcher, bindings, secrets e cron pendentes: não é backend de envio ativo.
 - Mailjet: conta Gaia ativada no Free. Um teste único pelo adaptador em 29/10/2026 às 17h58 chegou à conta Gaia em **Spam** (Mailjet `288230417721772860`; Gmail `1a18974a7ce61c70`). SPF/DKIM passaram, DMARC do remetente gmail.com falhou. Não foi teste da fila/portal; entrega na caixa de entrada continua não comprovada. Nenhum envio aos membros.
