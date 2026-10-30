@@ -6,16 +6,20 @@ Escolha explícita de Pedro em 29/10/2026: manter Firebase Spark e adaptar para 
 
 Atualização da ativação Brevo: login da conta Gaia confirmado e plano **Grátis** selecionado; o painel informa 300 envios/dia. A própria Brevo exige verificação de telefone antes do primeiro envio. A verificação foi solicitada ao titular diretamente no site; não há confirmação de conclusão, chave API provisionada ou teste Brevo real. O adaptador já preserva Reply-To da Gaia quando o provedor substitui o domínio remetente. Para esta conta sem domínio próprio, a configuração preparada coloca Brevo primeiro; todos os provedores continuam desabilitados até a validação real.
 
-O ID do D1 existente foi registrado em `worker/wrangler.jsonc`. A tentativa de abrir o formulário de binding no painel Cloudflare terminou em timeout; a conexão do banco ao Worker **não foi confirmada**. As observações do navegador seguintes também falharam. Antes de repetir qualquer mutação, reler o estado real do painel. Nenhuma implantação de dispatcher ou mudança de frontend foi confirmada nesta etapa.
+Atualização de 30/10/2026: o binding de produção `DB` foi conectado ao D1 existente `gaia-email` (UUID no `worker/wrangler.jsonc`). Foram aplicadas as cinco variáveis públicas do arquivo Wrangler e a flag `nodejs_compat`, com data de compatibilidade 2026-10-29. O dispatcher compilado foi minificado para transferência ao editor oficial; o conteúdo copiado de volta do editor foi idêntico ao artefato (19.314 caracteres; checksum FNV-1a 797270084). Depois da publicação, POST sem Origin retornou 403 `origin_denied`, e POST com a Origin correta e sem credencial retornou 401 `unauthorized`. Estes testes não admitiram mensagens nem comprovaram login válido, D1 em operação real ou envio.
+
+Continuam pendentes: `FIREBASE_WEB_API_KEY`, `EMAIL_PROVIDER_SECRETS`, cron, autenticação real do proprietário, regras de reserva e corte do frontend. Todos os provedores continuam desabilitados. O site publicado não mudou.
+
+Pedro autorizou expressamente criar a chave Brevo `GAIA Portal - Cloudflare - email transacional` e armazená-la como secret no Worker `gaia-email`. A proposta revisada usa acesso restrito: somente E-mails transacionais/Todos, que também inclui modelos e logs; demais recursos sem permissão; vencimento 30/10/2027 ou 90 dias sem uso. A tentativa de criação abriu a verificação obrigatória de telefone, **não uma chave**. Essa autorização não precisa ser repetida enquanto escopo, destino e prazo forem os mesmos. O botão Enviar código estava desabilitado; não houve confirmação de solicitação de SMS. A aba passou a falhar na interação; o titular foi orientado a conferir país e telefone e concluir a verificação diretamente. Não registrar telefone ou código neste repositório.
 
 - Firebase console: projeto portal-gaia-f5c93 no Spark, sem faturamento por uso habilitado.
-- Cloudflare: acesso confirmado; D1 `gaia-email` criado, schema inicial e índices aplicados. O Worker de mesmo nome existe em `https://gaia-email.gaia-robotica-uftm.workers.dev`, mas a versão ativa `77612a84` ainda é Hello World. Dispatcher, bindings, secrets e cron pendentes: não é backend de envio ativo.
+- Cloudflare: D1 criado e conectado; dispatcher publicado em `https://gaia-email.gaia-robotica-uftm.workers.dev`. Recusas de origem/autenticação verificadas em produção. Secrets, cron e integração autenticada ainda pendentes: não é backend de envio ativo.
 - Mailjet: conta Gaia ativada no Free. Um teste único pelo adaptador em 29/10/2026 às 17h58 chegou à conta Gaia em **Spam** (Mailjet `288230417721772860`; Gmail `1a18974a7ce61c70`). SPF/DKIM passaram, DMARC do remetente gmail.com falhou. Não foi teste da fila/portal; entrega na caixa de entrada continua não comprovada. Nenhum envio aos membros.
 - Código do Worker compila; D1 local e workerd passam nos testes sintéticos. Isso não comprova entrega real ou consumo de CPU em produção.
 
 ## Arquitetura selecionada
 
-Portal → Firebase Auth (identidade) → Worker autenticado → fila privada D1 → Cron → EmailRouter compartilhado → Mailjet/reserva.
+Portal → Firebase Auth (identidade) → Worker autenticado → fila privada D1 → Cron → EmailRouter compartilhado → Brevo/reserva configurada.
 
 O Firebase mantém o portal e sua identidade no Spark. O novo Worker não usa service account e não precisa de Admin SDK em produção. Valida o token do usuário com o endpoint oficial accounts:lookup do Google, confirma projeto/issuer/expiração e o perfil verificado autorizado; o token recebido não é armazenado no D1. A chave pública web do Firebase é configuração, não uma credencial de envio privada. Cada admissão de aviso usa o token somente para consultar e reservar a rota protegida no Firebase com ETag/if-match; nenhuma senha é enviada ao Worker.
 
