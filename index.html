@@ -1052,7 +1052,7 @@ function setOnline(uid) {
   sessionFlushInterval = setInterval(() => flushSession(uid), 60000);
 }
 function flushSession(uid) {
-  if (!uid || !sessionStart) return;
+  if (!uid || !sessionStart || attSaving) return;
   const today = GaiaAttendance.today();
   const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
   sessionStart = Date.now();
@@ -1063,7 +1063,7 @@ function flushSession(uid) {
 }
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && CU) flushSession(CU.id);
-  else if (!document.hidden && CU) { sessionStart = Date.now(); setOnline(CU.id); }
+  else if (!document.hidden && CU && !attSaving) { sessionStart = Date.now(); setOnline(CU.id); }
 });
 window.addEventListener('beforeunload', () => { if (CU) flushSession(CU.id); });
 
@@ -2260,7 +2260,7 @@ async function saveAttendance() {
     clearTimeout(slow);
     attSaving = false;
     for (const id of ['att-date', 'att-desc', 'att-hrs']) el(id).disabled = false;
-    if (CU) renderAttendance();
+    if (CU && currentPage === 'attendance') renderAttendance();
   }
 }
 
