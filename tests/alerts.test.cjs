@@ -33,8 +33,8 @@ test('new event date has its own in-portal reminder and empty list is quiet',()=
   assert.equal(s.notifications.length,2);
 });
 test('event email is opt-in and correction notice is visible in the home page',()=>{
-  const input=html.match(/<input[^>]*id="cal-email"[^>]*>/)[0];
-  assert.doesNotMatch(input,/\bchecked\b/);
+  assert.match(html,/id="cal-publish"[^>]*onclick="saveCalEvent\(\)"/);
+  assert.match(html,/id="cal-publish-email"[^>]*onclick="saveCalEvent\(true\)"/);
   assert.match(html,/id="alert-spam-fix-notice"/);
   assert.doesNotMatch(html,/Enviar e-mail para todos no dia do alerta/);
 });
