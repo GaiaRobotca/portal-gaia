@@ -17,6 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 #pg-attendance [hidden] { display: none !important; }
+#pg-attendance .ph-top { gap: 8px; flex-wrap: wrap; }
 :root {
   --bg:     #070d18;
   --bg2:    #0c1422;
@@ -2075,6 +2076,10 @@ let attInitialized = false;
 let attSaving = false;
 let attAttempt = null;
 let attHistoryKey;
+let attendanceConnected = false;
+firebase.database().ref('.info/connected').on('value', snap => {
+  attendanceConnected = snap.val() === true;
+});
 
 function resetAttendance() {
   attSelected.clear();
@@ -2170,26 +2175,32 @@ function renderAttHistory() {
       return mem || { name: (a.memberNames&&a.memberNames[a.members.indexOf(uid)])||uid, color:'#888', id:uid };
     });
     const chips = participantDetails.map(mem =>
-      `<span class="att-participant-chip">${avImg(mem.name,mem.color||'#888',20)} ${mem.name}</span>`
+      `<span class="att-participant-chip">${avImg(esc(mem.name), /^#[0-9a-f]{3,8}$/i.test(mem.color) ? mem.color : '#888',20)} ${esc(mem.name)}</span>`
     ).join('');
     return `<div class="att-session-card">
       <div class="att-session-hd" onclick="toggleAttSession(${idx})">
         <div style="flex:1">
-          <div style="font-size:13px;font-weight:500">${a.desc||'Reunião'}</div>
-          <div style="font-size:11px;color:var(--dim);margin-top:2px">${fmtDate(a.date)} · <span style="color:var(--green)">+${a.hours}h</span> · ${a.members.length} presente${a.members.length!==1?'s':''}</div>
+          <div style="font-size:13px;font-weight:500">${esc(a.desc||'Reunião')}</div>
+          <div style="font-size:11px;color:var(--dim);margin-top:2px">${GaiaAttendance.validDate(a.date) ? fmtDate(a.date) : '—'} · <span style="color:var(--green)">+${Number(a.hours) || 0}h</span> · ${a.members.length} presente${a.members.length!==1?'s':''}</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
-          ${CU.isAdmin?`<button class="btn btn-red btn-sm" style="padding:3px 9px;font-size:10px" onclick="event.stopPropagation();deleteAtt('${a.id}')">🗑</button>`:''}
+          ${CU.isAdmin?`<button class="btn btn-red btn-sm" style="padding:3px 9px;font-size:10px" data-att-remove="${idx}" aria-label="Remover registro">🗑</button>`:''}
           <span class="att-session-chevron" id="att-chev-${idx}">›</span>
         </div>
       </div>
       <div class="att-session-body" id="att-body-${idx}">
         <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px">Participantes (${a.members.length})</div>
         <div style="display:flex;flex-wrap:wrap">${chips || '<span style="font-size:12px;color:var(--dim)">Nenhum participante.</span>'}</div>
-        <div style="margin-top:10px;font-size:10px;color:var(--muted)">Registrado por: ${a.by||'—'}</div>
+        <div style="margin-top:10px;font-size:10px;color:var(--muted)">Registrado por: ${esc(a.by||'—')}</div>
       </div>
     </div>`;
   }).join('');
+  hist.querySelectorAll('[data-att-remove]').forEach(button => {
+    button.addEventListener('click', event => {
+      event.stopPropagation();
+      deleteAtt(list[Number(button.dataset.attRemove)].id);
+    });
+  });
 }
 function toggleAttSession(idx) {
   const body = el('att-body-'+idx), chev = el('att-chev-'+idx);
@@ -2222,6 +2233,7 @@ async function saveAttendance() {
   if (!Number.isInteger(hours) || hours < 1 || hours > 20) return toast('Informe de 1 a 20 horas inteiras.', 'err');
   const members = [...attSelected].sort();
   if (!members.length) return toast('Selecione ao menos um membro.', 'err');
+  if (!attendanceConnected) return toast('Sem conexão com o Firebase. Tente novamente quando reconectar.', 'err');
   const admin = CU;
   const key = JSON.stringify([admin.id, date, desc, hours, members]);
   if (attAttempt?.key !== key) attAttempt = { key, id: DB.child('attendance').push().key };
@@ -2252,6 +2264,74 @@ async function saveAttendance() {
   }
 }
 
+function toggleAttendanceExport() {
+  if (!CU?.isAdmin) return;
+  const panel = el('att-export');
+  panel.hidden = !panel.hidden;
+  el('att-export-toggle').setAttribute('aria-expanded', String(!panel.hidden));
+  if (!panel.hidden) el('att-period').focus();
+  updateAttendancePeriod();
+}
+
+function updateAttendancePeriod() {
+  const custom = el('att-period').value === 'custom';
+  el('att-from-field').hidden = !custom;
+  el('att-to-field').hidden = !custom;
+}
+
+let excelWriter;
+function loadAttendanceExcel() {
+  if (!excelWriter) {
+    excelWriter = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js';
+      script.integrity = 'sha384-Pqp51FUN2/qzfxZxBCtF0stpc9ONI6MYZpVqmo8m20SoaQCzf+arZvACkLkirlPz';
+      script.crossOrigin = 'anonymous';
+      script.onload = () => resolve(window.ExcelJS);
+      script.onerror = () => {
+        script.remove();
+        reject(new Error('Não foi possível carregar o gerador Excel.'));
+      };
+      document.head.append(script);
+    }).catch(error => {
+      excelWriter = null;
+      throw error;
+    });
+  }
+  return excelWriter;
+}
+
+async function exportAttendance() {
+  const button = el('att-download');
+  if (!CU?.isAdmin || button.disabled) return;
+  const admin = CU;
+  button.disabled = true;
+  try {
+    const range = GaiaAttendance.period(el('att-period').value, el('att-from').value,
+      el('att-to').value, ATT);
+    const data = GaiaAttendance.report(ATT, M, range, cargoLabel);
+    const ExcelJS = await loadAttendanceExcel();
+    if (CU !== admin || !CU.isAdmin) return;
+    const bytes = await GaiaAttendance.workbook(ExcelJS, data).xlsx.writeBuffer();
+    if (CU !== admin || !CU.isAdmin) return;
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([bytes], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    }));
+    link.download = `GAIA_Presencas_${range.start}_a_${range.end}.xlsx`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    toast(data.activities.length ? 'Planilha gerada!' : 'Planilha gerada. O período não tem registros.');
+  } catch (error) {
+    console.error('Falha ao exportar presenças', error);
+    toast(error.message || 'Não foi possível gerar a planilha.', 'err');
+  } finally {
+    button.disabled = false;
+  }
+}
+
 // ══════════════════════════════════════════════════════
 // HOURS
 // ══════════════════════════════════════════════════════
@@ -2272,16 +2352,30 @@ function renderHours(){
     ${HL.length?`<div class="sec-hd" style="margin-top:18px"><div class="sec-title">📋 Histórico</div></div><div class="card">${[...HL].reverse().slice(0,20).map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><div><span style="font-size:13px;font-weight:500">${l.memberName}</span><span style="font-size:11px;color:var(--dim);margin-left:8px">${l.reason||'—'}</span></div><div style="text-align:right"><span style="font-family:'DM Mono',monospace;font-size:13px;color:${l.delta>0?'var(--green)':l.delta<0?'var(--red)':'var(--dim)'}">${l.delta>0?'+':''}${l.delta}h</span><div style="font-size:10px;color:var(--muted)">${fmtDate(l.date)} · ${l.by}</div></div></div>`).join('')}</div>`:''}`;
 }
 function openHrsAdj(uid){const m=M.find(x=>x.id===uid);if(!m)return;el('ha-uid').value=uid;el('ha-name-lbl').textContent=`${m.name} · Horas atuais: ${m.hours||0}h`;el('ha-val').value=1;el('ha-reason').value='';openModal('modal-hrs-adj');}
-function applyHrsAdj(){
-  const uid=el('ha-uid').value,op=el('ha-op').value,val=parseInt(el('ha-val').value)||0,reason=el('ha-reason').value.trim();
-  const m=M.find(x=>x.id===uid);if(!m)return;
-  const before=m.hours||0;
-  if(op==='add')m.hours=before+val;
-  else if(op==='sub')m.hours=Math.max(0,before-val);
-  else m.hours=Math.max(0,val);
-  const delta=m.hours-before;
-  HL.push({memberId:uid,memberName:m.name,op,delta,reason,date:new Date().toISOString().split('T')[0],by:CU.name});
-  closeModal('modal-hrs-adj');save();toast('Horas ajustadas!');
+async function applyHrsAdj() {
+  if (!CU?.isAdmin) return;
+  const adminId = CU.id;
+  const uid = el('ha-uid').value, op = el('ha-op').value;
+  const val = parseInt(el('ha-val').value) || 0, reason = el('ha-reason').value.trim();
+  const date = GaiaAttendance.today();
+  closeModal('modal-hrs-adj');
+  try {
+    const result = await DB.transaction(data => {
+      const actor = data?.members?.find(m => m?.id === adminId && m.isAdmin);
+      const target = data?.members?.find(m => m?.id === uid);
+      if (!actor || !target) return;
+      const before = Number(target.hours) || 0;
+      const hours = op === 'add' ? before + val : Math.max(0, op === 'sub' ? before - val : val);
+      return { ...data, members: data.members.map(m => m?.id === uid ? { ...m, hours } : m),
+        hoursLog: [...(data.hoursLog || []), { memberId: uid, memberName: target.name, op,
+          delta: hours - before, reason, date, by: actor.name }] };
+    }, undefined, false);
+    if (!result.committed) throw new Error('Ajuste cancelado');
+    toast('Horas ajustadas!');
+  } catch (error) {
+    console.error('Falha ao ajustar horas', error);
+    toast('Não foi possível ajustar as horas.', 'err');
+  }
 }
 function saveHrsGoal(){HG=parseInt(el('goal-val').value)||20;closeModal('modal-hrs-goal');save();toast('Meta atualizada!');}
 function exportHoursCSV(){
