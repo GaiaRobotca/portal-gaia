@@ -127,7 +127,7 @@ async function run() {
   async function verifyDraft(page) {
     assert.equal(await page.locator('#att-date').inputValue(), '2026-11-29');
     assert.equal(await page.locator('#att-desc').inputValue(), 'Reunião fictícia');
-    assert.equal(await page.locator('#att-hrs').inputValue(), '2');
+    assert.equal(await page.locator('#att-hrs').inputValue(), '3');
     assert.equal(await page.locator('#att-members :checked').count(), 2);
     assert.equal(await page.locator('#att-count').textContent(), '2 selecionados');
     assert.ok(await page.evaluate(() => window.firstCheckbox === document.querySelector('#att-members input')));
@@ -137,7 +137,7 @@ async function run() {
     console.log('Opening isolated desktop portal');
     const desktop = await open('a', { width: 1366, height: 900 });
     assert.equal(await desktop.locator('#att-date').inputValue(), '2026-11-30');
-    await draft(desktop, '2026-11-29', 'Reunião fictícia', 2, [2, 3]);
+    await draft(desktop, '2026-11-29', 'Reunião fictícia', 3, [2, 3]);
     await desktop.evaluate(() => { window.firstCheckbox = document.querySelector('#att-members input'); });
     let elapsed = 0;
     for (const seconds of [30, 60, 120, 300]) {
@@ -183,8 +183,8 @@ async function run() {
     ]);
     assert.equal(nextKey, 3);
     assert.equal(commits, 2);
-    assert.equal(data.members.find(m => m.id === 'm').hours, 16);
-    assert.equal(data.members.find(m => m.id === 'n').hours, 12);
+    assert.equal(data.members.find(m => m.id === 'm').hours, 17);
+    assert.equal(data.members.find(m => m.id === 'n').hours, 13);
     assert.equal(data.attendance.filter(a => a.id === originalId).length, 1);
     assert.equal(data.hoursLog.length, 3);
     assert.equal(await desktop.locator('#att-desc').inputValue(), '');
@@ -218,7 +218,7 @@ async function run() {
       if (expected) assert.equal(typeof detail.getCell('E2').value, 'number');
       if (kind === 'all') {
         assert.equal(detail.getCell('B2').value, '=1+1');
-        assert.equal(book.worksheets[0].getCell('F2').value, 6);
+        assert.equal(book.worksheets[0].getCell('F2').value, 7);
       }
     }
     await desktop.locator('#att-from').fill('2026-03-02');
