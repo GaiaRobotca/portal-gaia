@@ -16,6 +16,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+#pg-attendance [hidden] { display: none !important; }
+#pg-attendance .ph-top { gap: 8px; flex-wrap: wrap; }
 :root {
   --bg:     #070d18;
   --bg2:    #0c1422;
@@ -681,12 +683,27 @@ body.light input,body.light select,body.light textarea{background:#fff;color:var
         <div class="ph-top">
           <div class="pt">Lista de Presença</div>
           <div style="display:flex;gap:8px">
+            <button id="att-export-toggle" class="btn btn-green btn-sm" aria-expanded="false" hidden onclick="toggleAttendanceExport()">Gerar planilha</button>
             <button class="btn btn-blue btn-sm" onclick="goPage('attendance',el('nav-attendance'))">↺ Atualizar</button>
           </div>
         </div>
         <div class="ps">Horas adicionadas automaticamente · Clique em uma reunião para ver participantes</div>
       </div>
-      <div class="card" style="margin-bottom:18px">
+      <div id="att-export" class="card" hidden style="margin-bottom:18px">
+        <div class="frow">
+          <label class="fg" style="flex:1"><span class="lbl">Período da planilha</span>
+            <select id="att-period" onchange="updateAttendancePeriod()">
+              <option value="1">Último mês</option><option value="6">Últimos 6 meses</option>
+              <option value="12">Últimos 12 meses</option><option value="all">Todo o histórico</option>
+              <option value="custom">Intervalo personalizado</option>
+            </select>
+          </label>
+          <label id="att-from-field" class="fg" style="flex:1" hidden><span class="lbl">Data inicial</span><input type="date" id="att-from"></label>
+          <label id="att-to-field" class="fg" style="flex:1" hidden><span class="lbl">Data final</span><input type="date" id="att-to"></label>
+        </div>
+        <button id="att-download" class="btn btn-blue btn-sm" onclick="exportAttendance()">Baixar Excel (.xlsx)</button>
+      </div>
+      <div id="att-form" class="card" style="margin-bottom:18px">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:14px">Registrar Nova Presença</div>
         <div class="frow">
           <div class="fg" style="flex:1"><label class="lbl">Data</label><input type="date" id="att-date"></div>
@@ -695,10 +712,10 @@ body.light input,body.light select,body.light textarea{background:#fff;color:var
         </div>
         <label class="lbl">Membros presentes</label>
         <div id="att-members" class="grid g3" style="background:var(--bg3);padding:14px;border:1px solid var(--border);border-radius:var(--r);margin:8px 0 14px"></div>
-        <div style="display:flex;gap:9px;align-items:center">
-          <button class="btn btn-green btn-sm" onclick="saveAttendance()">✓ Registrar Presença</button>
-          <button class="btn btn-ghost btn-sm" onclick="toggleAllAtt()">Marcar Todos</button>
-          <span id="att-count" style="font-size:11px;color:var(--dim)">0 selecionados</span>
+        <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+          <button id="att-save" class="btn btn-green btn-sm" onclick="saveAttendance()">✓ Registrar Presença</button>
+          <button id="att-all" class="btn btn-ghost btn-sm" onclick="toggleAllAtt()">Marcar todos</button>
+          <span id="att-count" aria-live="polite" style="font-size:11px;color:var(--dim)">0 selecionados</span>
         </div>
       </div>
       <div class="sec-hd"><div class="sec-title">📋 Histórico de Reuniões</div><span style="font-size:11px;color:var(--dim)">Clique para expandir</span></div>
@@ -1001,6 +1018,7 @@ body.light input,body.light select,body.light textarea{background:#fff;color:var
 
 <div id="toast-c"></div>
 
+<script src="attendance.js"></script>
 <script>
 // ══════════════════════════════════════════════════════
 // FIREBASE
@@ -1017,13 +1035,14 @@ const FB = firebase.initializeApp({
 const DB = firebase.database().ref('gaia_v7');
 
 // ── PRESENÇA ONLINE ──
-let sessionStart = null, sessionTodaySeconds = 0, sessionFlushInterval = null;
+let sessionDate = null, sessionStart = null, sessionTodaySeconds = 0, sessionFlushInterval = null;
 function setOnline(uid) {
   if (!uid) return;
-  const today = new Date().toISOString().split('T')[0];
+  const today = GaiaAttendance.today();
   sessionStart = Date.now();
   DB.child('sessions/' + uid).once('value', snap => {
     const d = snap.val() || {};
+    sessionDate = today;
     sessionTodaySeconds = (d.date === today ? d.todaySeconds : 0) || 0;
   });
   const ref = firebase.database().ref('gaia_v7/online/' + uid);
@@ -1033,20 +1052,20 @@ function setOnline(uid) {
   sessionFlushInterval = setInterval(() => flushSession(uid), 60000);
 }
 function flushSession(uid) {
-  if (!uid || !sessionStart) return;
-  const today = new Date().toISOString().split('T')[0];
+  if (!uid || !sessionStart || attSaving) return;
+  const today = GaiaAttendance.today();
   const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
   sessionStart = Date.now();
+  if (sessionDate !== today) { sessionTodaySeconds = 0; sessionDate = today; }
   sessionTodaySeconds += elapsed;
   DB.child('sessions/' + uid).set({ date: today, todaySeconds: sessionTodaySeconds, lastSeen: new Date().toISOString() });
   firebase.database().ref('gaia_v7/online/' + uid).update({ ts: Date.now() });
 }
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && CU) flushSession(CU.id);
-  else if (!document.hidden && CU) { sessionStart = Date.now(); setOnline(CU.id); }
+  else if (!document.hidden && CU && !attSaving) { sessionStart = Date.now(); setOnline(CU.id); }
 });
 window.addEventListener('beforeunload', () => { if (CU) flushSession(CU.id); });
-setInterval(() => { if (CU) { flushSession(CU.id); firebase.database().ref('gaia_v7/online/' + CU.id).update({ ts: Date.now() }); } }, 30000);
 
 let onlineUsers = {}, sessionData = {};
 firebase.database().ref('gaia_v7/online').on('value', snap => {
@@ -1058,7 +1077,7 @@ firebase.database().ref('gaia_v7/online').on('value', snap => {
 firebase.database().ref('gaia_v7/sessions').on('value', snap => { sessionData = snap.val() || {}; if (CU) renderCurrentPage(); });
 
 function fmtSession(uid) {
-  const today = new Date().toISOString().split('T')[0];
+  const today = GaiaAttendance.today();
   const d = sessionData[uid];
   let todaySec = (d && d.date === today ? d.todaySeconds : 0) || 0;
   if (uid === (CU && CU.id) && sessionStart) todaySec += Math.floor((Date.now() - sessionStart) / 1000);
@@ -1107,6 +1126,11 @@ let dismissedAlerts = new Set();
 // ══════════════════════════════════════════════════════
 // FIREBASE SYNC
 // ══════════════════════════════════════════════════════
+function portalData() {
+  return { members:M, tasks:T, submissions:S, rewards:R, memberPoints:MP,
+    notices:NOT, calEvents:CAL, emailConfig:ECFG, hoursGoal:HG, hoursLog:HL };
+}
+let synced = {};
 DB.on('value', snap => {
   const d = snap.val();
   if (d && d.members) {
@@ -1126,8 +1150,10 @@ DB.on('value', snap => {
     T  = JSON.parse(JSON.stringify(INIT_TASKS));
     S=[]; R=[]; ATT=[]; NOT=[]; CAL=[]; HL=[];
     M.forEach(m=>{ MP[m.id]=m.pts; });
-    save();
+    DB.transaction(current => current?.members ? current : { ...current, ...portalData() },
+      undefined, false).catch(error => console.error('Falha ao inicializar o portal', error));
   }
+  synced = JSON.parse(JSON.stringify(portalData()));
   if (CU) {
     const u = M.find(m=>m.id===CU.id);
     if (!u) { doLogout(); return; }
@@ -1141,8 +1167,43 @@ DB.on('value', snap => {
 });
 
 function save() {
-  DB.set({members:M, tasks:T, submissions:S, rewards:R, memberPoints:MP, attendance:ATT,
-    notices:NOT, calEvents:CAL, emailConfig:ECFG, hoursGoal:HG, hoursLog:HL});
+  const edited = JSON.parse(JSON.stringify(portalData()));
+  const changed = (a, b) => JSON.stringify(a) !== JSON.stringify(b);
+  const { members, hoursLog, ...modules } = edited;
+  const patch = Object.fromEntries(Object.entries(modules)
+    .filter(([key, value]) => changed(value, synced[key])));
+  const before = new Map((synced.members || []).map(m => [m.id, m]));
+  const after = new Map(members.map(m => [m.id, m]));
+  const removed = [...before.keys()].filter(id => !after.has(id));
+  const added = members.filter(m => !before.has(m.id));
+  const edits = new Map(members.filter(m => before.has(m.id)).map(m => [m.id,
+    Object.fromEntries(Object.entries(m).filter(([key, value]) => changed(value, before.get(m.id)[key])))
+  ]).filter(([, fields]) => Object.keys(fields).length));
+  const logs = hoursLog.slice((synced.hoursLog || []).length);
+  const operation = removed.length || added.length || edits.size || logs.length
+    ? DB.transaction(data => {
+      if (!data?.members) return;
+      const latest = data.members.filter(m => m && !removed.includes(m.id)).map(m => {
+        const fields = edits.get(m.id);
+        if (!fields) return m;
+        const updated = { ...m, ...fields };
+        if ('hours' in fields) {
+          updated.hours = Math.max(0, (Number(m.hours) || 0) + fields.hours - (Number(before.get(m.id).hours) || 0));
+        }
+        return updated;
+      });
+      const ids = new Set(latest.map(m => m.id));
+      return { ...data, ...patch, members: [...latest, ...added.filter(m => !ids.has(m.id))],
+        hoursLog: [...(data.hoursLog || []), ...logs] };
+    }, undefined, false).then(result => {
+      if (!result.committed) throw new Error('Alteração cancelada');
+    })
+    : Object.keys(patch).length ? DB.update(patch) : Promise.resolve();
+  operation.catch(error => {
+    console.error('Falha ao salvar', error);
+    toast('Não foi possível salvar as alterações.', 'err');
+  });
+  return operation;
 }
 
 // ══════════════════════════════════════════════════════
@@ -1317,6 +1378,9 @@ function openDrive() { window.open('https://drive.google.com/drive/u/1/folders/1
 
 function doLogout() {
   CU = null;
+  resetAttendance();
+  el('att-export').hidden = true;
+  el('att-export-toggle').setAttribute('aria-expanded', 'false');
   el('sb-online-dot').style.display = 'none';
   clearInterval(sessionFlushInterval);
   el('dash-screen').classList.remove('on');
@@ -2008,27 +2072,98 @@ function openMemberModal(uid){
 // ══════════════════════════════════════════════════════
 // ATTENDANCE
 // ══════════════════════════════════════════════════════
-let attAllSelected = false;
-function renderAttendance(){
-  el('att-date').value=new Date().toISOString().split('T')[0];
-  el('att-members').innerHTML=M.map(m=>`
-    <label style="display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:.15s" id="attlbl-${m.id}">
-      <input type="checkbox" id="att-${m.id}" value="${m.id}" style="width:14px;height:14px;accent-color:var(--blue)" onchange="updateAttCount()">
-      ${avImg(m.name,m.color,24)} <span style="font-size:12px">${m.name}</span>
-    </label>`).join('');
-  updateAttCount();
-  renderAttHistory();
+const attSelected = new Set();
+const attRows = new Map();
+let attInitialized = false;
+let attSaving = false;
+let attAttempt = null;
+let attHistoryKey;
+let attendanceConnected = false;
+firebase.database().ref('.info/connected').on('value', snap => {
+  attendanceConnected = snap.val() === true;
+});
+
+function resetAttendance() {
+  attSelected.clear();
+  attInitialized = false;
+  attAttempt = null;
+  el('att-desc').value = '';
+  el('att-hrs').value = '2';
 }
+
+function renderAttendance() {
+  const allowed = !!CU?.isAdmin;
+  el('att-form').hidden = !allowed;
+  el('att-export-toggle').hidden = !allowed;
+  if (!allowed) {
+    el('att-export').hidden = true;
+    el('att-export-toggle').setAttribute('aria-expanded', 'false');
+  }
+  if (!attInitialized) {
+    el('att-date').value = GaiaAttendance.today();
+    attInitialized = true;
+  }
+  const container = el('att-members');
+  const ids = new Set(M.map(m => m.id));
+  for (const [id, row] of attRows) {
+    if (ids.has(id)) continue;
+    row.label.remove();
+    attRows.delete(id);
+    attSelected.delete(id);
+  }
+  M.forEach((m, index) => {
+    let row = attRows.get(m.id);
+    if (!row) {
+      const label = document.createElement('label');
+      label.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;cursor:pointer';
+      const check = document.createElement('input');
+      check.type = 'checkbox';
+      check.style.cssText = 'width:14px;height:14px;accent-color:var(--blue)';
+      check.addEventListener('change', () => {
+        if (check.checked) attSelected.add(m.id);
+        else attSelected.delete(m.id);
+        updateAttCount();
+      });
+      const name = document.createElement('span');
+      name.style.fontSize = '12px';
+      label.append(check, name);
+      row = { label, check, name };
+      attRows.set(m.id, row);
+    }
+    if (row.name.textContent !== m.name) row.name.textContent = m.name;
+    row.check.checked = attSelected.has(m.id);
+    row.check.disabled = attSaving;
+    if (container.children[index] !== row.label) {
+      container.insertBefore(row.label, container.children[index] || null);
+    }
+  });
+  updateAttCount();
+  const historyKey = JSON.stringify([allowed, ATT, M.map(m => [m.id, m.name, m.color])]);
+  if (historyKey !== attHistoryKey) {
+    renderAttHistory();
+    attHistoryKey = historyKey;
+  }
+}
+
 function updateAttCount() {
-  const sel = M.filter(m=>el('att-'+m.id)&&el('att-'+m.id).checked).length;
-  const ct = el('att-count');
-  if(ct) ct.textContent = `${sel} selecionado${sel!==1?'s':''}`;
+  const count = attSelected.size;
+  el('att-count').textContent = `${count} selecionado${count === 1 ? '' : 's'}`;
+  el('att-all').textContent = count && count === attRows.size ? 'Desmarcar todos' : 'Marcar todos';
+  el('att-all').disabled = attSaving || !attRows.size;
+  el('att-save').disabled = attSaving;
 }
+
 function toggleAllAtt() {
-  attAllSelected = !attAllSelected;
-  M.forEach(m=>{ const c=el('att-'+m.id); if(c)c.checked=attAllSelected; });
+  if (!CU?.isAdmin || attSaving) return;
+  const all = attSelected.size === attRows.size;
+  attSelected.clear();
+  for (const [id, row] of attRows) {
+    row.check.checked = !all;
+    if (!all) attSelected.add(id);
+  }
   updateAttCount();
 }
+
 function renderAttHistory() {
   const hist = el('att-history');
   if(!hist)return;
@@ -2040,26 +2175,32 @@ function renderAttHistory() {
       return mem || { name: (a.memberNames&&a.memberNames[a.members.indexOf(uid)])||uid, color:'#888', id:uid };
     });
     const chips = participantDetails.map(mem =>
-      `<span class="att-participant-chip">${avImg(mem.name,mem.color||'#888',20)} ${mem.name}</span>`
+      `<span class="att-participant-chip">${avImg(esc(mem.name), /^#[0-9a-f]{3,8}$/i.test(mem.color) ? mem.color : '#888',20)} ${esc(mem.name)}</span>`
     ).join('');
     return `<div class="att-session-card">
       <div class="att-session-hd" onclick="toggleAttSession(${idx})">
         <div style="flex:1">
-          <div style="font-size:13px;font-weight:500">${a.desc||'Reunião'}</div>
-          <div style="font-size:11px;color:var(--dim);margin-top:2px">${fmtDate(a.date)} · <span style="color:var(--green)">+${a.hours}h</span> · ${a.members.length} presente${a.members.length!==1?'s':''}</div>
+          <div style="font-size:13px;font-weight:500">${esc(a.desc||'Reunião')}</div>
+          <div style="font-size:11px;color:var(--dim);margin-top:2px">${GaiaAttendance.validDate(a.date) ? fmtDate(a.date) : '—'} · <span style="color:var(--green)">+${Number(a.hours) || 0}h</span> · ${a.members.length} presente${a.members.length!==1?'s':''}</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
-          ${CU.isAdmin?`<button class="btn btn-red btn-sm" style="padding:3px 9px;font-size:10px" onclick="event.stopPropagation();deleteAtt('${a.id}')">🗑</button>`:''}
+          ${CU.isAdmin?`<button class="btn btn-red btn-sm" style="padding:3px 9px;font-size:10px" data-att-remove="${idx}" aria-label="Remover registro">🗑</button>`:''}
           <span class="att-session-chevron" id="att-chev-${idx}">›</span>
         </div>
       </div>
       <div class="att-session-body" id="att-body-${idx}">
         <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px">Participantes (${a.members.length})</div>
         <div style="display:flex;flex-wrap:wrap">${chips || '<span style="font-size:12px;color:var(--dim)">Nenhum participante.</span>'}</div>
-        <div style="margin-top:10px;font-size:10px;color:var(--muted)">Registrado por: ${a.by||'—'}</div>
+        <div style="margin-top:10px;font-size:10px;color:var(--muted)">Registrado por: ${esc(a.by||'—')}</div>
       </div>
     </div>`;
   }).join('');
+  hist.querySelectorAll('[data-att-remove]').forEach(button => {
+    button.addEventListener('click', event => {
+      event.stopPropagation();
+      deleteAtt(list[Number(button.dataset.attRemove)].id);
+    });
+  });
 }
 function toggleAttSession(idx) {
   const body = el('att-body-'+idx), chev = el('att-chev-'+idx);
@@ -2067,18 +2208,126 @@ function toggleAttSession(idx) {
   const open = body.classList.toggle('open');
   chev.classList.toggle('open', open);
 }
-function deleteAtt(id){ if(!confirm('Remover este registro?'))return; ATT=ATT.filter(a=>a.id!==id); save(); toast('Registro removido.'); }
-function saveAttendance(){
-  const date=el('att-date').value, desc=el('att-desc').value.trim(), hours=parseInt(el('att-hrs').value)||2;
-  if(!date){toast('Selecione a data','err');return;}
-  const present=M.filter(m=>el('att-'+m.id)&&el('att-'+m.id).checked);
-  if(!present.length){toast('Selecione ao menos um membro','err');return;}
-  const rec={id:'a'+Date.now(),date,desc,hours,members:present.map(m=>m.id),memberNames:present.map(m=>m.name),by:CU.name};
-  ATT.push(rec);
-  present.forEach(m=>{m.hours=(m.hours||0)+hours;HL.push({memberId:m.id,memberName:m.name,op:'add',delta:hours,reason:`Presença: ${desc||date}`,date,by:CU.name});});
-  M.forEach(m=>{const c=el('att-'+m.id);if(c)c.checked=false;});
-  updateAttCount();
-  save(); toast(`Presença registrada! +${hours}h para ${present.length} membro${present.length!==1?'s':''}.`);
+async function deleteAtt(id) {
+  if (!CU?.isAdmin || !confirm('Remover este registro do histórico? As horas já creditadas permanecerão no saldo.')) return;
+  const adminId = CU.id;
+  try {
+    const result = await DB.transaction(data => {
+      if (!data?.members?.some(m => m?.id === adminId && m.isAdmin)) return;
+      return { ...data, attendance: (data.attendance || []).filter(a => a.id !== id) };
+    }, undefined, false);
+    if (!result.committed) throw new Error('Exclusão cancelada');
+    toast('Registro removido.');
+  } catch (error) {
+    console.error('Falha ao remover presença', error);
+    toast('Não foi possível remover o registro.', 'err');
+  }
+}
+
+async function saveAttendance() {
+  if (!CU?.isAdmin || attSaving) return;
+  const date = el('att-date').value;
+  const desc = el('att-desc').value.trim();
+  const hours = el('att-hrs').valueAsNumber;
+  if (!GaiaAttendance.validDate(date)) return toast('Selecione uma data válida.', 'err');
+  if (!Number.isInteger(hours) || hours < 1 || hours > 20) return toast('Informe de 1 a 20 horas inteiras.', 'err');
+  const members = [...attSelected].sort();
+  if (!members.length) return toast('Selecione ao menos um membro.', 'err');
+  if (!attendanceConnected) return toast('Sem conexão com o Firebase. Tente novamente quando reconectar.', 'err');
+  const admin = CU;
+  const key = JSON.stringify([admin.id, date, desc, hours, members]);
+  if (attAttempt?.key !== key) attAttempt = { key, id: DB.child('attendance').push().key };
+  const record = { id: attAttempt.id, date, desc, hours, members, byId: admin.id };
+  attSaving = true;
+  for (const id of ['att-date', 'att-desc', 'att-hrs']) el(id).disabled = true;
+  renderAttendance();
+  const slow = setTimeout(() => {
+    if (CU === admin) toast('Aguardando confirmação do Firebase. O formulário continua preenchido.');
+  }, 5000);
+  try {
+    const result = await DB.transaction(data => GaiaAttendance.register(data, record), undefined, false);
+    if (!result.committed) throw new Error('Registro cancelado');
+    if (CU === admin) {
+      resetAttendance();
+      toast(`Presença registrada! +${hours}h para ${members.length} membro(s).`);
+    }
+  } catch (error) {
+    console.error('Falha ao registrar presença', error);
+    if (CU === admin) toast('Não foi possível registrar a presença. Tente novamente.', 'err');
+  } finally {
+    clearTimeout(slow);
+    attSaving = false;
+    for (const id of ['att-date', 'att-desc', 'att-hrs']) el(id).disabled = false;
+    if (CU && currentPage === 'attendance') renderAttendance();
+  }
+}
+
+function toggleAttendanceExport() {
+  if (!CU?.isAdmin) return;
+  const panel = el('att-export');
+  panel.hidden = !panel.hidden;
+  el('att-export-toggle').setAttribute('aria-expanded', String(!panel.hidden));
+  if (!panel.hidden) el('att-period').focus();
+  updateAttendancePeriod();
+}
+
+function updateAttendancePeriod() {
+  const custom = el('att-period').value === 'custom';
+  el('att-from-field').hidden = !custom;
+  el('att-to-field').hidden = !custom;
+}
+
+let excelWriter;
+function loadAttendanceExcel() {
+  if (!excelWriter) {
+    excelWriter = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js';
+      script.integrity = 'sha384-Pqp51FUN2/qzfxZxBCtF0stpc9ONI6MYZpVqmo8m20SoaQCzf+arZvACkLkirlPz';
+      script.crossOrigin = 'anonymous';
+      script.onload = () => resolve(window.ExcelJS);
+      script.onerror = () => {
+        script.remove();
+        reject(new Error('Não foi possível carregar o gerador Excel.'));
+      };
+      document.head.append(script);
+    }).catch(error => {
+      excelWriter = null;
+      throw error;
+    });
+  }
+  return excelWriter;
+}
+
+async function exportAttendance() {
+  const button = el('att-download');
+  if (!CU?.isAdmin || button.disabled) return;
+  const admin = CU;
+  button.disabled = true;
+  try {
+    const range = GaiaAttendance.period(el('att-period').value, el('att-from').value,
+      el('att-to').value, ATT);
+    const data = GaiaAttendance.report(ATT, M, range, cargoLabel);
+    const ExcelJS = await loadAttendanceExcel();
+    if (CU !== admin || !CU.isAdmin) return;
+    const bytes = await GaiaAttendance.workbook(ExcelJS, data).xlsx.writeBuffer();
+    if (CU !== admin || !CU.isAdmin) return;
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([bytes], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    }));
+    link.download = `GAIA_Presencas_${range.start}_a_${range.end}.xlsx`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    toast(data.activities.length ? 'Planilha gerada!' : 'Planilha gerada. O período não tem registros.');
+  } catch (error) {
+    console.error('Falha ao exportar presenças', error);
+    toast(error.message || 'Não foi possível gerar a planilha.', 'err');
+  } finally {
+    button.disabled = false;
+  }
 }
 
 // ══════════════════════════════════════════════════════
@@ -2098,19 +2347,33 @@ function renderHours(){
       ${sorted.map(m=>{const h=m.hours||0,pct=Math.min(100,Math.round(h/HG*100));let bc,bl;if(h>=HG){bc='hrs-ok';bl='✓ Meta';}else if(pct>=50){bc='hrs-warn';bl=pct+'%';}else{bc='hrs-low';bl=pct+'%';}
       return `<div class="hrs-row"><div class="av" style="width:32px;height:32px">${avImg(m.name,m.color,32,!!onlineUsers[m.id])}</div><div class="hrs-bar-wrap"><div class="hrs-bar-lbl"><span style="font-size:12px;font-weight:500">${m.name}</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#bb86fc">${h}h/${HG}h</span></div><div class="hrs-bar"><div class="hrs-bar-fill" style="width:${pct}%"></div></div></div><span class="hrs-badge ${bc}">${bl}</span><button class="hrs-adj" onclick="openHrsAdj('${m.id}')">Ajustar ✎</button></div>`;}).join('')}
     </div>
-    ${HL.length?`<div class="sec-hd" style="margin-top:18px"><div class="sec-title">📋 Histórico</div></div><div class="card">${[...HL].reverse().slice(0,20).map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><div><span style="font-size:13px;font-weight:500">${l.memberName}</span><span style="font-size:11px;color:var(--dim);margin-left:8px">${l.reason||'—'}</span></div><div style="text-align:right"><span style="font-family:'DM Mono',monospace;font-size:13px;color:${l.delta>0?'var(--green)':l.delta<0?'var(--red)':'var(--dim)'}">${l.delta>0?'+':''}${l.delta}h</span><div style="font-size:10px;color:var(--muted)">${fmtDate(l.date)} · ${l.by}</div></div></div>`).join('')}</div>`:''}`;
+    ${HL.length?`<div class="sec-hd" style="margin-top:18px"><div class="sec-title">📋 Histórico</div></div><div class="card">${[...HL].reverse().slice(0,20).map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><div><span style="font-size:13px;font-weight:500">${esc(l.memberName)}</span><span style="font-size:11px;color:var(--dim);margin-left:8px">${esc(l.reason||'—')}</span></div><div style="text-align:right"><span style="font-family:'DM Mono',monospace;font-size:13px;color:${l.delta>0?'var(--green)':l.delta<0?'var(--red)':'var(--dim)'}">${l.delta>0?'+':''}${l.delta}h</span><div style="font-size:10px;color:var(--muted)">${GaiaAttendance.validDate(l.date) ? fmtDate(l.date) : '—'} · ${esc(l.by)}</div></div></div>`).join('')}</div>`:''}`;
 }
 function openHrsAdj(uid){const m=M.find(x=>x.id===uid);if(!m)return;el('ha-uid').value=uid;el('ha-name-lbl').textContent=`${m.name} · Horas atuais: ${m.hours||0}h`;el('ha-val').value=1;el('ha-reason').value='';openModal('modal-hrs-adj');}
-function applyHrsAdj(){
-  const uid=el('ha-uid').value,op=el('ha-op').value,val=parseInt(el('ha-val').value)||0,reason=el('ha-reason').value.trim();
-  const m=M.find(x=>x.id===uid);if(!m)return;
-  const before=m.hours||0;
-  if(op==='add')m.hours=before+val;
-  else if(op==='sub')m.hours=Math.max(0,before-val);
-  else m.hours=Math.max(0,val);
-  const delta=m.hours-before;
-  HL.push({memberId:uid,memberName:m.name,op,delta,reason,date:new Date().toISOString().split('T')[0],by:CU.name});
-  closeModal('modal-hrs-adj');save();toast('Horas ajustadas!');
+async function applyHrsAdj() {
+  if (!CU?.isAdmin) return;
+  const adminId = CU.id;
+  const uid = el('ha-uid').value, op = el('ha-op').value;
+  const val = parseInt(el('ha-val').value) || 0, reason = el('ha-reason').value.trim();
+  const date = GaiaAttendance.today();
+  closeModal('modal-hrs-adj');
+  try {
+    const result = await DB.transaction(data => {
+      const actor = data?.members?.find(m => m?.id === adminId && m.isAdmin);
+      const target = data?.members?.find(m => m?.id === uid);
+      if (!actor || !target) return;
+      const before = Number(target.hours) || 0;
+      const hours = op === 'add' ? before + val : Math.max(0, op === 'sub' ? before - val : val);
+      return { ...data, members: data.members.map(m => m?.id === uid ? { ...m, hours } : m),
+        hoursLog: [...(data.hoursLog || []), { memberId: uid, memberName: target.name, op,
+          delta: hours - before, reason, date, by: actor.name }] };
+    }, undefined, false);
+    if (!result.committed) throw new Error('Ajuste cancelado');
+    toast('Horas ajustadas!');
+  } catch (error) {
+    console.error('Falha ao ajustar horas', error);
+    toast('Não foi possível ajustar as horas.', 'err');
+  }
 }
 function saveHrsGoal(){HG=parseInt(el('goal-val').value)||20;closeModal('modal-hrs-goal');save();toast('Meta atualizada!');}
 function exportHoursCSV(){
