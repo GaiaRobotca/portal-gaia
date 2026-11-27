@@ -10,4 +10,39 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test tests/*.test.*
+      - run: node --test tests/*.test.cjs
+      - run: npm ci --ignore-scripts --prefix functions
+      - run: node -e "require('./functions/index.js')"
+      - run: npm audit --omit=dev --prefix functions
+  email-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci --ignore-scripts --prefix functions
+      - run: npx --yes firebase-tools@15.34.2 emulators:exec --project demo-gaia-email --only database,auth "node --test tests/email-emulator.cjs"
+      - run: npm exec --prefix functions -- playwright install --with-deps chromium
+      - run: node tests/email-backend-browser.cjs
+        env:
+          GAIA_BROWSER: chromium
+  free-worker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts --prefix worker
+      - run: npm audit --prefix worker
+      - run: npm run build --prefix worker
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+      - run: node --test tests/worker-email.test.mjs

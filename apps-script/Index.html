@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR"><head><base target="_top"><meta charset="utf-8">
+<style>body{font:16px system-ui;max-width:760px;margin:40px auto;padding:20px;color:#18332c}button{padding:12px;margin:8px 8px 8px 0;cursor:pointer}pre{white-space:pre-wrap;background:#f1f5f3;padding:16px}#status{font-weight:bold}</style>
+</head><body>
+<h1>Reserva Gmail · GAIA</h1>
+<p>Remetente: gaia.robotica.uftm@gmail.com. Somente recusas explícitas por cota mensal do EmailJS são elegíveis.</p>
+<input id="notice" type="hidden" value="<?= noticeId ?>">
+<h2 id="title"></h2><pre id="body"></pre><p id="quota"></p><ul id="recipients"></ul>
+<button id="refresh">Atualizar prévia</button><button id="send" disabled>Enviar pendentes pelo Gmail</button>
+<p id="status" role="status"></p>
+<p>Aceite pelo serviço não confirma entrega na caixa de entrada. Cada lote tem no máximo 20 destinatários. Abrir esta página não envia mensagens.</p>
+<script>
+let preview;
+const el = id => document.getElementById(id);
+function fail(error) { el('status').textContent = error.message || 'Falha. Confira o portal.'; el('refresh').disabled = false; el('send').disabled = true; }
+function refresh() {
+  preview = null; el('send').disabled = true; el('refresh').disabled = true;
+  el('status').textContent = 'Consultando aviso e cota…';
+  google.script.run.withFailureHandler(fail).withSuccessHandler(data => {
+    preview = data; el('title').textContent = data.title; el('body').textContent = data.body;
+    el('quota').textContent = data.quota + ' destinatários disponíveis na cota; ' + data.candidates.length + ' pendentes elegíveis.';
+    el('recipients').replaceChildren();
+    data.candidates.forEach(m => { const li = document.createElement('li'); li.textContent = m.name + ' — ' + m.address; el('recipients').appendChild(li); });
+    el('refresh').disabled = false; el('send').disabled = !data.candidates.length || data.quota < 1;
+    el('status').textContent = 'Confira o conteúdo e os destinatários antes de enviar.';
+  }).previewNotice(el('notice').value);
+}
+el('refresh').onclick = refresh;
+el('send').onclick = () => {
+  if (!preview) return;
+  el('send').disabled = true; el('refresh').disabled = true; el('status').textContent = 'Enviando…';
+  google.script.run.withFailureHandler(fail).withSuccessHandler(result => {
+    preview = null; el('status').textContent = result.message; el('refresh').disabled = false;
+  }).sendNotice(preview.id, preview.fingerprint);
+};
+refresh();
+</script></body></html>
